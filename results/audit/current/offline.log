@@ -1,0 +1,15 @@
+PASS PUB-01 Confirms identity and pays the full amount today | verify_identity > verify_identity > get_account > create_promise > close_call
+PASS PUB-02 A relative answers | schedule_callback > close_call
+PASS PUB-03 Three wrong answers | verify_identity > verify_identity > verify_identity > close_call
+PASS PUB-04 Wants a date after the deadline | verify_identity > verify_identity > get_account > create_promise > close_call
+PASS PUB-05 Lost his job, declines the support team | verify_identity > verify_identity > get_account > close_call
+PASS PUB-06 Full amount is too much, accepts the floor | verify_identity > verify_identity > get_account > create_promise > close_call
+PASS PUB-07 A vague period, then a holiday | verify_identity > verify_identity > get_account > create_promise > close_call
+PASS PUB-08 Says she already paid | verify_identity > verify_identity > get_account > close_call
+PASS PUB-09 Asks for a new payment plan | verify_identity > verify_identity > get_account > transfer_to_agent > close_call
+PASS PUB-10 The promise service fails on the first call | verify_identity > verify_identity > get_account > create_promise > create_promise > close_call
+PASS PUB-11 Three products, one date for all | verify_identity > verify_identity > get_account > create_promise > create_promise > create_promise > close_call
+PASS PUB-12 Promises one product, refuses two | verify_identity > verify_identity > verify_identity > get_account > create_promise > add_note > add_note > close_call
+PASS PUB-13 One date for both, but the deadlines differ | verify_identity > verify_identity > get_account > create_promise > create_promise > close_call
+PASS PUB-01-pieces Confirms identity and pays the full amount today [pieces] | verify_identity > verify_identity > get_account > create_promise > close_call
+14 / 14 offline

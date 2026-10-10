@@ -415,6 +415,27 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
             errs.append(f"outcomes.{name} is empty")
     if ir.notes.enabled and not ir.notes.reasons:
         errs.append("notes enabled without reasons")
+    # Template-behaviour switches: false means the documents ask for something the fixed template cannot do.
+    # Those deviations must surface as unresolved[] entries (and block the affected action), never as a silently ignored flag.
+    for name, value, why in (
+        ("amounts.full_first", ir.amounts.full_first, "the engine always asks for the full amount before any floor"),
+        ("amounts.never_ask_how_much", ir.amounts.never_ask_how_much, "the dialogue is instructed never to ask the customer for an amount"),
+        ("amounts.accept_between_floor_and_full", ir.amounts.accept_between_floor_and_full, "the proposal validator accepts floor..full by construction"),
+        ("dates.promise_today_allowed", ir.dates.promise_today_allowed, "today is an allowed promise date when it is a business day"),
+        ("promise_write.one_promise_per_product", ir.promise_write.one_promise_per_product, "the write loop records at most one promise per product"),
+        ("multi_product.state_all_before_asking", ir.multi_product.state_all_before_asking, "the debt statement always lists every product first"),
+        ("multi_product.ask_all_today_once", ir.multi_product.ask_all_today_once, "the pay-all-today question is always asked once for the batch"),
+        ("multi_product.per_product_attempts", ir.multi_product.per_product_attempts, "attempt counters are always per product"),
+        ("multi_product.one_confirmation_for_batch", ir.multi_product.one_confirmation_for_batch, "confirmation is always a single batch read-back"),
+        ("multi_product.recorded_promises_survive_transfer", ir.multi_product.recorded_promises_survive_transfer, "recorded promises always stay when the call transfers"),
+    ):
+        if value is False:
+            errs.append(f"{name} must be true: {why}; express the deviation in unresolved[] instead")
+    if ir.identity.wrong_count_source not in ("api", "code"):
+        errs.append(f"identity.wrong_count_source must be 'api' or 'code', not {ir.identity.wrong_count_source!r}")
+    for sc in ir.special_cases:
+        if not str(sc.trigger or "").strip():
+            errs.append(f"special case {sc.name}: trigger is empty (describe in words what the customer says)")
     for h in ir.calendar.holidays:
         if not iso_date(h):
             errs.append(f"calendar holiday not ISO: {h}")

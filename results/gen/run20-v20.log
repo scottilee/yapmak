@@ -1,0 +1,109 @@
+publish gen-ab 2026-10-10T17:50:46Z
+published {'workflow_id': '516d7b3d-12a7-4794-be8a-12133b653e46', 'agent_id': '8912d228-94d9-4308-b85c-3054f1ff15a6', 'version': 19} (5.2s)
+start A-reps3 attempt 1 2026-10-10T17:50:55Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The support team was offered twice (Message 8 and Message 10), which violates the criterion that the support team be offered once. Other criteria were met: the assistant provided exactly one sentence of sympathy in Message 8, did not attempt to p
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 6 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 9 / 10 passed, 120 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The agent failed the requirement to offer the support team only once. The offer was made in [Message 8] and then repeated in [Message 10]. All other criteria were met: a single sentence of sympathy was provided in [Message 8], no persuasion was u
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 5 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 9 / 10 passed, 76 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+FAIL PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed to satisfy the criterion requiring it to identify as a digital assistant when asked. In message 9, the user explicitly asks 'Are you a robot?', but the agent ignores this question in message 10 and proceeds directly to confirming
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The assistant failed to meet the success criteria because the support team was offered twice (Message 8 and Message 10) instead of once. The assistant followed the other requirements: it provided exactly one sentence of sympathy in Message 8, did
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 5 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 8 / 10 passed, 107 s
+
+PASS PUB-01 3/3
+PASS PUB-02 3/3
+PASS PUB-03 3/3
+FAIL PUB-04 2/3
+FAIL PUB-05 0/3
+PASS PUB-06 3/3
+PASS PUB-07 3/3
+PASS PUB-08 3/3
+PASS PUB-09 3/3
+PASS PUB-10 3/3
+
+8 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 04a847c9-e026-4fb3-9076-a70823c04f69, status completed, 304 s.
+exit A-reps3 0 2026-10-10T17:56:50Z
+start B-reps3 attempt 1 2026-10-10T17:56:51Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The assistant met the criteria regarding security questions and promise/note recording but failed the attempt count criteria for the loans. The phone question was repeated exactly once (Message 6) and the date of birth was not (Message 2). One pr
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 4 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 2 / 3 passed, 66 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 3 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 3 / 3 passed, 55 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 3 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 3 / 3 passed, 46 s
+
+PASS PUB-11 3/3
+FAIL PUB-12 2/3
+PASS PUB-13 3/3
+
+2 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 636e3412-f15d-455c-ba03-aecf8c9e954e, status completed, 167 s.
+exit B-reps3 0 2026-10-10T17:59:59Z
+start A-asks_back attempt 1 2026-10-10T18:00:00Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The agent failed to meet all the success criteria. Specifically, the support team was offered twice (in Message 8 and Message 10), which violates the requirement that it be offered only once. Other criteria were met: sympathy was expressed in exa
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 8 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 9c89623d-94bb-483b-98f6-be2a938ea6be, status completed, 96 s.
+exit A-asks_back 0 2026-10-10T18:01:52Z
+batch done 2026-10-10T18:01:52Z

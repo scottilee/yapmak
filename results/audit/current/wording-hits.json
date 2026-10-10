@@ -1,0 +1,1209 @@
+{
+  "compile.py": [
+    {
+      "line": 275,
+      "text": "\\b(this|the) call is (being )?recorded\\b"
+    },
+    {
+      "line": 276,
+      "text": "\\bcall is (being )?recorded\\b"
+    },
+    {
+      "line": 348,
+      "text": "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. hardship = mentions illness, a death in the family or losing their job \u2014 this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other."
+    }
+  ],
+  "workflow_runtime.py": [
+    {
+      "line": 525,
+      "text": "recorded"
+    },
+    {
+      "line": 795,
+      "text": "Answer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would like to be connected with the support team."
+    },
+    {
+      "line": 1067,
+      "text": "recorded"
+    },
+    {
+      "line": 1095,
+      "text": "recorded"
+    },
+    {
+      "line": 1116,
+      "text": " is recorded."
+    },
+    {
+      "line": 1077,
+      "text": "recorded"
+    },
+    {
+      "line": 1133,
+      "text": "recorded"
+    },
+    {
+      "line": 726,
+      "text": "recorded"
+    },
+    {
+      "line": 827,
+      "text": "recorded"
+    },
+    {
+      "line": 1043,
+      "text": "recorded"
+    },
+    {
+      "line": 1164,
+      "text": "recorded"
+    }
+  ],
+  "compiler_nodes.py": [],
+  "results/audit/current/a.workflow.json": [
+    {
+      "path": ".nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ],
+  "results/audit/current/ab.workflow.json": [
+    {
+      "path": ".nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ],
+  "out/gen-a.workflow.json": [
+    {
+      "path": ".nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ],
+  "out/gen-ab.workflow.json": [
+    {
+      "path": ".nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ],
+  "out/gen-a.export.json": [
+    {
+      "path": ".workflow.nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".workflow.nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".workflow.nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ],
+  "out/gen-ab.export.json": [
+    {
+      "path": ".workflow.nodes.setup.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.cb_after.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.cb_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.finalize.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.neg_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "discount",
+        "recorded",
+        "waiver"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "nswer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they ",
+        "r question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would li",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    pass\n            if any((p['proposed'] for p in S['products'",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.negotiate.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".workflow.nodes.id_route_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.id_route_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.notes_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.state_debt.extraction_schema[0].description",
+      "matches": [
+        "discount",
+        "waiver"
+      ],
+      "snippets": [
+        " over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a pa",
+        "plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a ",
+        "stalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a h"
+      ]
+    },
+    {
+      "path": ".workflow.nodes.write_step.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "(status != '' and status != '200')\n        if ok:\n            p['recorded'] = True\n        else:\n            p['write_failures'] = p.get('write_failures', 0) ",
+        "n enumerate(S['products']):\n        if p['proposed'] and (not p['recorded']) and (not p['disposition']):\n            S['w_idx'] = k\n            S['w_pending']",
+        "mes']\n    N = POLICY['notes']\n    outcome, reason = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        ",
+        "on = ('', '')\n    recorded = [p for p in S['products'] if p.get('recorded')]\n    if S.get('transfer'):\n        outcome, reason = (S['transfer'].get('outcome')",
+        "       outcome, reason = (S['close'][0], S['close'][1])\n    elif recorded:\n        outcome, reason = (O['promise_outcome'], '')\n    elif S['products'] and all",
+        "nal_outcome'] = outcome\n    vars['final_reason'] = reason\n    if recorded and (not S.get('transfer')):\n        parts = ['Your promise of ' + _offer_text(p, p[",
+        " _offer_text(p, p['proposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('dispositio",
+        "roposed_amount'], p['proposed_date']) + ' is recorded.' for p in recorded]\n        failed = [p for p in S['products'] if p.get('disposition') == (O.get('servi",
+        " for k, p in enumerate(S['products']):\n            if not p.get('recorded') and p.get('disposition') in (N.get('reasons') or []):\n                S['notes'].a",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.init_products.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "['proposed_date'] = None\n        p['clamped'] = False\n        p['recorded'] = False\n        p['write_failures'] = 0\n        p['disposition'] = ''\n        out.",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.opening_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.readback_route.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "p in S['products']:\n                if p['proposed'] and (not p['recorded']):\n                    p['proposed'] = False\n                    p['disposition'] =",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.verify_after_0.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    },
+    {
+      "path": ".workflow.nodes.verify_after_1.pre_actions[0].function.parameters.properties.code.default",
+      "matches": [
+        "recorded"
+      ],
+      "snippets": [
+        "Hello, this is the digital assistant of Freya Bank. This call is recorded.\",\"opening_verbatim\":false,\"holder_question\":\"Am I speaking with <<title>> <<last_na",
+        "e] > 30):\n            if not S.get('close') and (not any((p.get('recorded') for p in S.get('products', [])))):\n                I = POLICY['identity']\n        "
+      ]
+    }
+  ]
+}

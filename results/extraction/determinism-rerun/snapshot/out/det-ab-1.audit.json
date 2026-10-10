@@ -1,0 +1,254 @@
+{
+ "covered": [
+  {
+   "rule": "A \u00a71: 1 to 45 days late",
+   "where": "bands[0].days_late_min, bands[1].days_late_max"
+  },
+  {
+   "rule": "A \u00a72: title plus last name",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "A 1: opening sentence content; no 'collections', 'debt', 'payment' or product before verification",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "A 2: \"Am I speaking with {title} {last_name}?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "A 3: ask once more, then not_reached / unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "A 4: robot / AI question",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "A 5, 10: third party told nothing; relative may not answer questions",
+   "where": "third_party.source, phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "A 6: callback today or next business day, 10:00-19:00, after now",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "A 7: ask once for another time, else no_callback",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "A 8: wrong number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "A 9: deceased, \"I am sorry for your loss.\"",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "A 11: DOB then phone last 4; YYYY-MM-DD; numeric dates read day-month-year",
+   "where": "identity.requirements[0..1], identity.requirements[0].numeric_date_order"
+  },
+  {
+   "rule": "A 12: three wrong answers in total",
+   "where": "identity.wrong_answer_limit, identity.remaining_slot"
+  },
+  {
+   "rule": "A 13: hint day_month_swapped, ask for month as a word",
+   "where": "identity.requirements[0].hint_field, identity.requirements[0].hint_reply"
+  },
+  {
+   "rule": "A 14: mobile app or branch; not_verified / failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "A 15: explain once; asking purpose = declining; not_verified / declined",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "A 16-17: collections team about a late payment; product naming",
+   "where": "phrases.debt_intro, phrases.product_naming"
+  },
+  {
+   "rule": "A \u00a77: business days and holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "A 18: band table",
+   "where": "bands[early], bands[late]"
+  },
+  {
+   "rule": "A 19: promise date today or later, business day, not after deadline",
+   "where": "dates.promise_today_allowed"
+  },
+  {
+   "rule": "A 20: weekend/holiday -> next business day",
+   "where": "dates.weekend_or_holiday_roll_forward"
+  },
+  {
+   "rule": "A 21: vague period ask once then deadline",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "A 22: next <weekday> = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "A 23: after deadline -> offer deadline; refusal = flat refusal",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "A 24: full amount first, never ask how much",
+   "where": "amounts.full_first, amounts.never_ask_how_much"
+  },
+  {
+   "rule": "A 25: floors by product type",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "A 26: floor once, rest stays overdue",
+   "where": "amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "A 27: accept floor..full; below floor offer floor once",
+   "where": "amounts.accept_between_floor_and_full, amounts.floor_offered_once"
+  },
+  {
+   "rule": "A 28: \"Can you make this payment today?\"",
+   "where": "phrases.today_question"
+  },
+  {
+   "rule": "A 30: attempts 1 and 2",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "A 31: attempts used up -> no_promise / refused",
+   "where": "outcomes.refused_reason, outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "A 32: hardship",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "A 33: no discounts/waivers/plans",
+   "where": "unresolved[no_extra_terms]"
+  },
+  {
+   "rule": "A 34: \"Do you confirm?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "A 36: one promise per product; change in mobile app",
+   "where": "promise_write.one_promise_per_product, phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "A 37: retry once, then service_error",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "A 38: text message sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "A 39: already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "A 40: dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "A 41: restructuring",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "A 42: human",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "A 43: scam",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "A 44: cannot answer",
+   "where": "special_cases[cannot_answer], phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "A 45: refuse to talk twice",
+   "where": "special_cases[refuse_to_talk], identity.declined_outcome"
+  },
+  {
+   "rule": "A 46: outcome table; transfer after promise -> transferred",
+   "where": "outcomes.table, outcomes.transfer_overrides_promise"
+  },
+  {
+   "rule": "A: Brief A never uses add_note (overridden by Brief B)",
+   "where": "notes.enabled"
+  },
+  {
+   "rule": "A 47: goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "B 1: one to three products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "B 2: state every product before asking",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "B 3: band/deadline per product",
+   "where": "bands (applied per product)"
+  },
+  {
+   "rule": "B 4: ask all today once, then product by product",
+   "where": "multi_product.ask_all_today_once, phrases.all_today_question"
+  },
+  {
+   "rule": "B 5: attempts per product",
+   "where": "multi_product.per_product_attempts"
+  },
+  {
+   "rule": "B 6: common date clamped to product deadline",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "B 7: one confirmation for all",
+   "where": "multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "B 8: add_note reasons for unpromised products",
+   "where": "notes.reasons, notes.note_each_unpromised_product"
+  },
+  {
+   "rule": "B 9: dispute / already paid do not end the call",
+   "where": "special_cases[already_paid|dispute].action=note, ends_call=false"
+  },
+  {
+   "rule": "B 10: restructuring keeps recorded promises; no notes on transfer",
+   "where": "multi_product.recorded_promises_survive_transfer, notes.none_on_transfer"
+  },
+  {
+   "rule": "B 11: failed create_promise -> service_error note",
+   "where": "notes.reasons, outcomes.service_error_reason"
+  },
+  {
+   "rule": "B Closing: all paid -> paid; first non-paid note reason; promise wins",
+   "where": "outcomes.all_paid_closes_as_paid, outcomes.no_promise_reason_from_first_non_paid_note, outcomes.promise_outcome"
+  }
+ ],
+ "fixed": [
+  "phrases.opening: removed the invented 'Hello,'. Rule 1 only gives the content, so the sentence now says just that (opening_verbatim stays false).",
+  "phrases.all_today_question: reworded to follow Brief B rule 4 ('whether the customer can pay all of them today') more closely.",
+  "special_cases[hardship].source: added the rule 32 sentence that supports takes_promise=true ('If the customer still names a date or an amount themselves, record the promise').",
+  "identity.source: added the rule 15 decline text that supports declined_outcome and asking_purpose_counts_as_decline.",
+  "third_party.source: added rule 10 (a relative may not answer questions or be told anything).",
+  "calendar.source: added rule 22 (next <weekday>) that supports next_weekday_means_following_week.",
+  "unresolved: added missing_date_parts (neither brief settles it) and no_extra_terms (rule 33 has no IR field)."
+ ],
+ "unresolved": [
+  "Hardship with several products: Brief B does not say whether a declined support transfer ends the call or the call continues with the other products. Brief A behaviour kept (ends_call=true).",
+  "How to read a date given without a month or year is not specified.",
+  "Rule 33 (no discounts, waivers, instalment plans or other terms) has no structural field and must go in the prompt text."
+ ]
+}

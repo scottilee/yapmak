@@ -1,0 +1,502 @@
+{
+  "e2e-ab": {
+    "counts": {
+      "run_start": 1,
+      "model_call": 2,
+      "policy_compiled": 1,
+      "workflow_compiled": 1,
+      "workflow_published": 1,
+      "checkpoint_export": 1,
+      "smoke_test": 1,
+      "export": 1,
+      "run_end": 1
+    },
+    "start": {
+      "event": "run_start",
+      "time": "2026-10-10T06:06:47-0700",
+      "elapsed_s": 0.0,
+      "slot": "e2e-ab",
+      "brief_paths": [
+        "briefs/brief-a.md",
+        "briefs/brief-b.md"
+      ],
+      "openapi_path": "tools/openapi.json",
+      "commit": "aad83ae423e24639fa37262f2efe7bd86e7d7d11",
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "end": [
+      {
+        "event": "run_end",
+        "time": "2026-10-10T06:11:39-0700",
+        "elapsed_s": 292.7,
+        "success": true
+      }
+    ],
+    "unpaired_starts": [],
+    "unpaired_completions": [],
+    "source_mismatches_at_recorded_commit": [],
+    "source_missing_at_recorded_commit": [],
+    "http_writes": []
+  },
+  "review-ab": {
+    "counts": {
+      "run_start": 1,
+      "model_call": 2,
+      "policy_compiled": 1,
+      "workflow_compiled": 1,
+      "freya_call": 5,
+      "workflow_published": 1,
+      "checkpoint_export": 1,
+      "smoke_test": 1,
+      "selftest": 1,
+      "export": 1,
+      "run_end": 1
+    },
+    "start": {
+      "event": "run_start",
+      "time": "2026-10-10T08:20:52-0700",
+      "elapsed_s": 0.0,
+      "slot": "review-ab",
+      "brief_paths": [
+        "briefs/brief-a.md",
+        "briefs/brief-b.md"
+      ],
+      "openapi_path": "tools/openapi.json",
+      "commit": "d5b14c4d60120faa08e8f95647e4ce724a6584c7",
+      "tree_dirty": true,
+      "argv": [
+        "build.py",
+        "--briefs",
+        "briefs/brief-a.md,briefs/brief-b.md",
+        "--openapi",
+        "tools/openapi.json",
+        "--slot",
+        "review-ab"
+      ],
+      "input_sha256_16": {
+        "briefs/brief-a.md": "d57c049c89aec461",
+        "briefs/brief-b.md": "c59c70099148b91c",
+        "tools/openapi.json": "9a8410b12e5c82b6"
+      },
+      "code_sha256_16": {
+        "build.py": "386f7f2b25c01fba",
+        "extract.py": "adeb88339bf56937",
+        "compile.py": "296b32b06f8d83fd",
+        "policy.py": "2e474562433dcee3",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "881c5c86c784e16f"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "end": [
+      {
+        "event": "run_end",
+        "time": "2026-10-10T08:24:37-0700",
+        "elapsed_s": 224.5,
+        "success": true
+      }
+    ],
+    "unpaired_starts": [],
+    "unpaired_completions": [],
+    "source_mismatches_at_recorded_commit": [],
+    "source_missing_at_recorded_commit": [],
+    "http_writes": [
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v2/workflow/d7aa40ef-e015-4f41-bc96-8463a6441a4a",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/end",
+        "ok": true,
+        "request_id": null
+      }
+    ]
+  },
+  "hidden-1": {
+    "counts": {
+      "run_start": 1,
+      "model_call": 2,
+      "policy_compiled": 1,
+      "workflow_compiled": 1,
+      "freya_call": 5,
+      "workflow_published": 1,
+      "checkpoint_export": 1,
+      "smoke_test": 1,
+      "selftest": 1,
+      "export": 1,
+      "run_end": 1
+    },
+    "start": {
+      "event": "run_start",
+      "time": "2026-10-10T08:29:03-0700",
+      "elapsed_s": 0.0,
+      "slot": "hidden-1",
+      "brief_paths": [
+        "hidden/dry-1/brief.md"
+      ],
+      "openapi_path": "hidden/dry-1/openapi.json",
+      "commit": "d783c888b0422bcc199e512fa5f8c3f83856bb2c",
+      "tree_dirty": false,
+      "argv": [
+        "build.py",
+        "--briefs",
+        "hidden/dry-1/brief.md",
+        "--openapi",
+        "hidden/dry-1/openapi.json",
+        "--slot",
+        "hidden-1"
+      ],
+      "input_sha256_16": {
+        "hidden/dry-1/brief.md": "a01d2a46a0512232",
+        "hidden/dry-1/openapi.json": "fedf1a79d33414ad"
+      },
+      "code_sha256_16": {
+        "build.py": "386f7f2b25c01fba",
+        "extract.py": "adeb88339bf56937",
+        "compile.py": "296b32b06f8d83fd",
+        "policy.py": "2e474562433dcee3",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "881c5c86c784e16f"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "end": [
+      {
+        "event": "run_end",
+        "time": "2026-10-10T08:32:20-0700",
+        "elapsed_s": 196.3,
+        "success": true
+      }
+    ],
+    "unpaired_starts": [],
+    "unpaired_completions": [],
+    "source_mismatches_at_recorded_commit": [],
+    "source_missing_at_recorded_commit": [],
+    "http_writes": [
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v2/workflow/4500c764-b9c7-4375-97fc-44cd71601aca",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/end",
+        "ok": true,
+        "request_id": null
+      }
+    ]
+  },
+  "hidden-2": {
+    "counts": {
+      "run_start": 1,
+      "model_call": 2,
+      "policy_compiled": 1,
+      "workflow_compiled": 1,
+      "freya_call": 5,
+      "workflow_published": 1,
+      "checkpoint_export": 1,
+      "smoke_test": 1,
+      "selftest": 1,
+      "export": 1,
+      "run_end": 1
+    },
+    "start": {
+      "event": "run_start",
+      "time": "2026-10-10T08:32:20-0700",
+      "elapsed_s": 0.0,
+      "slot": "hidden-2",
+      "brief_paths": [
+        "hidden/dry-2/01-mail.txt",
+        "hidden/dry-2/02-policy.md",
+        "hidden/dry-2/03-memo.txt",
+        "hidden/dry-2/04-codes.txt"
+      ],
+      "openapi_path": "hidden/dry-2/openapi.json",
+      "commit": "d783c888b0422bcc199e512fa5f8c3f83856bb2c",
+      "tree_dirty": false,
+      "argv": [
+        "build.py",
+        "--briefs",
+        "hidden/dry-2/01-mail.txt,hidden/dry-2/02-policy.md,hidden/dry-2/03-memo.txt,hidden/dry-2/04-codes.txt",
+        "--openapi",
+        "hidden/dry-2/openapi.json",
+        "--slot",
+        "hidden-2"
+      ],
+      "input_sha256_16": {
+        "hidden/dry-2/01-mail.txt": "6641495a59454136",
+        "hidden/dry-2/02-policy.md": "a265e3cb107684f5",
+        "hidden/dry-2/03-memo.txt": "25eff93cb9b1f6c6",
+        "hidden/dry-2/04-codes.txt": "87411823dc8f96f0",
+        "hidden/dry-2/openapi.json": "91a47c1fb5715968"
+      },
+      "code_sha256_16": {
+        "build.py": "386f7f2b25c01fba",
+        "extract.py": "adeb88339bf56937",
+        "compile.py": "296b32b06f8d83fd",
+        "policy.py": "2e474562433dcee3",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "881c5c86c784e16f"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "end": [
+      {
+        "event": "run_end",
+        "time": "2026-10-10T08:35:16-0700",
+        "elapsed_s": 176.0,
+        "success": true
+      }
+    ],
+    "unpaired_starts": [],
+    "unpaired_completions": [],
+    "source_mismatches_at_recorded_commit": [],
+    "source_missing_at_recorded_commit": [],
+    "http_writes": [
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v2/workflow/a1898b31-b5f9-4822-97b0-fc36ca2a0a0f",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": null
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/end",
+        "ok": true,
+        "request_id": null
+      }
+    ]
+  },
+  "rehearsal-a": {
+    "counts": {
+      "run_start": 1,
+      "policy_loaded": 1,
+      "workflow_compiled": 1,
+      "freya_call_start": 18,
+      "freya_call": 18,
+      "platform_retry": 1,
+      "workflow_published": 1,
+      "checkpoint_export": 1,
+      "selftest": 1,
+      "export": 1,
+      "run_end": 1
+    },
+    "start": {
+      "event": "run_start",
+      "run_id": "2e2cc43df6344fcd940808785733ed6a",
+      "pid": 37832,
+      "time": "2026-10-10T10:31:46-0700",
+      "elapsed_s": 0.005,
+      "slot": "rehearsal-a",
+      "brief_paths": [
+        "briefs/brief-a.md"
+      ],
+      "openapi_path": "tools/openapi.json",
+      "commit": "ddbed19660acbb5a866b9c94c0709448666d846a",
+      "tree_dirty": true,
+      "argv": [
+        "build.py",
+        "--briefs",
+        "briefs/brief-a.md",
+        "--openapi",
+        "tools/openapi.json",
+        "--slot",
+        "rehearsal-a",
+        "--policy",
+        "tests/fixtures/brief_a.policy.json"
+      ],
+      "input_sha256_16": {
+        "briefs/brief-a.md": "d57c049c89aec461",
+        "tools/openapi.json": "9a8410b12e5c82b6",
+        "tests/fixtures/brief_a.policy.json": "c23c665a84712e14"
+      },
+      "code_sha256_16": {
+        "build.py": "5b788889fb0b1c8a",
+        "extract.py": "9937e911a53ec5ac",
+        "compile.py": "eb0f816080315b3e",
+        "compiler_nodes.py": "7a7586d8a5d346b0",
+        "compiler_openapi.py": "075a2cec33a8e68b",
+        "compiler_checks.py": "6928af546f834423",
+        "workflow_runtime.py": "02edda735b3d617d",
+        "policy.py": "914a4b2af4ed7003",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "de2c0e8bda95e539",
+        "trace.py": "191bccdf732845c3",
+        "runcontrol.py": "b22f06193c644a70"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "end": [
+      {
+        "event": "run_end",
+        "run_id": "2e2cc43df6344fcd940808785733ed6a",
+        "pid": 37832,
+        "time": "2026-10-10T10:33:10-0700",
+        "elapsed_s": 84.2,
+        "success": true
+      }
+    ],
+    "unpaired_starts": [],
+    "unpaired_completions": [],
+    "source_mismatches_at_recorded_commit": [
+      "build.py",
+      "extract.py",
+      "compile.py",
+      "policy.py",
+      "freya.py",
+      "trace.py"
+    ],
+    "source_missing_at_recorded_commit": [
+      "compiler_nodes.py",
+      "compiler_openapi.py",
+      "compiler_checks.py",
+      "workflow_runtime.py",
+      "runcontrol.py"
+    ],
+    "http_writes": [
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": false,
+        "request_id": "10a779bca9e14709a61aceed2ef17dd1"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/workflow",
+        "ok": true,
+        "request_id": "50a365297cf2459492f6c467616b8a1c"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/v2/workflow/a54d4355-f820-4a39-94c3-112c2eb70460",
+        "ok": true,
+        "request_id": "b972957e3f314fd1bb4ebc2cb0cad74d"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/versions/workflow/a54d4355-f820-4a39-94c3-112c2eb70460/publish",
+        "ok": true,
+        "request_id": "860d340f3e554de6ba7cb463ae0ff306"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": "6bae2bc5655d4289bb9ab401b5a2a280"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": "817f20650d3e45928d3d69d84955438e"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/end",
+        "ok": true,
+        "request_id": "b08553015f8c49d39abfaedb33a627cb"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": "7ffd62d42bbc4b7589e0ced32baf1310"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/message",
+        "ok": true,
+        "request_id": "be92d9d067184146b772f7a4f13701fc"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v2/chat/end",
+        "ok": true,
+        "request_id": "7f855e54a2bb4d1f99767c0e051c023a"
+      }
+    ]
+  }
+}

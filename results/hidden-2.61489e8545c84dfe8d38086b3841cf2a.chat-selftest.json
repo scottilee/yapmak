@@ -1,0 +1,95 @@
+{
+ "workflow_id": "4d95c143-210e-471d-a014-65cf8adcf4f8",
+ "policy": "/Users/sl/sbx/hackathon/out/hidden-2.policy.json",
+ "ok": false,
+ "elapsed_s": 166.0,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": true,
+   "checks": [
+    {
+     "name": "opening_spoken",
+     "pass": true,
+     "detail": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "holder_asked",
+     "pass": true,
+     "detail": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "first_question_matches_ir",
+     "pass": true,
+     "detail": "want ask_text='what is your business postcode?' in 'Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?'"
+    },
+    {
+     "name": "first_question_marked",
+     "pass": true,
+     "detail": "Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?"
+    },
+    {
+     "name": "no_runtime_error",
+     "pass": true,
+     "detail": "no runtime error observed",
+     "soft": false
+    },
+    {
+     "name": "routed_to_ask_0",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->ask_0']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "Yes, speaking.",
+     "agent": "Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": false,
+   "checks": [
+    {
+     "name": "chat_call",
+     "pass": false,
+     "detail": "APIError('POST /api/v2/chat/message -> 504: error code: 504\\n')"
+    }
+   ],
+   "turns": [],
+   "attempts": 2,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "borrowing",
+  "collections",
+  "commitment",
+  "debt",
+  "due",
+  "facilit",
+  "installment",
+  "instalment",
+  "overdue",
+  "pay ",
+  "payment",
+  "product",
+  "promise",
+  "stock credit",
+  "trade line",
+  "vehicle lease"
+ ]
+}

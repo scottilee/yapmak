@@ -1,0 +1,39 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "scam_reply customer service number",
+   "text": "The brief says to tell the customer they can verify the call by phoning Freya Bank's customer service number, but does not give the number.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "all_today_question",
+   "text": "Brief A covers one product only and gives no question for paying several products today.",
+   "doc": "briefs/brief-a.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; rule 1 dictates only the content (digital assistant, Freya Bank, call recorded).",
+  "special_cases[hardship].trigger: added that hardship takes precedence over persuasion and over a restructuring request (rule 32: 'This rule comes before rules 30 and 41').",
+  "Widened source spans (identity, third_party, calendar, bands, amounts, dates, phrases) to quote the rules they encode (rules 3, 5, 10, 15 second refusal, 22 example, 23/26/27 flat-refusal, 17 amount and days late)."
+ ]
+}

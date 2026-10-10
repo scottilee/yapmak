@@ -113,6 +113,17 @@ def build(a):
         checkpoint_exported = True
         tr.event("checkpoint_export", path=str(export_path.relative_to(ROOT)), version=ids.get("version"))
 
+        # read-back: the exported file is what we submit; log what the platform changed or stripped (plan §5)
+        try:
+            stored = json.loads(export_path.read_text()).get("workflow") or {}
+            from compiler_checks import workflow_diff
+            diffs = workflow_diff(wf, stored)
+            stripped = [d for d in diffs if "missing in stored" in d or (" -> " in d and "added by platform" not in d)]
+            tr.event("workflow_readback", differences=len(diffs), platform_additions=len(diffs) - len(stripped),
+                     suspect=stripped[:8], suspect_count=len(stripped))
+        except BaseException as e:      # noqa: BLE001 - checkpoint exists; a diff hiccup must not kill the build
+            tr.event("workflow_readback", error=repr(e)[:200])
+
         # 4. pre-bank chat self-test (identity start + third party); never a simulation, never fatal ------------
         if not a.no_smoke:
             selftest(ids, ir, tr, a.slot)

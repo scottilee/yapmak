@@ -1,0 +1,48 @@
+[
+  {
+    "id": "PUB-01",
+    "brief": "A",
+    "family": "Happy path",
+    "level": "easy",
+    "title": "next friday from friday",
+    "variables": {
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "title": "Mr",
+      "now": "2026-10-16T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1988-03-14",
+      "phone_last4": "4471"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "4821",
+        "past_due": 420.0,
+        "days_late": 6,
+        "minimum_payment": 126.0
+      }
+    ],
+    "script": "Confirm your name and give correct security answers. You cannot pay today, Friday 16 October. Offer the full 420 dollars next Friday. You mean Friday 23 October. Confirm only that date at read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 420,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Next Friday resolves to 23 October from simulated Friday 16 October",
+      "No use of the real clock",
+      "One confirmed promise"
+    ]
+  }
+]

@@ -3,8 +3,8 @@
 Design (plan §3):
   - every bank tool is an engine-fired `api_request` node with a body baked from variables that code nodes set;
     no bank tool is ever in a conversation node's `tools`;
-  - all arithmetic, calendars, validation and outcome selection run in `code` nodes (bankcal.py source is
-    embedded verbatim plus a small runtime below); the dialogue model only talks;
+  - all arithmetic, calendars, validation and outcome selection run in `code` nodes (bankcal.py and
+    workflow_runtime.py sources are embedded, sliced per stage); the dialogue model only talks;
   - routing is deterministic: conversation nodes extract an intent enum, a code node consumes it and sets
     `next`, transitions test `next equals <node>`;
   - the template is multi-product native; a single product is the degenerate case.
@@ -236,11 +236,13 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
             "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. "
             "If they ask to spread the debt over time or to change its terms, say a colleague will handle that part; describe nothing yourself.\n"
             "If the customer talks about something else, reply in a few words and invite them to come back to the payment (\"whenever you are ready\") without repeating the proposal or any amount. If they ask a question, answer it in one sentence and then ask whether they can make the payment you proposed. "
-            "CURRENT INSTRUCTION: {{neg_instruction}}"
+            + ('\nIf the customer asks whether a recorded promise can be changed: say "' + ph.recorded_promise_change_reply + '" and continue. ' if ph.recorded_promise_change_reply else "")
+            + "CURRENT INSTRUCTION: {{neg_instruction}}"
         ),
         "readback": (
             "You have read the promise back and asked for confirmation. Wait for a clear yes. If the customer changes the amount or the date, acknowledge it briefly; "
             "the system checks it and you will read it back again. A later instruction tells you when something has gone through; until then do not confirm that anything is stored."
+            + ('\nIf the customer asks whether a promise can still be changed afterwards: say "' + ph.recorded_promise_change_reply + '".' if ph.recorded_promise_change_reply else "")
         ),
     }
     return P.PromptSet(system=system, stages=stages)
@@ -388,7 +390,8 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["notes_step"]["transitions"][0] = guarded_dispatch("add_note", "n_ok")
     nodes["add_note"] = api_node("add_note", tools["add_note"], {"customer_id": "{{customer_id}}", "product_id": "{{n_product_id}}", "reason": "{{n_reason}}"},
                                  "notes_step", [{"path": "data." + slots["ok_by_tool"]["add_note"], "variable": "n_ok"}])
-    goodbye = {"type": "tts", "text": "{{goodbye_text}}"}
+    # rule 47 (thank + goodbye before close) is a policy choice, not a template assumption
+    goodbye = {"type": "tts", "text": "{{goodbye_text}}"} if ir.outcomes.goodbye_before_close else {"type": "silent"}
     ok_close = "data." + slots["ok_by_tool"]["close_call"]
     nodes["close_reason"] = api_node("close_reason", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}", "reason": "{{final_reason}}"},
                                      "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)

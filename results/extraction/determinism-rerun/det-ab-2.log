@@ -1,0 +1,39 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "missing_date_parts",
+   "text": "The documents do not say how to interpret a promise date given without a month or year (e.g. 'the 15th').",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "hardship_multi_product",
+   "text": "Brief B rule 9 continues the call only for dispute and already-paid claims; it does not say whether a declined hardship transfer ends the call or is noted per product and the call continues. Kept Brief A rule 32 (close as no_promise / hardship).",
+   "doc": "briefs/brief-b.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the added 'Hello,'. The brief only dictates the content (digital assistant, Freya Bank, call recorded), so the sentence now says only that; opening_verbatim stays false.",
+  "special_cases[already_paid].source and special_cases[dispute].source: now quote Brief A rules 39/40 along with Brief B rule 9 (the override), so the sources show where the sentence and the trigger come from.",
+  "Expanded source spans for identity (rule 15 decline), third_party (rule 8 wrong number), amounts (rules 24, 27), outcomes (transfer-after-promise and goodbye), multi_product (rules 6 and 10), phrases (holder question, Brief B all-today question) and promise_write (rules 34 and 36) to cover every value they back. No values changed."
+ ]
+}

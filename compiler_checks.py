@@ -93,3 +93,31 @@ def static_check(wf: dict, tools: dict[str, ToolSpec]) -> list[str]:
         if x not in seen:
             errs.append(f"unreachable node {x}")
     return errs
+
+
+IGNORED_TOP = {"agent_config", "nodePositions", "test_variables", "tools", "context_variables"}
+
+
+def workflow_diff(candidate: dict, stored: dict, path: str = "", out: list | None = None) -> list[str]:
+    """Compare the workflow we sent with what the platform stored (it strips and adds fields silently).
+    Same semantics as the rehearsal tool's diff; shared so build.py can log it in the trace."""
+    if out is None:
+        out = []
+    if isinstance(candidate, dict) and isinstance(stored, dict):
+        for k in set(candidate) | set(stored):
+            if path == "" and k in IGNORED_TOP:
+                continue
+            if k not in stored:
+                out.append(f"{path}.{k}: missing in stored")
+            elif k not in candidate:
+                out.append(f"{path}.{k}: added by platform")
+            else:
+                workflow_diff(candidate[k], stored[k], f"{path}.{k}", out)
+    elif isinstance(candidate, list) and isinstance(stored, list):
+        if len(candidate) != len(stored):
+            out.append(f"{path}: list length {len(candidate)} -> {len(stored)}")
+        for i, (x, y) in enumerate(zip(candidate, stored)):
+            workflow_diff(x, y, f"{path}[{i}]", out)
+    elif candidate != stored and not (candidate in ("", None, False) and stored in ("", None, False)):
+        out.append(f"{path}: {str(candidate)[:60]!r} -> {str(stored)[:60]!r}")
+    return out

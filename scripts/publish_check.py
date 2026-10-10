@@ -15,29 +15,7 @@ sys.path.insert(0, str(ROOT))
 import freya  # noqa: E402
 from scripts.chatlib import Chat, variables_from, runtime_errors
 
-IGNORED_TOP = {"agent_config", "nodePositions", "test_variables", "tools", "context_variables"}
-
-
-def diff(a, b, path="", out=None):
-    out = out if out is not None else []
-    if isinstance(a, dict) and isinstance(b, dict):
-        for k in set(a) | set(b):
-            if path == "" and k in IGNORED_TOP:
-                continue
-            if k not in b:
-                out.append(f"{path}.{k}: missing in stored")
-            elif k not in a:
-                out.append(f"{path}.{k}: added by platform")
-            else:
-                diff(a[k], b[k], f"{path}.{k}", out)
-    elif isinstance(a, list) and isinstance(b, list):
-        if len(a) != len(b):
-            out.append(f"{path}: list length {len(a)} -> {len(b)}")
-        for i, (x, y) in enumerate(zip(a, b)):
-            diff(x, y, f"{path}[{i}]", out)
-    elif a != b and not (a in ("", None, False) and b in ("", None, False)):
-        out.append(f"{path}: {str(a)[:60]!r} -> {str(b)[:60]!r}")
-    return out
+from compiler_checks import workflow_diff
 
 
 def main():
@@ -50,7 +28,7 @@ def main():
     ids = freya.save_workflow(slot, wf)
     print("published", ids, f"({time.time() - t0:.1f}s)")
     stored = freya.api("GET", f"/api/v2/workflow/{ids['workflow_id']}", workspaceId=freya.workspace_id())["workflow"]["workflow"]
-    d = diff(wf, stored)
+    d = workflow_diff(wf, stored)
     print("stored-vs-candidate differences:", len(d))
     for line in d[:40]:
         print("  ", line)

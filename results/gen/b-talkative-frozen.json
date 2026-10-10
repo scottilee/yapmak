@@ -1,0 +1,164 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "a2b61ee6-3bea-4fd3-9d2d-9adf6b98ca58",
+ "iteration_id": "7f0b1556-0b14-4f5f-a027-e1c41e284ed9",
+ "seconds": 486,
+ "passed": 1,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The assistant failed two out of the three success criteria. While it did state all three products (credit card, personal loan, car loan) in Message 8 before making an ask, it did not successfully complete the other requirements. Although a read-back was provided in Message 10, the customer never confirmed the plan; they continued to describe their busy schedule until the call ended. Additionally, "
+   ],
+   "call_id": "d0a07098-16d4-464b-8bf0-a7b6fe0fbb78",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_ee2ad207-4f6",
+   "slowest_turn_s": 12.2,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 510.0, '2026-10-15')]",
+    "notes [], expected [('p2', 'refused'), ('p3', 'refused')]",
+    "the call was not closed with close_call",
+    "conversation: The assistant failed to meet several criteria regarding the handling of the debt collection. While the identity verification was handled correctly (DOB asked once in [Message 2] and phone number re-asked exactly once in [Message 6]), the assistant failed to record any promises or refusals. After the initial payment request in [Message 8], the assistant entered a repetitive loop from [Message 10] t"
+   ],
+   "call_id": "3e74e16c-5daf-4a23-8cd2-9410e07906f0",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_34e6530a-7a8",
+   "slowest_turn_s": 5.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "9a8c7625-7abe-49ba-b47b-3b663efa293f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a5b7237f-671",
+   "slowest_turn_s": 15.1,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The assistant failed two out of the three success criteria. While it did state all three products (credit card, personal loan, car loan) in Message 8 before making an ask, it did not successfully complete the other requirements. Although a read-back was provided in Message 10, the customer never confirmed the plan; they continued to describe their busy schedule until the call ended. Additionally, "
+    ],
+    "call_id": "d0a07098-16d4-464b-8bf0-a7b6fe0fbb78",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_ee2ad207-4f6",
+    "slowest_turn_s": 12.2,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 510.0, '2026-10-15')]",
+     "notes [], expected [('p2', 'refused'), ('p3', 'refused')]",
+     "the call was not closed with close_call",
+     "conversation: The assistant failed to meet several criteria regarding the handling of the debt collection. While the identity verification was handled correctly (DOB asked once in [Message 2] and phone number re-asked exactly once in [Message 6]), the assistant failed to record any promises or refusals. After the initial payment request in [Message 8], the assistant entered a repetitive loop from [Message 10] t"
+    ],
+    "call_id": "3e74e16c-5daf-4a23-8cd2-9410e07906f0",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_34e6530a-7a8",
+    "slowest_turn_s": 5.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "9a8c7625-7abe-49ba-b47b-3b663efa293f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a5b7237f-671",
+    "slowest_turn_s": 15.1,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

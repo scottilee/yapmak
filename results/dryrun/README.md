@@ -90,3 +90,23 @@ source .env && .venv/bin/python build.py --briefs hidden/dry-2/01-mail.txt,hidde
 [Preflight timings](preflight.json), [build/commit/push timings](sunday-steps.json), [run summary](run-summary.json), [input hashes](input-manifest.json), [artifact integrity](integrity.json), [predeclared expectations](expected-before-build.json), [workflow audit](workflow-audit.json), [push error](push.log). Exported agents and builder traces are the normal `out/hidden-*.workflow.json` and `traces/hidden-*.jsonl` files in the artifact commit.
 
 To repeat the offline export audit from the dry-run branch: `.venv/bin/python results/dryrun/audit_exports.py`. It reads the saved exports, compares their embedded policies and close nodes, and executes only exported pure Python runtime functions against local sample variables; it makes no platform or bank request. The temporary clone path is recorded in the command logs. Credentials were copied only as ignored `.env`, never committed.
+
+---
+
+## Regeneration of the two exports (10 Oct ~18:1x UTC, auditor)
+
+The two compiler defects documented above were fixed in the pipeline afterwards (v17: amount-slot excludes + `ask_once_first` in the wants-human routes; plus prompt/gate changes in the same working tree). The exports were stale; they have now been rebuilt **with extraction skipped**, so the IR evidence is untouched:
+
+```
+.venv/bin/python build.py --briefs hidden/dry-1/brief.md --openapi hidden/dry-1/openapi.json --policy out/hidden-1.policy.json --slot hidden-1          # 20.6 s
+.venv/bin/python build.py --briefs hidden/dry-2/01-mail.txt,hidden/dry-2/02-policy.md,hidden/dry-2/03-memo.txt,hidden/dry-2/04-codes.txt \
+             --openapi hidden/dry-2/openapi.json --policy out/hidden-2.policy.json --slot hidden-2                                                        # 178.1 s
+```
+
+- `out/hidden-1.policy.json`, `out/hidden-2.policy.json`, both audit files: **byte-identical** (verified by diff).
+- Both exported workflows now map `past_due → outstanding_amount` and `days_late → days_past_due` separately (old export had `days_past_due` in both slots).
+- Executing the **exported** hidden-2 `opening_route` code with `holder=wants_human` and `ask_once_first=false` now yields `next=transfer`, `transfer_queue=mtb_desk` (old export asked-then-stayed). hidden-2's identity route carries the same flag-aware branch.
+- New `workflow_readback` trace events: hidden-1: 707 differences, all platform additions, 0 suspect; hidden-2: 787 differences, all platform additions, 0 suspect; `scripts/check_artifacts.py` passes on all eight regenerated artifacts; hidden-1 pre-bank self-test passed live (`ok=true`, 12.0 s).
+- hidden-2 live self-test recorded `ok=false` in the trace for an environmental reason only: repeated **503/504 from the staging chat endpoint** during the retry window (the same template passed live on hidden-1 and on earlier runs; the defect-equivalent behaviour was proven offline by executing the exported code above). The published version and exports are unaffected (`run_end success=true` both).
+- Old artifacts are preserved: previous traces were auto-archived beside the new ones (`traces/hidden-<n>.<stamp>.jsonl`) and remain in git history; new file hashes — hidden-1.workflow `32234466bf5cb716…`, hidden-2.workflow `48eac26a8efe0ef8…`, traces `36a8465a48f858f7…` / `99ed35a41d7406e9…`.
+- Note for whoever commits this: the regenerated exports were produced by a working tree that includes uncommitted pipeline changes (flags/gates/readback event) — commit those **together with** these artifacts so the "output commit's parent = input commit, no pipeline file changed" invariant in a future dry run stays meaningful.

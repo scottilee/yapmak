@@ -479,6 +479,8 @@ def st_verify_after(i):
         vars['id_say'] = 'I could not read that. ' + _q(r)
         _save(S)
         return _set_next('ask_' + str(i))
+    if str(I.get('wrong_count_source', 'api')) != 'api':
+        left = None     # the documents fixed the allowance; ignore the API's remaining count for exhaustion (unreadable detection above still uses it)
     S['id_wrong'] = S.get('id_wrong', 0) + 1
     exhausted = (left is not None and left <= 0) or (left is None and S['id_wrong'] >= int(I.get('wrong_answer_limit', 3)))
     if exhausted:
@@ -791,10 +793,17 @@ def st_neg_route():
     if intent == 'question':
         o = S.get('offer') or dict()
         if S.get('awaiting') == 'support':
-            # hardship: no persuasion at all — answer (no discount or other term can be offered) and repeat the support offer only
-            vars['neg_instruction'] = 'Answer their question in one short sentence (you cannot offer any discount, waiver or other term). Do not ask for any payment. Then ask once more whether they would like to be connected with the support team.'
+            # hardship: the support team is offered exactly once and there is no persuasion. A question instead of a yes
+            # ("can I get a discount?") is a decline: answer it in the goodbye and close with the hardship outcome.
+            hr = ((_sc('hardship') or dict()).get('action') or dict()).get('reason') or 'hardship'
+            for p in S['products']:
+                if not p['proposed'] and not p['disposition']:
+                    p['disposition'] = hr
+            if any(p['proposed'] for p in S['products']):
+                return _readback(S)
+            vars['goodbye_text'] = 'I am not able to change the amount or the terms. I understand, and I will not record a promise today. Thank you for your time, and goodbye.'
             _save(S)
-            return _set_next('negotiate')
+            return _set_next('finalize')
         if o:
             vars['neg_instruction'] = ('Answer their question in one short sentence (if they ask what the lowest amount is, say it is the amount you just proposed; do not say any amount again). '
                                        'Then ask again whether they can make the payment you proposed on ' + _fmt(o.get('date')) + '.')

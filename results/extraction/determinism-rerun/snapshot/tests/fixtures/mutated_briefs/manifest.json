@@ -1,0 +1,42 @@
+[
+  {
+    "file": "calendar_and_limits.md",
+    "expected_changes": {
+      "early_n": 10,
+      "late_n": 5,
+      "holiday_replaced": [
+        "2026-10-26",
+        "2026-10-27"
+      ]
+    },
+    "support": "offline_policy_extraction"
+  },
+  {
+    "file": "identity_order.md",
+    "expected_changes": {
+      "identity_order": [
+        "phone_last4",
+        "date_of_birth"
+      ]
+    },
+    "support": "offline_policy_extraction"
+  },
+  {
+    "file": "callback_window.md",
+    "expected_changes": {
+      "callback_start": "09:00",
+      "callback_end": "17:00"
+    },
+    "support": "offline_policy_extraction"
+  },
+  {
+    "file": "effective_memo.md",
+    "combine_with": "briefs/brief-a.md",
+    "expected_changes": {
+      "callback_start": "09:00",
+      "callback_end": "17:00",
+      "effective_date": "2026-10-15"
+    },
+    "support": "offline_precedence_and_scope"
+  }
+]

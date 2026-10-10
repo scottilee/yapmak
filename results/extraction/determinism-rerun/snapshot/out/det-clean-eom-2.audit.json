@@ -1,0 +1,200 @@
+{
+ "covered": [
+  {
+   "rule": "1. Start exactly: \"Good day, this is Larkspur Business Bank's automated assistant. We record this call.\"",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "1. Ask exactly: \"Am I speaking with {{title}} {{last_name}}?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "1. Ask at most twice; unclear closes lark_unreached / lark_unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "1. Never say arrears, overdue, facility, payment before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "2. Third parties: disclose nothing; callbacks next business day 08:30-16:15 inclusive, strictly after now",
+   "where": "third_party.callback.days/start/end/must_be_after_now"
+  },
+  {
+   "rule": "2. Invalid slot ask once; second failure closes lark_unreached / lark_no_callback",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "2. Scheduled callback closes lark_unreached / lark_callback",
+   "where": "third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "2. Wrong number lark_unreached / lark_wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "2. Deceased: \"Please accept our condolences.\" lark_unreached / lark_deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "3. Four questions in order postcode, birth_year, company_number, founded_year with formats",
+   "where": "identity.requirements[0..3]"
+  },
+  {
+   "rule": "3. Max 4 wrong answers, use checks_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "3. Exhaustion: \"Please contact our business desk.\" lark_unverified / lark_failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "3. Explain once after refusal; second refusal lark_unverified / lark_declined",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "3. Why-security question is not a refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "3. No recoverable-format hint",
+   "where": "identity.requirements[*].hint_field/hint_reply empty"
+  },
+  {
+   "rule": "4. Up to 2 products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "4. Product naming working_line/asset_credit/merchant_credit",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "4. State all products before asking",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "4. Business days Mon-Fri except 2026-10-30, 2026-11-02, 2026-12-25, 2027-01-01",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "4. \"Next Friday\" = following calendar week; missing month/year = next occurrence",
+   "where": "calendar.next_weekday_means_following_week, calendar.missing_date_parts"
+  },
+  {
+   "rule": "5. Days late 1-45: end_of_month basis=business adjustment=preceding",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "5. One persuasion attempt: full on deadline, floor if full already refused",
+   "where": "bands[0].attempts"
+  },
+  {
+   "rule": "5. \"Can you settle all these products today?\" / \"Can you settle this today?\"",
+   "where": "phrases.all_today_question, phrases.today_question, multi_product.ask_all_today_once"
+  },
+  {
+   "rule": "5. Get_account order, separate attempt counters; exhaustion lark_refused",
+   "where": "multi_product.per_product_attempts, outcomes.refused_reason"
+  },
+  {
+   "rule": "5. Common date clamped to product deadline",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "6. Floors by kind",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "6. Full first, floor once, \"The remainder stays overdue.\", never ask how much, accept between floor and full",
+   "where": "amounts.*"
+  },
+  {
+   "rule": "6. Promise date today allowed, business day, roll forward within deadline, vague ask once then deadline",
+   "where": "dates.*"
+  },
+  {
+   "rule": "7. One batch read-back; \"May I record these promises?\"",
+   "where": "multi_product.one_confirmation_for_batch, promise_write.confirm_phrase"
+  },
+  {
+   "rule": "7. One create_promise per product; retry once; second failure lark_service_error",
+   "where": "promise_write.one_promise_per_product, promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "7. \"We will email confirmation to your registered address.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "7. \"Please contact our business desk to change a recorded promise.\"",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "8. Already paid: sentence, mark lark_settled, continue",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "8. Dispute: mark lark_disputed, continue",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "8. Hardship: sympathy, offer lark_care, else lark_distress and continue",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "8. Restructure: transfer lark_restructure, lark_transferred / lark_restructure",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "8. Human: ask once, transfer lark_desk, lark_transferred / lark_person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "8. Refusal to talk: ask once, second refusal ends call, remaining products lark_refused",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "8. Robot reply",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "8. Scam reply and continue",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "8. \"Our business desk can answer that question.\"",
+   "where": "phrases.cannot_answer_sentence, special_cases[cannot_answer]"
+  },
+  {
+   "rule": "9. One note per unpromised product with allowed reasons; none on transfer",
+   "where": "notes.*"
+  },
+  {
+   "rule": "9. Transfer keeps recorded promises",
+   "where": "multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "9. Outcome precedence",
+   "where": "outcomes.transfer_overrides_promise, promise_outcome, paid_outcome, all_paid_closes_as_paid, no_promise_outcome, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "9. Goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "9. Debt intro \"I am calling about the overdue business products.\"",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "10. Outcome code table",
+   "where": "outcomes.table"
+  }
+ ],
+ "fixed": [
+  "special_cases[hardship].say was empty although rule 8 requires one short sentence of sympathy; set it to a short sympathy sentence (content dictated, words not) and recorded this in unresolved."
+ ],
+ "unresolved": [
+  "No band/deadline is defined for products 0 days late or more than 45 days late.",
+  "Exact wording of the hardship sympathy sentence is not dictated.",
+  "Rules not expressible in the schema and left to prompts: missing callback hour must be clarified; never offer discount/waiver/instalment plan; any correction to the batch invalidates consent; failed write must be stated and never claimed recorded; third parties get no disclosure."
+ ]
+}

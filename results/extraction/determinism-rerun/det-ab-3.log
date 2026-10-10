@@ -1,0 +1,45 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The documents do not say how to interpret a promise date given without a month or year (e.g. 'the 5th'); left at default.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.all_today_question",
+   "text": "Brief B only says 'First ask whether the customer can pay all of them today' without dictating the words; a short sentence with that content was written.",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "special_cases.hardship (multi-product)",
+   "text": "Brief B lists `hardship` as an add_note reason but does not say whether a declined hardship offer ends the call or continues with the other products (rule 9 names only dispute and already paid). Brief A rule 32 (close as no_promise / hardship) is kept, so ends_call stays true.",
+   "doc": "briefs/brief-b.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the added 'Hello,' so the sentence holds only the content rule A1 dictates (digital assistant, Freya Bank, call recorded); opening_verbatim stays false because the words are not dictated.",
+  "phrases.all_today_question: reworded to 'Can you pay all of them today?' to follow Brief B rule 4's wording ('pay all of them today').",
+  "Source spans enriched (bands, amounts, outcomes, promise_write, phrases, already_paid/dispute) so they quote the rules each value comes from, including the Brief A rules that Brief B overrides.",
+  "Added an unresolved entry: Brief B does not say whether a declined hardship offer continues with the other products."
+ ]
+}

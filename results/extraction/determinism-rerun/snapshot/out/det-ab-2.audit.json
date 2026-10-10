@@ -1,0 +1,214 @@
+{
+ "covered": [
+  {
+   "rule": "A \u00a71 1 to 45 days late",
+   "where": "bands[0].days_late_min, bands[1].days_late_max"
+  },
+  {
+   "rule": "A rule 1 opening sentence; no 'collections','debt','payment' or product before verification",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "A rule 2 'Am I speaking with {title} {last_name}?'",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "A rule 3 ask once more, then not_reached/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "A rule 4 robot/AI reply",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "A rules 5-7 callback window today/next business day 10:00-19:00, after now, ask once more",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "A rule 8 wrong number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "A rule 9 'I am sorry for your loss.' / deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "A rule 10 relatives told nothing",
+   "where": "phrases.prohibited_before_verification (behavioural; no dedicated field)"
+  },
+  {
+   "rule": "A rule 11 DOB then phone last 4, YYYY-MM-DD, dmy",
+   "where": "identity.requirements[0..1]"
+  },
+  {
+   "rule": "A rule 12 three wrong answers in total",
+   "where": "identity.wrong_answer_limit, identity.remaining_slot=wrong_answers_left"
+  },
+  {
+   "rule": "A rule 13 day_month_swapped hint, month as a word",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "A rule 14 mobile app or branch, not_verified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "A rule 15 explain once, declined; asking purpose counts as declining",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "A rules 16-17 debt intro and product naming",
+   "where": "phrases.debt_intro, phrases.product_naming"
+  },
+  {
+   "rule": "A \u00a77 business days and holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "A rule 18 band table",
+   "where": "bands[early], bands[late]"
+  },
+  {
+   "rule": "A rules 19-21, 23 promise date constraints",
+   "where": "dates.*"
+  },
+  {
+   "rule": "A rule 22 next <weekday>",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "A rules 24-27 full first, floors, rest stays overdue, accept between floor and full",
+   "where": "amounts.*"
+  },
+  {
+   "rule": "A rule 28 'Can you make this payment today?'",
+   "where": "phrases.today_question"
+  },
+  {
+   "rule": "A rules 29-31 persuasion attempts, then no_promise/refused",
+   "where": "bands[*].attempts, outcomes.refused_reason"
+  },
+  {
+   "rule": "A rule 32 hardship: sympathy, offer support transfer, else no_promise/hardship, before rules 30 and 41, still record named promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "A rule 33 no discounts/waivers/plans",
+   "where": "behavioural; no structural field (amounts.never_ask_how_much is related)"
+  },
+  {
+   "rule": "A rules 34-35 read-back and 'Do you confirm?'",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "A rule 36 one promise per product; change in mobile app",
+   "where": "promise_write.one_promise_per_product, phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "A rule 37 retry once then service_error",
+   "where": "promise_write.retry_on_failure=1, outcomes.service_error_reason"
+  },
+  {
+   "rule": "A rule 38 text message sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "A rule 39 already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence, outcomes.paid_outcome"
+  },
+  {
+   "rule": "A rule 40 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "A rule 41 restructuring transfer",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "A rule 42 human: ask once, then general queue",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "A rule 43 scam reply",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "A rule 44 cannot answer",
+   "where": "phrases.cannot_answer_sentence, special_cases[cannot_answer]"
+  },
+  {
+   "rule": "A rule 45 refuse to talk twice (declined before verification)",
+   "where": "special_cases[refuse_to_talk], identity.declined_outcome"
+  },
+  {
+   "rule": "A rule 46 outcome table; transfer after promise -> transferred",
+   "where": "outcomes.table, outcomes.transfer_overrides_promise"
+  },
+  {
+   "rule": "A 'never uses add_note' (overridden by Brief B rule 8)",
+   "where": "notes.enabled=true"
+  },
+  {
+   "rule": "A rule 47 goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "B rule 1 one to three products",
+   "where": "multi_product.max_products=3"
+  },
+  {
+   "rule": "B rule 2 state every late product first",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "B rule 3 band/deadline per product",
+   "where": "bands (applied per product)"
+  },
+  {
+   "rule": "B rule 4 ask all today once, then product by product",
+   "where": "multi_product.ask_all_today_once, phrases.all_today_question"
+  },
+  {
+   "rule": "B rule 5 attempts per product",
+   "where": "multi_product.per_product_attempts"
+  },
+  {
+   "rule": "B rule 6 common date clamped to each product's deadline",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "B rule 7 one confirmation for all",
+   "where": "multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "B rule 8 add_note per unpromised product with listed reasons",
+   "where": "notes.reasons, notes.note_each_unpromised_product"
+  },
+  {
+   "rule": "B rule 9 dispute/already-paid noted, call continues",
+   "where": "special_cases[already_paid|dispute].action=note, ends_call=false"
+  },
+  {
+   "rule": "B rule 10 restructuring keeps recorded promises; no notes on any transfer",
+   "where": "multi_product.recorded_promises_survive_transfer, notes.none_on_transfer, special_cases[restructuring]"
+  },
+  {
+   "rule": "B rule 11 failed create_promise twice -> note service_error",
+   "where": "notes.reasons, outcomes.service_error_reason"
+  },
+  {
+   "rule": "B Closing: all paid -> paid; else first non-paid note reason; promise wins except rule 10",
+   "where": "outcomes.all_paid_closes_as_paid, outcomes.no_promise_reason_from_first_non_paid_note, outcomes.transfer_overrides_promise"
+  }
+ ],
+ "fixed": [
+  "phrases.opening: removed the added 'Hello,'. The brief only dictates the content (digital assistant, Freya Bank, call recorded), so the sentence now says only that; opening_verbatim stays false.",
+  "special_cases[already_paid].source and special_cases[dispute].source: now quote Brief A rules 39/40 along with Brief B rule 9 (the override), so the sources show where the sentence and the trigger come from.",
+  "Expanded source spans for identity (rule 15 decline), third_party (rule 8 wrong number), amounts (rules 24, 27), outcomes (transfer-after-promise and goodbye), multi_product (rules 6 and 10), phrases (holder question, Brief B all-today question) and promise_write (rules 34 and 36) to cover every value they back. No values changed."
+ ],
+ "unresolved": [
+  "How to read a promise date given without a month or year (e.g. 'the 15th'): not stated; calendar.missing_date_parts left as 'unresolved'.",
+  "Multi-product hardship: Brief B rule 9 continues the call only for dispute and already-paid claims. It does not say whether a declined hardship offer ends the call or is noted per product while the call continues. Brief A rule 32 (close no_promise/hardship) is kept.",
+  "Sympathy sentence for hardship: the brief only asks for 'one short sentence of sympathy'. 'I am sorry to hear that.' is a written sentence, not words the brief dictates."
+ ]
+}

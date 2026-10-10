@@ -1,0 +1,21 @@
+PASS P1 swapped-hint retry not counted wrong
+PASS P2 decline-then-answer recovers
+PASS P3a question-then-confirm survives
+PASS P3b unclear+question+yes continues (rule 3)
+PASS P4 outside-window twice -> no_callback
+PASS P5 floor-refused attempt ladder
+PASS P6 vague twice -> deadline offered
+PASS P7 readback correction re-validated
+PASS P8 write fails twice -> service_error
+PASS P9 p2 fails twice, p1 kept
+PASS P10 dispute one product, continue
+PASS P11 restructuring: agreed-unrecorded not written
+PASS P12 human after proposal -> transfer, no write
+PASS P13 hardship then customer names date -> recorded
+P14 cannot-say twice -> outcome: ('not_reached', 'no_callback') callbacks: []
+PASS P15 three wrongs end check (global across questions)
+PASS P16 negotiate turn-cap -> clean close
+   - cap fired: True | safe farewell said: True
+PASS P17 close rejection -> outcome still recorded
+
+15 / 15 probes fully as expected by the brief

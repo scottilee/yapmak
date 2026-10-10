@@ -1,0 +1,207 @@
+{
+ "covered": [
+  {
+   "rule": "1. The job: 1 to 45 days late on one product",
+   "where": "bands[*].days_late_min/max; multi_product.max_products=1"
+  },
+  {
+   "rule": "Call variables title/last_name, now",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "Rule 1 opening: digital assistant, Freya Bank, call recorded (content, not dictated words)",
+   "where": "phrases.opening; phrases.opening_verbatim=false"
+  },
+  {
+   "rule": "Rule 1 do not say collections/debt/payment/product before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "Rule 2 'Am I speaking with {title} {last_name}?'",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "Rule 3 confirmation asked twice, then not_reached/unclear",
+   "where": "identity.holder_confirmation_asks=2; identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "Rule 4 robot/AI reply",
+   "where": "phrases.robot_reply; special_cases[robot]"
+  },
+  {
+   "rule": "Rule 5 third party: say nothing beyond opening, ask when reachable",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "Rule 6 callback today/next business day 10:00-19:00 inclusive, after now -> not_reached/callback",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "Rule 7 ask once more, else not_reached/no_callback",
+   "where": "third_party.callback.retry_once; third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "Rule 8 wrong number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "Rule 9 'I am sorry for your loss.' -> not_reached/deceased",
+   "where": "third_party.deceased_sentence; third_party.deceased_outcome"
+  },
+  {
+   "rule": "Rule 10 relatives may not answer security questions or learn anything",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "Rule 11 DOB then phone last four; YYYY-MM-DD; numeric dates read day-month-year",
+   "where": "identity.requirements[0..1]; identity.requirements[0].numeric_date_order=dmy"
+  },
+  {
+   "rule": "Rule 12 three wrong answers in total",
+   "where": "identity.wrong_answer_limit=3; identity.remaining_slot=wrong_answers_left"
+  },
+  {
+   "rule": "Rule 13 day_month_swapped hint -> ask month as a word, not counted",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "Rule 14 failed -> mobile app or branch, not_verified/failed",
+   "where": "identity.failed_instruction; identity.failed_outcome"
+  },
+  {
+   "rule": "Rule 15 explain once, then not_verified/declined; asking purpose counts as declining",
+   "where": "identity.decline_explain_once; identity.asking_purpose_counts_as_decline; identity.declined_outcome"
+  },
+  {
+   "rule": "Rule 16-17 get_account, collections team / late payment, product naming",
+   "where": "phrases.debt_intro; phrases.product_naming"
+  },
+  {
+   "rule": "Business days Mon-Fri and holidays",
+   "where": "calendar.business_days; calendar.holidays"
+  },
+  {
+   "rule": "Rule 18 band table (early 12th business day, 1 attempt; late 7th business day, 2 attempts)",
+   "where": "bands[early]; bands[late]"
+  },
+  {
+   "rule": "Rule 19 promise date today or later, business day, not after deadline",
+   "where": "dates.promise_today_allowed"
+  },
+  {
+   "rule": "Rule 20 weekend/holiday -> next business day",
+   "where": "dates.weekend_or_holiday_roll_forward"
+  },
+  {
+   "rule": "Rule 21 vague period: ask once, then deadline",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "Rule 22 next/this weekday",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "Rule 23 after deadline -> offer deadline; refusal = flat refusal",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "Rule 24 full first, never ask how much",
+   "where": "amounts.full_first; amounts.never_ask_how_much"
+  },
+  {
+   "rule": "Rule 25 floors",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "Rule 26 floor once, 'the rest stays overdue'",
+   "where": "amounts.floor_offered_once; amounts.floor_wording"
+  },
+  {
+   "rule": "Rule 27 accept between floor and full inclusive",
+   "where": "amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "Rule 28 'Can you make this payment today?'",
+   "where": "phrases.today_question"
+  },
+  {
+   "rule": "Rule 30 attempts: attempt 1 full (or floor) on last business day this week or next; attempt 2 late only floor on deadline",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "Rule 31 attempts used up -> no_promise/refused",
+   "where": "outcomes.refused_reason; outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "Rule 32 hardship: sympathy, offer support transfer, else no_promise/hardship; before rules 30 and 41; may still record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "Rule 34 'Do you confirm?'",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "Rule 36 one promise per product; change in mobile app",
+   "where": "promise_write.one_promise_per_product; phrases.recorded_promise_change_reply; special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "Rule 37 retry once, then no_promise/service_error",
+   "where": "promise_write.retry_on_failure=1; outcomes.service_error_reason"
+  },
+  {
+   "rule": "Rule 38 'You will receive a text message confirming this promise.'",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "Rule 39 already paid -> paid",
+   "where": "special_cases[already_paid]; phrases.already_paid_sentence"
+  },
+  {
+   "rule": "Rule 40 dispute -> no_promise/dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "Rule 41 restructuring transfer",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "Rule 42 human: ask once, then general queue",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "Rule 43 scam reply, continue",
+   "where": "special_cases[scam]; phrases.scam_reply"
+  },
+  {
+   "rule": "Rule 44 cannot answer",
+   "where": "special_cases[cannot_answer]; phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "Rule 45 refuse to talk twice",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "Rule 46 outcome table; transfer after promise -> transferred",
+   "where": "outcomes.table; outcomes.transfer_overrides_promise"
+  },
+  {
+   "rule": "Brief A never uses add_note",
+   "where": "notes.enabled=false"
+  },
+  {
+   "rule": "Rule 47 thank and say goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  }
+ ],
+ "fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; rule 1 dictates only the content (digital assistant, Freya Bank, call recorded).",
+  "special_cases[hardship].trigger: added that hardship takes precedence over persuasion and over a restructuring request (rule 32: 'This rule comes before rules 30 and 41').",
+  "Widened source spans (identity, third_party, calendar, bands, amounts, dates, phrases) to quote the rules they encode (rules 3, 5, 10, 15 second refusal, 22 example, 23/26/27 flat-refusal, 17 amount and days late)."
+ ],
+ "unresolved": [
+  "Freya Bank's customer service number for the scam reply (rule 43) is not given.",
+  "No question for several products (all_today_question); Brief A covers one product only.",
+  "Rule 33 (no discount, waiver, instalment plan or other terms) and rule 29 (a proposed date or amount is never a refusal) have no structural IR field; they are prompt-level constraints.",
+  "Rule 35 (re-check a changed date or amount at confirmation) and rule 10 (relatives get no account information) have no dedicated IR field beyond the date, amount and third-party policies."
+ ]
+}

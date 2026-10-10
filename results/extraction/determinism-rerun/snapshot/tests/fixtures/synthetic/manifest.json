@@ -1,0 +1,56 @@
+[
+  {
+    "name": "readback_amount_correction",
+    "file": "readback_amount_correction.json",
+    "case_id": "PUB-01",
+    "support": "official_cases",
+    "requirements": [],
+    "identity_and_products_unchanged": true
+  },
+  {
+    "name": "below_floor_then_accept",
+    "file": "below_floor_then_accept.json",
+    "case_id": "PUB-06",
+    "support": "official_cases",
+    "requirements": [],
+    "identity_and_products_unchanged": true
+  },
+  {
+    "name": "next_friday_from_friday",
+    "file": "next_friday_from_friday.json",
+    "case_id": "PUB-01",
+    "support": "requires_now_adapter",
+    "requirements": [
+      "Official run_cases.py uses server session variables and ignores the JSON now override. Use scripts/run_synthetic_cases.py."
+    ],
+    "identity_and_products_unchanged": true
+  },
+  {
+    "name": "dispute_second_of_three",
+    "file": "dispute_second_of_three.json",
+    "case_id": "PUB-11",
+    "support": "official_cases",
+    "requirements": [],
+    "identity_and_products_unchanged": true
+  },
+  {
+    "name": "transfer_after_recorded_promise",
+    "file": "transfer_after_recorded_promise.json",
+    "case_id": "PUB-11",
+    "support": "script_requires_interruption_opportunity",
+    "requirements": [
+      "This script can run with --cases, but only reaches its trigger if the workflow allows a customer turn after acknowledging persistence and before writing pending notes/closing. Use controlled chat for deterministic coverage."
+    ],
+    "identity_and_products_unchanged": true
+  },
+  {
+    "name": "double_write_failure",
+    "file": "double_write_failure.json",
+    "case_id": "PUB-11",
+    "support": "offline_fault_fixture_only",
+    "identity_and_products_unchanged": true,
+    "requirements": [
+      "Official runner does not send faults or products to /v1/practice/sessions. No documented per-product double-failure injection is provided. Do not label this runnable via --cases until such support exists."
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+{
+ "bands": [
+  "late_1_45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "Only days late 1\u201345 is defined; the documents give no deadline or attempts for products more than 45 days late (or 0 days late).",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "Rule 8 requires 'one short sentence of sympathy' for hardship but does not dictate the words; special_cases[hardship].say holds a short sentence written to that content.",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[hardship].say was empty although rule 8 requires one short sentence of sympathy; set it to a short sympathy sentence (content dictated, words not) and recorded this in unresolved."
+ ]
+}

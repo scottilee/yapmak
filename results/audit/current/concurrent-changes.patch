@@ -1,0 +1,175 @@
+--- snapshot/build.py
++++ working/build.py
+@@ -113,6 +113,17 @@
+         checkpoint_exported = True
+         tr.event("checkpoint_export", path=str(export_path.relative_to(ROOT)), version=ids.get("version"))
+ 
++        # read-back: the exported file is what we submit; log what the platform changed or stripped (plan §5)
++        try:
++            stored = json.loads(export_path.read_text()).get("workflow") or {}
++            from compiler_checks import workflow_diff
++            diffs = workflow_diff(wf, stored)
++            stripped = [d for d in diffs if "missing in stored" in d or (" -> " in d and "added by platform" not in d)]
++            tr.event("workflow_readback", differences=len(diffs), platform_additions=len(diffs) - len(stripped),
++                     suspect=stripped[:8], suspect_count=len(stripped))
++        except BaseException as e:      # noqa: BLE001 - checkpoint exists; a diff hiccup must not kill the build
++            tr.event("workflow_readback", error=repr(e)[:200])
++
+         # 4. pre-bank chat self-test (identity start + third party); never a simulation, never fatal ------------
+         if not a.no_smoke:
+             selftest(ids, ir, tr, a.slot)
+--- snapshot/compile.py
++++ working/compile.py
+@@ -3,8 +3,8 @@
+ Design (plan §3):
+   - every bank tool is an engine-fired `api_request` node with a body baked from variables that code nodes set;
+     no bank tool is ever in a conversation node's `tools`;
+-  - all arithmetic, calendars, validation and outcome selection run in `code` nodes (bankcal.py source is
+-    embedded verbatim plus a small runtime below); the dialogue model only talks;
++  - all arithmetic, calendars, validation and outcome selection run in `code` nodes (bankcal.py and
++    workflow_runtime.py sources are embedded, sliced per stage); the dialogue model only talks;
+   - routing is deterministic: conversation nodes extract an intent enum, a code node consumes it and sets
+     `next`, transitions test `next equals <node>`;
+   - the template is multi-product native; a single product is the degenerate case.
+@@ -236,11 +236,13 @@
+             "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. "
+             "If they ask to spread the debt over time or to change its terms, say a colleague will handle that part; describe nothing yourself.\n"
+             "If the customer talks about something else, reply in a few words and invite them to come back to the payment (\"whenever you are ready\") without repeating the proposal or any amount. If they ask a question, answer it in one sentence and then ask whether they can make the payment you proposed. "
+-            "CURRENT INSTRUCTION: {{neg_instruction}}"
++            + ('\nIf the customer asks whether a recorded promise can be changed: say "' + ph.recorded_promise_change_reply + '" and continue. ' if ph.recorded_promise_change_reply else "")
++            + "CURRENT INSTRUCTION: {{neg_instruction}}"
+         ),
+         "readback": (
+             "You have read the promise back and asked for confirmation. Wait for a clear yes. If the customer changes the amount or the date, acknowledge it briefly; "
+             "the system checks it and you will read it back again. A later instruction tells you when something has gone through; until then do not confirm that anything is stored."
++            + ('\nIf the customer asks whether a promise can still be changed afterwards: say "' + ph.recorded_promise_change_reply + '".' if ph.recorded_promise_change_reply else "")
+         ),
+     }
+     return P.PromptSet(system=system, stages=stages)
+@@ -388,7 +390,8 @@
+     nodes["notes_step"]["transitions"][0] = guarded_dispatch("add_note", "n_ok")
+     nodes["add_note"] = api_node("add_note", tools["add_note"], {"customer_id": "{{customer_id}}", "product_id": "{{n_product_id}}", "reason": "{{n_reason}}"},
+                                  "notes_step", [{"path": "data." + slots["ok_by_tool"]["add_note"], "variable": "n_ok"}])
+-    goodbye = {"type": "tts", "text": "{{goodbye_text}}"}
++    # rule 47 (thank + goodbye before close) is a policy choice, not a template assumption
++    goodbye = {"type": "tts", "text": "{{goodbye_text}}"} if ir.outcomes.goodbye_before_close else {"type": "silent"}
+     ok_close = "data." + slots["ok_by_tool"]["close_call"]
+     nodes["close_reason"] = api_node("close_reason", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}", "reason": "{{final_reason}}"},
+                                      "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)
+--- snapshot/compiler_checks.py
++++ working/compiler_checks.py
+@@ -93,3 +93,31 @@
+         if x not in seen:
+             errs.append(f"unreachable node {x}")
+     return errs
++
++
++IGNORED_TOP = {"agent_config", "nodePositions", "test_variables", "tools", "context_variables"}
++
++
++def workflow_diff(candidate: dict, stored: dict, path: str = "", out: list | None = None) -> list[str]:
++    """Compare the workflow we sent with what the platform stored (it strips and adds fields silently).
++    Same semantics as the rehearsal tool's diff; shared so build.py can log it in the trace."""
++    if out is None:
++        out = []
++    if isinstance(candidate, dict) and isinstance(stored, dict):
++        for k in set(candidate) | set(stored):
++            if path == "" and k in IGNORED_TOP:
++                continue
++            if k not in stored:
++                out.append(f"{path}.{k}: missing in stored")
++            elif k not in candidate:
++                out.append(f"{path}.{k}: added by platform")
++            else:
++                workflow_diff(candidate[k], stored[k], f"{path}.{k}", out)
++    elif isinstance(candidate, list) and isinstance(stored, list):
++        if len(candidate) != len(stored):
++            out.append(f"{path}: list length {len(candidate)} -> {len(stored)}")
++        for i, (x, y) in enumerate(zip(candidate, stored)):
++            workflow_diff(x, y, f"{path}[{i}]", out)
++    elif candidate != stored and not (candidate in ("", None, False) and stored in ("", None, False)):
++        out.append(f"{path}: {str(candidate)[:60]!r} -> {str(stored)[:60]!r}")
++    return out
+--- snapshot/policy.py
++++ working/policy.py
+@@ -415,6 +415,27 @@
+             errs.append(f"outcomes.{name} is empty")
+     if ir.notes.enabled and not ir.notes.reasons:
+         errs.append("notes enabled without reasons")
++    # Template-behaviour switches: false means the documents ask for something the fixed template cannot do.
++    # Those deviations must surface as unresolved[] entries (and block the affected action), never as a silently ignored flag.
++    for name, value, why in (
++        ("amounts.full_first", ir.amounts.full_first, "the engine always asks for the full amount before any floor"),
++        ("amounts.never_ask_how_much", ir.amounts.never_ask_how_much, "the dialogue is instructed never to ask the customer for an amount"),
++        ("amounts.accept_between_floor_and_full", ir.amounts.accept_between_floor_and_full, "the proposal validator accepts floor..full by construction"),
++        ("dates.promise_today_allowed", ir.dates.promise_today_allowed, "today is an allowed promise date when it is a business day"),
++        ("promise_write.one_promise_per_product", ir.promise_write.one_promise_per_product, "the write loop records at most one promise per product"),
++        ("multi_product.state_all_before_asking", ir.multi_product.state_all_before_asking, "the debt statement always lists every product first"),
++        ("multi_product.ask_all_today_once", ir.multi_product.ask_all_today_once, "the pay-all-today question is always asked once for the batch"),
++        ("multi_product.per_product_attempts", ir.multi_product.per_product_attempts, "attempt counters are always per product"),
++        ("multi_product.one_confirmation_for_batch", ir.multi_product.one_confirmation_for_batch, "confirmation is always a single batch read-back"),
++        ("multi_product.recorded_promises_survive_transfer", ir.multi_product.recorded_promises_survive_transfer, "recorded promises always stay when the call transfers"),
++    ):
++        if value is False:
++            errs.append(f"{name} must be true: {why}; express the deviation in unresolved[] instead")
++    if ir.identity.wrong_count_source not in ("api", "code"):
++        errs.append(f"identity.wrong_count_source must be 'api' or 'code', not {ir.identity.wrong_count_source!r}")
++    for sc in ir.special_cases:
++        if not str(sc.trigger or "").strip():
++            errs.append(f"special case {sc.name}: trigger is empty (describe in words what the customer says)")
+     for h in ir.calendar.holidays:
+         if not iso_date(h):
+             errs.append(f"calendar holiday not ISO: {h}")
+--- snapshot/workflow_runtime.py
++++ working/workflow_runtime.py
+@@ -479,6 +479,8 @@
+         vars['id_say'] = 'I could not read that. ' + _q(r)
+         _save(S)
+         return _set_next('ask_' + str(i))
++    if str(I.get('wrong_count_source', 'api')) != 'api':
++        left = None     # the documents fixed the allowance; ignore the API's remaining count for exhaustion (unreadable detection above still uses it)
+     S['id_wrong'] = S.get('id_wrong', 0) + 1
+     exhausted = (left is not None and left <= 0) or (left is None and S['id_wrong'] >= int(I.get('wrong_answer_limit', 3)))
+     if exhausted:
+--- snapshot/scripts/publish_check.py
++++ working/scripts/publish_check.py
+@@ -15,29 +15,7 @@
+ import freya  # noqa: E402
+ from scripts.chatlib import Chat, variables_from, runtime_errors
+ 
+-IGNORED_TOP = {"agent_config", "nodePositions", "test_variables", "tools", "context_variables"}
+-
+-
+-def diff(a, b, path="", out=None):
+-    out = out if out is not None else []
+-    if isinstance(a, dict) and isinstance(b, dict):
+-        for k in set(a) | set(b):
+-            if path == "" and k in IGNORED_TOP:
+-                continue
+-            if k not in b:
+-                out.append(f"{path}.{k}: missing in stored")
+-            elif k not in a:
+-                out.append(f"{path}.{k}: added by platform")
+-            else:
+-                diff(a[k], b[k], f"{path}.{k}", out)
+-    elif isinstance(a, list) and isinstance(b, list):
+-        if len(a) != len(b):
+-            out.append(f"{path}: list length {len(a)} -> {len(b)}")
+-        for i, (x, y) in enumerate(zip(a, b)):
+-            diff(x, y, f"{path}[{i}]", out)
+-    elif a != b and not (a in ("", None, False) and b in ("", None, False)):
+-        out.append(f"{path}: {str(a)[:60]!r} -> {str(b)[:60]!r}")
+-    return out
++from compiler_checks import workflow_diff
+ 
+ 
+ def main():
+@@ -50,7 +28,7 @@
+     ids = freya.save_workflow(slot, wf)
+     print("published", ids, f"({time.time() - t0:.1f}s)")
+     stored = freya.api("GET", f"/api/v2/workflow/{ids['workflow_id']}", workspaceId=freya.workspace_id())["workflow"]["workflow"]
+-    d = diff(wf, stored)
++    d = workflow_diff(wf, stored)
+     print("stored-vs-candidate differences:", len(d))
+     for line in d[:40]:
+         print("  ", line)

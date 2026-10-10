@@ -1,0 +1,48 @@
+[
+  {
+    "id": "PUB-06",
+    "brief": "A",
+    "family": "Amounts",
+    "level": "hard",
+    "title": "below floor then accept",
+    "variables": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1986-05-17",
+      "phone_last4": "1502"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "1903",
+        "past_due": 2125.1,
+        "days_late": 12,
+        "minimum_payment": 637.5
+      }
+    ],
+    "script": "Confirm your name and give correct security answers. Say the full amount is too much and propose 100 dollars this Friday. When told the floor is 637.50, accept that floor for Friday. Confirm its read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 637.5,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "100 dollars is rejected without a promise write",
+      "Floor offered with explanation that the remainder stays overdue",
+      "Record 637.50 on 16 October only after confirmation"
+    ]
+  }
+]

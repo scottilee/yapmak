@@ -1,0 +1,40 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "all_today_question",
+   "text": "Brief A covers one product only; no question for paying several products today is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "The brief does not say how to read a promise date given without month or year (e.g. 'the 15th').",
+   "doc": "briefs/brief-a.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the added 'Hello,' so the sentence contains only what rule 1 requires (the content is dictated, the words are not, so opening_verbatim stays false).",
+  "special_cases[refuse_to_talk].trigger: rewritten so it describes what the customer says and that the call closes on the second time. Before, it read 'says for the second time', which together with ask_once_first=true could be counted twice.",
+  "Source spans extended so every rule has a recorded origin: rules 3 and 16 (identity.source), rules 5 and 10 (third_party.source), rules 27 and 33 (amounts.source), rules 20 and 23 refusal plus rule 29 (dates.source), rules 30-31 (bands.source), rules 35 and 37 ok:true (promise_write.source), rule 40 last sentence (dispute.source).",
+  "Checked against the tool API: all enum values (verify_identity fields, product types, transfer queues, close_call outcomes) exist there. Every reason matches the brief's outcome table. No other values changed. Only one document was given, so no precedence conflict was possible."
+ ]
+}

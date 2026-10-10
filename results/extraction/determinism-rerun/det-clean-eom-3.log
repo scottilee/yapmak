@@ -1,0 +1,35 @@
+{
+ "bands": [
+  "late_1_45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "change_recorded_promise",
+  "cannot_answer"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "The brief defines a deadline only for 1\u201345 days late; no rule is given for products more than 45 days late (or 0 days late).",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "multi_product.source.text: completed the clamping quote ('... and explained in the read-back') and added the batch read-back sentence so the span is literal and supports one_confirmation_for_batch.",
+  "phrases.source.text: quoted the prohibited-words sentence literally ('never say these words or disclose their associated information').",
+  "unresolved bands entry: also notes that 0 days late is not covered. All other values were verified against the brief and the OpenAPI enums (verify_identity field, get_account kind, transfer_to_agent queue, add_note reason, close_call outcome/reason) and left unchanged."
+ ]
+}

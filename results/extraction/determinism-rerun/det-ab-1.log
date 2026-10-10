@@ -1,0 +1,48 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "hardship_multi_product",
+   "text": "Brief B lists hardship as an add_note reason but does not say whether a declined hardship transfer ends the call or continues with the other products (Brief B rule 9 names only dispute and already paid); kept Brief A behaviour (close as no_promise / hardship after noting unpromised products).",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "Neither brief says how to read a promise or callback date given without a month or year (e.g. 'the 15th'); left as unresolved.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "no_extra_terms",
+   "text": "Rule 33 (never offer a discount, a waiver, an instalment plan or any term not in the brief) has no structural IR field; it must be carried by the prompt text.",
+   "doc": "briefs/brief-a.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented 'Hello,'. Rule 1 only gives the content, so the sentence now says just that (opening_verbatim stays false).",
+  "phrases.all_today_question: reworded to follow Brief B rule 4 ('whether the customer can pay all of them today') more closely.",
+  "special_cases[hardship].source: added the rule 32 sentence that supports takes_promise=true ('If the customer still names a date or an amount themselves, record the promise').",
+  "identity.source: added the rule 15 decline text that supports declined_outcome and asking_purpose_counts_as_decline.",
+  "third_party.source: added rule 10 (a relative may not answer questions or be told anything).",
+  "calendar.source: added rule 22 (next <weekday>) that supports next_weekday_means_following_week.",
+  "unresolved: added missing_date_parts (neither brief settles it) and no_extra_terms (rule 33 has no IR field)."
+ ]
+}
