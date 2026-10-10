@@ -1,0 +1,12 @@
+CODE LIST C9 — authoritative enum combinations
+
+mtb_arranged: (omit reason)
+mtb_settled: (omit reason)
+mtb_transferred: mtb_restructure | mtb_person | mtb_care
+mtb_no_deal: mtb_refused | mtb_distress | mtb_disputed | mtb_service_error
+mtb_unverified: mtb_failed | mtb_declined
+mtb_unreached: mtb_callback | mtb_no_callback | mtb_wrong_number | mtb_deceased | mtb_unclear
+
+Transfer queues: mtb_restructure, mtb_desk, mtb_care
+add_note reasons: mtb_refused, mtb_distress, mtb_disputed, mtb_settled, mtb_service_error
+Only these combinations are allowed; omit reason where stated.

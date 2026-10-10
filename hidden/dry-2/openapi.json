@@ -1,0 +1,498 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Marlow Trade Bank dry-run API",
+    "version": "dry-2026-10-10"
+  },
+  "servers": [
+    {
+      "url": "https://dry-2-mtb.example.invalid/api"
+    }
+  ],
+  "components": {},
+  "paths": {
+    "/bank/verify_identity": {
+      "post": {
+        "summary": "Check exactly one field; question order, formats and total wrong-answer allowance come from the effective brief. remaining_tries is authoritative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "postcode",
+                      "registration_code",
+                      "founding_year",
+                      "contact_birthdate"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "Use the format and question order in the effective brief. Date answers must be ISO YYYY-MM-DD; preserve leading zeros in digit answers."
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "field",
+                  "answer"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "check_passed": {
+                      "type": "boolean"
+                    },
+                    "all_checks_complete": {
+                      "type": "boolean"
+                    },
+                    "remaining_tries": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "verify_identity"
+      }
+    },
+    "/bank/get_account": {
+      "post": {
+        "summary": "Return obligations after all required identity answers pass.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "obligations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "facility_id": {
+                            "type": "string"
+                          },
+                          "product_type": {
+                            "type": "string",
+                            "enum": [
+                              "trade_line",
+                              "stock_credit",
+                              "vehicle_lease"
+                            ]
+                          },
+                          "outstanding_amount": {
+                            "type": "number"
+                          },
+                          "days_past_due": {
+                            "type": "integer"
+                          },
+                          "trade_floor": {
+                            "type": "number",
+                            "description": "Lowest acceptable promise amount for trade_line"
+                          },
+                          "stock_floor": {
+                            "type": "number",
+                            "description": "Lowest acceptable promise amount for stock_credit"
+                          },
+                          "lease_floor": {
+                            "type": "number",
+                            "description": "Lowest acceptable promise amount for vehicle_lease"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "get_account"
+      }
+    },
+    "/bank/create_promise": {
+      "post": {
+        "summary": "Perform create_promise according to the effective policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "product_id",
+                  "amount",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "create_promise"
+      }
+    },
+    "/bank/add_note": {
+      "post": {
+        "summary": "Add one product note only when the effective policy authorizes it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "mtb_refused",
+                      "mtb_distress",
+                      "mtb_disputed",
+                      "mtb_settled",
+                      "mtb_service_error"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "product_id",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "add_note"
+      }
+    },
+    "/bank/schedule_callback": {
+      "post": {
+        "summary": "Perform schedule_callback according to the effective policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "HH:MM"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "schedule_callback"
+      }
+    },
+    "/bank/transfer_to_agent": {
+      "post": {
+        "summary": "Perform transfer_to_agent according to the effective policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "mtb_restructure",
+                      "mtb_desk",
+                      "mtb_care"
+                    ]
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "queue"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "transfer_to_agent"
+      }
+    },
+    "/bank/close_call": {
+      "post": {
+        "summary": "Perform close_call according to the effective policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "mtb_arranged",
+                      "mtb_settled",
+                      "mtb_transferred",
+                      "mtb_no_deal",
+                      "mtb_unverified",
+                      "mtb_unreached"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "mtb_refused",
+                      "mtb_distress",
+                      "mtb_disputed",
+                      "mtb_settled",
+                      "mtb_service_error",
+                      "mtb_restructure",
+                      "mtb_person",
+                      "mtb_care",
+                      "mtb_failed",
+                      "mtb_declined",
+                      "mtb_callback",
+                      "mtb_no_callback",
+                      "mtb_wrong_number",
+                      "mtb_deceased",
+                      "mtb_unclear"
+                    ],
+                    "description": "Allowed combinations come from the current code list. Omit reason for arranged and settled."
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "outcome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "operation_success states whether the operation actually succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "operation_success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No write was completed. Follow the effective brief for any retry."
+          }
+        },
+        "operationId": "close_call"
+      }
+    }
+  }
+}

@@ -189,7 +189,7 @@ class Driver:
                     raise AssertionError(f"expected to be in {expected_node}, was in {name}")
                 self.vars.update(turn)
                 nxt = self.route(n)
-                if nxt == name:   # nothing matched: stay
+                if nxt is None or nxt == name:   # nothing matched: the engine stays in the node without re-entering it
                     continue
             elif t == "end_call":
                 return

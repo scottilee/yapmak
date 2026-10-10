@@ -1,0 +1,45 @@
+mock down (500), retry 1 2026-10-10T15:39:27Z
+mock down (500), retry 2 2026-10-10T15:41:28Z
+mock down (500), retry 3 2026-10-10T15:43:28Z
+mock down (500), retry 4 2026-10-10T15:45:28Z
+mock down (500), retry 5 2026-10-10T15:47:28Z
+mock ok 2026-10-10T15:49:28Z
+start A 2026-10-10T15:49:28Z
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 121, in <module>
+    if __name__ == "__main__": main()
+                               ~~~~^^
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 67, in main
+    rows, sim_id, it_id, status, took, med = run_once(a.agent_id, cases, ids)
+                                             ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 86, in run_once
+    sessions = {c["id"]: http("/v1/practice/sessions", {"case": c["id"]})["variables"] for c in cases}
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/tools/score.py", line 15, in http
+    except urllib.error.HTTPError as e: return json.load(e)
+                                               ~~~~~~~~~^^^
+  File "/usr/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/usr/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/usr/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+exit A 1 2026-10-10T15:49:29Z
+start B 2026-10-10T15:49:29Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 7 s. Failed calls where the customer hung up: 0.
+
+3 / 3 passed (bank records and conversation checks). Last simulation c52f8886-9194-4c28-85e8-d1ddcb8d674b, status completed, 230 s.
+exit B 0 2026-10-10T15:53:27Z
+start A-asks_back 2026-10-10T15:53:27Z

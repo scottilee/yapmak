@@ -98,7 +98,7 @@ class CapDriver(O.Driver):
                     self.trace.append((name + ":turn-cap", "platform"))
                 else:
                     nxt = self.route(n)
-                    if nxt == name:
+                    if nxt is None or nxt == name:   # unrouted turn: the engine stays in the node without re-entering it
                         continue
             elif t == "end_call":
                 return

@@ -1,0 +1,78 @@
+[
+  {
+    "step": "clean-start",
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.084
+  },
+  {
+    "step": "venv",
+    "command": [
+      "uv",
+      "venv",
+      ".venv"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.017
+  },
+  {
+    "step": "dependencies",
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      ".venv/bin/python",
+      "-r",
+      "requirements.txt"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.153
+  },
+  {
+    "step": "claude-preflight",
+    "command": [
+      "bash",
+      "-c",
+      "source .env\nclaude -p \"say OK\""
+    ],
+    "exit_code": 0,
+    "elapsed_s": 2.692
+  },
+  {
+    "step": "offline-tests",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 1.047
+  },
+  {
+    "step": "fixture-rehearsal",
+    "command": [
+      "bash",
+      "-c",
+      "source .env\n.venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot rehearsal-a"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 17.437
+  },
+  {
+    "step": "clean-after-rehearsal",
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.004
+  }
+]

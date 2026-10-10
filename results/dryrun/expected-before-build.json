@@ -1,0 +1,343 @@
+{
+  "dry-1": {
+    "folder": "dry-1",
+    "bank": "Juniper Cooperative Bank",
+    "prefix": "jcb",
+    "fields": [
+      [
+        "membership_year",
+        "In which year did you join the cooperative?",
+        "year",
+        0
+      ],
+      [
+        "date_of_birth",
+        "What is your date of birth?",
+        "date",
+        0
+      ],
+      [
+        "access_suffix",
+        "What are the six digits of your access reference?",
+        "digits",
+        6
+      ]
+    ],
+    "limit": 5,
+    "max_products": 2,
+    "holidays": [
+      "2026-10-19",
+      "2026-10-29",
+      "2026-12-31"
+    ],
+    "callback": [
+      "today",
+      "08:00",
+      "18:30"
+    ],
+    "types": [
+      "cooperative_line",
+      "equipment_credit"
+    ],
+    "floors": [
+      "line_floor",
+      "equipment_floor"
+    ],
+    "names": [
+      "cooperative credit line",
+      "equipment credit"
+    ],
+    "retry": 2,
+    "inputs": [
+      "brief.md"
+    ],
+    "phrases": {
+      "opening": "This is the automated assistant of Juniper Cooperative Bank. This call is recorded.",
+      "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+      "debt_intro": "I am calling about your overdue cooperative borrowing.",
+      "today_question": "Can you settle this commitment today?",
+      "all_today_question": "Can you settle every listed commitment today?",
+      "robot_reply": "I am the automated assistant of Juniper Cooperative Bank.",
+      "scam_reply": "Please verify this call using the number on your statement.",
+      "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+      "already_paid_sentence": "A received payment may take two working days to appear.",
+      "cannot_answer_sentence": "Our service desk can answer that question.",
+      "recorded_promise_change_reply": "Please use your secure inbox to request a change."
+    },
+    "identity": [
+      {
+        "field": "membership_year",
+        "ask_text": "In which year did you join the cooperative?",
+        "answer_format": "year",
+        "digits": 0
+      },
+      {
+        "field": "date_of_birth",
+        "ask_text": "What is your date of birth?",
+        "answer_format": "date",
+        "digits": 0
+      },
+      {
+        "field": "access_suffix",
+        "ask_text": "What are the six digits of your access reference?",
+        "answer_format": "digits",
+        "digits": 6
+      }
+    ],
+    "bands": [
+      {
+        "days_late_min": 1,
+        "days_late_max": 18,
+        "deadline": {
+          "kind": "calendar_days",
+          "n": 9,
+          "adjustment": "following"
+        }
+      },
+      {
+        "days_late_min": 19,
+        "days_late_max": 75,
+        "deadline": {
+          "kind": "nth_business_day",
+          "n": 4
+        }
+      }
+    ],
+    "table": {
+      "jcb_arranged": [],
+      "jcb_settled": [],
+      "jcb_transferred": [
+        "jcb_restructure",
+        "jcb_person",
+        "jcb_care"
+      ],
+      "jcb_no_deal": [
+        "jcb_refused",
+        "jcb_distress",
+        "jcb_disputed",
+        "jcb_service_error"
+      ],
+      "jcb_unverified": [
+        "jcb_failed",
+        "jcb_declined"
+      ],
+      "jcb_unreached": [
+        "jcb_callback",
+        "jcb_no_callback",
+        "jcb_wrong_number",
+        "jcb_deceased",
+        "jcb_unclear"
+      ]
+    },
+    "queues": {
+      "restructure": "jcb_restructure",
+      "desk": "jcb_desk",
+      "care": "jcb_care"
+    },
+    "reasons": {
+      "refused": "jcb_refused",
+      "distress": "jcb_distress",
+      "disputed": "jcb_disputed",
+      "settled": "jcb_settled",
+      "service_error": "jcb_service_error",
+      "restructure": "jcb_restructure",
+      "person": "jcb_person",
+      "care": "jcb_care",
+      "failed": "jcb_failed",
+      "declined": "jcb_declined",
+      "callback": "jcb_callback",
+      "no_callback": "jcb_no_callback",
+      "wrong_number": "jcb_wrong_number",
+      "deceased": "jcb_deceased",
+      "unclear": "jcb_unclear"
+    },
+    "outcomes": {
+      "arranged": "jcb_arranged",
+      "settled": "jcb_settled",
+      "transferred": "jcb_transferred",
+      "no_deal": "jcb_no_deal",
+      "unverified": "jcb_unverified",
+      "unreached": "jcb_unreached"
+    }
+  },
+  "dry-2": {
+    "folder": "dry-2",
+    "bank": "Marlow Trade Bank",
+    "prefix": "mtb",
+    "fields": [
+      [
+        "postcode",
+        "What is your business postcode?",
+        "text",
+        0
+      ],
+      [
+        "registration_code",
+        "What is your seven-digit registration code?",
+        "digits",
+        7
+      ],
+      [
+        "founding_year",
+        "In which year was your business founded?",
+        "year",
+        0
+      ],
+      [
+        "contact_birthdate",
+        "What is the registered contact date of birth?",
+        "date",
+        0
+      ]
+    ],
+    "limit": 4,
+    "max_products": 3,
+    "holidays": [
+      "2026-10-30",
+      "2026-11-02",
+      "2026-12-25",
+      "2027-01-01"
+    ],
+    "callback": [
+      "next_business_day",
+      "09:20",
+      "17:10"
+    ],
+    "types": [
+      "trade_line",
+      "stock_credit",
+      "vehicle_lease"
+    ],
+    "floors": [
+      "trade_floor",
+      "stock_floor",
+      "lease_floor"
+    ],
+    "names": [
+      "trade line",
+      "stock credit",
+      "vehicle lease"
+    ],
+    "retry": 0,
+    "inputs": [
+      "01-mail.txt",
+      "02-policy.md",
+      "03-memo.txt",
+      "04-codes.txt"
+    ],
+    "phrases": {
+      "opening": "This is the automated assistant of Marlow Trade Bank. This call is recorded.",
+      "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+      "debt_intro": "I am calling about overdue business commitments.",
+      "today_question": "Can you settle this commitment today?",
+      "all_today_question": "Can you settle every listed commitment today?",
+      "robot_reply": "I am the automated assistant of Marlow Trade Bank.",
+      "scam_reply": "Please verify this call using the number on your statement.",
+      "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+      "already_paid_sentence": "A received payment may take two working days to appear.",
+      "cannot_answer_sentence": "Our service desk can answer that question.",
+      "recorded_promise_change_reply": "Please use your secure inbox to request a change."
+    },
+    "identity": [
+      {
+        "field": "postcode",
+        "ask_text": "What is your business postcode?",
+        "answer_format": "text",
+        "digits": 0
+      },
+      {
+        "field": "registration_code",
+        "ask_text": "What is your seven-digit registration code?",
+        "answer_format": "digits",
+        "digits": 7
+      },
+      {
+        "field": "founding_year",
+        "ask_text": "In which year was your business founded?",
+        "answer_format": "year",
+        "digits": 0
+      },
+      {
+        "field": "contact_birthdate",
+        "ask_text": "What is the registered contact date of birth?",
+        "answer_format": "date",
+        "digits": 0
+      }
+    ],
+    "bands": [
+      {
+        "days_late_min": 1,
+        "days_late_max": 24,
+        "deadline": {
+          "kind": "nth_business_day",
+          "n": 8
+        }
+      },
+      {
+        "days_late_min": 25,
+        "days_late_max": 90,
+        "deadline": {
+          "kind": "end_of_month",
+          "basis": "business",
+          "adjustment": "preceding"
+        }
+      }
+    ],
+    "table": {
+      "mtb_arranged": [],
+      "mtb_settled": [],
+      "mtb_transferred": [
+        "mtb_restructure",
+        "mtb_person",
+        "mtb_care"
+      ],
+      "mtb_no_deal": [
+        "mtb_refused",
+        "mtb_distress",
+        "mtb_disputed",
+        "mtb_service_error"
+      ],
+      "mtb_unverified": [
+        "mtb_failed",
+        "mtb_declined"
+      ],
+      "mtb_unreached": [
+        "mtb_callback",
+        "mtb_no_callback",
+        "mtb_wrong_number",
+        "mtb_deceased",
+        "mtb_unclear"
+      ]
+    },
+    "queues": {
+      "restructure": "mtb_restructure",
+      "desk": "mtb_desk",
+      "care": "mtb_care"
+    },
+    "reasons": {
+      "refused": "mtb_refused",
+      "distress": "mtb_distress",
+      "disputed": "mtb_disputed",
+      "settled": "mtb_settled",
+      "service_error": "mtb_service_error",
+      "restructure": "mtb_restructure",
+      "person": "mtb_person",
+      "care": "mtb_care",
+      "failed": "mtb_failed",
+      "declined": "mtb_declined",
+      "callback": "mtb_callback",
+      "no_callback": "mtb_no_callback",
+      "wrong_number": "mtb_wrong_number",
+      "deceased": "mtb_deceased",
+      "unclear": "mtb_unclear"
+    },
+    "outcomes": {
+      "arranged": "mtb_arranged",
+      "settled": "mtb_settled",
+      "transferred": "mtb_transferred",
+      "no_deal": "mtb_no_deal",
+      "unverified": "mtb_unverified",
+      "unreached": "mtb_unreached"
+    }
+  }
+}

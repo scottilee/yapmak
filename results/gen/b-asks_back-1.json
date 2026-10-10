@@ -1,0 +1,162 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "b5f7f8df-de68-46b3-a9cc-5f51c8052db6",
+ "iteration_id": "63b47ea5-a45a-4ea6-861a-8e4c68105bbe",
+ "seconds": 65,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "909a2306-8428-4b25-bf3a-fbf16ac5781d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a7a1968c-299",
+   "slowest_turn_s": 2.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The conversation failed on two specific identity verification criteria, despite meeting all other requirements. 1. The date of birth was asked twice ([Message 2] and [Message 4]), violating the requirement that it not be asked again. 2. The phone question was asked a total of three times ([Message 6], [Message 8], and [Message 10]), violating the requirement that it be asked again only once. Other"
+   ],
+   "call_id": "2411125b-a0fd-483b-9a6b-028599f1bf10",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_88948d59-988",
+   "slowest_turn_s": 2.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "28038aca-00f2-4f47-bdd0-b69f2f93b0ce",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a82d31db-c66",
+   "slowest_turn_s": 3.4,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "909a2306-8428-4b25-bf3a-fbf16ac5781d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a7a1968c-299",
+    "slowest_turn_s": 2.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The conversation failed on two specific identity verification criteria, despite meeting all other requirements. 1. The date of birth was asked twice ([Message 2] and [Message 4]), violating the requirement that it not be asked again. 2. The phone question was asked a total of three times ([Message 6], [Message 8], and [Message 10]), violating the requirement that it be asked again only once. Other"
+    ],
+    "call_id": "2411125b-a0fd-483b-9a6b-028599f1bf10",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_88948d59-988",
+    "slowest_turn_s": 2.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "28038aca-00f2-4f47-bdd0-b69f2f93b0ce",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a82d31db-c66",
+    "slowest_turn_s": 3.4,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

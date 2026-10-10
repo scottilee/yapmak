@@ -1,0 +1,14 @@
+{
+  "input_commit": "d783c888b0422bcc199e512fa5f8c3f83856bb2c",
+  "output_commit": "2520f623718f73d87864050618cdaa35652a5480",
+  "run_commands": [
+    "source .env && .venv/bin/python build.py --briefs hidden/dry-1/brief.md --openapi hidden/dry-1/openapi.json --slot hidden-1",
+    "source .env && .venv/bin/python build.py --briefs hidden/dry-2/01-mail.txt,hidden/dry-2/02-policy.md,hidden/dry-2/03-memo.txt,hidden/dry-2/04-codes.txt --openapi hidden/dry-2/openapi.json --slot hidden-2"
+  ],
+  "form_run_command": "source .env && .venv/bin/python build.py --briefs hidden/dry-1/brief.md --openapi hidden/dry-1/openapi.json --slot hidden-1 && source .env && .venv/bin/python build.py --briefs hidden/dry-2/01-mail.txt,hidden/dry-2/02-policy.md,hidden/dry-2/03-memo.txt,hidden/dry-2/04-codes.txt --openapi hidden/dry-2/openapi.json --slot hidden-2",
+  "started_epoch": 1791646143.8313751,
+  "completed_epoch": 1791646516.3974426,
+  "elapsed_s": 372.566,
+  "preflight_start_epoch": 1791645730.157105,
+  "inputs_unchanged": true
+}

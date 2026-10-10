@@ -1,0 +1,88 @@
+[
+  {
+    "step": "stage-inputs",
+    "command": [
+      "git",
+      "add",
+      "hidden/dry-1",
+      "hidden/dry-2"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.005,
+    "started_epoch": 1791646143.8315341
+  },
+  {
+    "step": "commit-inputs",
+    "command": [
+      "git",
+      "commit",
+      "-m",
+      "Dry-run hidden inputs: clean spec and raw pack, unchanged"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.005,
+    "started_epoch": 1791646143.8365338
+  },
+  {
+    "step": "build-1",
+    "command": [
+      "bash",
+      "-c",
+      "source .env && .venv/bin/python build.py --briefs hidden/dry-1/brief.md --openapi hidden/dry-1/openapi.json --slot hidden-1"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 196.463,
+    "started_epoch": 1791646143.844489
+  },
+  {
+    "step": "build-2",
+    "command": [
+      "bash",
+      "-c",
+      "source .env && .venv/bin/python build.py --briefs hidden/dry-2/01-mail.txt,hidden/dry-2/02-policy.md,hidden/dry-2/03-memo.txt,hidden/dry-2/04-codes.txt --openapi hidden/dry-2/openapi.json --slot hidden-2"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 176.076,
+    "started_epoch": 1791646340.307416
+  },
+  {
+    "step": "stage-outputs",
+    "command": [
+      "git",
+      "add",
+      "out/hidden-1.workflow.json",
+      "out/hidden-1.policy.json",
+      "out/hidden-1.audit.json",
+      "out/hidden-2.workflow.json",
+      "out/hidden-2.policy.json",
+      "out/hidden-2.audit.json",
+      "traces/hidden-1.jsonl",
+      "traces/hidden-2.jsonl"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.008,
+    "started_epoch": 1791646516.3834271
+  },
+  {
+    "step": "commit-outputs",
+    "command": [
+      "git",
+      "commit",
+      "-m",
+      "Hidden brief builds"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.005,
+    "started_epoch": 1791646516.391788
+  },
+  {
+    "step": "push",
+    "command": [
+      "git",
+      "push"
+    ],
+    "exit_code": 128,
+    "elapsed_s": 0.0,
+    "started_epoch": 1791646516.3968956
+  }
+]

@@ -1,0 +1,11 @@
+SIGNED MEMO M42 — 10 October 2026, 12:00 UTC
+Approved: Operations and Customer Care
+
+This memo replaces these P12 settings and nothing else:
+A. Security asks postcode FIRST, registration_code SECOND, founding_year THIRD, contact_birthdate FOURTH. Retain their exact P12 question sentences and formats. Four wrong answers TOTAL, not two.
+B. For days late 25–90 only, replace six business days with the LAST BUSINESS DAY OF THE CURRENT CALENDAR MONTH: end_of_month, basis=business, adjustment=preceding. Do not count forward from today or roll into the next month. The 1–24 band remains eight business days after today. Both still have one full-on-deadline attempt with the floor substitution rule.
+C. Zero retries after a failed create_promise; mark service_error after the first failure. The API response success flag still governs whether anything was saved.
+D. Human requests transfer immediately to mtb_desk, without asking whether the assistant can help.
+E. Callbacks are next business day ONLY; the existing 09:20–17:10 window remains.
+
+All remaining P12 wording, holidays, notes and outcome precedence remain effective. Old statements in the cover email are historical quotations.

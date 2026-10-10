@@ -1,0 +1,3688 @@
+{
+  "hidden-1": {
+    "slot": "hidden-1",
+    "folder": "dry-1",
+    "workflow_id": "4500c764-b9c7-4375-97fc-44cd71601aca",
+    "nodes": 37,
+    "checks": [
+      {
+        "path": "all_code_nodes_same_policy",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bank_name",
+        "expected": "Juniper Cooperative Bank",
+        "actual": "Juniper Cooperative Bank",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.ok",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.verified",
+        "expected": "check_passed",
+        "actual": "check_passed",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.all_verified",
+        "expected": "all_checks_complete",
+        "actual": "all_checks_complete",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.remaining",
+        "expected": "remaining_tries",
+        "actual": "remaining_tries",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.list",
+        "expected": "obligations",
+        "actual": "obligations",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.id",
+        "expected": "facility_id",
+        "actual": "facility_id",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.type",
+        "expected": "product_type",
+        "actual": "product_type",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.past_due",
+        "expected": "outstanding_amount",
+        "actual": "days_past_due",
+        "match": false,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.days_late",
+        "expected": "days_past_due",
+        "actual": "days_past_due",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.verify_identity",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.get_account",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.create_promise",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.add_note",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.schedule_callback",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.transfer_to_agent",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.close_call",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.order",
+        "expected": [
+          "membership_year",
+          "date_of_birth",
+          "access_suffix"
+        ],
+        "actual": [
+          "membership_year",
+          "date_of_birth",
+          "access_suffix"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "runtime.account.full_amount",
+        "expected": 987.65,
+        "actual": 13.0,
+        "match": false,
+        "note": "Executed exported init_products with offline API-shaped sample: outstanding_amount=987.65, days_past_due=13, floor=5; no bank request."
+      },
+      {
+        "path": "identity[0].field",
+        "expected": "membership_year",
+        "actual": "membership_year",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].ask_text",
+        "expected": "In which year did you join the cooperative?",
+        "actual": "In which year did you join the cooperative?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].answer_format",
+        "expected": "year",
+        "actual": "year",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].digits",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_0.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. Before we continue, I need to ask you three short security questions. In which year did you join the cooperative?"
+      },
+      {
+        "path": "verify_after_0.next",
+        "expected": "ask_1",
+        "actual": "ask_1",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_0.field",
+        "expected": [
+          "membership_year"
+        ],
+        "actual": [
+          "membership_year"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].field",
+        "expected": "date_of_birth",
+        "actual": "date_of_birth",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].ask_text",
+        "expected": "What is your date of birth?",
+        "actual": "What is your date of birth?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].answer_format",
+        "expected": "date",
+        "actual": "date",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].digits",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].numeric_date_order",
+        "expected": "mdy",
+        "actual": "mdy",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_1.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. What is your date of birth?"
+      },
+      {
+        "path": "verify_after_1.next",
+        "expected": "ask_2",
+        "actual": "ask_2",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_1.field",
+        "expected": [
+          "date_of_birth"
+        ],
+        "actual": [
+          "date_of_birth"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].field",
+        "expected": "access_suffix",
+        "actual": "access_suffix",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].ask_text",
+        "expected": "What are the six digits of your access reference?",
+        "actual": "What are the six digits of your access reference?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].answer_format",
+        "expected": "digits",
+        "actual": "digits",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].digits",
+        "expected": 6,
+        "actual": 6,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_2.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. What are the six digits of your access reference?"
+      },
+      {
+        "path": "verify_after_2.next",
+        "expected": "get_account",
+        "actual": "get_account",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_2.field",
+        "expected": [
+          "access_suffix"
+        ],
+        "actual": [
+          "access_suffix"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.wrong_answer_limit",
+        "expected": 5,
+        "actual": 5,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.remaining_slot",
+        "expected": "remaining_tries",
+        "actual": "remaining_tries",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.asking_purpose_counts_as_decline",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.failed_instruction",
+        "expected": "Please contact the verification desk.",
+        "actual": "Please contact the verification desk.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.holder_confirmation_asks",
+        "expected": 2,
+        "actual": 2,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.days",
+        "expected": "today",
+        "actual": "today",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.start",
+        "expected": "08:00",
+        "actual": "08:00",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.end",
+        "expected": "18:30",
+        "actual": "18:30",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.deceased_sentence",
+        "expected": "We are sorry for your loss.",
+        "actual": "We are sorry for your loss.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.holidays",
+        "expected": [
+          "2026-10-19",
+          "2026-10-29",
+          "2026-12-31"
+        ],
+        "actual": [
+          "2026-10-19",
+          "2026-10-29",
+          "2026-12-31"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.business_days",
+        "expected": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "actual": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.missing_date_parts",
+        "expected": "next_occurrence",
+        "actual": "next_occurrence",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.next_weekday_means_following_week",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "multi_product.max_products",
+        "expected": 2,
+        "actual": 2,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "amounts.floors",
+        "expected": {
+          "cooperative_line": "line_floor",
+          "equipment_credit": "equipment_floor"
+        },
+        "actual": {
+          "cooperative_line": "line_floor",
+          "equipment_credit": "equipment_floor"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "promise_write.retry_on_failure",
+        "expected": 2,
+        "actual": 2,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "promise_write.confirm_phrase",
+        "expected": "May I save this payment agreement?",
+        "actual": "May I save this payment agreement?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "amounts.floor_wording",
+        "expected": "The unpaid remainder remains overdue.",
+        "actual": "The unpaid remainder remains overdue.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "notes.enabled",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "notes.none_on_transfer",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "outcomes.transfer_overrides_promise",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.opening_verbatim",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.human.ask_once_first",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.already_paid.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.already_paid.action",
+        "expected": {
+          "type": "note",
+          "reason": "jcb_settled"
+        },
+        "actual": {
+          "type": "note",
+          "reason": "jcb_settled"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.dispute.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.dispute.action",
+        "expected": {
+          "type": "note",
+          "reason": "jcb_disputed"
+        },
+        "actual": {
+          "type": "note",
+          "reason": "jcb_disputed"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.hardship.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.hardship.offer_transfer_queue",
+        "expected": "jcb_care",
+        "actual": "jcb_care",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.opening",
+        "expected": "This is the automated assistant of Juniper Cooperative Bank. This call is recorded.",
+        "actual": "This is the automated assistant of Juniper Cooperative Bank. This call is recorded.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.holder_question",
+        "expected": "Am I speaking with {{title}} {{last_name}}?",
+        "actual": "Am I speaking with {{title}} {{last_name}}?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.debt_intro",
+        "expected": "I am calling about your overdue cooperative borrowing.",
+        "actual": "I am calling about your overdue cooperative borrowing.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.today_question",
+        "expected": "Can you settle this commitment today?",
+        "actual": "Can you settle this commitment today?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.all_today_question",
+        "expected": "Can you settle every listed commitment today?",
+        "actual": "Can you settle every listed commitment today?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.robot_reply",
+        "expected": "I am the automated assistant of Juniper Cooperative Bank.",
+        "actual": "I am the automated assistant of Juniper Cooperative Bank.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.scam_reply",
+        "expected": "Please verify this call using the number on your statement.",
+        "actual": "Please verify this call using the number on your statement.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.after_promise_sentence",
+        "expected": "A confirmation will be placed in your secure inbox.",
+        "actual": "A confirmation will be placed in your secure inbox.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.already_paid_sentence",
+        "expected": "A received payment may take two working days to appear.",
+        "actual": "A received payment may take two working days to appear.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.cannot_answer_sentence",
+        "expected": "Our service desk can answer that question.",
+        "actual": "Our service desk can answer that question.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.recorded_promise_change_reply",
+        "expected": "Please use your secure inbox to request a change.",
+        "actual": "Please use your secure inbox to request a change.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "opening.on_enter",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "outcomes.table",
+        "expected": {
+          "jcb_arranged": [],
+          "jcb_settled": [],
+          "jcb_transferred": [
+            "jcb_care",
+            "jcb_person",
+            "jcb_restructure"
+          ],
+          "jcb_no_deal": [
+            "jcb_disputed",
+            "jcb_distress",
+            "jcb_refused",
+            "jcb_service_error"
+          ],
+          "jcb_unverified": [
+            "jcb_declined",
+            "jcb_failed"
+          ],
+          "jcb_unreached": [
+            "jcb_callback",
+            "jcb_deceased",
+            "jcb_no_callback",
+            "jcb_unclear",
+            "jcb_wrong_number"
+          ]
+        },
+        "actual": {
+          "jcb_arranged": [],
+          "jcb_settled": [],
+          "jcb_transferred": [
+            "jcb_care",
+            "jcb_person",
+            "jcb_restructure"
+          ],
+          "jcb_no_deal": [
+            "jcb_disputed",
+            "jcb_distress",
+            "jcb_refused",
+            "jcb_service_error"
+          ],
+          "jcb_unverified": [
+            "jcb_declined",
+            "jcb_failed"
+          ],
+          "jcb_unreached": [
+            "jcb_callback",
+            "jcb_deceased",
+            "jcb_no_callback",
+            "jcb_unclear",
+            "jcb_wrong_number"
+          ]
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.url",
+        "expected": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.outcome.enum",
+        "expected": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "actual": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.url",
+        "expected": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.outcome.enum",
+        "expected": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "actual": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.reason.enum",
+        "expected": [
+          "jcb_callback",
+          "jcb_care",
+          "jcb_deceased",
+          "jcb_declined",
+          "jcb_disputed",
+          "jcb_distress",
+          "jcb_failed",
+          "jcb_no_callback",
+          "jcb_person",
+          "jcb_refused",
+          "jcb_restructure",
+          "jcb_service_error",
+          "jcb_settled",
+          "jcb_unclear",
+          "jcb_wrong_number"
+        ],
+        "actual": [
+          "jcb_callback",
+          "jcb_care",
+          "jcb_deceased",
+          "jcb_declined",
+          "jcb_disputed",
+          "jcb_distress",
+          "jcb_failed",
+          "jcb_no_callback",
+          "jcb_person",
+          "jcb_refused",
+          "jcb_restructure",
+          "jcb_service_error",
+          "jcb_settled",
+          "jcb_unclear",
+          "jcb_wrong_number"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.reason.default",
+        "expected": "{{final_reason}}",
+        "actual": "{{final_reason}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.url",
+        "expected": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.outcome.enum",
+        "expected": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "actual": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.url",
+        "expected": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-1-jcb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.outcome.enum",
+        "expected": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "actual": [
+          "jcb_arranged",
+          "jcb_no_deal",
+          "jcb_settled",
+          "jcb_transferred",
+          "jcb_unreached",
+          "jcb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.reason.enum",
+        "expected": [
+          "jcb_callback",
+          "jcb_care",
+          "jcb_deceased",
+          "jcb_declined",
+          "jcb_disputed",
+          "jcb_distress",
+          "jcb_failed",
+          "jcb_no_callback",
+          "jcb_person",
+          "jcb_refused",
+          "jcb_restructure",
+          "jcb_service_error",
+          "jcb_settled",
+          "jcb_unclear",
+          "jcb_wrong_number"
+        ],
+        "actual": [
+          "jcb_callback",
+          "jcb_care",
+          "jcb_deceased",
+          "jcb_declined",
+          "jcb_disputed",
+          "jcb_distress",
+          "jcb_failed",
+          "jcb_no_callback",
+          "jcb_person",
+          "jcb_refused",
+          "jcb_restructure",
+          "jcb_service_error",
+          "jcb_settled",
+          "jcb_unclear",
+          "jcb_wrong_number"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.reason.default",
+        "expected": "{{final_reason}}",
+        "actual": "{{final_reason}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.omits_reason",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.failed_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.declined_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.unclear_holder_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.restructuring.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.human.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[0].deadline",
+        "expected": {
+          "kind": "calendar_days",
+          "n": 9,
+          "adjustment": "following"
+        },
+        "actual": {
+          "kind": "calendar_days",
+          "n": 9,
+          "adjustment": "following"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[0].attempts",
+        "expected": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "actual": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-10-14",
+        "expected": "2026-10-23",
+        "actual": "2026-10-23",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-10-23",
+        "expected": "2026-11-02",
+        "actual": "2026-11-02",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-11-25",
+        "expected": "2026-12-04",
+        "actual": "2026-12-04",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-12-24",
+        "expected": "2027-01-04",
+        "actual": "2027-01-04",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[1].deadline",
+        "expected": {
+          "kind": "nth_business_day",
+          "n": 4
+        },
+        "actual": {
+          "kind": "nth_business_day",
+          "n": 4
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[1].attempts",
+        "expected": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "actual": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-10-14",
+        "expected": "2026-10-21",
+        "actual": "2026-10-21",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-10-23",
+        "expected": "2026-10-30",
+        "actual": "2026-10-30",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-11-25",
+        "expected": "2026-12-01",
+        "actual": "2026-12-01",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-12-24",
+        "expected": "2026-12-30",
+        "actual": "2026-12-30",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "init_products.embedded_deadline_matches_source",
+        "expected": "FunctionDef(name='deadline', args=arguments(args=[arg(arg='today'), arg(arg='rule'), arg(arg='holidays'), arg(arg='business_days')]), body=[Try(body=[Assign(targets=[Name(id='d', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='today', ctx=Load())])), If(test=BoolOp(op=Or(), values=[Compare(left=Name(id='d', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), UnaryOp(op=Not(), operand=Call(func=Name(id='isinstance', ctx=Load()), args=[Name(id='rule', ctx=Load()), Name(id='dict', ctx=Load())])), Compare(left=Call(func=Name(id='_calendar', ctx=Load()), args=[Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), ops=[Is()], comparators=[Constant(value=None)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='kind', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='kind')])), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='nth_business_day')]), body=[Return(value=Call(func=Name(id='nth_business_day_after', ctx=Load()), args=[Name(id='today', ctx=Load()), Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')]), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), Assign(targets=[Name(id='adjustment', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='adjustment')])), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[NotIn()], comparators=[Tuple(elts=[Constant(value='none'), Constant(value='following'), Constant(value='preceding')], ctx=Load())]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='calendar_days')]), body=[Assign(targets=[Name(id='n', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')])), If(test=BoolOp(op=Or(), values=[Compare(left=Call(func=Name(id='type', ctx=Load()), args=[Name(id='n', ctx=Load())]), ops=[IsNot()], comparators=[Name(id='int', ctx=Load())]), Compare(left=Name(id='n', ctx=Load()), ops=[Lt()], comparators=[Constant(value=0)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=BinOp(left=Name(id='d', ctx=Load()), op=Add(), right=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Name(id='n', ctx=Load()))])), attr='isoformat', ctx=Load())))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='fixed_date')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='date')]))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='end_of_month')]), body=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='business')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Name(id='last_business_day_of_month', ctx=Load()), args=[Name(id='today', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))], orelse=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='calendar')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Call(func=Name(id='_month_end', ctx=Load()), args=[Name(id='d', ctx=Load())]), attr='isoformat', ctx=Load())))], orelse=[Return(value=Constant(value=None))])])], orelse=[Return(value=Constant(value=None))])])]), Assign(targets=[Name(id='target_day', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='target', ctx=Load())])), If(test=Compare(left=Name(id='target_day', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='none')]), body=[Return(value=Name(id='target', ctx=Load()))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='following')]), body=[Return(value=Call(func=Name(id='next_business_day', ctx=Load()), args=[Name(id='target', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), For(target=Name(id='_', ctx=Store()), iter=Call(func=Name(id='range', ctx=Load()), args=[BinOp(left=Constant(value=7), op=Mult(), right=BinOp(left=Call(func=Name(id='len', ctx=Load()), args=[Name(id='holidays', ctx=Load())]), op=Add(), right=Constant(value=1)))]), body=[If(test=Call(func=Name(id='is_business_day', ctx=Load()), args=[Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), body=[Return(value=Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())))]), AugAssign(target=Name(id='target_day', ctx=Store()), op=Sub(), value=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Constant(value=1))]))])], handlers=[ExceptHandler(type=Name(id='Exception', ctx=Load()), body=[Pass()])]), Return(value=Constant(value=None))])",
+        "actual": "FunctionDef(name='deadline', args=arguments(args=[arg(arg='today'), arg(arg='rule'), arg(arg='holidays'), arg(arg='business_days')]), body=[Try(body=[Assign(targets=[Name(id='d', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='today', ctx=Load())])), If(test=BoolOp(op=Or(), values=[Compare(left=Name(id='d', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), UnaryOp(op=Not(), operand=Call(func=Name(id='isinstance', ctx=Load()), args=[Name(id='rule', ctx=Load()), Name(id='dict', ctx=Load())])), Compare(left=Call(func=Name(id='_calendar', ctx=Load()), args=[Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), ops=[Is()], comparators=[Constant(value=None)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='kind', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='kind')])), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='nth_business_day')]), body=[Return(value=Call(func=Name(id='nth_business_day_after', ctx=Load()), args=[Name(id='today', ctx=Load()), Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')]), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), Assign(targets=[Name(id='adjustment', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='adjustment')])), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[NotIn()], comparators=[Tuple(elts=[Constant(value='none'), Constant(value='following'), Constant(value='preceding')], ctx=Load())]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='calendar_days')]), body=[Assign(targets=[Name(id='n', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')])), If(test=BoolOp(op=Or(), values=[Compare(left=Call(func=Name(id='type', ctx=Load()), args=[Name(id='n', ctx=Load())]), ops=[IsNot()], comparators=[Name(id='int', ctx=Load())]), Compare(left=Name(id='n', ctx=Load()), ops=[Lt()], comparators=[Constant(value=0)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=BinOp(left=Name(id='d', ctx=Load()), op=Add(), right=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Name(id='n', ctx=Load()))])), attr='isoformat', ctx=Load())))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='fixed_date')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='date')]))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='end_of_month')]), body=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='business')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Name(id='last_business_day_of_month', ctx=Load()), args=[Name(id='today', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))], orelse=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='calendar')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Call(func=Name(id='_month_end', ctx=Load()), args=[Name(id='d', ctx=Load())]), attr='isoformat', ctx=Load())))], orelse=[Return(value=Constant(value=None))])])], orelse=[Return(value=Constant(value=None))])])]), Assign(targets=[Name(id='target_day', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='target', ctx=Load())])), If(test=Compare(left=Name(id='target_day', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='none')]), body=[Return(value=Name(id='target', ctx=Load()))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='following')]), body=[Return(value=Call(func=Name(id='next_business_day', ctx=Load()), args=[Name(id='target', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), For(target=Name(id='_', ctx=Store()), iter=Call(func=Name(id='range', ctx=Load()), args=[BinOp(left=Constant(value=7), op=Mult(), right=BinOp(left=Call(func=Name(id='len', ctx=Load()), args=[Name(id='holidays', ctx=Load())]), op=Add(), right=Constant(value=1)))]), body=[If(test=Call(func=Name(id='is_business_day', ctx=Load()), args=[Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), body=[Return(value=Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())))]), AugAssign(target=Name(id='target_day', ctx=Store()), op=Sub(), value=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Constant(value=1))]))])], handlers=[ExceptHandler(type=Name(id='Exception', ctx=Load()), body=[Pass()])]), Return(value=Constant(value=None))])",
+        "match": true,
+        "note": ""
+      }
+    ],
+    "mismatches": [
+      {
+        "path": "SLOTS.account.past_due",
+        "expected": "outstanding_amount",
+        "actual": "days_past_due",
+        "match": false,
+        "note": ""
+      },
+      {
+        "path": "runtime.account.full_amount",
+        "expected": 987.65,
+        "actual": 13.0,
+        "match": false,
+        "note": "Executed exported init_products with offline API-shaped sample: outstanding_amount=987.65, days_past_due=13, floor=5; no bank request."
+      }
+    ],
+    "deadlines": [
+      {
+        "band": [
+          1,
+          18
+        ],
+        "now": "2026-10-14",
+        "expected": "2026-10-23",
+        "actual": "2026-10-23"
+      },
+      {
+        "band": [
+          1,
+          18
+        ],
+        "now": "2026-10-23",
+        "expected": "2026-11-02",
+        "actual": "2026-11-02"
+      },
+      {
+        "band": [
+          1,
+          18
+        ],
+        "now": "2026-11-25",
+        "expected": "2026-12-04",
+        "actual": "2026-12-04"
+      },
+      {
+        "band": [
+          1,
+          18
+        ],
+        "now": "2026-12-24",
+        "expected": "2027-01-04",
+        "actual": "2027-01-04"
+      },
+      {
+        "band": [
+          19,
+          75
+        ],
+        "now": "2026-10-14",
+        "expected": "2026-10-21",
+        "actual": "2026-10-21"
+      },
+      {
+        "band": [
+          19,
+          75
+        ],
+        "now": "2026-10-23",
+        "expected": "2026-10-30",
+        "actual": "2026-10-30"
+      },
+      {
+        "band": [
+          19,
+          75
+        ],
+        "now": "2026-11-25",
+        "expected": "2026-12-01",
+        "actual": "2026-12-01"
+      },
+      {
+        "band": [
+          19,
+          75
+        ],
+        "now": "2026-12-24",
+        "expected": "2026-12-30",
+        "actual": "2026-12-30"
+      }
+    ],
+    "unresolved": [
+      {
+        "topic": "hardship sympathetic sentence",
+        "text": "The brief requires 'one short sympathetic sentence' but does not dictate its words; a short sentence was written.",
+        "doc": "hidden/dry-1/brief.md"
+      },
+      {
+        "topic": "refuse_to_talk / human request wording",
+        "text": "The brief requires asking once to continue (refusal) and asking once whether the agent can help (human request) but dictates no words; no phrase field exists for these, so they are left to the prompt.",
+        "doc": "hidden/dry-1/brief.md"
+      }
+    ],
+    "audit_unresolved": [
+      "Hardship 'one short sympathetic sentence' has no dictated wording; 'I am very sorry to hear that.' was written to satisfy the content requirement.",
+      "No dictated wording for asking once to continue after a first refusal, or for asking once whether the agent can help before a human transfer.",
+      "Several prompt-level rules have no IR field (relative non-disclosure, part-of-day callback clarification, below-floor counteroffer, no discounts/waivers, 'never say a failed promise was saved'); they are in the brief and must be carried by prompt text."
+    ],
+    "audit_fixed": [
+      "No value errors found: every outcome, reason, queue, field and floor property was checked against openapi.json enums/schemas and the brief text.",
+      "Extended multi_product.source text to cite the clamping and transfer-preservation sentences that back the corresponding booleans.",
+      "Added an unresolved entry noting that the brief dictates no wording for the 'ask once to continue' (refusal) and 'ask once whether you can help' (human request) prompts."
+    ],
+    "close_nodes": {
+      "close_retry": {
+        "outcome": {
+          "enum": [
+            "jcb_arranged",
+            "jcb_settled",
+            "jcb_transferred",
+            "jcb_no_deal",
+            "jcb_unverified",
+            "jcb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_reason": {
+        "reason": {
+          "enum": [
+            "jcb_refused",
+            "jcb_distress",
+            "jcb_disputed",
+            "jcb_settled",
+            "jcb_service_error",
+            "jcb_restructure",
+            "jcb_person",
+            "jcb_care",
+            "jcb_failed",
+            "jcb_declined",
+            "jcb_callback",
+            "jcb_no_callback",
+            "jcb_wrong_number",
+            "jcb_deceased",
+            "jcb_unclear"
+          ],
+          "type": "string",
+          "default": "{{final_reason}}",
+          "description": "Allowed combinations come from the current code list. Omit reason for arranged and settled."
+        },
+        "outcome": {
+          "enum": [
+            "jcb_arranged",
+            "jcb_settled",
+            "jcb_transferred",
+            "jcb_no_deal",
+            "jcb_unverified",
+            "jcb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_noreason": {
+        "outcome": {
+          "enum": [
+            "jcb_arranged",
+            "jcb_settled",
+            "jcb_transferred",
+            "jcb_no_deal",
+            "jcb_unverified",
+            "jcb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_retry_same": {
+        "reason": {
+          "enum": [
+            "jcb_refused",
+            "jcb_distress",
+            "jcb_disputed",
+            "jcb_settled",
+            "jcb_service_error",
+            "jcb_restructure",
+            "jcb_person",
+            "jcb_care",
+            "jcb_failed",
+            "jcb_declined",
+            "jcb_callback",
+            "jcb_no_callback",
+            "jcb_wrong_number",
+            "jcb_deceased",
+            "jcb_unclear"
+          ],
+          "type": "string",
+          "default": "{{final_reason}}",
+          "description": "Allowed combinations come from the current code list. Omit reason for arranged and settled."
+        },
+        "outcome": {
+          "enum": [
+            "jcb_arranged",
+            "jcb_settled",
+            "jcb_transferred",
+            "jcb_no_deal",
+            "jcb_unverified",
+            "jcb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      }
+    },
+    "embedded_policy": {
+      "source_docs": [
+        "hidden/dry-1/brief.md",
+        "hidden/dry-1/openapi.json"
+      ],
+      "bank_name": "Juniper Cooperative Bank",
+      "identity": {
+        "requirements": [
+          {
+            "field": "membership_year",
+            "ask_text": "In which year did you join the cooperative?",
+            "answer_format": "year",
+            "digits": 0,
+            "numeric_date_order": "mdy",
+            "hint_field": "",
+            "hint_reply": ""
+          },
+          {
+            "field": "date_of_birth",
+            "ask_text": "What is your date of birth?",
+            "answer_format": "date",
+            "digits": 0,
+            "numeric_date_order": "mdy",
+            "hint_field": "",
+            "hint_reply": ""
+          },
+          {
+            "field": "access_suffix",
+            "ask_text": "What are the six digits of your access reference?",
+            "answer_format": "digits",
+            "digits": 6,
+            "numeric_date_order": "mdy",
+            "hint_field": "",
+            "hint_reply": ""
+          }
+        ],
+        "wrong_answer_limit": 5,
+        "wrong_count_source": "api",
+        "remaining_slot": "remaining_tries",
+        "holder_confirmation_asks": 2,
+        "decline_explain_once": true,
+        "asking_purpose_counts_as_decline": false,
+        "failed_outcome": [
+          "jcb_unverified",
+          "jcb_failed"
+        ],
+        "declined_outcome": [
+          "jcb_unverified",
+          "jcb_declined"
+        ],
+        "unclear_holder_outcome": [
+          "jcb_unreached",
+          "jcb_unclear"
+        ],
+        "failed_instruction": "Please contact the verification desk."
+      },
+      "third_party": {
+        "callback": {
+          "enabled": true,
+          "days": "today",
+          "start": "08:00",
+          "end": "18:30",
+          "must_be_after_now": true,
+          "retry_once": true,
+          "scheduled_outcome": [
+            "jcb_unreached",
+            "jcb_callback"
+          ],
+          "no_callback_outcome": [
+            "jcb_unreached",
+            "jcb_no_callback"
+          ]
+        },
+        "wrong_number_outcome": [
+          "jcb_unreached",
+          "jcb_wrong_number"
+        ],
+        "deceased_outcome": [
+          "jcb_unreached",
+          "jcb_deceased"
+        ],
+        "deceased_sentence": "We are sorry for your loss."
+      },
+      "calendar": {
+        "holidays": [
+          "2026-10-19",
+          "2026-10-29",
+          "2026-12-31"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "next_occurrence"
+      },
+      "bands": [
+        {
+          "name": "days_1_18",
+          "days_late_min": 1,
+          "days_late_max": 18,
+          "deadline": {
+            "kind": "calendar_days",
+            "n": 9,
+            "adjustment": "following"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "name": "days_19_75",
+          "days_late_min": 19,
+          "days_late_max": 75,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "amounts": {
+        "floors": {
+          "cooperative_line": "line_floor",
+          "equipment_credit": "equipment_floor"
+        },
+        "full_first": true,
+        "never_ask_how_much": true,
+        "floor_offered_once": true,
+        "floor_wording": "The unpaid remainder remains overdue.",
+        "accept_between_floor_and_full": true
+      },
+      "dates": {
+        "promise_today_allowed": true,
+        "weekend_or_holiday_roll_forward": true,
+        "vague_ask_once_then_deadline": true,
+        "after_deadline_offer_deadline": true
+      },
+      "special_cases": [
+        {
+          "name": "already_paid",
+          "trigger": "The customer says they have already paid this product.",
+          "action": {
+            "type": "note",
+            "reason": "jcb_settled"
+          },
+          "say": "A received payment may take two working days to appear.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "dispute",
+          "trigger": "The customer says the debt is not theirs, they never held the product, or it was previously paid off and closed.",
+          "action": {
+            "type": "note",
+            "reason": "jcb_disputed"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "hardship",
+          "trigger": "The customer mentions illness, bereavement or job loss.",
+          "action": {
+            "type": "note",
+            "reason": "jcb_distress"
+          },
+          "say": "I am very sorry to hear that.",
+          "offer_transfer_queue": "jcb_care",
+          "offer_outcome": [
+            "jcb_transferred",
+            "jcb_care"
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "restructuring",
+          "trigger": "The customer asks for restructuring or lower future instalments.",
+          "action": {
+            "type": "transfer",
+            "queue": "jcb_restructure",
+            "outcome": "jcb_transferred",
+            "reason": "jcb_restructure"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "human",
+          "trigger": "The customer asks to speak to a human person.",
+          "action": {
+            "type": "transfer",
+            "queue": "jcb_desk",
+            "outcome": "jcb_transferred",
+            "reason": "jcb_person"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": true,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "refuse_to_talk",
+          "trigger": "The customer refuses to talk or continue the conversation.",
+          "action": {
+            "type": "note",
+            "reason": "jcb_refused"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": true,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "robot",
+          "trigger": "The customer asks whether they are speaking with a robot or a machine.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "I am the automated assistant of Juniper Cooperative Bank.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "scam",
+          "trigger": "The customer asks whether this call is a scam or genuine.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "Please verify this call using the number on your statement.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "cannot_answer",
+          "trigger": "The customer asks another question the assistant cannot answer.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "Our service desk can answer that question.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        }
+      ],
+      "outcomes": {
+        "table": [
+          {
+            "outcome": "jcb_arranged",
+            "reasons": []
+          },
+          {
+            "outcome": "jcb_settled",
+            "reasons": []
+          },
+          {
+            "outcome": "jcb_transferred",
+            "reasons": [
+              "jcb_restructure",
+              "jcb_person",
+              "jcb_care"
+            ]
+          },
+          {
+            "outcome": "jcb_no_deal",
+            "reasons": [
+              "jcb_refused",
+              "jcb_distress",
+              "jcb_disputed",
+              "jcb_service_error"
+            ]
+          },
+          {
+            "outcome": "jcb_unverified",
+            "reasons": [
+              "jcb_failed",
+              "jcb_declined"
+            ]
+          },
+          {
+            "outcome": "jcb_unreached",
+            "reasons": [
+              "jcb_callback",
+              "jcb_no_callback",
+              "jcb_wrong_number",
+              "jcb_deceased",
+              "jcb_unclear"
+            ]
+          }
+        ],
+        "promise_outcome": "jcb_arranged",
+        "paid_outcome": "jcb_settled",
+        "transfer_outcome": "jcb_transferred",
+        "transfer_overrides_promise": true,
+        "no_promise_outcome": "jcb_no_deal",
+        "all_paid_closes_as_paid": true,
+        "no_promise_reason_from_first_non_paid_note": true,
+        "service_error_reason": "jcb_service_error",
+        "refused_reason": "jcb_refused",
+        "goodbye_before_close": true
+      },
+      "notes": {
+        "enabled": true,
+        "reasons": [
+          "jcb_refused",
+          "jcb_distress",
+          "jcb_disputed",
+          "jcb_settled",
+          "jcb_service_error"
+        ],
+        "note_each_unpromised_product": true,
+        "none_on_transfer": true
+      },
+      "multi_product": {
+        "max_products": 2,
+        "state_all_before_asking": true,
+        "ask_all_today_once": true,
+        "per_product_attempts": true,
+        "common_date_clamped_per_product": true,
+        "one_confirmation_for_batch": true,
+        "recorded_promises_survive_transfer": true
+      },
+      "phrases": {
+        "opening": "This is the automated assistant of Juniper Cooperative Bank. This call is recorded.",
+        "opening_verbatim": true,
+        "holder_question": "Am I speaking with <<title>> <<last_name>>?",
+        "debt_intro": "I am calling about your overdue cooperative borrowing.",
+        "today_question": "Can you settle this commitment today?",
+        "all_today_question": "Can you settle every listed commitment today?",
+        "robot_reply": "I am the automated assistant of Juniper Cooperative Bank.",
+        "scam_reply": "Please verify this call using the number on your statement.",
+        "prohibited_before_verification": [
+          "overdue",
+          "borrowing",
+          "commitment",
+          "payment",
+          "balance"
+        ],
+        "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+        "already_paid_sentence": "A received payment may take two working days to appear.",
+        "cannot_answer_sentence": "Our service desk can answer that question.",
+        "recorded_promise_change_reply": "Please use your secure inbox to request a change.",
+        "product_naming": {
+          "cooperative_line": "cooperative credit line",
+          "equipment_credit": "equipment credit"
+        }
+      },
+      "promise_write": {
+        "retry_on_failure": 2,
+        "one_promise_per_product": true,
+        "confirm_phrase": "May I save this payment agreement?"
+      },
+      "unresolved": []
+    }
+  },
+  "hidden-2": {
+    "slot": "hidden-2",
+    "folder": "dry-2",
+    "workflow_id": "a1898b31-b5f9-4822-97b0-fc36ca2a0a0f",
+    "nodes": 41,
+    "checks": [
+      {
+        "path": "all_code_nodes_same_policy",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bank_name",
+        "expected": "Marlow Trade Bank",
+        "actual": "Marlow Trade Bank",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.ok",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.verified",
+        "expected": "check_passed",
+        "actual": "check_passed",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.all_verified",
+        "expected": "all_checks_complete",
+        "actual": "all_checks_complete",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.verify.remaining",
+        "expected": "remaining_tries",
+        "actual": "remaining_tries",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.list",
+        "expected": "obligations",
+        "actual": "obligations",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.id",
+        "expected": "facility_id",
+        "actual": "facility_id",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.type",
+        "expected": "product_type",
+        "actual": "product_type",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.past_due",
+        "expected": "outstanding_amount",
+        "actual": "days_past_due",
+        "match": false,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.account.days_late",
+        "expected": "days_past_due",
+        "actual": "days_past_due",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.verify_identity",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.get_account",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.create_promise",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.add_note",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.schedule_callback",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.transfer_to_agent",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "SLOTS.ok_by_tool.close_call",
+        "expected": "operation_success",
+        "actual": "operation_success",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.order",
+        "expected": [
+          "postcode",
+          "registration_code",
+          "founding_year",
+          "contact_birthdate"
+        ],
+        "actual": [
+          "postcode",
+          "registration_code",
+          "founding_year",
+          "contact_birthdate"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "runtime.account.full_amount",
+        "expected": 987.65,
+        "actual": 13.0,
+        "match": false,
+        "note": "Executed exported init_products with offline API-shaped sample: outstanding_amount=987.65, days_past_due=13, floor=5; no bank request."
+      },
+      {
+        "path": "identity[0].field",
+        "expected": "postcode",
+        "actual": "postcode",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].ask_text",
+        "expected": "What is your business postcode?",
+        "actual": "What is your business postcode?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].answer_format",
+        "expected": "text",
+        "actual": "text",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[0].digits",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_0.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?"
+      },
+      {
+        "path": "verify_after_0.next",
+        "expected": "ask_1",
+        "actual": "ask_1",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_0.field",
+        "expected": [
+          "postcode"
+        ],
+        "actual": [
+          "postcode"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].field",
+        "expected": "registration_code",
+        "actual": "registration_code",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].ask_text",
+        "expected": "What is your seven-digit registration code?",
+        "actual": "What is your seven-digit registration code?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].answer_format",
+        "expected": "digits",
+        "actual": "digits",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[1].digits",
+        "expected": 7,
+        "actual": 7,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_1.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. What is your seven-digit registration code?"
+      },
+      {
+        "path": "verify_after_1.next",
+        "expected": "ask_2",
+        "actual": "ask_2",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_1.field",
+        "expected": [
+          "registration_code"
+        ],
+        "actual": [
+          "registration_code"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].field",
+        "expected": "founding_year",
+        "actual": "founding_year",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].ask_text",
+        "expected": "In which year was your business founded?",
+        "actual": "In which year was your business founded?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].answer_format",
+        "expected": "year",
+        "actual": "year",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[2].digits",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_2.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. In which year was your business founded?"
+      },
+      {
+        "path": "verify_after_2.next",
+        "expected": "ask_3",
+        "actual": "ask_3",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_2.field",
+        "expected": [
+          "founding_year"
+        ],
+        "actual": [
+          "founding_year"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[3].field",
+        "expected": "contact_birthdate",
+        "actual": "contact_birthdate",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[3].ask_text",
+        "expected": "What is the registered contact date of birth?",
+        "actual": "What is the registered contact date of birth?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[3].answer_format",
+        "expected": "date",
+        "actual": "date",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[3].digits",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity[3].numeric_date_order",
+        "expected": "mdy",
+        "actual": "mdy",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "ask_3.question_present",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": "Actual node speaks id_say; evaluated exported _ask_text(i): Thank you. What is the registered contact date of birth?"
+      },
+      {
+        "path": "verify_after_3.next",
+        "expected": "get_account",
+        "actual": "get_account",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "verify_3.field",
+        "expected": [
+          "contact_birthdate"
+        ],
+        "actual": [
+          "contact_birthdate"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.wrong_answer_limit",
+        "expected": 4,
+        "actual": 4,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.remaining_slot",
+        "expected": "remaining_tries",
+        "actual": "remaining_tries",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.asking_purpose_counts_as_decline",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.failed_instruction",
+        "expected": "Please contact the verification desk.",
+        "actual": "Please contact the verification desk.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.holder_confirmation_asks",
+        "expected": 2,
+        "actual": 2,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.days",
+        "expected": "next_business_day",
+        "actual": "next_business_day",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.start",
+        "expected": "09:20",
+        "actual": "09:20",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.callback.end",
+        "expected": "17:10",
+        "actual": "17:10",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "third_party.deceased_sentence",
+        "expected": "We are sorry for your loss.",
+        "actual": "We are sorry for your loss.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.holidays",
+        "expected": [
+          "2026-10-30",
+          "2026-11-02",
+          "2026-12-25",
+          "2027-01-01"
+        ],
+        "actual": [
+          "2026-10-30",
+          "2026-11-02",
+          "2026-12-25",
+          "2027-01-01"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.business_days",
+        "expected": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "actual": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.missing_date_parts",
+        "expected": "next_occurrence",
+        "actual": "next_occurrence",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "calendar.next_weekday_means_following_week",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "multi_product.max_products",
+        "expected": 3,
+        "actual": 3,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "amounts.floors",
+        "expected": {
+          "trade_line": "trade_floor",
+          "stock_credit": "stock_floor",
+          "vehicle_lease": "lease_floor"
+        },
+        "actual": {
+          "trade_line": "trade_floor",
+          "stock_credit": "stock_floor",
+          "vehicle_lease": "lease_floor"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "promise_write.retry_on_failure",
+        "expected": 0,
+        "actual": 0,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "promise_write.confirm_phrase",
+        "expected": "May I save this payment agreement?",
+        "actual": "May I save this payment agreement?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "amounts.floor_wording",
+        "expected": "The unpaid remainder remains overdue.",
+        "actual": "The unpaid remainder remains overdue.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "notes.enabled",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "notes.none_on_transfer",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "outcomes.transfer_overrides_promise",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.opening_verbatim",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.human.ask_once_first",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.already_paid.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.already_paid.action",
+        "expected": {
+          "type": "note",
+          "reason": "mtb_settled"
+        },
+        "actual": {
+          "type": "note",
+          "reason": "mtb_settled"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.dispute.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.dispute.action",
+        "expected": {
+          "type": "note",
+          "reason": "mtb_disputed"
+        },
+        "actual": {
+          "type": "note",
+          "reason": "mtb_disputed"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.hardship.ends_call",
+        "expected": false,
+        "actual": false,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.hardship.offer_transfer_queue",
+        "expected": "mtb_care",
+        "actual": "mtb_care",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.opening",
+        "expected": "This is the automated assistant of Marlow Trade Bank. This call is recorded.",
+        "actual": "This is the automated assistant of Marlow Trade Bank. This call is recorded.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.holder_question",
+        "expected": "Am I speaking with {{title}} {{last_name}}?",
+        "actual": "Am I speaking with {{title}} {{last_name}}?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.debt_intro",
+        "expected": "I am calling about overdue business commitments.",
+        "actual": "I am calling about overdue business commitments.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.today_question",
+        "expected": "Can you settle this commitment today?",
+        "actual": "Can you settle this commitment today?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.all_today_question",
+        "expected": "Can you settle every listed commitment today?",
+        "actual": "Can you settle every listed commitment today?",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.robot_reply",
+        "expected": "I am the automated assistant of Marlow Trade Bank.",
+        "actual": "I am the automated assistant of Marlow Trade Bank.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.scam_reply",
+        "expected": "Please verify this call using the number on your statement.",
+        "actual": "Please verify this call using the number on your statement.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.after_promise_sentence",
+        "expected": "A confirmation will be placed in your secure inbox.",
+        "actual": "A confirmation will be placed in your secure inbox.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.already_paid_sentence",
+        "expected": "A received payment may take two working days to appear.",
+        "actual": "A received payment may take two working days to appear.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.cannot_answer_sentence",
+        "expected": "Our service desk can answer that question.",
+        "actual": "Our service desk can answer that question.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "phrases.recorded_promise_change_reply",
+        "expected": "Please use your secure inbox to request a change.",
+        "actual": "Please use your secure inbox to request a change.",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "opening.on_enter",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "memo.immediate_human.opening_route",
+        "expected": "transfer",
+        "actual": "opening",
+        "match": false,
+        "note": "Executed exported Python only, with preclassified intent; no chat or bank requests."
+      },
+      {
+        "path": "memo.immediate_human.id_route_0",
+        "expected": "transfer",
+        "actual": "ask_0",
+        "match": false,
+        "note": "Executed exported Python only, with preclassified intent; no chat or bank requests."
+      },
+      {
+        "path": "outcomes.table",
+        "expected": {
+          "mtb_arranged": [],
+          "mtb_settled": [],
+          "mtb_transferred": [
+            "mtb_care",
+            "mtb_person",
+            "mtb_restructure"
+          ],
+          "mtb_no_deal": [
+            "mtb_disputed",
+            "mtb_distress",
+            "mtb_refused",
+            "mtb_service_error"
+          ],
+          "mtb_unverified": [
+            "mtb_declined",
+            "mtb_failed"
+          ],
+          "mtb_unreached": [
+            "mtb_callback",
+            "mtb_deceased",
+            "mtb_no_callback",
+            "mtb_unclear",
+            "mtb_wrong_number"
+          ]
+        },
+        "actual": {
+          "mtb_arranged": [],
+          "mtb_settled": [],
+          "mtb_transferred": [
+            "mtb_care",
+            "mtb_person",
+            "mtb_restructure"
+          ],
+          "mtb_no_deal": [
+            "mtb_disputed",
+            "mtb_distress",
+            "mtb_refused",
+            "mtb_service_error"
+          ],
+          "mtb_unverified": [
+            "mtb_declined",
+            "mtb_failed"
+          ],
+          "mtb_unreached": [
+            "mtb_callback",
+            "mtb_deceased",
+            "mtb_no_callback",
+            "mtb_unclear",
+            "mtb_wrong_number"
+          ]
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.url",
+        "expected": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.outcome.enum",
+        "expected": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "actual": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.url",
+        "expected": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.outcome.enum",
+        "expected": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "actual": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.reason.enum",
+        "expected": [
+          "mtb_callback",
+          "mtb_care",
+          "mtb_deceased",
+          "mtb_declined",
+          "mtb_disputed",
+          "mtb_distress",
+          "mtb_failed",
+          "mtb_no_callback",
+          "mtb_person",
+          "mtb_refused",
+          "mtb_restructure",
+          "mtb_service_error",
+          "mtb_settled",
+          "mtb_unclear",
+          "mtb_wrong_number"
+        ],
+        "actual": [
+          "mtb_callback",
+          "mtb_care",
+          "mtb_deceased",
+          "mtb_declined",
+          "mtb_disputed",
+          "mtb_distress",
+          "mtb_failed",
+          "mtb_no_callback",
+          "mtb_person",
+          "mtb_refused",
+          "mtb_restructure",
+          "mtb_service_error",
+          "mtb_settled",
+          "mtb_unclear",
+          "mtb_wrong_number"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.reason.default",
+        "expected": "{{final_reason}}",
+        "actual": "{{final_reason}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_reason.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.url",
+        "expected": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.outcome.enum",
+        "expected": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "actual": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.url",
+        "expected": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "actual": "https://dry-2-mtb.example.invalid/api/bank/close_call",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.outcome.enum",
+        "expected": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "actual": [
+          "mtb_arranged",
+          "mtb_no_deal",
+          "mtb_settled",
+          "mtb_transferred",
+          "mtb_unreached",
+          "mtb_unverified"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.outcome.default",
+        "expected": "{{final_outcome}}",
+        "actual": "{{final_outcome}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.reason.enum",
+        "expected": [
+          "mtb_callback",
+          "mtb_care",
+          "mtb_deceased",
+          "mtb_declined",
+          "mtb_disputed",
+          "mtb_distress",
+          "mtb_failed",
+          "mtb_no_callback",
+          "mtb_person",
+          "mtb_refused",
+          "mtb_restructure",
+          "mtb_service_error",
+          "mtb_settled",
+          "mtb_unclear",
+          "mtb_wrong_number"
+        ],
+        "actual": [
+          "mtb_callback",
+          "mtb_care",
+          "mtb_deceased",
+          "mtb_declined",
+          "mtb_disputed",
+          "mtb_distress",
+          "mtb_failed",
+          "mtb_no_callback",
+          "mtb_person",
+          "mtb_refused",
+          "mtb_restructure",
+          "mtb_service_error",
+          "mtb_settled",
+          "mtb_unclear",
+          "mtb_wrong_number"
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.reason.default",
+        "expected": "{{final_reason}}",
+        "actual": "{{final_reason}}",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_retry_same.success_mapping",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "close_noreason.omits_reason",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.failed_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.declined_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "identity.unclear_holder_outcome.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.restructuring.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "special_cases.human.allowed_pair",
+        "expected": true,
+        "actual": true,
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[0].deadline",
+        "expected": {
+          "kind": "nth_business_day",
+          "n": 8
+        },
+        "actual": {
+          "kind": "nth_business_day",
+          "n": 8
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[0].attempts",
+        "expected": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "actual": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-10-14",
+        "expected": "2026-10-26",
+        "actual": "2026-10-26",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-10-23",
+        "expected": "2026-11-06",
+        "actual": "2026-11-06",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-11-25",
+        "expected": "2026-12-07",
+        "actual": "2026-12-07",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[0]@2026-12-24",
+        "expected": "2027-01-07",
+        "actual": "2027-01-07",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[1].deadline",
+        "expected": {
+          "kind": "end_of_month",
+          "basis": "business",
+          "adjustment": "preceding"
+        },
+        "actual": {
+          "kind": "end_of_month",
+          "basis": "business",
+          "adjustment": "preceding"
+        },
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "bands[1].attempts",
+        "expected": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "actual": [
+          {
+            "amount": "full",
+            "date": "deadline",
+            "floor_if_full_refused": true
+          }
+        ],
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-10-14",
+        "expected": "2026-10-29",
+        "actual": "2026-10-29",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-10-23",
+        "expected": "2026-10-29",
+        "actual": "2026-10-29",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-11-25",
+        "expected": "2026-11-30",
+        "actual": "2026-11-30",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "deadline[1]@2026-12-24",
+        "expected": "2026-12-31",
+        "actual": "2026-12-31",
+        "match": true,
+        "note": ""
+      },
+      {
+        "path": "init_products.embedded_deadline_matches_source",
+        "expected": "FunctionDef(name='deadline', args=arguments(args=[arg(arg='today'), arg(arg='rule'), arg(arg='holidays'), arg(arg='business_days')]), body=[Try(body=[Assign(targets=[Name(id='d', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='today', ctx=Load())])), If(test=BoolOp(op=Or(), values=[Compare(left=Name(id='d', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), UnaryOp(op=Not(), operand=Call(func=Name(id='isinstance', ctx=Load()), args=[Name(id='rule', ctx=Load()), Name(id='dict', ctx=Load())])), Compare(left=Call(func=Name(id='_calendar', ctx=Load()), args=[Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), ops=[Is()], comparators=[Constant(value=None)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='kind', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='kind')])), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='nth_business_day')]), body=[Return(value=Call(func=Name(id='nth_business_day_after', ctx=Load()), args=[Name(id='today', ctx=Load()), Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')]), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), Assign(targets=[Name(id='adjustment', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='adjustment')])), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[NotIn()], comparators=[Tuple(elts=[Constant(value='none'), Constant(value='following'), Constant(value='preceding')], ctx=Load())]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='calendar_days')]), body=[Assign(targets=[Name(id='n', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')])), If(test=BoolOp(op=Or(), values=[Compare(left=Call(func=Name(id='type', ctx=Load()), args=[Name(id='n', ctx=Load())]), ops=[IsNot()], comparators=[Name(id='int', ctx=Load())]), Compare(left=Name(id='n', ctx=Load()), ops=[Lt()], comparators=[Constant(value=0)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=BinOp(left=Name(id='d', ctx=Load()), op=Add(), right=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Name(id='n', ctx=Load()))])), attr='isoformat', ctx=Load())))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='fixed_date')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='date')]))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='end_of_month')]), body=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='business')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Name(id='last_business_day_of_month', ctx=Load()), args=[Name(id='today', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))], orelse=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='calendar')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Call(func=Name(id='_month_end', ctx=Load()), args=[Name(id='d', ctx=Load())]), attr='isoformat', ctx=Load())))], orelse=[Return(value=Constant(value=None))])])], orelse=[Return(value=Constant(value=None))])])]), Assign(targets=[Name(id='target_day', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='target', ctx=Load())])), If(test=Compare(left=Name(id='target_day', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='none')]), body=[Return(value=Name(id='target', ctx=Load()))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='following')]), body=[Return(value=Call(func=Name(id='next_business_day', ctx=Load()), args=[Name(id='target', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), For(target=Name(id='_', ctx=Store()), iter=Call(func=Name(id='range', ctx=Load()), args=[BinOp(left=Constant(value=7), op=Mult(), right=BinOp(left=Call(func=Name(id='len', ctx=Load()), args=[Name(id='holidays', ctx=Load())]), op=Add(), right=Constant(value=1)))]), body=[If(test=Call(func=Name(id='is_business_day', ctx=Load()), args=[Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), body=[Return(value=Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())))]), AugAssign(target=Name(id='target_day', ctx=Store()), op=Sub(), value=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Constant(value=1))]))])], handlers=[ExceptHandler(type=Name(id='Exception', ctx=Load()), body=[Pass()])]), Return(value=Constant(value=None))])",
+        "actual": "FunctionDef(name='deadline', args=arguments(args=[arg(arg='today'), arg(arg='rule'), arg(arg='holidays'), arg(arg='business_days')]), body=[Try(body=[Assign(targets=[Name(id='d', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='today', ctx=Load())])), If(test=BoolOp(op=Or(), values=[Compare(left=Name(id='d', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), UnaryOp(op=Not(), operand=Call(func=Name(id='isinstance', ctx=Load()), args=[Name(id='rule', ctx=Load()), Name(id='dict', ctx=Load())])), Compare(left=Call(func=Name(id='_calendar', ctx=Load()), args=[Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), ops=[Is()], comparators=[Constant(value=None)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='kind', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='kind')])), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='nth_business_day')]), body=[Return(value=Call(func=Name(id='nth_business_day_after', ctx=Load()), args=[Name(id='today', ctx=Load()), Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')]), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), Assign(targets=[Name(id='adjustment', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='adjustment')])), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[NotIn()], comparators=[Tuple(elts=[Constant(value='none'), Constant(value='following'), Constant(value='preceding')], ctx=Load())]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='calendar_days')]), body=[Assign(targets=[Name(id='n', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='n')])), If(test=BoolOp(op=Or(), values=[Compare(left=Call(func=Name(id='type', ctx=Load()), args=[Name(id='n', ctx=Load())]), ops=[IsNot()], comparators=[Name(id='int', ctx=Load())]), Compare(left=Name(id='n', ctx=Load()), ops=[Lt()], comparators=[Constant(value=0)])]), body=[Return(value=Constant(value=None))]), Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=BinOp(left=Name(id='d', ctx=Load()), op=Add(), right=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Name(id='n', ctx=Load()))])), attr='isoformat', ctx=Load())))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='fixed_date')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='date')]))], orelse=[If(test=Compare(left=Name(id='kind', ctx=Load()), ops=[Eq()], comparators=[Constant(value='end_of_month')]), body=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='business')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Name(id='last_business_day_of_month', ctx=Load()), args=[Name(id='today', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))], orelse=[If(test=Compare(left=Call(func=Attribute(value=Name(id='rule', ctx=Load()), attr='get', ctx=Load()), args=[Constant(value='basis')]), ops=[Eq()], comparators=[Constant(value='calendar')]), body=[Assign(targets=[Name(id='target', ctx=Store())], value=Call(func=Attribute(value=Call(func=Name(id='_month_end', ctx=Load()), args=[Name(id='d', ctx=Load())]), attr='isoformat', ctx=Load())))], orelse=[Return(value=Constant(value=None))])])], orelse=[Return(value=Constant(value=None))])])]), Assign(targets=[Name(id='target_day', ctx=Store())], value=Call(func=Name(id='_date', ctx=Load()), args=[Name(id='target', ctx=Load())])), If(test=Compare(left=Name(id='target_day', ctx=Load()), ops=[Is()], comparators=[Constant(value=None)]), body=[Return(value=Constant(value=None))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='none')]), body=[Return(value=Name(id='target', ctx=Load()))]), If(test=Compare(left=Name(id='adjustment', ctx=Load()), ops=[Eq()], comparators=[Constant(value='following')]), body=[Return(value=Call(func=Name(id='next_business_day', ctx=Load()), args=[Name(id='target', ctx=Load()), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]))]), For(target=Name(id='_', ctx=Store()), iter=Call(func=Name(id='range', ctx=Load()), args=[BinOp(left=Constant(value=7), op=Mult(), right=BinOp(left=Call(func=Name(id='len', ctx=Load()), args=[Name(id='holidays', ctx=Load())]), op=Add(), right=Constant(value=1)))]), body=[If(test=Call(func=Name(id='is_business_day', ctx=Load()), args=[Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())), Name(id='holidays', ctx=Load()), Name(id='business_days', ctx=Load())]), body=[Return(value=Call(func=Attribute(value=Name(id='target_day', ctx=Load()), attr='isoformat', ctx=Load())))]), AugAssign(target=Name(id='target_day', ctx=Store()), op=Sub(), value=Call(func=Attribute(value=Name(id='datetime', ctx=Load()), attr='timedelta', ctx=Load()), keywords=[keyword(arg='days', value=Constant(value=1))]))])], handlers=[ExceptHandler(type=Name(id='Exception', ctx=Load()), body=[Pass()])]), Return(value=Constant(value=None))])",
+        "match": true,
+        "note": ""
+      }
+    ],
+    "mismatches": [
+      {
+        "path": "SLOTS.account.past_due",
+        "expected": "outstanding_amount",
+        "actual": "days_past_due",
+        "match": false,
+        "note": ""
+      },
+      {
+        "path": "runtime.account.full_amount",
+        "expected": 987.65,
+        "actual": 13.0,
+        "match": false,
+        "note": "Executed exported init_products with offline API-shaped sample: outstanding_amount=987.65, days_past_due=13, floor=5; no bank request."
+      },
+      {
+        "path": "memo.immediate_human.opening_route",
+        "expected": "transfer",
+        "actual": "opening",
+        "match": false,
+        "note": "Executed exported Python only, with preclassified intent; no chat or bank requests."
+      },
+      {
+        "path": "memo.immediate_human.id_route_0",
+        "expected": "transfer",
+        "actual": "ask_0",
+        "match": false,
+        "note": "Executed exported Python only, with preclassified intent; no chat or bank requests."
+      }
+    ],
+    "deadlines": [
+      {
+        "band": [
+          1,
+          24
+        ],
+        "now": "2026-10-14",
+        "expected": "2026-10-26",
+        "actual": "2026-10-26"
+      },
+      {
+        "band": [
+          1,
+          24
+        ],
+        "now": "2026-10-23",
+        "expected": "2026-11-06",
+        "actual": "2026-11-06"
+      },
+      {
+        "band": [
+          1,
+          24
+        ],
+        "now": "2026-11-25",
+        "expected": "2026-12-07",
+        "actual": "2026-12-07"
+      },
+      {
+        "band": [
+          1,
+          24
+        ],
+        "now": "2026-12-24",
+        "expected": "2027-01-07",
+        "actual": "2027-01-07"
+      },
+      {
+        "band": [
+          25,
+          90
+        ],
+        "now": "2026-10-14",
+        "expected": "2026-10-29",
+        "actual": "2026-10-29"
+      },
+      {
+        "band": [
+          25,
+          90
+        ],
+        "now": "2026-10-23",
+        "expected": "2026-10-29",
+        "actual": "2026-10-29"
+      },
+      {
+        "band": [
+          25,
+          90
+        ],
+        "now": "2026-11-25",
+        "expected": "2026-11-30",
+        "actual": "2026-11-30"
+      },
+      {
+        "band": [
+          25,
+          90
+        ],
+        "now": "2026-12-24",
+        "expected": "2026-12-31",
+        "actual": "2026-12-31"
+      }
+    ],
+    "unresolved": [],
+    "audit_unresolved": [
+      "Exact wording of the hardship sympathetic sentence is not dictated by the documents (only 'one short sympathetic sentence').",
+      "Some P12 constraints have no IR field and are left to prompt text: text answers strip spaces, no account detail or security answers from relatives, third party asked for reachability without disclosing purpose, below-floor counteroffer once then flat refusal, never more than full, no discounts/waivers/instalment plans, correction invalidates consent, never claim a failed promise was saved, use call variable now."
+    ],
+    "audit_fixed": [
+      "special_cases[hardship].say: was empty although P12 requires 'one short sympathetic sentence'; added the short sentence \"I am sorry to hear that.\" (content-dictated, wording not dictated).",
+      "All other values were checked against P12, M42, C9 and openapi.json and found correct; no other changes."
+    ],
+    "close_nodes": {
+      "close_retry": {
+        "outcome": {
+          "enum": [
+            "mtb_arranged",
+            "mtb_settled",
+            "mtb_transferred",
+            "mtb_no_deal",
+            "mtb_unverified",
+            "mtb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_reason": {
+        "reason": {
+          "enum": [
+            "mtb_refused",
+            "mtb_distress",
+            "mtb_disputed",
+            "mtb_settled",
+            "mtb_service_error",
+            "mtb_restructure",
+            "mtb_person",
+            "mtb_care",
+            "mtb_failed",
+            "mtb_declined",
+            "mtb_callback",
+            "mtb_no_callback",
+            "mtb_wrong_number",
+            "mtb_deceased",
+            "mtb_unclear"
+          ],
+          "type": "string",
+          "default": "{{final_reason}}",
+          "description": "Allowed combinations come from the current code list. Omit reason for arranged and settled."
+        },
+        "outcome": {
+          "enum": [
+            "mtb_arranged",
+            "mtb_settled",
+            "mtb_transferred",
+            "mtb_no_deal",
+            "mtb_unverified",
+            "mtb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_noreason": {
+        "outcome": {
+          "enum": [
+            "mtb_arranged",
+            "mtb_settled",
+            "mtb_transferred",
+            "mtb_no_deal",
+            "mtb_unverified",
+            "mtb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      },
+      "close_retry_same": {
+        "reason": {
+          "enum": [
+            "mtb_refused",
+            "mtb_distress",
+            "mtb_disputed",
+            "mtb_settled",
+            "mtb_service_error",
+            "mtb_restructure",
+            "mtb_person",
+            "mtb_care",
+            "mtb_failed",
+            "mtb_declined",
+            "mtb_callback",
+            "mtb_no_callback",
+            "mtb_wrong_number",
+            "mtb_deceased",
+            "mtb_unclear"
+          ],
+          "type": "string",
+          "default": "{{final_reason}}",
+          "description": "Allowed combinations come from the current code list. Omit reason for arranged and settled."
+        },
+        "outcome": {
+          "enum": [
+            "mtb_arranged",
+            "mtb_settled",
+            "mtb_transferred",
+            "mtb_no_deal",
+            "mtb_unverified",
+            "mtb_unreached"
+          ],
+          "type": "string",
+          "default": "{{final_outcome}}"
+        },
+        "customer_id": {
+          "type": "string",
+          "default": "{{customer_id}}"
+        }
+      }
+    },
+    "embedded_policy": {
+      "source_docs": [
+        "hidden/dry-2/01-mail.txt",
+        "hidden/dry-2/02-policy.md",
+        "hidden/dry-2/03-memo.txt",
+        "hidden/dry-2/04-codes.txt",
+        "hidden/dry-2/openapi.json"
+      ],
+      "bank_name": "Marlow Trade Bank",
+      "identity": {
+        "requirements": [
+          {
+            "field": "postcode",
+            "ask_text": "What is your business postcode?",
+            "answer_format": "text",
+            "digits": 0,
+            "numeric_date_order": "dmy",
+            "hint_field": "",
+            "hint_reply": ""
+          },
+          {
+            "field": "registration_code",
+            "ask_text": "What is your seven-digit registration code?",
+            "answer_format": "digits",
+            "digits": 7,
+            "numeric_date_order": "dmy",
+            "hint_field": "",
+            "hint_reply": ""
+          },
+          {
+            "field": "founding_year",
+            "ask_text": "In which year was your business founded?",
+            "answer_format": "year",
+            "digits": 0,
+            "numeric_date_order": "dmy",
+            "hint_field": "",
+            "hint_reply": ""
+          },
+          {
+            "field": "contact_birthdate",
+            "ask_text": "What is the registered contact date of birth?",
+            "answer_format": "date",
+            "digits": 0,
+            "numeric_date_order": "mdy",
+            "hint_field": "",
+            "hint_reply": ""
+          }
+        ],
+        "wrong_answer_limit": 4,
+        "wrong_count_source": "api",
+        "remaining_slot": "remaining_tries",
+        "holder_confirmation_asks": 2,
+        "decline_explain_once": true,
+        "asking_purpose_counts_as_decline": false,
+        "failed_outcome": [
+          "mtb_unverified",
+          "mtb_failed"
+        ],
+        "declined_outcome": [
+          "mtb_unverified",
+          "mtb_declined"
+        ],
+        "unclear_holder_outcome": [
+          "mtb_unreached",
+          "mtb_unclear"
+        ],
+        "failed_instruction": "Please contact the verification desk."
+      },
+      "third_party": {
+        "callback": {
+          "enabled": true,
+          "days": "next_business_day",
+          "start": "09:20",
+          "end": "17:10",
+          "must_be_after_now": true,
+          "retry_once": true,
+          "scheduled_outcome": [
+            "mtb_unreached",
+            "mtb_callback"
+          ],
+          "no_callback_outcome": [
+            "mtb_unreached",
+            "mtb_no_callback"
+          ]
+        },
+        "wrong_number_outcome": [
+          "mtb_unreached",
+          "mtb_wrong_number"
+        ],
+        "deceased_outcome": [
+          "mtb_unreached",
+          "mtb_deceased"
+        ],
+        "deceased_sentence": "We are sorry for your loss."
+      },
+      "calendar": {
+        "holidays": [
+          "2026-10-30",
+          "2026-11-02",
+          "2026-12-25",
+          "2027-01-01"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "next_occurrence"
+      },
+      "bands": [
+        {
+          "name": "1-24",
+          "days_late_min": 1,
+          "days_late_max": 24,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 8
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "name": "25-90",
+          "days_late_min": 25,
+          "days_late_max": 90,
+          "deadline": {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "amounts": {
+        "floors": {
+          "trade_line": "trade_floor",
+          "stock_credit": "stock_floor",
+          "vehicle_lease": "lease_floor"
+        },
+        "full_first": true,
+        "never_ask_how_much": true,
+        "floor_offered_once": true,
+        "floor_wording": "The unpaid remainder remains overdue.",
+        "accept_between_floor_and_full": true
+      },
+      "dates": {
+        "promise_today_allowed": true,
+        "weekend_or_holiday_roll_forward": true,
+        "vague_ask_once_then_deadline": true,
+        "after_deadline_offer_deadline": true
+      },
+      "special_cases": [
+        {
+          "name": "already_paid",
+          "trigger": "The customer says they have already paid this product.",
+          "action": {
+            "type": "note",
+            "reason": "mtb_settled"
+          },
+          "say": "A received payment may take two working days to appear.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "dispute",
+          "trigger": "The customer says the debt is not theirs, they never held it, or it was previously paid off and closed.",
+          "action": {
+            "type": "note",
+            "reason": "mtb_disputed"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "hardship",
+          "trigger": "The customer mentions illness, bereavement or job loss.",
+          "action": {
+            "type": "note",
+            "reason": "mtb_distress"
+          },
+          "say": "I am sorry to hear that.",
+          "offer_transfer_queue": "mtb_care",
+          "offer_outcome": [
+            "mtb_transferred",
+            "mtb_care"
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "restructuring",
+          "trigger": "The customer asks for restructuring or lower future instalments.",
+          "action": {
+            "type": "transfer",
+            "queue": "mtb_restructure",
+            "outcome": "mtb_transferred",
+            "reason": "mtb_restructure"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "human",
+          "trigger": "The customer asks to speak to a human person.",
+          "action": {
+            "type": "transfer",
+            "queue": "mtb_desk",
+            "outcome": "mtb_transferred",
+            "reason": "mtb_person"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "refuse_to_talk",
+          "trigger": "The customer refuses to talk or continue the conversation.",
+          "action": {
+            "type": "note",
+            "reason": "mtb_refused"
+          },
+          "say": "",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": true,
+          "ask_once_first": true,
+          "takes_promise": false,
+          "ends_call": true
+        },
+        {
+          "name": "robot",
+          "trigger": "The customer asks whether they are talking to a robot or a machine.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "I am the automated assistant of Marlow Trade Bank.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": false,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "scam",
+          "trigger": "The customer asks whether this call is a scam or genuine.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "Please verify this call using the number on your statement.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": false,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "cannot_answer",
+          "trigger": "The customer asks another question the assistant cannot answer.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "Our service desk can answer that question.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": false,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        },
+        {
+          "name": "change_promise",
+          "trigger": "The customer asks to alter a promise that has already been saved.",
+          "action": {
+            "type": "continue"
+          },
+          "say": "Please use your secure inbox to request a change.",
+          "offer_transfer_queue": "",
+          "offer_outcome": [
+            "",
+            ""
+          ],
+          "before_persuasion": false,
+          "ask_once_first": false,
+          "takes_promise": false,
+          "ends_call": false
+        }
+      ],
+      "outcomes": {
+        "table": [
+          {
+            "outcome": "mtb_arranged",
+            "reasons": []
+          },
+          {
+            "outcome": "mtb_settled",
+            "reasons": []
+          },
+          {
+            "outcome": "mtb_transferred",
+            "reasons": [
+              "mtb_restructure",
+              "mtb_person",
+              "mtb_care"
+            ]
+          },
+          {
+            "outcome": "mtb_no_deal",
+            "reasons": [
+              "mtb_refused",
+              "mtb_distress",
+              "mtb_disputed",
+              "mtb_service_error"
+            ]
+          },
+          {
+            "outcome": "mtb_unverified",
+            "reasons": [
+              "mtb_failed",
+              "mtb_declined"
+            ]
+          },
+          {
+            "outcome": "mtb_unreached",
+            "reasons": [
+              "mtb_callback",
+              "mtb_no_callback",
+              "mtb_wrong_number",
+              "mtb_deceased",
+              "mtb_unclear"
+            ]
+          }
+        ],
+        "promise_outcome": "mtb_arranged",
+        "paid_outcome": "mtb_settled",
+        "transfer_outcome": "mtb_transferred",
+        "transfer_overrides_promise": true,
+        "no_promise_outcome": "mtb_no_deal",
+        "all_paid_closes_as_paid": true,
+        "no_promise_reason_from_first_non_paid_note": true,
+        "service_error_reason": "mtb_service_error",
+        "refused_reason": "mtb_refused",
+        "goodbye_before_close": true
+      },
+      "notes": {
+        "enabled": true,
+        "reasons": [
+          "mtb_refused",
+          "mtb_distress",
+          "mtb_disputed",
+          "mtb_settled",
+          "mtb_service_error"
+        ],
+        "note_each_unpromised_product": true,
+        "none_on_transfer": true
+      },
+      "multi_product": {
+        "max_products": 3,
+        "state_all_before_asking": true,
+        "ask_all_today_once": true,
+        "per_product_attempts": true,
+        "common_date_clamped_per_product": true,
+        "one_confirmation_for_batch": true,
+        "recorded_promises_survive_transfer": true
+      },
+      "phrases": {
+        "opening": "This is the automated assistant of Marlow Trade Bank. This call is recorded.",
+        "opening_verbatim": true,
+        "holder_question": "Am I speaking with <<title>> <<last_name>>?",
+        "debt_intro": "I am calling about overdue business commitments.",
+        "today_question": "Can you settle this commitment today?",
+        "all_today_question": "Can you settle every listed commitment today?",
+        "robot_reply": "I am the automated assistant of Marlow Trade Bank.",
+        "scam_reply": "Please verify this call using the number on your statement.",
+        "prohibited_before_verification": [
+          "overdue",
+          "borrowing",
+          "commitment",
+          "payment",
+          "balance"
+        ],
+        "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+        "already_paid_sentence": "A received payment may take two working days to appear.",
+        "cannot_answer_sentence": "Our service desk can answer that question.",
+        "recorded_promise_change_reply": "Please use your secure inbox to request a change.",
+        "product_naming": {
+          "trade_line": "trade line",
+          "stock_credit": "stock credit",
+          "vehicle_lease": "vehicle lease"
+        }
+      },
+      "promise_write": {
+        "retry_on_failure": 0,
+        "one_promise_per_product": true,
+        "confirm_phrase": "May I save this payment agreement?"
+      },
+      "unresolved": []
+    }
+  }
+}

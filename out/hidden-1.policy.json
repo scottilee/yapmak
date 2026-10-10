@@ -1,0 +1,542 @@
+{
+ "source_docs": [
+  "hidden/dry-1/brief.md",
+  "hidden/dry-1/openapi.json"
+ ],
+ "bank_name": "Juniper Cooperative Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "membership_year",
+    "ask_text": "In which year did you join the cooperative?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-1/brief.md",
+     "text": "1. `membership_year` \u2014 say exactly \"In which year did you join the cooperative?\". Format year."
+    }
+   },
+   {
+    "field": "date_of_birth",
+    "ask_text": "What is your date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-1/brief.md",
+     "text": "2. `date_of_birth` \u2014 say exactly \"What is your date of birth?\". Format date. ... Normalize date answers to YYYY-MM-DD; purely numeric dates use month/day/year."
+    }
+   },
+   {
+    "field": "access_suffix",
+    "ask_text": "What are the six digits of your access reference?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-1/brief.md",
+     "text": "3. `access_suffix` \u2014 say exactly \"What are the six digits of your access reference?\". Format digits, exactly 6 digits including leading zeros."
+    }
+   }
+  ],
+  "wrong_answer_limit": 5,
+  "wrong_count_source": "api",
+  "remaining_slot": "remaining_tries",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "jcb_unverified",
+   "jcb_failed"
+  ],
+  "declined_outcome": [
+   "jcb_unverified",
+   "jcb_declined"
+  ],
+  "unclear_holder_outcome": [
+   "jcb_unreached",
+   "jcb_unclear"
+  ],
+  "failed_instruction": "Please contact the verification desk.",
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Permit 5 wrong answers TOTAL across the whole check; use API remaining_tries. On exhaustion say exactly \"Please contact the verification desk.\" and close jcb_unverified/jcb_failed. After an explicit refusal explain account protection once; after a second refusal close jcb_unverified/jcb_declined. A purpose or security question is NOT a refusal. Ask at most twice, then close jcb_unreached/jcb_unclear."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today",
+   "start": "08:00",
+   "end": "18:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "jcb_unreached",
+    "jcb_callback"
+   ],
+   "no_callback_outcome": [
+    "jcb_unreached",
+    "jcb_no_callback"
+   ],
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Callback days are today only, between 08:00 and 18:30 inclusive and strictly after now. ... On an invalid slot ask once for another; a second invalid slot or refusal closes jcb_unreached/jcb_no_callback. A successfully scheduled callback closes jcb_unreached/jcb_callback."
+   }
+  },
+  "wrong_number_outcome": [
+   "jcb_unreached",
+   "jcb_wrong_number"
+  ],
+  "deceased_outcome": [
+   "jcb_unreached",
+   "jcb_deceased"
+  ],
+  "deceased_sentence": "We are sorry for your loss.",
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Wrong number closes jcb_unreached/jcb_wrong_number. If the holder has died, say exactly \"We are sorry for your loss.\" and close jcb_unreached/jcb_deceased."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-19",
+   "2026-10-29",
+   "2026-12-31"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Business days are Monday\u2013Friday excluding only 2026-10-19, 2026-10-29, 2026-12-31. Next weekday means the following calendar week's weekday, even when today is that weekday; this weekday means this calendar week. For missing date parts use the next occurrence on or after today."
+  }
+ },
+ "bands": [
+  {
+   "name": "days_1_18",
+   "days_late_min": 1,
+   "days_late_max": 18,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 9,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Days late 1\u201318 inclusive: today plus 9 calendar days, then move forward to a business day if needed (calendar_days, n=9, adjustment=following). Both bands get exactly one persuasion attempt: full amount on the deadline, substituting floor only if full was already refused."
+   }
+  },
+  {
+   "name": "days_19_75",
+   "days_late_min": 19,
+   "days_late_max": 75,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 4
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Days late 19\u201375 inclusive: fourth business day after today (nth_business_day, n=4). Both bands get exactly one persuasion attempt: full amount on the deadline, substituting floor only if full was already refused."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "cooperative_line": "line_floor",
+   "equipment_credit": "equipment_floor"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder remains overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Floor mapping is {\"cooperative_line\": \"line_floor\", \"equipment_credit\": \"equipment_floor\"}. Offer full amount first; never ask the customer how much they can pay. If full is too much offer the floor once per product and say exactly \"The unpaid remainder remains overdue.\" Accept any amount from floor to full inclusive."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "A promise may be today but must be a business day no later than its deadline. Roll weekends/holidays forward only within the deadline; otherwise offer the deadline. Clarify a vague period once, then offer the deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this product.",
+   "action": {
+    "type": "note",
+    "reason": "jcb_settled"
+   },
+   "say": "A received payment may take two working days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Already paid: say exactly \"A received payment may take two working days to appear.\"; no promise for that product, mark jcb_settled and continue other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, they never held the product, or it was previously paid off and closed.",
+   "action": {
+    "type": "note",
+    "reason": "jcb_disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Dispute (not their debt, never held it, or it was previously paid off and closed): no argument or promise, mark jcb_disputed and continue."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "jcb_distress"
+   },
+   "say": "I am very sorry to hear that.",
+   "offer_transfer_queue": "jcb_care",
+   "offer_outcome": [
+    "jcb_transferred",
+    "jcb_care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Illness, bereavement or job loss: one short sympathetic sentence and no persuasion/promise; offer queue jcb_care; accepted transfer closes jcb_transferred/jcb_care; declined offer marks only this product jcb_distress and continues."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for restructuring or lower future instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "jcb_restructure",
+    "outcome": "jcb_transferred",
+    "reason": "jcb_restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Restructuring/lower future instalments: immediate transfer to jcb_restructure, close jcb_transferred/jcb_restructure."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human person.",
+   "action": {
+    "type": "transfer",
+    "queue": "jcb_desk",
+    "outcome": "jcb_transferred",
+    "reason": "jcb_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Human request: ask once whether you can help, then transfer if they insist to jcb_desk, close jcb_transferred/jcb_person."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the conversation.",
+   "action": {
+    "type": "note",
+    "reason": "jcb_refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "On a first refusal to talk ask once to continue; a second stops persuasion, marks all remaining products jcb_refused and finalizes."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are speaking with a robot or a machine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am the automated assistant of Juniper Cooperative Bank.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Robot question: say exactly \"I am the automated assistant of Juniper Cooperative Bank.\""
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam or genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please verify this call using the number on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Scam question: say exactly \"Please verify this call using the number on your statement.\""
+   }
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks another question the assistant cannot answer.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Our service desk can answer that question.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-1/brief.md",
+    "text": "Other unanswerable question: say exactly \"Our service desk can answer that question.\" and invent nothing."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "jcb_arranged",
+    "reasons": [],
+    "when": "At least one promise saved and no transfer."
+   },
+   {
+    "outcome": "jcb_settled",
+    "reasons": [],
+    "when": "No promise saved and all products marked settled."
+   },
+   {
+    "outcome": "jcb_transferred",
+    "reasons": [
+     "jcb_restructure",
+     "jcb_person",
+     "jcb_care"
+    ],
+    "when": "Call transferred; overrides every other outcome."
+   },
+   {
+    "outcome": "jcb_no_deal",
+    "reasons": [
+     "jcb_refused",
+     "jcb_distress",
+     "jcb_disputed",
+     "jcb_service_error"
+    ],
+    "when": "Otherwise, with the first non-settled product's note reason in API order."
+   },
+   {
+    "outcome": "jcb_unverified",
+    "reasons": [
+     "jcb_failed",
+     "jcb_declined"
+    ],
+    "when": "Identity check failed or declined."
+   },
+   {
+    "outcome": "jcb_unreached",
+    "reasons": [
+     "jcb_callback",
+     "jcb_no_callback",
+     "jcb_wrong_number",
+     "jcb_deceased",
+     "jcb_unclear"
+    ],
+    "when": "Holder not reached or not confirmed."
+   }
+  ],
+  "promise_outcome": "jcb_arranged",
+  "paid_outcome": "jcb_settled",
+  "transfer_outcome": "jcb_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "jcb_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "jcb_service_error",
+  "refused_reason": "jcb_refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Transfer preserves saved promises but cancels unsaved proposals and overrides every other outcome. Otherwise any saved promise yields jcb_arranged; with none saved and all products marked settled use jcb_settled; otherwise jcb_no_deal with the first non-settled product's note reason in API order. Say thank you and goodbye before exactly one close_call, the last bank action. Omit reason on arranged/settled outcomes."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "jcb_refused",
+   "jcb_distress",
+   "jcb_disputed",
+   "jcb_settled",
+   "jcb_service_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Add one note for each unpromised product on non-transfer calls using only jcb_refused, jcb_distress, jcb_disputed, jcb_settled, jcb_service_error. Defer notes until the final non-transfer decision. No notes at all on a transfer, including before it."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "get_account returns at most 2 obligations. ... State every product, amount and days late before asking for payment. ... for several ask exactly \"Can you settle every listed commitment today?\" once, then process in API order without repeating the today question for each. Counters are per product. ... If a common date exceeds one product's deadline clamp only that product and explain the change in the read-back. ... Transfer preserves saved promises"
+  }
+ },
+ "phrases": {
+  "opening": "This is the automated assistant of Juniper Cooperative Bank. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about your overdue cooperative borrowing.",
+  "today_question": "Can you settle this commitment today?",
+  "all_today_question": "Can you settle every listed commitment today?",
+  "robot_reply": "I am the automated assistant of Juniper Cooperative Bank.",
+  "scam_reply": "Please verify this call using the number on your statement.",
+  "prohibited_before_verification": [
+   "overdue",
+   "borrowing",
+   "commitment",
+   "payment",
+   "balance"
+  ],
+  "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+  "already_paid_sentence": "A received payment may take two working days to appear.",
+  "cannot_answer_sentence": "Our service desk can answer that question.",
+  "recorded_promise_change_reply": "Please use your secure inbox to request a change.",
+  "product_naming": {
+   "cooperative_line": "cooperative credit line",
+   "equipment_credit": "equipment credit"
+  },
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "OPENING. Say exactly \"This is the automated assistant of Juniper Cooperative Bank. This call is recorded.\" Then say exactly \"Am I speaking with {{title}} {{last_name}}?\" ... Spoken product names are {\"cooperative_line\": \"cooperative credit line\", \"equipment_credit\": \"equipment credit\"}."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 2,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save this payment agreement?",
+  "source": {
+   "doc": "hidden/dry-1/brief.md",
+   "text": "Read all pending products, amounts and dates together, then ask exactly \"May I save this payment agreement?\" ... Allow 2 extra create_promise attempts after a failed first attempt; when these are exhausted mark that product jcb_service_error, state it failed, and continue others."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "The brief requires 'one short sympathetic sentence' but does not dictate its words; a short sentence was written.",
+   "doc": "hidden/dry-1/brief.md"
+  },
+  {
+   "topic": "refuse_to_talk / human request wording",
+   "text": "The brief requires asking once to continue (refusal) and asking once whether the agent can help (human request) but dictates no words; no phrase field exists for these, so they are left to the prompt.",
+   "doc": "hidden/dry-1/brief.md"
+  }
+ ]
+}

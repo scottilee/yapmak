@@ -1,0 +1,571 @@
+{
+ "source_docs": [
+  "hidden/dry-2/01-mail.txt",
+  "hidden/dry-2/02-policy.md",
+  "hidden/dry-2/03-memo.txt",
+  "hidden/dry-2/04-codes.txt",
+  "hidden/dry-2/openapi.json"
+ ],
+ "bank_name": "Marlow Trade Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "What is your business postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-2/03-memo.txt",
+     "text": "A. Security asks postcode FIRST, registration_code SECOND, founding_year THIRD, contact_birthdate FOURTH. Retain their exact P12 question sentences and formats."
+    }
+   },
+   {
+    "field": "registration_code",
+    "ask_text": "What is your seven-digit registration code?",
+    "answer_format": "digits",
+    "digits": 7,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-2/02-policy.md",
+     "text": "`registration_code` \u2014 say exactly \"What is your seven-digit registration code?\". Format digits, exactly 7 digits including leading zeros."
+    }
+   },
+   {
+    "field": "founding_year",
+    "ask_text": "In which year was your business founded?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-2/02-policy.md",
+     "text": "`founding_year` \u2014 say exactly \"In which year was your business founded?\". Format year."
+    }
+   },
+   {
+    "field": "contact_birthdate",
+    "ask_text": "What is the registered contact date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "hidden/dry-2/02-policy.md",
+     "text": "`contact_birthdate` \u2014 say exactly \"What is the registered contact date of birth?\". Format date. ... purely numeric dates use month/day/year."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "remaining_tries",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "mtb_unverified",
+   "mtb_failed"
+  ],
+  "declined_outcome": [
+   "mtb_unverified",
+   "mtb_declined"
+  ],
+  "unclear_holder_outcome": [
+   "mtb_unreached",
+   "mtb_unclear"
+  ],
+  "failed_instruction": "Please contact the verification desk.",
+  "source": {
+   "doc": "hidden/dry-2/03-memo.txt",
+   "text": "Four wrong answers TOTAL, not two."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:20",
+   "end": "17:10",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "mtb_unreached",
+    "mtb_callback"
+   ],
+   "no_callback_outcome": [
+    "mtb_unreached",
+    "mtb_no_callback"
+   ],
+   "source": {
+    "doc": "hidden/dry-2/03-memo.txt",
+    "text": "E. Callbacks are next business day ONLY; the existing 09:20\u201317:10 window remains."
+   }
+  },
+  "wrong_number_outcome": [
+   "mtb_unreached",
+   "mtb_wrong_number"
+  ],
+  "deceased_outcome": [
+   "mtb_unreached",
+   "mtb_deceased"
+  ],
+  "deceased_sentence": "We are sorry for your loss.",
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "Wrong number closes mtb_unreached/mtb_wrong_number. If the holder has died, say exactly \"We are sorry for your loss.\" and close mtb_unreached/mtb_deceased."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-30",
+   "2026-11-02",
+   "2026-12-25",
+   "2027-01-01"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "Business days are Monday\u2013Friday excluding only 2026-10-30, 2026-11-02, 2026-12-25, 2027-01-01. Next weekday means the following calendar week's weekday, even when today is that weekday ... For missing date parts use the next occurrence on or after today."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-24",
+   "days_late_min": 1,
+   "days_late_max": 24,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 8
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "hidden/dry-2/03-memo.txt",
+    "text": "The 1\u201324 band remains eight business days after today. Both still have one full-on-deadline attempt with the floor substitution rule."
+   }
+  },
+  {
+   "name": "25-90",
+   "days_late_min": 25,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "hidden/dry-2/03-memo.txt",
+    "text": "B. For days late 25\u201390 only, replace six business days with the LAST BUSINESS DAY OF THE CURRENT CALENDAR MONTH: end_of_month, basis=business, adjustment=preceding."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "trade_line": "trade_floor",
+   "stock_credit": "stock_floor",
+   "vehicle_lease": "lease_floor"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder remains overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "Offer full amount first; never ask the customer how much they can pay. If full is too much offer the floor once per product and say exactly \"The unpaid remainder remains overdue.\" Accept any amount from floor to full inclusive."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "A promise may be today but must be a business day no later than its deadline. Roll weekends/holidays forward only within the deadline; otherwise offer the deadline. Clarify a vague period once, then offer the deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this product.",
+   "action": {
+    "type": "note",
+    "reason": "mtb_settled"
+   },
+   "say": "A received payment may take two working days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Already paid: say exactly \"A received payment may take two working days to appear.\"; no promise for that product, mark mtb_settled and continue other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, they never held it, or it was previously paid off and closed.",
+   "action": {
+    "type": "note",
+    "reason": "mtb_disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Dispute (not their debt, never held it, or it was previously paid off and closed): no argument or promise, mark mtb_disputed and continue."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "mtb_distress"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "mtb_care",
+   "offer_outcome": [
+    "mtb_transferred",
+    "mtb_care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Illness, bereavement or job loss: one short sympathetic sentence and no persuasion/promise; offer queue mtb_care; accepted transfer closes mtb_transferred/mtb_care; declined offer marks only this product mtb_distress and continues."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for restructuring or lower future instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "mtb_restructure",
+    "outcome": "mtb_transferred",
+    "reason": "mtb_restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Restructuring/lower future instalments: immediate transfer to mtb_restructure, close mtb_transferred/mtb_restructure."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human person.",
+   "action": {
+    "type": "transfer",
+    "queue": "mtb_desk",
+    "outcome": "mtb_transferred",
+    "reason": "mtb_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-2/03-memo.txt",
+    "text": "D. Human requests transfer immediately to mtb_desk, without asking whether the assistant can help."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the conversation.",
+   "action": {
+    "type": "note",
+    "reason": "mtb_refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "On a first refusal to talk ask once to continue; a second stops persuasion, marks all remaining products mtb_refused and finalizes."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot or a machine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am the automated assistant of Marlow Trade Bank.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Robot question: say exactly \"I am the automated assistant of Marlow Trade Bank.\""
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam or genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please verify this call using the number on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Scam question: say exactly \"Please verify this call using the number on your statement.\""
+   }
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks another question the assistant cannot answer.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Our service desk can answer that question.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "Other unanswerable question: say exactly \"Our service desk can answer that question.\" and invent nothing."
+   }
+  },
+  {
+   "name": "change_promise",
+   "trigger": "The customer asks to alter a promise that has already been saved.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please use your secure inbox to request a change.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "hidden/dry-2/02-policy.md",
+    "text": "If asked to alter a saved promise, say exactly \"Please use your secure inbox to request a change.\" and do not overwrite it."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "mtb_arranged",
+    "reasons": [],
+    "when": "at least one promise saved and no transfer"
+   },
+   {
+    "outcome": "mtb_settled",
+    "reasons": [],
+    "when": "no promise saved and all products marked settled"
+   },
+   {
+    "outcome": "mtb_transferred",
+    "reasons": [
+     "mtb_restructure",
+     "mtb_person",
+     "mtb_care"
+    ],
+    "when": "call transferred to an agent queue"
+   },
+   {
+    "outcome": "mtb_no_deal",
+    "reasons": [
+     "mtb_refused",
+     "mtb_distress",
+     "mtb_disputed",
+     "mtb_service_error"
+    ],
+    "when": "no promise saved; reason is first non-settled product's note reason in API order"
+   },
+   {
+    "outcome": "mtb_unverified",
+    "reasons": [
+     "mtb_failed",
+     "mtb_declined"
+    ],
+    "when": "identity check failed or declined"
+   },
+   {
+    "outcome": "mtb_unreached",
+    "reasons": [
+     "mtb_callback",
+     "mtb_no_callback",
+     "mtb_wrong_number",
+     "mtb_deceased",
+     "mtb_unclear"
+    ],
+    "when": "account holder not reached"
+   }
+  ],
+  "promise_outcome": "mtb_arranged",
+  "paid_outcome": "mtb_settled",
+  "transfer_outcome": "mtb_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "mtb_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "mtb_service_error",
+  "refused_reason": "mtb_refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "hidden/dry-2/04-codes.txt",
+   "text": "CODE LIST C9 \u2014 authoritative enum combinations"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "mtb_refused",
+   "mtb_distress",
+   "mtb_disputed",
+   "mtb_settled",
+   "mtb_service_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "Add one note for each unpromised product on non-transfer calls using only mtb_refused, mtb_distress, mtb_disputed, mtb_settled, mtb_service_error. ... No notes at all on a transfer, including before it."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "get_account returns at most 3 obligations."
+  }
+ },
+ "phrases": {
+  "opening": "This is the automated assistant of Marlow Trade Bank. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about overdue business commitments.",
+  "today_question": "Can you settle this commitment today?",
+  "all_today_question": "Can you settle every listed commitment today?",
+  "robot_reply": "I am the automated assistant of Marlow Trade Bank.",
+  "scam_reply": "Please verify this call using the number on your statement.",
+  "prohibited_before_verification": [
+   "overdue",
+   "borrowing",
+   "commitment",
+   "payment",
+   "balance"
+  ],
+  "after_promise_sentence": "A confirmation will be placed in your secure inbox.",
+  "already_paid_sentence": "A received payment may take two working days to appear.",
+  "cannot_answer_sentence": "Our service desk can answer that question.",
+  "recorded_promise_change_reply": "Please use your secure inbox to request a change.",
+  "product_naming": {
+   "trade_line": "trade line",
+   "stock_credit": "stock credit",
+   "vehicle_lease": "vehicle lease"
+  },
+  "source": {
+   "doc": "hidden/dry-2/02-policy.md",
+   "text": "OPENING. Say exactly \"This is the automated assistant of Marlow Trade Bank. This call is recorded.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save this payment agreement?",
+  "source": {
+   "doc": "hidden/dry-2/03-memo.txt",
+   "text": "C. Zero retries after a failed create_promise; mark service_error after the first failure."
+  }
+ },
+ "unresolved": []
+}

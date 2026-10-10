@@ -1,0 +1,109 @@
+{
+ "workflow_id": "a1898b31-b5f9-4822-97b0-fc36ca2a0a0f",
+ "policy": "/tmp/freya-sunday-dryrun-dvx4wt7h/repo/out/hidden-2.policy.json",
+ "ok": true,
+ "elapsed_s": 9.1,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": true,
+   "checks": [
+    {
+     "name": "opening_spoken",
+     "pass": true,
+     "detail": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "holder_asked",
+     "pass": true,
+     "detail": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "first_question_matches_ir",
+     "pass": true,
+     "detail": "want ask_text='what is your business postcode?' in 'Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?'"
+    },
+    {
+     "name": "first_question_marked",
+     "pass": true,
+     "detail": "Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?"
+    },
+    {
+     "name": "routed_to_ask_0",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->ask_0']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "Yes, speaking.",
+     "agent": "Thank you. Before we continue, I need to ask you four short security questions. What is your business postcode?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": true,
+   "checks": [
+    {
+     "name": "no_account_words",
+     "pass": true,
+     "detail": "banned hits=[] in 'I understand. When can Ms Customer be reached, including the day and time?'"
+    },
+    {
+     "name": "asks_when_reachable",
+     "pass": true,
+     "detail": "I understand. When can Ms Customer be reached, including the day and time?"
+    },
+    {
+     "name": "routed_to_third_party",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->third_party']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "This is the automated assistant of Marlow Trade Bank. This call is recorded. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "This is her husband, she's not here.",
+     "agent": "I understand. When can Ms Customer be reached, including the day and time?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "borrowing",
+  "collections",
+  "commitment",
+  "debt",
+  "due",
+  "facilit",
+  "installment",
+  "instalment",
+  "overdue",
+  "pay ",
+  "payment",
+  "product",
+  "promise",
+  "stock credit",
+  "trade line",
+  "vehicle lease"
+ ]
+}

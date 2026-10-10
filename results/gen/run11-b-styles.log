@@ -18,3 +18,22 @@ slowest agent turn per call: median 2 s, worst 4 s. Failed calls where the custo
 2 / 3 passed (bank records and conversation checks). Last simulation 14b286af-9744-4e3a-8b3e-36bcf8f18034, status completed, 54 s.
 exit B-corrects 0 2026-10-10T15:18:46Z
 start B-talkative 2026-10-10T15:18:46Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The conversation failed multiple criteria. 1. The phone question was asked again twice (Message 6 and Message 8) rather than once. 2. There were four total attempts made on the personal loan (Messages 10, 28, 30, and 32) instead of the required t
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 3 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation d1726f23-03cd-423b-8e6d-5295ef7dc09f, status completed, 108 s.
+exit B-talkative 0 2026-10-10T15:20:40Z
+start B-asks_back 2026-10-10T15:20:40Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The conversation failed on two specific identity verification criteria, despite meeting all other requirements. 1. The date of birth was asked twice ([Message 2] and [Message 4]), violating the requirement that it not be asked again. 2. The phone
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 3 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation b5f7f8df-de68-46b3-a9cc-5f51c8052db6, status completed, 65 s.
+exit B-asks_back 0 2026-10-10T15:21:52Z

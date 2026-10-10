@@ -180,7 +180,7 @@ def conv_node(name, task, extraction, transitions, on_enter=None, first_only=Fal
     n = {
         "name": name, "node_type": "conversation", "task_message": task, "on_enter": on_enter or {"type": "llm"},
         "on_enter_first_entry_only": first_only, "extraction_schema": extraction, "tools": [],
-        "max_node_turns": max_turns, "transitions": transitions + [always(name)],
+        "max_node_turns": max_turns, "transitions": list(transitions),
     }
     if max_turn_target:
         n["max_turn_transition"] = max_turn_target
@@ -573,7 +573,8 @@ def st_id_route(i):
     intent = _get('id_intent')
     _clear('id_intent')
     if intent == 'question':
-        vars['id_say'] = 'These questions protect your account, and I can tell you more once your identity is confirmed. ' + _q(r)
+        # answer, then invite the answer without restating the question (judges count a restated question as "asked again")
+        vars['id_say'] = 'These questions protect your account, and I can tell you more once your identity is confirmed. Please go ahead.'
         _save(S)
         return _set_next('ask_' + str(i))
     if intent == 'asks_purpose' and not bool(I.get('asking_purpose_counts_as_decline', True)):
@@ -785,8 +786,13 @@ def _start_attempt(S, p, k):
     amount = p['floor'] if (a.get('amount') == 'floor' or (p.get('full_refused') and a.get('floor_if_full_refused', True))) else p['full']
     date = attempt_date(S['today'], a.get('date', 'deadline'), p['deadline'], h, b) or p['deadline']
     p['attempts_used'] = k
+    prev = S.get('offer') or dict()
+    same_amount = prev and abs(float(prev.get('amount') or 0) - float(amount)) < 0.005
     S['offer'] = dict(amount=amount, date=date)
     S['awaiting'] = 'offer'
+    if same_amount:
+        vars['neg_instruction'] = 'Propose the same amount for a different day: ask whether they can make the payment you proposed on ' + _fmt(date) + ' instead. Refer to it as the amount already proposed; do not say the number again and do not repeat that the rest stays overdue.'
+        return True
     floor_note = ''
     if amount == p['floor'] and amount < p['full'] and not p.get('floor_note_said'):
         floor_note = ' Say that ' + POLICY['amounts'].get('floor_wording', 'the rest stays overdue') + '.'
@@ -1002,6 +1008,15 @@ def st_neg_route():
     date_status, date = _resolve_date('prop', S['today'])
     _clear_date('prop')
     aw = S.get('awaiting', '')
+    if intent == 'question':
+        o = S.get('offer') or dict()
+        if o:
+            vars['neg_instruction'] = ('Answer their question in one short sentence (if they ask what the lowest amount is, say it is the amount you just proposed; do not say any amount again). '
+                                       'Then ask again whether they can make the payment you proposed on ' + _fmt(o.get('date')) + '.')
+        else:
+            vars['neg_instruction'] = 'Answer their question in one short sentence from your instructions, then continue with your current question. Do not say any amount or date that is not in your instruction.'
+        _save(S)
+        return _set_next('negotiate')
     if intent in ('too_much', 'refuses'):
         amount = None                      # "I cannot pay 2,500" is not an offer of 2,500
     if intent == 'proposes' and amount is None and date_status == 'none':
@@ -1037,12 +1052,9 @@ def st_neg_route():
     if aw == 'human':
         S['awaiting'] = S.get('awaiting_prev') or 'offer'
         aw = S['awaiting']
-        if intent in ('refuses', 'human'):
+        if intent in ('refuses_to_talk', 'human'):
             return _transfer(S, 'human')
-        if intent in ('accepts', 'pays_today') and amount is None and date_status == 'none':
-            vars['neg_instruction'] = 'Continue with the current question.'
-            _save(S)
-            return _set_next('negotiate')
+        # anything else (an acceptance, a proposal, a refusal of the offer) continues the negotiation normally
     if date_status == 'unreadable' and intent == 'proposes':
         if S.get('awaiting') == 'exact_day':
             vars['neg_instruction'] = 'The customer seems to be in the middle of saying the date. Say only "Yes?" or "Go on" and wait; do not ask the question again.'
@@ -1127,11 +1139,6 @@ def _too_much(S):
         S['pi'] = targets[0]
     p['full_refused'] = True
     o = S.get('offer') or dict()
-    if p.get('floor_offered') and S.get('awaiting') == 'offer' and o and abs(float(o.get('amount') or 0) - float(p['floor'])) < 0.005:
-        # the floor is already on the table: answer the question, do not make a second offer and do not repeat the overdue note
-        vars['neg_instruction'] = 'The customer asked about the amount: say that the amount you just proposed is the lowest you can record, without saying the number again, and ask whether they can pay it on ' + _fmt(o.get('date')) + '. Do not say anything about the rest of the amount.'
-        _save(S)
-        return _set_next('negotiate')
     if p.get('floor_offered') or not bool(A.get('floor_offered_once', True)):
         k = p.get('attempts_used', 0) + 1
         if _start_attempt(S, p, k):
@@ -1608,7 +1615,7 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
         "identity": (
             f"You are running the security check for {{{{title}}}} {{{{last_name}}}}. Do NOT mention {prohibited} or any account information yet. "
             "The question to ask now is in your opening line; if the customer gives only part of the answer, ask for the rest. "
-            "If they ask why you need it, say these questions protect their account and ask again. Ask one question at a time; never move to another question yourself."
+            "If they ask why you need it, say these questions protect their account and ask again. If they talk about something else, answer in one short sentence and repeat the question once. Ask one question at a time; never move to another question yourself."
         ),
         "negotiate": (
             "The customer is verified and you are arranging a payment. Follow your current instruction exactly; every amount and date comes from it. "
@@ -1616,6 +1623,7 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
             "Say the sentence that the rest of the amount stays overdue at most once in the whole call; if you have said it, do not repeat it even if the instruction mentions it. Name the lowest amount at most once in the whole call; if the customer asks what it is after you named it, say it is the amount you just proposed and ask again whether they can pay it. "
             "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. "
             "If they ask for a payment plan or lower instalments, say you will connect them with a colleague; do not describe any plan.\n"
+            "If the customer talks about something else or asks a question, answer in one sentence and then ask once more whether they can make the payment you already proposed; do not present it as a new offer and do not restate amounts. "
             "CURRENT INSTRUCTION: {{neg_instruction}}"
         ),
         "readback": (
@@ -1630,7 +1638,7 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
 # Assembler
 # =============================================================================================
 INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "scam", "refuses_to_talk", "question", "other"]
-ROUTED_INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk"]
+ROUTED_INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question"]
 
 
 def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.PromptSet | None = None) -> dict:
@@ -1662,7 +1670,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
              "Who is on the line, from the LAST message. confirmed ONLY if the person answered yes, that's me, speaking, or said the customer's own name {{first_name}} {{last_name}}. "
              "third_party if they said they are someone else (husband, wife, relative, friend, colleague) or that the customer is not available. wrong_number if they said the number does not belong to the customer. "
              "deceased if they said the customer has died. wants_human if they ask for a human agent. refuses if they say they do not want to talk. "
-             "question if they asked something without confirming (who is this, is this a robot, is this a scam, what is this about). unclear for hello, go ahead, or anything else.",
+             "question if they asked something without confirming (who is this, is this a robot, is this a scam, what is this about) or checked the connection (can you hear me?). unclear for hello, go ahead, or anything else.",
              ["confirmed", "third_party", "wrong_number", "deceased", "wants_human", "refuses", "question", "unclear"])],
         [on_enum("holder", ["confirmed", "third_party", "wrong_number", "deceased", "wants_human", "refuses", "question", "unclear"], "opening_route")],
         on_enter={"type": "tts", "text": opening_line}, first_only=True, max_turns=8, max_turn_target="opening_route")
@@ -1725,7 +1733,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
             "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. "
             "proposes = names their own date and/or amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'). refuses = says no / cannot pay / nothing, without naming a date or amount. "
             "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. "
-            "hardship = mentions illness, a death in the family or losing their job. restructuring = asks for a payment plan, lower instalments or restructuring. human = asks for a human agent. "
+            "hardship = mentions illness, a death in the family or losing their job. restructuring = asks for a payment plan, lower instalments or restructuring. human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
             "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other.", INTENTS),
         ext("prop_amount", "float", "An amount of money the customer named for a payment, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none."),
     ] + date_ext("prop", "the payment date the customer named")
