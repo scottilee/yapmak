@@ -74,3 +74,29 @@ comp("m4_required_field", m, copy.deepcopy(ir0))
 m = copy.deepcopy(oa0)
 resp(m, "/verify_identity")["attempts_left"] = resp(m, "/verify_identity").pop("wrong_answers_left")
 comp("m1_remaining_rename", m, copy.deepcopy(ir0))
+
+
+# R1: request fields renamed on every write tool (outcome->disposition_code, amount->promised_amount, date->promise_date,
+#     product_id->facility_ref, queue->team, field/answer->check/value) -> must compile, bodies must carry the new names
+def req(spec, tool):
+    return spec["paths"][tool]["post"]["requestBody"]["content"]["application/json"]["schema"]
+
+RENAMES = {"/verify_identity": {"field": "check", "answer": "value"}, "/create_promise": {"product_id": "facility_ref", "amount": "promised_amount", "date": "promise_date"},
+           "/add_note": {"product_id": "facility_ref", "reason": "note_code"}, "/schedule_callback": {"date": "callback_day", "time": "callback_hour"},
+           "/transfer_to_agent": {"queue": "team"}, "/close_call": {"outcome": "disposition_code", "reason": "sub_code"}}
+m = copy.deepcopy(oa0)
+for tool, ren in RENAMES.items():
+    s = req(m, tool)
+    for old, new in ren.items():
+        s["properties"][new] = s["properties"].pop(old)
+        s["required"] = [new if r == old else r for r in s.get("required", [])]
+rc = comp("r1_request_renames", m, copy.deepcopy(ir0), copy.deepcopy(ab0))
+if rc == 0:
+    wf = json.load(open(TMP / "wf_r1_request_renames.json"))
+    bodies = {k: sorted(n["pre_actions"][0]["function"]["parameters"]["properties"]["body"]["properties"]) for k, n in wf["nodes"].items() if n["node_type"] == "api_request"}
+    ok = bodies["create_promise"] == ["customer_id", "facility_ref", "promise_date", "promised_amount"] and bodies["close_reason"] == ["customer_id", "disposition_code", "sub_code"] and bodies["transfer"] == ["customer_id", "team"]
+    print(f"   bodies use the renamed fields: {ok}")
+
+# R2: a required request field with no recognisable name (close_call outcome -> zz_final) -> must stop the build, naming the tool.argument
+m = copy.deepcopy(oa0); s = req(m, "/close_call"); s["properties"]["zz_final"] = s["properties"].pop("outcome"); s["required"] = ["zz_final" if r == "outcome" else r for r in s["required"]]
+comp("r2_request_unmappable", m, copy.deepcopy(ir0))

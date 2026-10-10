@@ -1,0 +1,67 @@
+{
+  "started_epoch": 1791670135.3808303,
+  "elapsed_s": 299.045,
+  "steps": [
+    {
+      "step": "clone",
+      "command": [
+        "git",
+        "clone",
+        "/Users/sl/sbx/hackathon",
+        "/tmp/v22-clone"
+      ],
+      "cwd": "/Users/sl/sbx/hackathon",
+      "exit_code": 0,
+      "started_epoch": 1791670135.3808455,
+      "elapsed_s": 0.46
+    },
+    {
+      "step": "setup",
+      "command": [
+        "bash",
+        "-c",
+        "uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt"
+      ],
+      "cwd": "/tmp/v22-clone",
+      "exit_code": 0,
+      "started_epoch": 1791670135.840958,
+      "elapsed_s": 0.195
+    },
+    {
+      "step": "preflight",
+      "command": [
+        "scripts/preflight.sh",
+        "--with-build"
+      ],
+      "cwd": "/tmp/v22-clone",
+      "exit_code": 0,
+      "started_epoch": 1791670136.036902,
+      "elapsed_s": 35.487
+    },
+    {
+      "step": "full-ab",
+      "command": [
+        "bash",
+        "-c",
+        "set -a; source .env; set +a; .venv/bin/python -u build.py --briefs briefs/brief-a.md,briefs/brief-b.md --openapi tools/openapi.json --slot rehearsal-ab"
+      ],
+      "cwd": "/tmp/v22-clone",
+      "exit_code": 0,
+      "started_epoch": 1791670171.5242972,
+      "elapsed_s": 207.441
+    },
+    {
+      "step": "submit-fast",
+      "command": [
+        "scripts/submit.sh",
+        "hidden/dry-1",
+        "hidden/dry-2",
+        "--fast"
+      ],
+      "cwd": "/tmp/v22-clone",
+      "exit_code": 0,
+      "started_epoch": 1791670378.9654462,
+      "elapsed_s": 55.46
+    }
+  ]
+}

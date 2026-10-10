@@ -30,7 +30,7 @@ from compiler_nodes import MIN_CONF, WEEKDAY_ENUM
 # =============================================================================================
 # OpenAPI mapper
 # =============================================================================================
-from compiler_openapi import ToolSpec, parse_openapi, tool_enums, response_slots
+from compiler_openapi import ToolSpec, parse_openapi, tool_enums, response_slots, request_slots
 
 
 # =============================================================================================
@@ -262,6 +262,11 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     COMPILE_NOTES.clear()
     prompts = prompts or default_prompts(ir)
     slots = response_slots(tools)
+    R = request_slots(tools)
+
+    def body(tool, **sem):
+        """Semantic arguments -> the supplied schema's property names; arguments the schema does not have are omitted."""
+        return {R[tool][k]: v for k, v in sem.items() if R[tool].get(k)}
     V, A = slots["verify"], slots["account"]
     nodes = {}
 
@@ -306,7 +311,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["cb_route"] = cn("cb_route", ["schedule_callback", "third_party", "finalize"], default="finalize")
     nodes["cb_route"]["transitions"][0] = guarded_dispatch("schedule_callback", "cb_ok")
     nodes["schedule_callback"] = api_node("schedule_callback", tools["schedule_callback"],
-                                         {"customer_id": "{{customer_id}}", "date": "{{cb_date}}", "time": "{{cb_time}}"},
+                                         body("schedule_callback", customer_id="{{customer_id}}", date="{{cb_date}}", time="{{cb_time}}"),
                                          "cb_after", [{"path": "data." + slots["ok_by_tool"]["schedule_callback"], "variable": "cb_ok"}])
     nodes["cb_after"] = cn("cb_after", ["finalize", "third_party"], default="finalize")
 
@@ -335,14 +340,14 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
         nodes[f"id_route_{i}"] = cn(f"id_route_{i}", [f"verify_{i}", f"ask_{i}", "finalize", "transfer"], default=f"ask_{i}")
         nodes[f"id_route_{i}"]["transitions"][0] = guarded_dispatch(f"verify_{i}", "v_ok")
         nodes[f"verify_{i}"] = api_node(f"verify_{i}", tools["verify_identity"],
-                                        {"customer_id": "{{customer_id}}", "field": r.field, "answer": "{{id_answer}}"},
+                                        body("verify_identity", customer_id="{{customer_id}}", field=r.field, answer="{{id_answer}}"),
                                         f"verify_after_{i}",
                                         [{"path": "data." + V[k], "variable": var} for k, var in (("ok", "v_ok"), ("verified", "v_verified"), ("all_verified", "v_all"), ("remaining", "v_left"), ("hint", "v_hint")) if V[k] != "__none__"])
         nxt = [f"ask_{i}", "get_account", "finalize"] + ([f"ask_{i + 1}"] if i + 1 < len(reqs) else [])
         nodes[f"verify_after_{i}"] = cn(f"verify_after_{i}", nxt, default=f"ask_{i}")
 
     # --- account and negotiation ------------------------------------------------------------------
-    nodes["get_account"] = api_node("get_account", tools["get_account"], {"customer_id": "{{customer_id}}"}, "init_products",
+    nodes["get_account"] = api_node("get_account", tools["get_account"], body("get_account", customer_id="{{customer_id}}"), "init_products",
                                     [{"path": "data." + A["list"], "variable": "products_raw"}], retries=1)
     nodes["init_products"] = cn("init_products", ["state_debt"])
     neg_schema = [
@@ -381,36 +386,36 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["write_step"]["on_enter"] = {"type": "tts", "text": "Thank you, one moment please."}   # covers the write chain's wait
     nodes["write_step"]["on_enter_first_entry_only"] = True
     nodes["create_promise"] = api_node("create_promise", tools["create_promise"],
-                                       {"customer_id": "{{customer_id}}", "product_id": "{{w_product_id}}", "amount": "{{w_amount}}", "date": "{{w_date}}"},
+                                       body("create_promise", customer_id="{{customer_id}}", product_id="{{w_product_id}}", amount="{{w_amount}}", date="{{w_date}}"),
                                        "write_step", [{"path": "data." + slots["ok"], "variable": "w_ok"}, {"path": "status_code", "variable": "w_status"}])
-    nodes["transfer"] = api_node("transfer", tools["transfer_to_agent"], {"customer_id": "{{customer_id}}", "queue": "{{transfer_queue}}"},
+    nodes["transfer"] = api_node("transfer", tools["transfer_to_agent"], body("transfer_to_agent", customer_id="{{customer_id}}", queue="{{transfer_queue}}"),
                                  "finalize", [{"path": "data." + slots["ok_by_tool"]["transfer_to_agent"], "variable": "t_ok"}])
     nodes["finalize"] = cn("finalize", ["notes_step", "close_reason", "close_noreason"], default="close_reason")
     nodes["notes_step"] = cn("notes_step", ["add_note", "close_reason", "close_noreason"], default="close_reason")
     nodes["notes_step"]["transitions"][0] = guarded_dispatch("add_note", "n_ok")
-    nodes["add_note"] = api_node("add_note", tools["add_note"], {"customer_id": "{{customer_id}}", "product_id": "{{n_product_id}}", "reason": "{{n_reason}}"},
+    nodes["add_note"] = api_node("add_note", tools["add_note"], body("add_note", customer_id="{{customer_id}}", product_id="{{n_product_id}}", reason="{{n_reason}}"),
                                  "notes_step", [{"path": "data." + slots["ok_by_tool"]["add_note"], "variable": "n_ok"}])
     # rule 47 (thank + goodbye before close) is a policy choice, not a template assumption
     goodbye = {"type": "tts", "text": "{{goodbye_text}}"} if ir.outcomes.goodbye_before_close else {"type": "silent"}
     ok_close = "data." + slots["ok_by_tool"]["close_call"]
-    nodes["close_reason"] = api_node("close_reason", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}", "reason": "{{final_reason}}"},
+    nodes["close_reason"] = api_node("close_reason", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}", reason="{{final_reason}}"),
                                      "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)
     # if the bank rejected the outcome/reason pair, try once more without the reason (silently), then end regardless
     closed = {"target_node": "end", "description": "closed", "condition": {"logic": "or", "conditions": [{"variable": "close_ok", "operator": "equals", "operand": v} for v in ("true", "True")]}}
     nodes["close_reason"]["transitions"] = [closed, always("close_retry_same")]
-    nodes["close_retry_same"] = api_node("close_retry_same", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}", "reason": "{{final_reason}}"},
+    nodes["close_retry_same"] = api_node("close_retry_same", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}", reason="{{final_reason}}"),
                                          "end", [{"path": ok_close, "variable": "close_ok"}])
     nodes["close_retry_same"]["transitions"] = [closed, always("close_retry")]
-    nodes["close_retry"] = api_node("close_retry", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}"},
+    nodes["close_retry"] = api_node("close_retry", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}"),
                                     "end", [{"path": ok_close, "variable": "close_ok"}])
-    nodes["close_noreason"] = api_node("close_noreason", tools["close_call"], {"customer_id": "{{customer_id}}", "outcome": "{{final_outcome}}"},
+    nodes["close_noreason"] = api_node("close_noreason", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}"),
                                        "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)
     nodes["close_noreason"]["transitions"] = [closed, always("close_retry")]   # a transient rejection gets one retry
     nodes["end"] = end_node()
 
     # amount is a number in the schema; the baked default is a string -> the engine sends it as given. Make it numeric via a pre-hook.
     nodes["create_promise"]["pre_actions"][0]["pre_process_code"] = (
-        "try:\n    b = config.get('body') if isinstance(config, dict) else None\n    if isinstance(b, dict) and 'amount' in b:\n        b['amount'] = float(str(b['amount']).replace(',', ''))\nexcept Exception:\n    pass\n")
+        "try:\n    b = config.get('body') if isinstance(config, dict) else None\n    if isinstance(b, dict) and " + repr(R["create_promise"]["amount"]) + " in b:\n        b[" + repr(R["create_promise"]["amount"]) + "] = float(str(b[" + repr(R["create_promise"]["amount"]) + "]).replace(',', ''))\nexcept Exception:\n    pass\n")
 
     for n in nodes.values():
         if n["node_type"] == "code":

@@ -1,0 +1,168 @@
+{
+ "covered": [
+  {
+   "rule": "1 opening: automated assistant of Bank 0, call recorded; ask with title and last name",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.holder_question"
+  },
+  {
+   "rule": "2 never say collections, debt, payment, credit card, loan before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "3 confirmation: ask once more, then unreached/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "4 robot reply",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "4 scam: verify via customer service number, continue",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "5 third party: say nothing, ask when reachable",
+   "where": "third_party.source, third_party.callback"
+  },
+  {
+   "rule": "6 callback next business day 09:00-18:00, after now, unreached/callback",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "7 outside window: ask once more, else unreached/no_callback",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "8 wrong number unreached/wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "9 deceased sentence and unreached/deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "10 refusal to talk no_arrangement/declined_payment",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "11 postcode (text) then birth_year (year)",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "12 2 wrong answers total, wrong_answers_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "13 failed: app/branch sentence, unverified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "14 explain once, second refusal unverified/declined",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "15 human during identity check: ask once, desk, handed_over/person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "16 now clock, Mon-Fri, holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "17 next/this weekday",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "18 debt intro, up to 2 products, state all, ask once pay all today",
+   "where": "phrases.debt_intro, multi_product.max_products, multi_product.state_all_before_asking, multi_product.ask_all_today_once, phrases.today_question, phrases.all_today_question"
+  },
+  {
+   "rule": "19 floors per product type and naming",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "20 full first, never ask how much, floor once with 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "21 promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "22 band table rows band1/band2",
+   "where": "bands[0], bands[1]"
+  },
+  {
+   "rule": "23 persuasion attempts",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "24 no promise -> declined_payment",
+   "where": "outcomes.refused_reason, notes.reasons"
+  },
+  {
+   "rule": "25 already paid sentence, note settled, continue",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "26 dispute note disputed, continue",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "27 hardship sympathy, offer care, decline no_arrangement/distress, record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "28 restructuring transfer restructure",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "29 human after verification",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "30 read-back 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "31 after-promise sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "32 no retry, no_arrangement/system_error",
+   "where": "promise_write.retry_on_failure=0, outcomes.service_error_reason"
+  },
+  {
+   "rule": "33 change promise reply",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "34 several products: clamp per product, one read-back, transfer keeps promise",
+   "where": "multi_product"
+  },
+  {
+   "rule": "35 one note per unpromised product, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "36 goodbye before close_call; outcome table",
+   "where": "outcomes.goodbye_before_close, outcomes.table"
+  },
+  {
+   "rule": "37 outcome precedence",
+   "where": "outcomes.promise_outcome, transfer_outcome, transfer_overrides_promise, paid_outcome, all_paid_closes_as_paid, no_promise_outcome, no_promise_reason_from_first_non_paid_note"
+  }
+ ],
+ "fixed": [
+  "Added unresolved entry for calendar.missing_date_parts: the brief does not say how to read incomplete promise dates.",
+  "Added unresolved entry for the wrong-number apology: rule 8 requires an apology but no words are dictated and the IR has no field for it.",
+  "Checked every other value against the brief and the openapi enums (verify_identity field, product type, transfer queue, close_call outcome, add_note reason). All match, so nothing else changed."
+ ],
+ "unresolved": [
+  "No sentence is dictated for questions the agent cannot answer (phrases.cannot_answer_sentence is empty).",
+  "The API summary says three wrong answers end the check. The brief, which is the sole policy authority, says 2, so 2 is used.",
+  "After a failed create_promise the agent must say the promise could not be recorded. No words are dictated and the IR has no field for it.",
+  "How to read a promise date that has missing parts is not specified.",
+  "The wrong-number apology has no dictated words."
+ ]
+}

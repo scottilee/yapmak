@@ -1,0 +1,211 @@
+{
+ "perm": 3,
+ "style": "clean",
+ "slot": "lb-03",
+ "exit": 0,
+ "seconds": 168,
+ "diff": [
+  {
+   "field": "identity.fields",
+   "truth": [
+    [
+     "phone_last4",
+     "digits",
+     6,
+     ""
+    ],
+    [
+     "date_of_birth",
+     "date",
+     0,
+     "mdy"
+    ],
+    [
+     "postcode",
+     "text",
+     0,
+     ""
+    ],
+    [
+     "birth_year",
+     "year",
+     0,
+     ""
+    ]
+   ],
+   "extracted": [
+    [
+     "phone_last4",
+     "digits",
+     6,
+     ""
+    ],
+    [
+     "date_of_birth",
+     "date",
+     0,
+     "mdy"
+    ],
+    [
+     "postcode",
+     "text",
+     0,
+     ""
+    ],
+    [
+     "birth_year",
+     "year",
+     4,
+     ""
+    ]
+   ]
+  },
+  {
+   "field": "bands",
+   "truth": [
+    [
+     1,
+     5,
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "preceding"
+     },
+     2
+    ],
+    [
+     6,
+     49,
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "preceding"
+     },
+     2
+    ],
+    [
+     50,
+     90,
+     {
+      "kind": "fixed_date",
+      "date": "2026-11-30",
+      "adjustment": "following"
+     },
+     2
+    ]
+   ],
+   "extracted": [
+    [
+     1,
+     5,
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none"
+     },
+     2
+    ],
+    [
+     6,
+     49,
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none"
+     },
+     2
+    ],
+    [
+     50,
+     90,
+     {
+      "kind": "fixed_date",
+      "date": "2026-11-30",
+      "adjustment": "following"
+     },
+     2
+    ]
+   ]
+  }
+ ],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [
+    "n/a: single-product policy"
+   ],
+   "write_fail": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "phone_last4 length",
+   "text": "The brief says phone_last4 is exactly 6 digits including leading zeros, while the tool API describes phone_last4 as four digits. The brief (sole policy authority) value 6 was used; confirm which is correct.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "wrong answer limit",
+   "text": "The brief sets 5 wrong answers in total; the verify_identity API summary says three wrong answers end the check. The brief value (5) and the API's wrong_answers_left count were used.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "number of security questions",
+   "text": "The brief asks 4 security questions; the get_account API summary says it is refused until 'both questions' are passed.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "date hint reply",
+   "text": "The API returns hint=day_month_swapped for date_of_birth, but the brief does not say what to reply; a short request to repeat the date was written.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The brief asks for 'one short sentence of sympathy' without dictating the words; 'I am sorry to hear that.' was written.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "service error sentence",
+   "text": "Rule 32 says to say that the promise could not be recorded but dictates no words, and the schema has no dedicated phrase field for it.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "cannot-answer sentence",
+   "text": "The brief does not give a sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "missing section 7",
+   "text": "The brief jumps from section 6 (rule 33) to section 8 (rule 36); rules 34-35 / section 7 are missing.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  },
+  {
+   "topic": "missing date parts",
+   "text": "The brief does not say how to interpret a promise date given without month or year.",
+   "doc": "results/layer-b/lb-03/brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; the brief only dictates the content (automated assistant of Bank 3, call is recorded).",
+  "identity.requirements[date_of_birth].hint_reply: removed the invented instruction 'with the month name'; kept a neutral request to repeat the date (still listed as unresolved).",
+  "special_cases[human].source: added rule 15 (human request during the identity check) alongside rule 29.",
+  "identity.source, third_party.source, amounts.source, outcomes.source, multi_product.source, promise_write.source, phrases.source: extended quotes to cover rules 5, 13, 16, 20, 28, 30, 36 and the prohibited-word rule.",
+  "notes.source.text: replaced a non-quote description with an empty text, since there is no source sentence about add_note.",
+  "unresolved: added entries for the undictated hardship sympathy sentence and the undictated service-error sentence (rule 32)."
+ ],
+ "audit_unresolved": [
+  "phone_last4 length: brief says exactly 6 digits, API says four digits (brief value used).",
+  "Wrong-answer limit: brief says 5, API summary says three (brief value used).",
+  "Number of questions: brief asks 4, get_account summary mentions 'both questions'.",
+  "Reply to the API's day_month_swapped hint is not dictated by the brief.",
+  "Hardship sympathy sentence words are not dictated.",
+  "Sentence for a failed create_promise is not dictated and has no phrase field.",
+  "No cannot-answer sentence in the brief.",
+  "Section 7 (rules 34-35) is missing from the brief.",
+  "How to read a promise date missing month or year is not stated."
+ ]
+}

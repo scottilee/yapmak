@@ -1,0 +1,54 @@
+{
+ "perm": 6,
+ "style": "raw",
+ "slot": "lb-06",
+ "exit": 0,
+ "seconds": 165,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "wrong_answer_limit vs API",
+   "text": "Memo M46 sets 5 wrong answers total and P16 says to use the API's `wrong_answers_left`, but the tool API summary says 'Three wrong answers in total end the check.' The limit of 5 is kept from the memo; the API may end the check earlier.",
+   "doc": "results/layer-b/lb-06/03-memo.txt"
+  },
+  {
+   "topic": "human request during identity check",
+   "text": "P16 rule 15 transfers immediately during the identity check; memo M46 D says human requests are handled by first asking once whether the assistant can help, without distinguishing phases. Applied ask-once-first to all human requests.",
+   "doc": "results/layer-b/lb-06/03-memo.txt"
+  },
+  {
+   "topic": "get_account precondition vs three questions",
+   "text": "The tool API says get_account is 'Refused until both questions are passed', while the documents require three security questions (company_number, founded_year, postcode). The documents' three questions are kept.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "P16 27 requires 'one short sentence of sympathy' without dictating the words; 'I am very sorry to hear that.' is a written sentence, not dictated wording.",
+   "doc": "results/layer-b/lb-06/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the added 'Hello,' so the sentence holds only what P16 1 requires (automated assistant of Bank 6, call is recorded); still opening_verbatim=false because the words are not dictated.",
+  "phrases.today_question: changed 'Can you pay this today?' to 'Can you pay all of it today?' to match the P16 18 wording.",
+  "phrases.cannot_answer_sentence: removed the added apology so it says only what P16 32 requires ('say you could not record it').",
+  "Source spans extended (identity, callback, third party, multi_product, phrases, promise_write, outcomes) to quote the rules each value comes from (P16 3, 5, 7, 30, 36, 19 naming)."
+ ],
+ "audit_unresolved": [
+  "Wrong-answer limit: M46 says 5 in total, but the API summary says three wrong answers end the check. Kept 5 from the memo; the API's wrong_answers_left may end the check sooner.",
+  "Human request during the identity check: P16 15 transfers at once, while M46 D says to ask once first and does not separate the phases. Ask-once-first is applied to every human request.",
+  "The API says get_account is refused until 'both questions' are passed, but the documents require three security questions. Kept the three from the documents.",
+  "Hardship: the documents ask for one short sentence of sympathy without giving the words, so the sentence used is written, not quoted."
+ ]
+}

@@ -646,6 +646,9 @@ def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
     if verdict == 'roll_forward':
         S['offer'] = dict(amount=float(v['amount']), date=v['offer_date'])
         S['awaiting'] = 'offer'
+        if date == S['today']:
+            return ('Say that today, ' + _fmt(date) + ', is not a business day, so the payment cannot be made today; nothing is recorded yet. '
+                    'Offer the next business day, ' + _fmt(v['offer_date']) + ', for ' + _money(v['amount']) + ', and ask whether they can pay then.')
         return 'Say that ' + _fmt(date) + ' is not a business day and offer the next business day, ' + _fmt(v['offer_date']) + ', for ' + _money(v['amount']) + '.'
     if verdict == 'below_floor':
         if p.get('floor_offered'):
@@ -863,6 +866,9 @@ def st_neg_route():
     # --- phase: the first "today?" question (covers all products) ---
     if aw == 'today':
         if intent in ('pays_today', 'accepts') and not has_prop:
+            h, b = _cal()
+            if not is_business_day(S['today'], h, b):
+                return _proposal(S, None, S['today'], 'ok')      # "today" on a weekend/holiday: offer the next business day
             for k in _targets(S):
                 p = S['products'][k]
                 r = _apply_proposal(S, p, None, S['today'], 'ok', True)

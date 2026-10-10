@@ -1,0 +1,560 @@
+{
+ "source_docs": [
+  "results/layer-b/lb-00/brief.md"
+ ],
+ "bank_name": "Bank 0",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "Could you tell me your postcode, please?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-00/brief.md",
+     "text": "`postcode` \u2014 ask for your postcode. Format text: letters and digits, spaces removed."
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "Could you tell me your birth year, please?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-00/brief.md",
+     "text": "`birth_year` \u2014 ask for your birth year. Format year, four digits."
+    }
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "wrong_answers_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": [
+   "unverified",
+   "failed"
+  ],
+  "declined_outcome": [
+   "unverified",
+   "declined"
+  ],
+  "unclear_holder_outcome": [
+   "unreached",
+   "unclear"
+  ],
+  "failed_instruction": "Please use the mobile app or visit a branch.",
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "A wrong answer may be asked again. 2 wrong answers in total end the check, whichever question they were on; the API's `wrong_answers_left` is the count to use. After 2 wrong answers, do not state the debt. Say \"Please use the mobile app or visit a branch.\" and close as `unverified` / `failed`. If the customer declines to answer or asks what the call is about before answering, explain once that the questions protect their account. A second refusal closes as `unverified` / `declined`."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:00",
+   "end": "18:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "unreached",
+    "callback"
+   ],
+   "no_callback_outcome": [
+    "unreached",
+    "no_callback"
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "A callback is for the next business day only, never today, from 09:00 to 18:00, both included, and later than `now`. Call `schedule_callback` with the date and the time, then close as `unreached` / `callback`. If the person names a time outside that window, say so and ask once more. If no valid time results, close as `unreached` / `no_callback`."
+   }
+  },
+  "wrong_number_outcome": [
+   "unreached",
+   "wrong_number"
+  ],
+  "deceased_outcome": [
+   "unreached",
+   "deceased"
+  ],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "Someone other than the customer (relative, colleague, friend): say nothing about the purpose. Ask when the customer can be reached. Wrong number: apologise and close as `unreached` / `wrong_number`. The customer has died: say \"I am sorry for your loss.\" and close as `unreached` / `deceased`."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-26",
+   "2026-11-11",
+   "2026-11-26",
+   "2026-12-25",
+   "2027-01-01"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "Business days are Monday to Friday, except Bank 0 holidays: 2026-10-26, 2026-11-11, 2026-11-26, 2026-12-25, 2027-01-01. \"Next <weekday>\" means that weekday of the following week, even when today is that weekday; \"this <weekday>\" means the coming one."
+  }
+ },
+ "bands": [
+  {
+   "name": "band1",
+   "days_late_min": 1,
+   "days_late_max": 38,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 14,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "| 1 to 38 | band1 | today plus 14 calendar days; if that day is not a business day, the next business day | 2 |"
+   }
+  },
+  {
+   "name": "band2",
+   "days_late_min": 39,
+   "days_late_max": 45,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "calendar",
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "| 39 to 45 | band2 | the last calendar day of the current month; if that day is not a business day, the next business day | 2 |"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "credit_card": "minimum_payment",
+   "personal_loan": "instalment_amount",
+   "car_loan": "instalment_amount"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest stays overdue",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "Ask for the full past-due amount first. Never ask \"how much can you pay?\". Any amount between the floor and the full amount is accepted; an amount below the floor is refused, and the floor is offered once per product with the words \"the rest stays overdue\"."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "A promise date must be today or later, a business day, and not after the deadline. A weekend day or holiday rolls to the next business day. A vague date (next week, when I get paid): ask once for the exact day; if none follows, propose the deadline. A date after the deadline: offer the deadline instead."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the product.",
+   "action": {
+    "type": "note",
+    "reason": "settled"
+   },
+   "say": "Payments can take one business day to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "Already paid: say \"Payments can take one business day to appear.\". Note the product as `settled` and continue with the other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the debt: it is not their debt, they never had the product, or it was closed or paid off before.",
+   "action": {
+    "type": "note",
+    "reason": "disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "Dispute (not their debt, never had the product, closed or paid off before): note the product as `disputed` and continue with the other products."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes hardship such as illness, a death in the family, or job loss.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "distress"
+   },
+   "say": "I am very sorry to hear that.",
+   "offer_transfer_queue": "care",
+   "offer_outcome": [
+    "handed_over",
+    "care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "Hardship (illness, a death in the family, job loss): say one short sentence of sympathy, make no persuasion attempt, and offer a transfer to the `care` team. If they accept, call `transfer_to_agent` with queue `care` and close as `handed_over` / `care`. If they decline, close as `no_arrangement` / `distress`. A customer in hardship may still name a date and amount; record it."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a payment plan, lower instalments, or changing the terms.",
+   "action": {
+    "type": "transfer",
+    "queue": "restructure",
+    "outcome": "handed_over",
+    "reason": "restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "Restructuring (a payment plan, lower instalments, changing the terms): call `transfer_to_agent` with queue `restructure` and close as `handed_over` / `restructure`. Promises already recorded on this call stay recorded."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human agent or a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "desk",
+    "outcome": "handed_over",
+    "reason": "person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "A request for a human after verification: ask once whether you can help first; if they insist, transfer to `desk` and close as `handed_over` / `person`. A request for a human agent during the identity check: ask once whether you can help first; if they insist, call `transfer_to_agent` with queue `desk` and close as `handed_over` / `person`."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The person suspects the call is a scam or asks whether it is genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify this call by phoning Bank 0's customer service number.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "If the person suspects a scam: say they can verify the call by phoning Bank 0's customer service number, and continue."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The person asks whether they are talking to a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Bank 0's digital assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "If asked whether this is a robot: say \"I am Bank 0's digital assistant.\""
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "declined_payment"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "The customer refuses to talk: close as `no_arrangement` / `declined_payment`."
+   }
+  },
+  {
+   "name": "change_promise",
+   "trigger": "The customer asks whether a recorded promise can be changed.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can change it in the mobile app.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-00/brief.md",
+    "text": "If the customer asks whether a recorded promise can be changed: say \"You can change it in the mobile app.\""
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "arrangement",
+    "reasons": [],
+    "when": "At least one promise recorded."
+   },
+   {
+    "outcome": "settled",
+    "reasons": [],
+    "when": "All products already paid."
+   },
+   {
+    "outcome": "handed_over",
+    "reasons": [
+     "restructure",
+     "person",
+     "care"
+    ],
+    "when": "A transfer, with the transfer's reason, even after a promise."
+   },
+   {
+    "outcome": "no_arrangement",
+    "reasons": [
+     "declined_payment",
+     "distress",
+     "disputed",
+     "system_error"
+    ],
+    "when": "No promise: reason of the first product in get_account order that is not paid."
+   },
+   {
+    "outcome": "unverified",
+    "reasons": [
+     "failed",
+     "declined"
+    ],
+    "when": "Identity check failed or declined."
+   },
+   {
+    "outcome": "unreached",
+    "reasons": [
+     "callback",
+     "no_callback",
+     "wrong_number",
+     "deceased",
+     "unclear"
+    ],
+    "when": "Customer not reached."
+   }
+  ],
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_arrangement",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "system_error",
+  "refused_reason": "declined_payment",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "At least one promise recorded: `arrangement`. A transfer: `handed_over` with the transfer's reason, even after a promise. All products already paid: `settled`. No promise: `no_arrangement` with the reason of the first product in `get_account` order that is not paid."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "declined_payment",
+   "distress",
+   "disputed",
+   "settled",
+   "system_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "Before closing a call that is not a transfer, add exactly one note (`add_note`) for each product without a promise, with the reason that applies: `declined_payment`, `distress`, `disputed`, `settled`, `system_error`. No notes on a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "`get_account` returns up to 2 products. ... Every product is handled on the same call: a common date is checked against each product's own deadline and clamped to it; one read-back covers all pending promises; a transfer after a recorded promise keeps the promise."
+  }
+ },
+ "phrases": {
+  "opening": "Hello, this is the automated assistant of Bank 0, and this call is recorded.",
+  "opening_verbatim": false,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling from the Bank 0 collections team about a late payment.",
+  "today_question": "Can you pay all of it today?",
+  "all_today_question": "Can you pay all of it today?",
+  "robot_reply": "I am Bank 0's digital assistant.",
+  "scam_reply": "You can verify this call by phoning Bank 0's customer service number.",
+  "prohibited_before_verification": [
+   "collections",
+   "debt",
+   "payment",
+   "credit card",
+   "loan"
+  ],
+  "after_promise_sentence": "You will receive a text message confirming this promise.",
+  "already_paid_sentence": "Payments can take one business day to appear.",
+  "cannot_answer_sentence": "",
+  "recorded_promise_change_reply": "You can change it in the mobile app.",
+  "product_naming": {
+   "credit_card": "credit card",
+   "personal_loan": "personal loan",
+   "car_loan": "car loan"
+  },
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "First sentence: say you are the automated assistant of Bank 0 and that the call is recorded. Then ask whether you are speaking with the customer, using title and last name. Before the identity check is complete, never say the words collections, debt, payment, credit card or loan. After verification say you are calling from the Bank 0 collections team about a late payment. ... then ask once whether they can pay all of it today."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you confirm?",
+  "source": {
+   "doc": "results/layer-b/lb-00/brief.md",
+   "text": "If `create_promise` fails, do not retry: say you could not record it and close as `no_arrangement` / `system_error` (note the product `system_error`). Read the product, the amount and the date back and ask \"Do you confirm?\"."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The brief does not dictate a sentence for questions the agent cannot answer; phrases.cannot_answer_sentence left empty.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "wrong_answer_limit",
+   "text": "The tool API summary says three wrong answers end the check; the brief (sole policy authority) says 2 wrong answers in total end the check. The brief's value 2 is used.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "promise_write_failure_sentence",
+   "text": "The brief says to say the promise could not be recorded after a failed create_promise but dictates no exact words and the IR has no field for it.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "The brief does not say how to read a promise date given without month or year; calendar.missing_date_parts left at default 'unresolved'.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "wrong_number_apology",
+   "text": "Rule 8 says to apologise on a wrong number but dictates no words and the IR has no field for that sentence.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  }
+ ]
+}

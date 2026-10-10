@@ -30,6 +30,20 @@ chat smoke test, and records that in the trace.
 | Builder trace (SDK model responses/tools, Freya HTTP calls, tests) | `traces/<slot>.jsonl` |
 | Extracted policy + audit (supporting evidence committed with the submission) | `out/<slot>.policy.json`, `out/<slot>.audit.json` |
 
+## Two-command Sunday (scripts)
+
+```bash
+scripts/preflight.sh [--with-build]          # 16:30: venv + imports, .env keys, claude -p, pytest, Freya API, no simulation running,
+                                              # bank mock, .freya-agents.json, git identity/remote, submission/config.json
+scripts/submit.sh hidden/hidden-1 hidden/hidden-2 --push   # 17:00: commit inputs unchanged -> build 1 -> build 2 -> scan + commit
+                                              # artifacts -> write + commit submission/form.json (team/repo from submission/config.json)
+```
+
+`submit.sh` reads every non-OpenAPI file in each directory as a brief, in sorted file-name order (name them `01-…`, `02-…`), and
+the `.json` with `paths` as the tool API. A failed build 1 does not stop build 2. `--fast` rehearses the mechanics without the
+extractor (practice policy + practice API); `--branch NAME` works on a new branch. Fill `submission/config.json` (`team`, `repo`)
+before Sunday; without `--push` the script prints the push command. Rehearsed 10 Oct 21:25 UTC in a scratch clone (fast mode).
+
 ## Sunday checklist
 
 1. Before 17:00: `git status` clean (HEAD == working tree — re-run the clone rehearsal after every compiler change),

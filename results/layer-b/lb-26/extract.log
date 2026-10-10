@@ -1,0 +1,71 @@
+{
+ "bands": [
+  "band1",
+  "band2",
+  "band3"
+ ],
+ "identity": [
+  "phone_last4",
+  "date_of_birth",
+  "postcode",
+  "birth_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "change_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "phone_last4 length",
+   "text": "P36 \u00a711 (kept by M66) says phone_last4 is exactly 8 digits including leading zeros, but the verify_identity API description says 'For phone_last4: four digits.' Used 8 from the documents; needs confirmation.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "wrong answer limit vs API",
+   "text": "M66 sets 5 wrong answers in total; the verify_identity API summary says 'Three wrong answers in total end the check.' Used 5 and the API's wrong_answers_left counter.",
+   "doc": "results/layer-b/lb-26/03-memo.txt"
+  },
+  {
+   "topic": "get_account gating",
+   "text": "The get_account API summary says 'Refused until both questions are passed', while the documents require 4 security questions.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "date hint reply",
+   "text": "The API can return hint=day_month_swapped for date_of_birth; the documents do not dictate what to say. hint_reply is a non-dictated wording.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "cannot-answer sentence",
+   "text": "The documents give no sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "create_promise failure sentence",
+   "text": "P36 \u00a732 only says to 'say you could not record it'; no exact words are dictated.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "wrong-number apology",
+   "text": "P36 \u00a78 says to apologise to a wrong number but dictates no words and the schema has no field for it.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "obsolete cover-email settings",
+   "text": "The cover email quotes old settings as history only. Not applied: retry 2 failed saves (M66 C: zero), date_of_birth first (M66 A: phone_last4 first), fourth business day for the latest band (M66 B: fifth), no same-day callbacks (M66 E: today allowed). Its '5 wrong answers' happens to match M66 A, which is the source used.",
+   "doc": "results/layer-b/lb-26/01-mail.txt"
+  }
+ ],
+ "audit_fixed": [
+  "unresolved[obsolete cover-email settings]: removed '5 wrong answers' from the list of settings that were not applied. M66 A also sets 5, so that value is applied (with M66 as its source); the entry now lists each obsolete setting next to the memo item that replaces it.",
+  "Added unresolved entry: P36 \u00a78 says to apologise to a wrong number but gives no words, and the schema has no field for it.",
+  "Added P36 \u00a722 attempt count to the bands[2] source and P36 \u00a730 to the promise_write source, so each value shows where it came from (values unchanged)."
+ ]
+}

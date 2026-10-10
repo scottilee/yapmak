@@ -1,0 +1,190 @@
+{
+ "covered": [
+  {
+   "rule": "Mail: M66 overrides only its named P36 rules; quoted settings obsolete",
+   "where": "unresolved[obsolete cover-email settings]"
+  },
+  {
+   "rule": "P36 \u00a71 first sentence: automated assistant of Bank 26, call recorded (content only)",
+   "where": "phrases.opening, phrases.opening_verbatim=false"
+  },
+  {
+   "rule": "P36 \u00a71 ask whether speaking with customer using title and last name",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "P36 \u00a72 never say collections, debt, payment, credit card, loan before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "P36 \u00a73 ask once more; unclear -> unreached/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "P36 \u00a74 robot reply",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "P36 \u00a74 scam: verify via customer service number, continue",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "P36 \u00a75 third party: say nothing, ask when reachable",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "P36 \u00a76 callback window 10:00-17:30 inclusive, after now; M66 E today or next business day",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "P36 \u00a77 outside window: ask once more, else unreached/no_callback",
+   "where": "third_party.callback.retry_once, no_callback_outcome"
+  },
+  {
+   "rule": "P36 \u00a78 wrong number -> unreached/wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "P36 \u00a79 deceased sentence and outcome",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "P36 \u00a710 refuses to talk -> no_arrangement/declined_payment",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "P36 \u00a711 questions + formats; M66 A order phone_last4, date_of_birth, postcode, birth_year",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "P36 \u00a711.1 numbers read day-month-year",
+   "where": "identity.requirements[1].numeric_date_order=dmy"
+  },
+  {
+   "rule": "P36 \u00a712 / M66 A 5 wrong answers total, wrong_answers_left",
+   "where": "identity.wrong_answer_limit, identity.remaining_slot"
+  },
+  {
+   "rule": "P36 \u00a713 failed: 'Please use the mobile app or visit a branch.' unverified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "P36 \u00a714 explain once; second refusal unverified/declined",
+   "where": "identity.decline_explain_once, asking_purpose_counts_as_decline, declined_outcome"
+  },
+  {
+   "rule": "P36 \u00a715/\u00a729 human -> desk, handed_over/person; M66 D ask once first",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "P36 \u00a716 business days Mon-Sat, holidays 2026-10-14, 2026-10-15",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "P36 \u00a717 next <weekday> = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "P36 \u00a718 debt intro, up to 2 products, state all, ask once pay all today",
+   "where": "phrases.debt_intro, phrases.today_question, phrases.all_today_question, multi_product"
+  },
+  {
+   "rule": "P36 \u00a719 floors and naming per product type",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "P36 \u00a720 full first, never ask how much, floor once 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "P36 \u00a721 promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "P36 \u00a722 band1 30 Nov 2026 following",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "P36 \u00a722 band2 today+9 calendar days preceding",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "P36 \u00a722 band3 / M66 B fifth business day",
+   "where": "bands[2].deadline"
+  },
+  {
+   "rule": "P36 \u00a723 attempt 1 full on last business day this/next week (floor if full refused); attempt 2 floor on deadline",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "P36 \u00a724 attempts used up -> note declined_payment",
+   "where": "outcomes.refused_reason, notes.reasons"
+  },
+  {
+   "rule": "P36 \u00a725 already paid sentence, note settled, continue",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "P36 \u00a726 dispute note disputed, continue",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "P36 \u00a727 hardship: sympathy, offer care, decline -> no_arrangement/distress, record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "P36 \u00a728 restructuring -> restructure queue",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "P36 \u00a730 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "P36 \u00a731 after promise sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "P36 \u00a732 / M66 C zero retries, system_error",
+   "where": "promise_write.retry_on_failure=0, outcomes.service_error_reason"
+  },
+  {
+   "rule": "P36 \u00a733 change promise reply",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "P36 \u00a734 common date clamped, one read-back, transfer keeps promise",
+   "where": "multi_product"
+  },
+  {
+   "rule": "P36 \u00a735 one note per unpromised product; no notes on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "P36 \u00a736 / Code list C outcomes and reasons; goodbye before close_call",
+   "where": "outcomes.table, outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "P36 \u00a737 precedence",
+   "where": "outcomes.promise_outcome, transfer_outcome, transfer_overrides_promise, paid_outcome, all_paid_closes_as_paid, no_promise_outcome, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "Code list C queues care, desk, restructure",
+   "where": "special_cases[hardship|restructuring|human]"
+  }
+ ],
+ "fixed": [
+  "unresolved[obsolete cover-email settings]: removed '5 wrong answers' from the list of settings that were not applied. M66 A also sets 5, so that value is applied (with M66 as its source); the entry now lists each obsolete setting next to the memo item that replaces it.",
+  "Added unresolved entry: P36 \u00a78 says to apologise to a wrong number but gives no words, and the schema has no field for it.",
+  "Added P36 \u00a722 attempt count to the bands[2] source and P36 \u00a730 to the promise_write source, so each value shows where it came from (values unchanged)."
+ ],
+ "unresolved": [
+  "phone_last4 length: the documents say 8 digits, the API description says four digits.",
+  "Wrong-answer limit: M66 says 5, the API summary says three.",
+  "get_account summary says 'both questions', the documents use 4 questions.",
+  "hint_reply wording for day_month_swapped is not dictated by the documents.",
+  "No cannot-answer sentence in the documents.",
+  "No exact words for the create_promise failure message (P36 \u00a732).",
+  "No exact words for the wrong-number apology (P36 \u00a78)."
+ ]
+}

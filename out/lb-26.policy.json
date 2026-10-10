@@ -1,0 +1,629 @@
+{
+ "source_docs": [
+  "results/layer-b/lb-26/01-mail.txt",
+  "results/layer-b/lb-26/02-policy.md",
+  "results/layer-b/lb-26/03-memo.txt",
+  "results/layer-b/lb-26/04-codes.txt"
+ ],
+ "bank_name": "Bank 26",
+ "identity": {
+  "requirements": [
+   {
+    "field": "phone_last4",
+    "ask_text": "Please tell me your phone last4.",
+    "answer_format": "digits",
+    "digits": 8,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-26/03-memo.txt",
+     "text": "A. Security asks in this order: `phone_last4` FIRST ... Keep each question's wording and format. | P36 \u00a711.4: `phone_last4` \u2014 ask for your phone last4. Format digits, exactly 8 digits including leading zeros."
+    }
+   },
+   {
+    "field": "date_of_birth",
+    "ask_text": "Please tell me your date of birth.",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "hint",
+    "hint_reply": "I think the day and the month may be swapped. Could you tell me your date of birth again, with the day first and then the month?",
+    "source": {
+     "doc": "results/layer-b/lb-26/03-memo.txt",
+     "text": "`date_of_birth` SECOND | P36 \u00a711.1: `date_of_birth` \u2014 ask for your date of birth. Format date, sent as YYYY-MM-DD; a date given only as numbers is read day, then month, then year."
+    }
+   },
+   {
+    "field": "postcode",
+    "ask_text": "Please tell me your postcode.",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-26/03-memo.txt",
+     "text": "`postcode` THIRD | P36 \u00a711.2: `postcode` \u2014 ask for your postcode. Format text: letters and digits, spaces removed."
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "Please tell me your birth year.",
+    "answer_format": "year",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-26/03-memo.txt",
+     "text": "`birth_year` FOURTH | P36 \u00a711.3: `birth_year` \u2014 ask for your birth year. Format year, four digits."
+    }
+   }
+  ],
+  "wrong_answer_limit": 5,
+  "wrong_count_source": "api",
+  "remaining_slot": "wrong_answers_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": [
+   "unverified",
+   "failed"
+  ],
+  "declined_outcome": [
+   "unverified",
+   "declined"
+  ],
+  "unclear_holder_outcome": [
+   "unreached",
+   "unclear"
+  ],
+  "failed_instruction": "Please use the mobile app or visit a branch.",
+  "source": {
+   "doc": "results/layer-b/lb-26/03-memo.txt",
+   "text": "5 wrong answers TOTAL across the whole check, not 4. | P36 \u00a712-14: the API's `wrong_answers_left` is the count to use. ... Say \"Please use the mobile app or visit a branch.\" and close as `unverified` / `failed`. ... A second refusal closes as `unverified` / `declined`."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "17:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "unreached",
+    "callback"
+   ],
+   "no_callback_outcome": [
+    "unreached",
+    "no_callback"
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-26/03-memo.txt",
+    "text": "E. Callbacks are for today or the next business day; the existing window remains. | P36 \u00a76-7: from 10:00 to 17:30, both included, and later than `now` ... close as `unreached` / `callback` ... If no valid time results, close as `unreached` / `no_callback`."
+   }
+  },
+  "wrong_number_outcome": [
+   "unreached",
+   "wrong_number"
+  ],
+  "deceased_outcome": [
+   "unreached",
+   "deceased"
+  ],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "8. Wrong number: apologise and close as `unreached` / `wrong_number`. 9. The customer has died: say \"I am sorry for your loss.\" and close as `unreached` / `deceased`."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-14",
+   "2026-10-15"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "16. ... Business days are Monday to Saturday, except Bank 26 holidays: 2026-10-14, 2026-10-15. 17. \"Next <weekday>\" means that weekday of the following week, even when today is that weekday"
+  }
+ },
+ "bands": [
+  {
+   "name": "band1",
+   "days_late_min": 1,
+   "days_late_max": 7,
+   "deadline": {
+    "kind": "fixed_date",
+    "date": "2026-11-30",
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "| 1 to 7 | band1 | 30 November 2026 for everyone; if that day is not a business day, the next business day | 2 |"
+   }
+  },
+  {
+   "name": "band2",
+   "days_late_min": 8,
+   "days_late_max": 45,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 9,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "| 8 to 45 | band2 | today plus 9 calendar days; if that day is not a business day, the previous business day | 2 |"
+   }
+  },
+  {
+   "name": "band3",
+   "days_late_min": 46,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 5
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-26/03-memo.txt",
+    "text": "B. For days late 46\u201360 only, the deadline is no longer the sixth business day after today but the fifth business day after today. | P36 \u00a722 table: | 46 to 60 | band3 | ... | 2 |"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "mortgage": "monthly_instalment",
+   "store_card": "minimum_payment",
+   "overdraft": "minimum_due",
+   "student_loan": "scheduled_repayment"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest stays overdue",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "19-20. ... Ask for the full past-due amount first. Never ask \"how much can you pay?\". Any amount between the floor and the full amount is accepted; ... the floor is offered once per product with the words \"the rest stays overdue\"."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "21. A promise date must be today or later, a business day, and not after the deadline. A weekend day or holiday rolls to the next business day. A vague date ...: ask once for the exact day; if none follows, propose the deadline. A date after the deadline: offer the deadline instead."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the past-due amount for a product.",
+   "action": {
+    "type": "note",
+    "reason": "settled"
+   },
+   "say": "Payments can take one business day to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "25. Already paid: say \"Payments can take one business day to appear.\". Note the product as `settled` and continue with the other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the debt: says it is not their debt, they never had the product, or it was closed or paid off before.",
+   "action": {
+    "type": "note",
+    "reason": "disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "26. Dispute (not their debt, never had the product, closed or paid off before): note the product as `disputed` and continue with the other products."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes hardship such as illness, a death in the family, or job loss.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "distress"
+   },
+   "say": "I am sorry to hear about your situation.",
+   "offer_transfer_queue": "care",
+   "offer_outcome": [
+    "handed_over",
+    "care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "27. Hardship (illness, a death in the family, job loss): say one short sentence of sympathy, make no persuasion attempt, and offer a transfer to the `care` team. If they accept, call `transfer_to_agent` with queue `care` and close as `handed_over` / `care`. If they decline, close as `no_arrangement` / `distress`. A customer in hardship may still name a date and amount; record it."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a payment plan, lower instalments, or changing the terms.",
+   "action": {
+    "type": "transfer",
+    "queue": "restructure",
+    "outcome": "handed_over",
+    "reason": "restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "28. Restructuring (a payment plan, lower instalments, changing the terms): call `transfer_to_agent` with queue `restructure` and close as `handed_over` / `restructure`. Promises already recorded on this call stay recorded."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human agent or a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "desk",
+    "outcome": "handed_over",
+    "reason": "person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-26/03-memo.txt",
+    "text": "D. Human requests are handled by first asking once whether the assistant can help; transfer only if they insist. | P36 \u00a715/\u00a729: transfer to `desk` and close as `handed_over` / `person`."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer suspects the call is a scam or asks whether it is genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify this call by phoning Bank 26's customer service number.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "If the person suspects a scam: say they can verify the call by phoning Bank 26's customer service number, and continue."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Bank 26's digital assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "4. If asked whether this is a robot: say \"I am Bank 26's digital assistant.\""
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "declined_payment"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "10. The customer refuses to talk: close as `no_arrangement` / `declined_payment`."
+   }
+  },
+  {
+   "name": "change_promise",
+   "trigger": "The customer asks whether a recorded promise can be changed.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can change it in the mobile app.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-26/02-policy.md",
+    "text": "33. If the customer asks whether a recorded promise can be changed: say \"You can change it in the mobile app.\""
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "arrangement",
+    "reasons": [],
+    "when": "At least one promise recorded."
+   },
+   {
+    "outcome": "settled",
+    "reasons": [],
+    "when": "All products already paid."
+   },
+   {
+    "outcome": "handed_over",
+    "reasons": [
+     "restructure",
+     "person",
+     "care"
+    ],
+    "when": "A transfer, with the transfer's reason, even after a promise."
+   },
+   {
+    "outcome": "no_arrangement",
+    "reasons": [
+     "declined_payment",
+     "distress",
+     "disputed",
+     "system_error"
+    ],
+    "when": "No promise; reason of the first product in get_account order that is not paid."
+   },
+   {
+    "outcome": "unverified",
+    "reasons": [
+     "failed",
+     "declined"
+    ],
+    "when": "Identity check failed or declined."
+   },
+   {
+    "outcome": "unreached",
+    "reasons": [
+     "callback",
+     "no_callback",
+     "wrong_number",
+     "deceased",
+     "unclear"
+    ],
+    "when": "Customer not reached."
+   }
+  ],
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_arrangement",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "system_error",
+  "refused_reason": "declined_payment",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "results/layer-b/lb-26/04-codes.txt",
+   "text": "CODE LIST C \u2014 authoritative enum combinations ... | P36 \u00a737: At least one promise recorded: `arrangement`. A transfer: `handed_over` with the transfer's reason, even after a promise. All products already paid: `settled`. No promise: `no_arrangement` with the reason of the first product in `get_account` order that is not paid."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "declined_payment",
+   "distress",
+   "disputed",
+   "settled",
+   "system_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-26/04-codes.txt",
+   "text": "add_note reasons: declined_payment, distress, disputed, settled, system_error | P36 \u00a735: add exactly one note (`add_note`) for each product without a promise ... No notes on a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "18. `get_account` returns up to 2 products. ... 34. Every product is handled on the same call: a common date is checked against each product's own deadline and clamped to it; one read-back covers all pending promises; a transfer after a recorded promise keeps the promise."
+  }
+ },
+ "phrases": {
+  "opening": "This is the automated assistant of Bank 26, and this call is recorded.",
+  "opening_verbatim": false,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling from the Bank 26 collections team about a late payment.",
+  "today_question": "Can you pay all of it today?",
+  "all_today_question": "Can you pay all of it today?",
+  "robot_reply": "I am Bank 26's digital assistant.",
+  "scam_reply": "You can verify this call by phoning Bank 26's customer service number.",
+  "prohibited_before_verification": [
+   "collections",
+   "debt",
+   "payment",
+   "credit card",
+   "loan"
+  ],
+  "after_promise_sentence": "You will receive a text message confirming this promise.",
+  "already_paid_sentence": "Payments can take one business day to appear.",
+  "cannot_answer_sentence": "",
+  "recorded_promise_change_reply": "You can change it in the mobile app.",
+  "product_naming": {
+   "mortgage": "mortgage",
+   "store_card": "store card",
+   "overdraft": "overdraft",
+   "student_loan": "student loan"
+  },
+  "source": {
+   "doc": "results/layer-b/lb-26/02-policy.md",
+   "text": "1. First sentence: say you are the automated assistant of Bank 26 and that the call is recorded. ... 2. never say the words collections, debt, payment, credit card or loan ... 18. say you are calling from the Bank 26 collections team about a late payment ... then ask once whether they can pay all of it today. ... 31. say \"You will receive a text message confirming this promise.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you confirm?",
+  "source": {
+   "doc": "results/layer-b/lb-26/03-memo.txt",
+   "text": "C. Zero retries after a failed create_promise; the service-error outcome applies after the first failure. | P36 \u00a730: ask \"Do you confirm?\" ... one promise per product."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "phone_last4 length",
+   "text": "P36 \u00a711 (kept by M66) says phone_last4 is exactly 8 digits including leading zeros, but the verify_identity API description says 'For phone_last4: four digits.' Used 8 from the documents; needs confirmation.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "wrong answer limit vs API",
+   "text": "M66 sets 5 wrong answers in total; the verify_identity API summary says 'Three wrong answers in total end the check.' Used 5 and the API's wrong_answers_left counter.",
+   "doc": "results/layer-b/lb-26/03-memo.txt"
+  },
+  {
+   "topic": "get_account gating",
+   "text": "The get_account API summary says 'Refused until both questions are passed', while the documents require 4 security questions.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "date hint reply",
+   "text": "The API can return hint=day_month_swapped for date_of_birth; the documents do not dictate what to say. hint_reply is a non-dictated wording.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "cannot-answer sentence",
+   "text": "The documents give no sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "create_promise failure sentence",
+   "text": "P36 \u00a732 only says to 'say you could not record it'; no exact words are dictated.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "wrong-number apology",
+   "text": "P36 \u00a78 says to apologise to a wrong number but dictates no words and the schema has no field for it.",
+   "doc": "results/layer-b/lb-26/02-policy.md"
+  },
+  {
+   "topic": "obsolete cover-email settings",
+   "text": "The cover email quotes old settings as history only. Not applied: retry 2 failed saves (M66 C: zero), date_of_birth first (M66 A: phone_last4 first), fourth business day for the latest band (M66 B: fifth), no same-day callbacks (M66 E: today allowed). Its '5 wrong answers' happens to match M66 A, which is the source used.",
+   "doc": "results/layer-b/lb-26/01-mail.txt"
+  }
+ ]
+}

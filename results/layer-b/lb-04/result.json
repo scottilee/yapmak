@@ -1,0 +1,64 @@
+{
+ "perm": 4,
+ "style": "raw",
+ "slot": "lb-04",
+ "exit": 0,
+ "seconds": 158,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "wrong_answer_limit",
+   "text": "The tool API summary for verify_identity says three wrong answers in total end the check, while signed memo M44 sets 4 wrong answers total; the memo value (4) is used and the API's wrong_answers_left is the count to use.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "identity_questions_count",
+   "text": "The get_account summary says it is refused until 'both questions' are passed, while the documents require 3 security questions.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "hardship_sympathy_sentence",
+   "text": "P14 only requires 'one short sentence of sympathy' without dictating the words; a short sentence was written.",
+   "doc": "results/layer-b/lb-04/02-policy.md"
+  },
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents only say to tell the customer the promise could not be recorded (after failed retries); no general cannot-answer sentence is dictated.",
+   "doc": "results/layer-b/lb-04/02-policy.md"
+  },
+  {
+   "topic": "product_naming_card_digits",
+   "text": "The documents do not say to name a credit card's last digits; products are named by type only.",
+   "doc": "results/layer-b/lb-04/02-policy.md"
+  },
+  {
+   "topic": "opening_wording",
+   "text": "P14 rule 1 dictates the content of the opening (automated assistant of Bank 4, call is recorded), not the exact words; a short sentence was written and opening_verbatim is false.",
+   "doc": "results/layer-b/lb-04/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting word 'Hello,' \u2014 P14 rule 1 dictates only the content (automated assistant of Bank 4, call recorded); opening_verbatim stays false and an unresolved entry records that the wording is not dictated.",
+  "bands[1].source: added the P14 table reference for the attempt count of 2, which M44 B leaves unchanged (only the deadline changes)."
+ ],
+ "audit_unresolved": [
+  "verify_identity API summary says three wrong answers end the check; M44 sets 4 total. The memo value is used, and wrong_answers_left is the count to use.",
+  "get_account API summary mentions 'both questions', but the documents require 3 security questions.",
+  "The hardship sympathy sentence is not dictated (only 'one short sentence of sympathy').",
+  "Only the content of the could-not-record sentence is given; there is no general cannot-answer sentence.",
+  "The documents do not say to name the credit card's last digits.",
+  "The words of the opening sentence are not dictated, only its content."
+ ]
+}

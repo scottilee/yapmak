@@ -1,0 +1,59 @@
+{
+ "perm": 0,
+ "style": "clean",
+ "slot": "lb-00",
+ "exit": 0,
+ "seconds": 150,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The brief does not dictate a sentence for questions the agent cannot answer; phrases.cannot_answer_sentence left empty.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "wrong_answer_limit",
+   "text": "The tool API summary says three wrong answers end the check; the brief (sole policy authority) says 2 wrong answers in total end the check. The brief's value 2 is used.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "promise_write_failure_sentence",
+   "text": "The brief says to say the promise could not be recorded after a failed create_promise but dictates no exact words and the IR has no field for it.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "The brief does not say how to read a promise date given without month or year; calendar.missing_date_parts left at default 'unresolved'.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  },
+  {
+   "topic": "wrong_number_apology",
+   "text": "Rule 8 says to apologise on a wrong number but dictates no words and the IR has no field for that sentence.",
+   "doc": "results/layer-b/lb-00/brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added unresolved entry for calendar.missing_date_parts: the brief does not say how to read incomplete promise dates.",
+  "Added unresolved entry for the wrong-number apology: rule 8 requires an apology but no words are dictated and the IR has no field for it.",
+  "Checked every other value against the brief and the openapi enums (verify_identity field, product type, transfer queue, close_call outcome, add_note reason). All match, so nothing else changed."
+ ],
+ "audit_unresolved": [
+  "No sentence is dictated for questions the agent cannot answer (phrases.cannot_answer_sentence is empty).",
+  "The API summary says three wrong answers end the check. The brief, which is the sole policy authority, says 2, so 2 is used.",
+  "After a failed create_promise the agent must say the promise could not be recorded. No words are dictated and the IR has no field for it.",
+  "How to read a promise date that has missing parts is not specified.",
+  "The wrong-number apology has no dictated words."
+ ]
+}

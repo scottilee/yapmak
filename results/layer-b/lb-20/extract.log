@@ -1,0 +1,45 @@
+{
+ "bands": [
+  "band1"
+ ],
+ "identity": [
+  "birth_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The brief does not dictate a sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-20/brief.md"
+  },
+  {
+   "topic": "already_paid/dispute with several products",
+   "text": "The brief allows up to 3 products and never uses add_note, but says already paid and dispute close the call; it does not say whether the call continues with other products. Encoded as closing the call.",
+   "doc": "results/layer-b/lb-20/brief.md"
+  },
+  {
+   "topic": "wrong answer limit vs API",
+   "text": "The brief says 4 wrong answers end the check; the API summary says three. The brief (sole policy authority) is used, with wrong_answers_left as the counter.",
+   "doc": "results/layer-b/lb-20/brief.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The brief requires one short sentence of sympathy but does not dictate the words; a short sentence was written.",
+   "doc": "results/layer-b/lb-20/brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed invented 'Hello,' so the sentence carries only the content rule 1 dictates.",
+  "phrases.today_question: replaced 'Can you pay the full past-due amount today?' with the brief's wording 'Can you pay all of it today?' (rule 18).",
+  "unresolved: added entry noting the hardship sympathy sentence is not dictated by the brief (written by extractor)."
+ ]
+}

@@ -1,0 +1,29 @@
+WARN incomplete git identity; committing as 'temsilci <submission@localhost>' (git config --global user.name/user.email to change)
+[22:12:58] inputs already committed
+[22:12:58] build 1: source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-1
+{"slot": "hidden-1", "workflow_id": "082289f1-5561-4448-b795-82ec15272b9f", "agent_id": "00dd2413-1c16-4d76-a454-bed0a79e0b14", "version": 1, "workflow": "/tmp/v22-clone/out/hidden-1.workflow.json", "trace": "/tmp/v22-clone/traces/hidden-1.jsonl", "elapsed_s": 25}
+[22:13:23] build 1 finished
+[22:13:23] build 2: source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-2
+{"slot": "hidden-2", "workflow_id": "ba156689-dc33-43dc-99bf-185b85a7fa70", "agent_id": "b76a82b1-f85c-4dc9-93ea-c6fcf01f88ff", "version": 1, "workflow": "/tmp/v22-clone/out/hidden-2.workflow.json", "trace": "/tmp/v22-clone/traces/hidden-2.jsonl", "elapsed_s": 31}
+[22:13:54] build 2 finished
+10 artifacts passed credential scanning
+[22:13:54] artifacts committed: d14b78fdd2f7252aafa440ef54ca38354ebe7660
+{
+  "team": "temsilci",
+  "repo": "https://www.github.com/scottilee/temsilci",
+  "commit": "d14b78fdd2f7252aafa440ef54ca38354ebe7660",
+  "run_command": "source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-1 && source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-2",
+  "workflows": {
+    "hidden-1": "out/hidden-1.workflow.json",
+    "hidden-2": "out/hidden-2.workflow.json"
+  },
+  "traces": {
+    "hidden-1": "traces/hidden-1.jsonl",
+    "hidden-2": "traces/hidden-2.jsonl"
+  }
+}
+[22:13:54] form committed: 03a0785 (form.commit = d14b78fdd2f7252aafa440ef54ca38354ebe7660, the artifacts commit)
+[22:13:54] not pushed; run: git push -u origin main
+
+build 1: ok   build 2: ok
+submit commit d14b78fdd2f7252aafa440ef54ca38354ebe7660   form: submission/form.json

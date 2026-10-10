@@ -1,0 +1,167 @@
+{
+ "covered": [
+  {
+   "rule": "1. First sentence: automated assistant of Bank 3, call recorded; ask with title and last name",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.holder_question"
+  },
+  {
+   "rule": "2. Never say collections, debt, payment, credit card or loan before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "3. Only clear yes/speaking/own name confirms; ask once more; then not_reached/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "4. Robot reply / scam reply, continue",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
+  },
+  {
+   "rule": "5. Third party: say nothing about purpose, ask when reachable",
+   "where": "third_party.callback, third_party.source"
+  },
+  {
+   "rule": "6. Callback next business day only, 10:00-18:00 inclusive, after now; not_reached/callback",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "7. Time outside window: ask once more, else not_reached/no_callback",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "8. Wrong number: not_reached/wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "9. Deceased: \"I am sorry for your loss.\" not_reached/deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "10. Refuses to talk: no_promise/refused",
+   "where": "special_cases[refuse_to_talk], outcomes.refused_reason"
+  },
+  {
+   "rule": "11. Four questions in order: phone_last4 (6 digits), date_of_birth (mdy), postcode (text), birth_year (year)",
+   "where": "identity.requirements[0..3]"
+  },
+  {
+   "rule": "12. 5 wrong answers in total; use wrong_answers_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "13. \"Please use the mobile app or visit a branch.\" not_verified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "14. Explain once; second refusal not_verified/declined; asking purpose counts",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "15. Human during identity check: general, transferred/human",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "16. Clock = now; Mon-Fri; holidays 2026-10-26, 2026-11-11, 2026-11-26, 2026-12-25, 2027-01-01",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "17. Next <weekday> = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "18. Debt intro after verification; up to 1 product; \"Can you make this payment today?\"",
+   "where": "phrases.debt_intro, multi_product.max_products=1, phrases.today_question"
+  },
+  {
+   "rule": "19. Floors per product type and spoken names",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "20. Full first, never ask how much, accept floor..full, floor once with \"the rest stays overdue\"",
+   "where": "amounts.*"
+  },
+  {
+   "rule": "21. Promise date rules (today or later, business day, roll forward, vague, after deadline)",
+   "where": "dates.*"
+  },
+  {
+   "rule": "22. Band table rows band1/band2/band3",
+   "where": "bands[0..2]"
+  },
+  {
+   "rule": "23. Attempt 1 full on last business day this week (or next); floor if full refused; attempt 2 floor on deadline",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "24. Attempts used up -> no promise",
+   "where": "outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "25. Already paid: sentence, close paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence, outcomes.paid_outcome"
+  },
+  {
+   "rule": "26. Dispute: no_promise/dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "27. Hardship: sympathy, no persuasion, offer support transfer, else no_promise/hardship; may still record a promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "28. Restructuring transfer; recorded promises stay",
+   "where": "special_cases[restructuring], multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "29. Human after verification: do not ask whether you can help; general, transferred/human",
+   "where": "special_cases[human].ask_once_first=false"
+  },
+  {
+   "rule": "30. Read-back with \"Do you confirm?\"; one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "31. \"You will receive a text message confirming this promise.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "32. create_promise fails: no retry, no_promise/service_error",
+   "where": "promise_write.retry_on_failure=0, outcomes.service_error_reason"
+  },
+  {
+   "rule": "33. \"You can change it in the mobile app.\"",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "36. Goodbye before close_call; outcome/reason table",
+   "where": "outcomes.goodbye_before_close, outcomes.table"
+  },
+  {
+   "rule": "37. Outcome precedence (promise, transferred even after promise, paid, no_promise)",
+   "where": "outcomes.promise_outcome, outcomes.transfer_outcome, outcomes.transfer_overrides_promise"
+  },
+  {
+   "rule": "add_note not used by the brief",
+   "where": "notes.enabled=false"
+  }
+ ],
+ "fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; the brief only dictates the content (automated assistant of Bank 3, call is recorded).",
+  "identity.requirements[date_of_birth].hint_reply: removed the invented instruction 'with the month name'; kept a neutral request to repeat the date (still listed as unresolved).",
+  "special_cases[human].source: added rule 15 (human request during the identity check) alongside rule 29.",
+  "identity.source, third_party.source, amounts.source, outcomes.source, multi_product.source, promise_write.source, phrases.source: extended quotes to cover rules 5, 13, 16, 20, 28, 30, 36 and the prohibited-word rule.",
+  "notes.source.text: replaced a non-quote description with an empty text, since there is no source sentence about add_note.",
+  "unresolved: added entries for the undictated hardship sympathy sentence and the undictated service-error sentence (rule 32)."
+ ],
+ "unresolved": [
+  "phone_last4 length: brief says exactly 6 digits, API says four digits (brief value used).",
+  "Wrong-answer limit: brief says 5, API summary says three (brief value used).",
+  "Number of questions: brief asks 4, get_account summary mentions 'both questions'.",
+  "Reply to the API's day_month_swapped hint is not dictated by the brief.",
+  "Hardship sympathy sentence words are not dictated.",
+  "Sentence for a failed create_promise is not dictated and has no phrase field.",
+  "No cannot-answer sentence in the brief.",
+  "Section 7 (rules 34-35) is missing from the brief.",
+  "How to read a promise date missing month or year is not stated."
+ ]
+}

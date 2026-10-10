@@ -1,0 +1,17 @@
+Pre-flight at 22:08 UTC (briefs open 17:00 UTC, submission closes 20:00 UTC)
+PASS  git tree clean at df51f26
+WARN  git identity incomplete (user.name='', email missing): commits fail with 'Author identity unknown'; submit.sh falls back to the team name, or run git config --global user.name 'Your Name'
+PASS  git remote origin: /Users/sl/sbx/hackathon
+PASS  venv imports (pipeline + claude_agent_sdk)
+PASS  FREYA_API_KEY set
+PASS  FREYA_BANK_TEAM_KEY set
+PASS  claude -p answers (OK)
+PASS  pytest: 88 passed in 3.66s
+PASS  Freya API reachable (workspace 63eff5de…)
+PASS  no simulation running in the workspace
+PASS  bank mock healthy (practice session created)
+WARN  .freya-agents.json missing: hidden-1/hidden-2 will be created as new workflows (fine, but note it)
+PASS  submission/config.json has team and repo
+PASS  rehearsal build (policy fixture, slot rehearsal-a) green
+
+2 warning(s), 0 failure(s)

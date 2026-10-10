@@ -90,8 +90,53 @@ def parse_openapi(path: str) -> dict[str, ToolSpec]:
     return tools
 
 
+# Request fields are discovered too (the kit says fields and allowed values can change): each semantic argument the
+# template sends is mapped onto the supplied schema's property by meaning. (needles in priority order, excluded words)
+REQUEST_SLOTS = {
+    "customer_id":     (("customer_id", "customer", "client", "member", "holder", "cust"), ("product", "facility", "account", "promise", "note")),
+    "verify_identity": {"field": (("field", "question", "check", "item", "kind", "type"), ("answer", "value", "customer")),
+                        "answer": (("answer", "value", "response", "reply", "given"), ("customer", "field"))},
+    "create_promise":  {"product_id": (("product_id", "facility_id", "account_id", "obligation", "product", "facility", "account", "loan", "_id", "id"), ("customer", "client", "member", "promise_id")),
+                        "amount": (("amount", "sum", "value", "promised", "total", "payment"), ("date", "day", "product", "customer")),
+                        "date": (("date", "day", "when", "due", "scheduled"), ("amount", "time", "product", "customer"))},
+    "add_note":        {"product_id": (("product_id", "facility_id", "account_id", "obligation", "product", "facility", "account", "loan", "_id", "id"), ("customer", "client", "member", "note_id")),
+                        "reason": (("reason", "code", "category", "kind", "type"), ("product", "customer", "text", "note_id")),
+                        "text": (("text", "note", "comment", "message", "detail", "body"), ("product", "customer", "reason", "code"))},
+    "schedule_callback": {"date": (("date", "day", "when"), ("time", "customer")),
+                          "time": (("time", "hour", "slot", "clock"), ("date", "day", "customer"))},
+    "transfer_to_agent": {"queue": (("queue", "team", "department", "desk", "destination", "target", "group"), ("customer",))},
+    "close_call":      {"outcome": (("outcome", "disposition", "result", "status", "resolution"), ("reason", "sub", "customer")),
+                        "reason": (("reason", "sub", "detail", "cause", "code"), ("outcome", "disposition", "result", "status", "customer"))},
+}
+OPTIONAL_REQUEST_SLOTS = {("add_note", "text"), ("close_call", "reason")}
+
+
+def request_slots(tools: dict[str, ToolSpec]) -> dict[str, dict[str, str]]:
+    """{tool: {semantic argument: actual body property}}. The semantic name itself wins when present; otherwise the first
+    property matching a needle. A required argument that maps to nothing stops the build with the actual property names;
+    `customer_id` is sent only when the schema has such a field."""
+    out, missing = {}, []
+    for name, t in tools.items():
+        props = t.body_props
+        m = {}
+        needles, excl = REQUEST_SLOTS["customer_id"]
+        m["customer_id"] = "customer_id" if "customer_id" in props else _pick(props, *needles, default="", exclude=excl)
+        for sem, (needles, excl) in REQUEST_SLOTS.get(name, {}).items():
+            actual = sem if sem in props else _pick({k: v for k, v in props.items() if k not in m.values()}, *needles, default="", exclude=excl)
+            if not actual and (name, sem) not in OPTIONAL_REQUEST_SLOTS:
+                missing.append(f"{name}.{sem} (body has {sorted(props)})")
+            m[sem] = actual
+        out[name] = m
+    if missing:
+        raise SystemExit("cannot map request fields from the tool API: " + "; ".join(missing))
+    return out
+
+
 def tool_enums(tools: dict[str, ToolSpec]) -> dict[str, dict[str, list[str]]]:
-    return {n: t.enums() for n, t in tools.items()}
+    """Enums keyed by the template's semantic argument names (what the policy IR refers to), resolved through request_slots."""
+    R = request_slots(tools)
+    return {n: {sem: t.body_props[actual]["enum"] for sem, actual in R[n].items() if actual and "enum" in t.body_props.get(actual, {})}
+            for n, t in tools.items()}
 
 
 def _pick(props: dict, *needles: str, default: str = "", exclude: tuple = ()) -> str:

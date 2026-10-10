@@ -1,0 +1,427 @@
+{
+ "source_docs": [
+  "synthetic permutation 14"
+ ],
+ "bank_name": "Bank 14",
+ "identity": {
+  "requirements": [
+   {
+    "field": "birth_year",
+    "ask_text": "your birth year",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy"
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "wrong_answers_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": [
+   "id-fail",
+   "exhausted"
+  ],
+  "declined_outcome": [
+   "id-fail",
+   "would-not-answer"
+  ],
+  "unclear_holder_outcome": [
+   "no-contact",
+   "unclear"
+  ],
+  "failed_instruction": "Please use the mobile app or visit a branch.",
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 3, 11-15"
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "12:00",
+   "end": "17:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "no-contact",
+    "cb-set"
+   ],
+   "no_callback_outcome": [
+    "no-contact",
+    "cb-none"
+   ],
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rules 6, 7"
+   }
+  },
+  "wrong_number_outcome": [
+   "no-contact",
+   "wrong-no"
+  ],
+  "deceased_outcome": [
+   "no-contact",
+   "deceased"
+  ],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 5-10"
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "next_weekday_means_following_week": true,
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "section 7, rule 22"
+  }
+ },
+ "bands": [
+  {
+   "name": "band1",
+   "days_late_min": 1,
+   "days_late_max": 40,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 14,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    }
+   ]
+  },
+  {
+   "name": "band2",
+   "days_late_min": 41,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "fixed_date",
+    "date": "2026-11-30",
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ]
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "mortgage": "monthly_instalment",
+   "store_card": "minimum_payment",
+   "overdraft": "minimum_due",
+   "student_loan": "scheduled_repayment"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest stays overdue",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 24-27"
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 19-23"
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they already paid this past-due amount",
+   "action": {
+    "type": "note",
+    "reason": "already-paid"
+   },
+   "say": "Payments can take one business day to appear.",
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "briefs/brief-b.md",
+    "text": "rule 9"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, they never had the product, or the product was closed or paid off in the past",
+   "action": {
+    "type": "note",
+    "reason": "disputes"
+   },
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "briefs/brief-b.md",
+    "text": "rule 9"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, a death in the family or job loss",
+   "action": {
+    "type": "close",
+    "outcome": "no-ptp",
+    "reason": "vulnerable"
+   },
+   "say": "one short sentence of sympathy",
+   "offer_transfer_queue": "welfare",
+   "offer_outcome": [
+    "escalated",
+    "welfare"
+   ],
+   "before_persuasion": true,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rule 32"
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a new payment plan or lower instalments",
+   "action": {
+    "type": "transfer",
+    "queue": "plans",
+    "outcome": "escalated",
+    "reason": "plans"
+   },
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rule 41"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks for a human agent",
+   "action": {
+    "type": "transfer",
+    "queue": "front-desk",
+    "outcome": "escalated",
+    "reason": "agent"
+   },
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rule 42"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this is a scam",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify this call by phoning Freya Bank's customer service number.",
+   "ends_call": false,
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rule 43"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer says, for the second time, that they do not want to talk",
+   "action": {
+    "type": "close",
+    "outcome": "no-ptp",
+    "reason": "refuses"
+   },
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "briefs/brief-a.md",
+    "text": "rule 45"
+   },
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ]
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "ptp-recorded",
+    "reasons": []
+   },
+   {
+    "outcome": "already-paid",
+    "reasons": []
+   },
+   {
+    "outcome": "escalated",
+    "reasons": [
+     "plans",
+     "agent",
+     "welfare"
+    ]
+   },
+   {
+    "outcome": "no-ptp",
+    "reasons": [
+     "refuses",
+     "vulnerable",
+     "disputes",
+     "tool-error"
+    ]
+   },
+   {
+    "outcome": "id-fail",
+    "reasons": [
+     "exhausted",
+     "would-not-answer"
+    ]
+   },
+   {
+    "outcome": "no-contact",
+    "reasons": [
+     "cb-set",
+     "cb-none",
+     "wrong-no",
+     "deceased",
+     "unclear"
+    ]
+   }
+  ],
+  "promise_outcome": "ptp-recorded",
+  "paid_outcome": "already-paid",
+  "transfer_outcome": "escalated",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no-ptp",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "tool-error",
+  "refused_reason": "refuses",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 46, 47"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "refuses",
+   "vulnerable",
+   "disputes",
+   "already-paid",
+   "tool-error"
+  ],
+  "source": {
+   "doc": "briefs/brief-b.md",
+   "text": "rules 8, 10, 11"
+  },
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "briefs/brief-b.md",
+   "text": "rules 1-7, 10"
+  }
+ },
+ "phrases": {
+  "opening": "Good day, this is the automated assistant of Bank 14. We record this call.",
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "robot_reply": "I am Freya Bank's digital assistant.",
+  "scam_reply": "You can verify this call by phoning Freya Bank's customer service number.",
+  "prohibited_before_verification": [
+   "collections",
+   "debt",
+   "payment",
+   "credit card",
+   "loan"
+  ],
+  "after_promise_sentence": "You will receive a text message confirming this promise.",
+  "already_paid_sentence": "Payments can take one business day to appear.",
+  "cannot_answer_sentence": "I do not have that information.",
+  "recorded_promise_change_reply": "You can change it in the mobile app.",
+  "product_naming": {
+   "mortgage": "mortgage",
+   "store_card": "store card",
+   "overdraft": "overdraft",
+   "student_loan": "student loan"
+  },
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 1, 2, 4, 17, 36, 38, 39, 43, 44"
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you confirm?",
+  "source": {
+   "doc": "briefs/brief-a.md",
+   "text": "rules 34-37"
+  }
+ },
+ "unresolved": []
+}

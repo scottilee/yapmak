@@ -1,0 +1,51 @@
+{
+ "bands": [
+  "band1",
+  "band2"
+ ],
+ "identity": [
+  "birth_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "change_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-14/02-policy.md"
+  },
+  {
+   "topic": "promise_write_failure_sentence",
+   "text": "After a failed create_promise the policy says only 'say you could not record it'; no field holds this sentence (e.g. 'I could not record your promise.').",
+   "doc": "results/layer-b/lb-14/02-policy.md"
+  },
+  {
+   "topic": "wrong_answer_limit",
+   "text": "The tool API summary says three wrong answers end the check; signed memo M54 sets 2 wrong answers in total. The memo value (2) is used.",
+   "doc": "results/layer-b/lb-14/03-memo.txt"
+  },
+  {
+   "topic": "wrong_number_apology",
+   "text": "Rule 8 says to apologise on a wrong number but dictates no words, and the IR has no phrase field for it.",
+   "doc": "results/layer-b/lb-14/02-policy.md"
+  },
+  {
+   "topic": "get_account_question_count",
+   "text": "The get_account API summary says it is refused 'until both questions are passed', but the documents define only one security question (birth_year); the single question is used.",
+   "doc": "openapi.json"
+  }
+ ],
+ "audit_fixed": [
+  "Added unresolved entry: rule 8 requires an apology on a wrong number but dictates no words and the IR has no field for it.",
+  "Added unresolved entry: the openapi get_account summary mentions 'both questions', but the documents define only one security question (birth_year)."
+ ]
+}

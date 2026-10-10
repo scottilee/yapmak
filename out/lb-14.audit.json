@@ -1,0 +1,171 @@
+{
+ "covered": [
+  {
+   "rule": "Mail: M54 overrides only named rules; quoted 1 Oct settings (4 wrong answers, 2 retries, 4th business day, same-day callbacks) obsolete",
+   "where": "identity.wrong_answer_limit, promise_write.retry_on_failure, bands[1].deadline, third_party.callback.days"
+  },
+  {
+   "rule": "P24 1: opening sentence (content only) + holder question with title and last name",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.holder_question"
+  },
+  {
+   "rule": "P24 2: forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "P24 3: ask once more, then no-contact/unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "P24 4: robot reply / scam reply and continue",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
+  },
+  {
+   "rule": "P24 5: third party, say nothing, ask when reachable",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "P24 6 + M54 E: callback next business day only, 12:00-17:30, after now, no-contact/cb-set",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "P24 7: ask once more, else no-contact/cb-none",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "P24 8: wrong number no-contact/wrong-no",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "P24 9: deceased sentence and no-contact/deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "P24 10: refuses to talk no-ptp/refuses",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "P24 11 + M54 A: birth_year, year format",
+   "where": "identity.requirements[0]"
+  },
+  {
+   "rule": "P24 12 + M54 A: 2 wrong answers total, wrong_answers_left",
+   "where": "identity.wrong_answer_limit, identity.remaining_slot"
+  },
+  {
+   "rule": "P24 13: failed check sentence, id-fail/exhausted",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "P24 14: explain once, second refusal id-fail/would-not-answer",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "P24 15/29 + M54 D: human request transfer immediately to front-desk, escalated/agent",
+   "where": "special_cases[human] (ask_once_first=false)"
+  },
+  {
+   "rule": "P24 16: business days Mon-Thu, no holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "P24 17: next <weekday> = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "P24 18: debt intro, up to 2 products, state all, ask all today once",
+   "where": "phrases.debt_intro, phrases.today_question, phrases.all_today_question, multi_product.max_products"
+  },
+  {
+   "rule": "P24 19: floors and naming per product type",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "P24 20: full first, never ask how much, floor once with 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "P24 21: promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "P24 22 table row band1",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "P24 22 table row band2 + M54 B fixed 2026-11-30 following",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "P24 23: attempts order and floor_if_full_refused",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "P24 24: attempts used up -> note refuses",
+   "where": "outcomes.refused_reason, notes.reasons"
+  },
+  {
+   "rule": "P24 25: already paid sentence, note, continue",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "P24 26: dispute note, continue",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "P24 27: hardship sympathy, offer welfare, decline no-ptp/vulnerable, record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "P24 28: restructuring transfer plans, escalated/plans",
+   "where": "special_cases[restructuring], multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "P24 30: read-back 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "P24 31: after-promise sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "P24 32 + M54 C: zero retries, no-ptp/tool-error",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "P24 33: change promise reply",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "P24 34: same call, clamp common date, one read-back, transfer keeps promise",
+   "where": "multi_product"
+  },
+  {
+   "rule": "P24 35: one note per unpromised product, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "P24 36 + Code list C: outcome/reason table, goodbye before close_call",
+   "where": "outcomes.table, outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "P24 37: precedence",
+   "where": "outcomes.promise_outcome, transfer_outcome, transfer_overrides_promise, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "Code list C: queues front-desk, plans, welfare; add_note reasons",
+   "where": "special_cases[*].action.queue, notes.reasons"
+  }
+ ],
+ "fixed": [
+  "Added unresolved entry: rule 8 requires an apology on a wrong number but dictates no words and the IR has no field for it.",
+  "Added unresolved entry: the openapi get_account summary mentions 'both questions', but the documents define only one security question (birth_year)."
+ ],
+ "unresolved": [
+  "No dictated cannot-answer sentence.",
+  "No field for the 'could not record it' sentence after a failed create_promise.",
+  "API summary says three wrong answers; memo M54 sets 2 (memo used).",
+  "Wrong-number apology wording not dictated.",
+  "get_account summary says 'both questions' while only one security question exists."
+ ]
+}

@@ -1,0 +1,172 @@
+{
+ "covered": [
+  {
+   "rule": "Mail: M46 overrides only its named P16 rules; code list C is the sole vocabulary; quoted 1 Oct settings obsolete",
+   "where": "source_docs; identity.requirements order (memo, not founded_year first); bands[1].deadline (memo, not fourth business day); third_party.callback.days (memo E, not 'no same-day callbacks')"
+  },
+  {
+   "rule": "P16 1 opening: automated assistant of Bank 6, call recorded; ask with title and last name",
+   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.holder_question"
+  },
+  {
+   "rule": "P16 2 forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "P16 3 clear confirmation, ask once more, then no-contact/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "P16 4 robot reply / scam reply and continue",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
+  },
+  {
+   "rule": "P16 5 third party: say nothing about the purpose, ask when reachable",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "P16 6 + M46 E callback today or next business day, 09:00-17:30 inclusive, after now, no-contact/cb-set",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "P16 7 time outside window: ask once more, else no-contact/cb-none",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "P16 8 wrong number no-contact/wrong-no",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "P16 9 deceased sentence and no-contact/deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "P16 10 refuses to talk no-ptp/refuses",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "P16 11 + M46 A question order company_number, founded_year, postcode; formats kept",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "P16 12 + M46 A 5 wrong answers total; use wrong_answers_left",
+   "where": "identity.wrong_answer_limit=5, identity.remaining_slot, identity.wrong_count_source"
+  },
+  {
+   "rule": "P16 13 failed check sentence, id-fail/exhausted",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "P16 14 explain once, second refusal id-fail/would-not-answer",
+   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+  },
+  {
+   "rule": "P16 15/29 + M46 D human request: ask once, then front-desk escalated/agent",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "P16 16 Monday-Thursday business days, no holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "P16 17 next/this weekday",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "P16 18 debt intro, up to 2 products, state all, ask all today once",
+   "where": "phrases.debt_intro, multi_product.max_products, multi_product.state_all_before_asking, phrases.today_question, phrases.all_today_question"
+  },
+  {
+   "rule": "P16 19 floors and product naming",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "P16 20 full first, never ask how much, floor once with 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "P16 21 promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "P16 22 band1 end of calendar month, following",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "P16 22 + M46 B band2 today + 14 calendar days, following",
+   "where": "bands[1].deadline"
+  },
+  {
+   "rule": "P16 23 attempts: full on last business day this/next week (floor if full refused), then floor on deadline",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "P16 24 attempts used up: note refuses",
+   "where": "outcomes.refused_reason, notes.reasons"
+  },
+  {
+   "rule": "P16 25 already paid sentence, note, continue",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "P16 26 dispute note and continue",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "P16 27 hardship: sympathy, welfare offer, decline no-ptp/vulnerable, may record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "P16 28 restructuring transfer plans escalated/plans",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "P16 30 read-back, 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "P16 31 after-promise sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "P16 32 + M46 C retry 2 times, then could-not-record, no-ptp/tool-error",
+   "where": "promise_write.retry_on_failure=2, phrases.cannot_answer_sentence, outcomes.service_error_reason"
+  },
+  {
+   "rule": "P16 33 change recorded promise reply",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "P16 34 same call, common date clamped, one read-back, promise survives transfer",
+   "where": "multi_product"
+  },
+  {
+   "rule": "P16 35 one note per unpromised product, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "P16 36 goodbye before close_call; outcome list",
+   "where": "outcomes.goodbye_before_close, outcomes.table"
+  },
+  {
+   "rule": "P16 37 outcome precedence",
+   "where": "outcomes.promise_outcome, transfer_overrides_promise, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "Code list C outcomes, queues, add_note reasons",
+   "where": "outcomes.table, special_cases[*].action.queue, notes.reasons"
+  }
+ ],
+ "fixed": [
+  "phrases.opening: removed the added 'Hello,' so the sentence holds only what P16 1 requires (automated assistant of Bank 6, call is recorded); still opening_verbatim=false because the words are not dictated.",
+  "phrases.today_question: changed 'Can you pay this today?' to 'Can you pay all of it today?' to match the P16 18 wording.",
+  "phrases.cannot_answer_sentence: removed the added apology so it says only what P16 32 requires ('say you could not record it').",
+  "Source spans extended (identity, callback, third party, multi_product, phrases, promise_write, outcomes) to quote the rules each value comes from (P16 3, 5, 7, 30, 36, 19 naming)."
+ ],
+ "unresolved": [
+  "Wrong-answer limit: M46 says 5 in total, but the API summary says three wrong answers end the check. Kept 5 from the memo; the API's wrong_answers_left may end the check sooner.",
+  "Human request during the identity check: P16 15 transfers at once, while M46 D says to ask once first and does not separate the phases. Ask-once-first is applied to every human request.",
+  "The API says get_account is refused until 'both questions' are passed, but the documents require three security questions. Kept the three from the documents.",
+  "Hardship: the documents ask for one short sentence of sympathy without giving the words, so the sentence used is written, not quoted."
+ ]
+}
