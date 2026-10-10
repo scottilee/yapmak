@@ -13,6 +13,7 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import freya  # noqa: E402
+from scripts.chatlib import Chat, variables_from, runtime_errors
 
 IGNORED_TOP = {"agent_config", "nodePositions", "test_variables", "tools", "context_variables"}
 
@@ -59,35 +60,22 @@ def main():
     if "--no-chat" in sys.argv:
         return
     cv = {"customer_id": "c_smoke", "first_name": "Daniel", "last_name": "Reyes", "title": "Mr", "now": "2026-10-14T11:00"}
-    call_id = None
-    try:
+    with Chat(ids["workflow_id"], cv) as session:
         for msg in ["Hello?", "Yes, speaking."]:
-            body = {"workflowId": ids["workflow_id"], "message": msg}
-            if call_id:
-                body["callId"] = call_id
-            else:
-                body["customerVariables"] = cv
             t0 = time.time()
-            r = freya.api("POST", "/api/v2/chat/message", body)
-            call_id = r.get("callId", call_id)
-            print(f"chat> {msg}\nagent< {r.get('response')!r} ({time.time() - t0:.1f}s)")
-        call = freya.get_call(call_id)
-        snap = {}
-        for m in call.get("messages", []):
-            try:
-                ev = json.loads(m.get("message", ""))
-                if isinstance(ev, dict) and ev.get("event") in ("route_evaluated", "error", "function_call_complete"):
-                    print("  event:", ev.get("event"), ev.get("from_node") or ev.get("function") or "", "->", ev.get("target", ""), str(ev.get("message", ""))[:200])
-                    snap = ev.get("variable_table") or snap
-            except (ValueError, TypeError):
-                pass
-        for k in ("next", "runtime_error", "today_text", "id_say", "state_json"):
-            if k in snap:
-                v = snap[k]
-                print(f"  var {k} = {str(v.get('value') if isinstance(v, dict) else v)[:160]}")
-    finally:
-        if call_id:
-            freya.api("POST", "/api/v2/chat/end", {"callId": call_id})
+            response = session.send(msg)
+            print(f"chat> {msg}\nagent< {response.get('response')!r} ({time.time() - t0:.1f}s)")
+        call = session.evidence()
+        values, events = variables_from(call)
+        for event in events:
+            if event['event'] in ('route_evaluated', 'error', 'function_call_complete'):
+                print("  event:", event['event'], event.get('from_node') or event.get('function') or '', '->', event.get('target', ''))
+        for key in ('next', 'runtime_error', 'today_text', 'id_say', 'state_json'):
+            if key in values:
+                print(f"  var {key} = {str(values[key])[:160]}")
+        errors = runtime_errors(call)
+        if errors:
+            raise RuntimeError("workflow runtime errors: " + "; ".join(errors))
 
 
 if __name__ == "__main__":

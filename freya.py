@@ -4,20 +4,47 @@
     export FREYA_API_URL=https://staging-app.freyavoice.ai   # default
 """
 import json, os, time, urllib.request, urllib.error, urllib.parse
+import pathlib
+import tempfile
+import uuid
+import fcntl
+import runcontrol
+from trace import inherited_event
+from artifact_security import check_artifact, redact
 
 URL = os.environ.get("FREYA_API_URL", "https://staging-app.freyavoice.ai")
 # Cloudflare rejects requests without a browser-like User-Agent (error 1010).
 HEADERS = {"Authorization": "Bearer " + os.environ.get("FREYA_API_KEY", ""), "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (build-the-builder)"}
 
+class APIError(RuntimeError):
+    def __init__(self, method, path, status, detail):
+        self.status = status
+        super().__init__(f"{method} {path} -> {status}: {detail}")
+
+
 def api(method, path, body=None, **params):
-    """Call the API and return the `result` part of its {success, data: {message, result}} envelope."""
+    """Shared tracing covers parent and child processes, including interrupted requests."""
     q = "?" + urllib.parse.urlencode(params) if params else ""
-    req = urllib.request.Request(URL + path + q, data=json.dumps(body).encode() if body is not None else None, headers=HEADERS, method=method)
+    request_id = uuid.uuid4().hex
+    started = time.monotonic()
+    inherited_event("freya_call_start", request_id=request_id, method=method, path=path)
     try:
-        with urllib.request.urlopen(req, timeout=120) as r: out = json.load(r)
-    except urllib.error.HTTPError as e:
-        raise RuntimeError(f"{method} {path} -> {e.code}: {e.read().decode()[:1500]}") from None
-    return out.get("data", {}).get("result", out) if isinstance(out, dict) else out
+        req = urllib.request.Request(URL + path + q, data=json.dumps(body).encode() if body is not None else None, headers=HEADERS, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=runcontrol.timeout(120)) as r:
+                out = json.load(r)
+        except urllib.error.HTTPError as e:
+            raise APIError(method, path, e.code, redact(e.read().decode(errors="replace"))[:1500]) from None
+        if isinstance(out, dict) and out.get("success") is False:
+            raise APIError(method, path, 200, "API reported success=false")
+        result = out.get("data", {}).get("result", out) if isinstance(out, dict) else out
+    except BaseException as e:
+        inherited_event("freya_call", request_id=request_id, method=method, path=path, ok=False,
+                        error=repr(e)[:300], duration_ms=int((time.monotonic() - started) * 1000))
+        raise
+    inherited_event("freya_call", request_id=request_id, method=method, path=path, ok=True,
+                    duration_ms=int((time.monotonic() - started) * 1000))
+    return result
 
 _ws = None
 def workspace_id():
@@ -33,39 +60,132 @@ def create_workflow(name, workflow):
     w = api("POST", "/api/v2/workflow", {"name": name, "workflow": workflow})["workflow"]
     return {"workflow_id": w["id"], "agent_id": w["agentId"]}
 
-def save_workflow(slot, workflow, state_file=".freya-agents.json"):
-    """Create the workflow the first time, update the same one afterwards. Use this in your builder.
+def atomic_json(path, data):
+    path = pathlib.Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=path.name + ".", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(data, f, indent=1)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
-    `slot` is your own label, for example the brief's file name. A workspace holds a limited number of workflows,
-    so a builder that creates a new one on every run stops working after a few runs."""
-    import pathlib
-    f = pathlib.Path(state_file); state = json.loads(f.read_text()) if f.exists() else {}
-    if slot in state:
-        state[slot]["version"] = update_workflow(state[slot]["workflow_id"], workflow); f.write_text(json.dumps(state, indent=1))
-    else:
-        state[slot] = create_workflow(f"{slot} {time.strftime('%m%d-%H%M%S')}", workflow); f.write_text(json.dumps(state, indent=1))
-    return state[slot]
-def validate_workflow(name, workflow): return api("POST", "/api/v2/workflow", {"name": name, "workflow": workflow}, dryRun="true")
+
+def find_workflow(name):
+    """Reconcile a persisted creation intent by its unique remote name."""
+    offset = 0
+    matches = []
+    while True:
+        page = api("GET", "/api/v2/workflow", workspaceId=workspace_id(), limit=100, offset=offset)
+        rows = page["workflows"]
+        matches.extend(w for w in rows if w.get("name") == name)
+        offset += len(rows)
+        if not rows or offset >= page["total"]:
+            break
+    if len(matches) > 1:
+        raise RuntimeError("Multiple workflows match a pending creation; reconcile the slot manually")
+    if matches:
+        w = matches[0]
+        return {"workflow_id": w["id"], "agent_id": w["agentId"]}
+    return None
+
+
+def save_workflow(slot, workflow, state_file=None):
+    """Serialize local publishers; persist intent before creation and reconcile ambiguous failures.
+
+    Never repeat an ambiguous POST. If the remote workflow is not yet visible, keep the intent
+    and fail safely; a later invocation can reconcile it without creating another workflow.
+    """
+    check_artifact(json.dumps(workflow))
+    f = pathlib.Path(state_file) if state_file else pathlib.Path(__file__).resolve().parent / ".freya-agents.json"
+    f.parent.mkdir(parents=True, exist_ok=True)
+    with open(str(f) + ".lock", "a") as lock:
+        wait_until = time.monotonic() + 90
+        while True:
+            try:
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic() >= wait_until:
+                    raise TimeoutError("workflow registry busy for 90 seconds")
+                runcontrol.sleep(0.1)
+        state = json.loads(f.read_text()) if f.exists() else {}
+        entry = state.get(slot)
+        if entry and "pending_name" in entry:
+            recovered = find_workflow(entry["pending_name"])
+            if not recovered:
+                raise RuntimeError("Pending workflow creation is not visible; refusing a duplicate POST. "
+                                   "Re-run after reconciliation or verify the pending_name in the slot registry.")
+            state[slot] = entry = recovered
+            atomic_json(f, state)
+        if not entry:
+            name = f"{slot} {uuid.uuid4().hex}"
+            state[slot] = {"pending_name": name}
+            atomic_json(f, state)
+            try:
+                entry = create_workflow(name, workflow)
+            except APIError as e:
+                # A definitive client rejection did not create a workflow. Timeouts/5xx remain ambiguous.
+                if 400 <= e.status < 500 and e.status not in (408, 409):
+                    del state[slot]
+                    atomic_json(f, state)
+                raise
+            state[slot] = entry
+            atomic_json(f, state)
+        entry["version"] = update_workflow(entry["workflow_id"], workflow)
+        atomic_json(f, state)
+        return dict(entry)
+
+
+def validate_workflow(name, workflow):
+    check_artifact(json.dumps(workflow))
+    return api("POST", "/api/v2/workflow", {"name": name, "workflow": workflow}, dryRun="true")
+
+
+def _contains(actual, expected, path=()):
+    """Platform adds defaults; compare all candidate fields without requiring their absence."""
+    if isinstance(expected, dict):
+        if not isinstance(actual, dict):
+            return False
+        # Node names and schema property names are semantic maps, not platform defaults.
+        if path and path[-1] in ("nodes", "properties") and actual.keys() != expected.keys():
+            return False
+        return all(k in actual and _contains(actual[k], v, path + (k,)) for k, v in expected.items())
+    if isinstance(expected, list):
+        return isinstance(actual, list) and len(actual) == len(expected) and all(_contains(a, b, path) for a, b in zip(actual, expected))
+    return actual == expected
+
+
 def update_workflow(workflow_id, workflow):
-    """Update a workflow and publish the new version. Returns the published version number.
-
-    An update alone only saves a new, unpublished version. Simulations and calls keep running the published one,
-    so an update that is not published tests your old phone agent."""
-    api("PUT", f"/api/v2/workflow/{workflow_id}", {"workflow": workflow})
-    # The platform fills in a default agent_config. If its model is not the event's model, a simulation still runs
-    # (it overrides the model), but a chat turn or a real call cannot start. Set the model and save once more.
-    w = api("GET", f"/api/v2/workflow/{workflow_id}", workspaceId=workspace_id())["workflow"]["workflow"]
-    ac = w.get("agent_config") or {}; llm = ac.get("llmConfig") or {}
-    if (llm.get("provider"), llm.get("model")) != (AGENT_LLM["provider"], AGENT_LLM["model"]):
-        ac["llmConfig"] = {**llm, **AGENT_LLM}; api("PUT", f"/api/v2/workflow/{workflow_id}", {"workflow": {**w, "agent_config": ac}})
+    """Read before writing so retries of a saved or published candidate do not create versions."""
+    def read():
+        return api("GET", f"/api/v2/workflow/{workflow_id}", workspaceId=workspace_id())["workflow"]["workflow"]
+    check_artifact(json.dumps(workflow))
+    stored = read()
+    ac = dict(stored.get("agent_config") or {})
+    ac["llmConfig"] = {**(ac.get("llmConfig") or {}), **AGENT_LLM}
+    desired = {**workflow, "agent_config": ac}
+    if not _contains(stored, desired):
+        api("PUT", f"/api/v2/workflow/{workflow_id}", {"workflow": desired})
+        stored = read()
+        if not _contains(stored, desired):
+            raise RuntimeError("Platform did not retain the candidate workflow; refusing to publish")
     vs = api("GET", f"/api/v2/versions/workflow/{workflow_id}", workspaceId=workspace_id())["versions"]
     newest = max(vs, key=lambda v: v["versionNumber"])
-    if not newest.get("isPublished"): api("POST", f"/api/v2/versions/workflow/{workflow_id}/publish", {"versionId": newest["id"]})
+    if not newest.get("isPublished"):
+        api("POST", f"/api/v2/versions/workflow/{workflow_id}/publish", {"versionId": newest["id"]})
     return newest["versionNumber"]
+
 def export_workflow(workflow_id, path):
     """Write the workflow as it is on the platform to a file. This file is part of what you submit."""
     w = api("GET", f"/api/v2/workflow/{workflow_id}", workspaceId=workspace_id())["workflow"]
-    open(path, "w").write(json.dumps({"workflow_id": w["id"], "agent_id": w.get("agentId"), "updated_at": w.get("updatedAt"), "workflow": w["workflow"]}, indent=1)); return path
+    check_artifact(json.dumps(w))
+    atomic_json(path, {"workflow_id": w["id"], "agent_id": w.get("agentId"), "updated_at": w.get("updatedAt"), "workflow": w["workflow"]})
+    return path
 def create_personas(personas):        return api("POST", "/api/v2/personas", {"personas": personas})
 def get_iteration(sim_id, it_id):
     """One iteration with ALL its runs. The route returns 30 runs by default and 100 at most, so this reads page by page."""
@@ -86,20 +206,28 @@ SIM_LLM = {"provider": "google", "model": "gemini-3-flash-preview"}        # pla
 
 def run_simulation(agent_id, name, variables_by_persona, max_seconds=420, concurrency=int(os.environ.get("FREYA_SIM_CONCURRENCY", "5"))):
     """Start a text simulation, wait for it, return (simulation_id, iteration_id)."""
-    while True:                      # a workspace runs one simulation at a time: wait for the running one instead of failing
-        try:
-            sim = api("POST", "/api/v2/simulations", {
-                "agentId": agent_id, "name": name, "mode": "chat", "selectedPersonaIds": list(variables_by_persona),
-                "customerVariablesMap": variables_by_persona, "maxConcurrentCalls": concurrency, "runsPerPersona": 1, "maxCallDurationSeconds": max_seconds,
-                "assistantLlmOverride": AGENT_LLM, "routingLlmOverride": AGENT_LLM, "extractionLlmOverride": AGENT_LLM,
-                "personaLlmOverride": SIM_LLM, "analysisLlmOverride": SIM_LLM})
-            break
-        except RuntimeError as e:
-            if "concurrent simulations" not in str(e): raise
-            print("another simulation is running in this workspace, waiting 30 s", flush=True); time.sleep(30)
+    with runcontrol.deadline(90):
+        busy_until = time.monotonic() + 90
+        while True:                      # bounded workspace contention wait
+            try:
+                sim = api("POST", "/api/v2/simulations", {
+                    "agentId": agent_id, "name": name, "mode": "chat", "selectedPersonaIds": list(variables_by_persona),
+                    "customerVariablesMap": variables_by_persona, "maxConcurrentCalls": concurrency, "runsPerPersona": 1, "maxCallDurationSeconds": max_seconds,
+                    "assistantLlmOverride": AGENT_LLM, "routingLlmOverride": AGENT_LLM, "extractionLlmOverride": AGENT_LLM,
+                    "personaLlmOverride": SIM_LLM, "analysisLlmOverride": SIM_LLM})
+                break
+            except RuntimeError as e:
+                if "concurrent simulations" not in str(e): raise
+                if time.monotonic() >= busy_until:
+                    raise TimeoutError("simulation slot busy for 90 seconds") from e
+                inherited_event("simulation_wait", remaining_s=round(busy_until - time.monotonic(), 1))
+                runcontrol.sleep(min(30, busy_until - time.monotonic()))
     sim_id = (sim.get("simulation") or sim)["id"]
+    poll_until = time.monotonic() + max(900, max_seconds * len(variables_by_persona))
     while True:
-        time.sleep(10)
+        if time.monotonic() >= poll_until:
+            raise TimeoutError("simulation polling deadline exceeded")
+        runcontrol.sleep(10)
         s = api("GET", f"/api/v2/simulations/{sim_id}"); s = s.get("simulation") or s
         if s.get("status") in ("completed", "failed", "paused"): break
     its = api("GET", f"/api/v2/simulations/{sim_id}/iterations"); its = its.get("iterations") or its.get("items") or its

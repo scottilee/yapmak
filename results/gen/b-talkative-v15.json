@@ -1,0 +1,162 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "eb51921a-6cc8-47d6-acde-75b7705c8918",
+ "iteration_id": "90f62363-fb9e-4766-a422-a00255dda8c8",
+ "seconds": 239,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "69d56981-987f-4e6f-bf21-67330dbe1a4f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a57f6200-b54",
+   "slowest_turn_s": 5.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The conversation failed to meet the success criteria regarding the number of payment attempts. While the security questions were handled correctly (phone asked twice at [4] and [6], date of birth once at [2]), and the notes/promises were recorded correctly (promise for credit card, 'refused' notes for personal and car loans), the agent made too many attempts on the personal loan. The criteria requ"
+   ],
+   "call_id": "61d80889-0c5a-4a30-90af-b2f49ba28118",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_c316046f-f37",
+   "slowest_turn_s": 9.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "083b96f6-9fde-4157-8cf4-890729019fb8",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_c1be14ff-a29",
+   "slowest_turn_s": 5.5,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "69d56981-987f-4e6f-bf21-67330dbe1a4f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a57f6200-b54",
+    "slowest_turn_s": 5.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The conversation failed to meet the success criteria regarding the number of payment attempts. While the security questions were handled correctly (phone asked twice at [4] and [6], date of birth once at [2]), and the notes/promises were recorded correctly (promise for credit card, 'refused' notes for personal and car loans), the agent made too many attempts on the personal loan. The criteria requ"
+    ],
+    "call_id": "61d80889-0c5a-4a30-90af-b2f49ba28118",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_c316046f-f37",
+    "slowest_turn_s": 9.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "083b96f6-9fde-4157-8cf4-890729019fb8",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_c1be14ff-a29",
+    "slowest_turn_s": 5.5,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

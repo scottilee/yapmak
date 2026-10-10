@@ -1,0 +1,40 @@
+{
+  "jobs": [
+    {
+      "name": "A-reps3",
+      "output": "a-reps3",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--reps",
+        "3"
+      ]
+    },
+    {
+      "name": "B-reps3",
+      "output": "b-reps3",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--reps",
+        "3"
+      ]
+    }
+  ],
+  "wait_for": {
+    "pattern": "^exit A-corrects",
+    "path": "results/gen/run7.log;"
+  },
+  "publish": [
+    {
+      "slot": "gen-a",
+      "path": "out/gen-a.workflow.json"
+    },
+    {
+      "slot": "gen-ab",
+      "path": "out/gen-ab.workflow.json"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "jobs": [
+    {
+      "name": "A",
+      "output": "a-run7",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A"
+      ]
+    },
+    {
+      "name": "B",
+      "output": "b-run4",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B"
+      ]
+    },
+    {
+      "name": "A-asks_back",
+      "output": "a-asksback3",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "asks_back"
+      ]
+    },
+    {
+      "name": "B-pieces",
+      "output": "b-pieces3",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--style",
+        "pieces"
+      ]
+    },
+    {
+      "name": "A-corrects",
+      "output": "a-corrects3",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "corrects"
+      ]
+    }
+  ],
+  "publish": [
+    {
+      "slot": "gen-a",
+      "path": "out/gen-a.workflow.json"
+    },
+    {
+      "slot": "gen-ab",
+      "path": "out/gen-ab.workflow.json"
+    }
+  ]
+}

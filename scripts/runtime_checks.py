@@ -9,6 +9,8 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / 'tools')]
 import freya
+from scripts.chatlib import Chat, variables_from
+from trace import _scrub
 from score import http
 
 
@@ -32,11 +34,7 @@ def code_node(source, transitions):
 
 
 def save_json(path, value):
-    text = json.dumps(value, indent=2)
-    for key in ('FREYA_API_KEY', 'FREYA_BANK_TEAM_KEY'):
-        if os.environ.get(key):
-            text = text.replace(os.environ[key], '[REDACTED]')
-    path.write_text(text)
+    path.write_text(json.dumps(_scrub(value), indent=2))
 
 
 def publish(workflow, out):
@@ -52,43 +50,17 @@ def publish(workflow, out):
 
 
 def chat(ids, variables, messages, out, label):
-    turns, call_id = [], None
-    try:
+    turns = []
+    def cleanup(error):
+        save_json(out / (label + '.end-error.json'), {'error': str(error)})
+    with Chat(ids['workflow_id'], variables, on_cleanup_error=cleanup) as session:
         for message in messages:
-            body = {'workflowId': ids['workflow_id'], 'message': message}
-            if call_id:
-                body['callId'] = call_id
-            else:
-                body['customerVariables'] = variables
-            result = freya.api('POST', '/api/v2/chat/message', body)
-            call_id = result.get('callId', call_id)
+            result = session.send(message)
             turns.append({'input': message, 'result': result})
             save_json(out / (label + '.turns.json'), turns)
-        if call_id:
-            call = freya.get_call(call_id)
-            save_json(out / (label + '.call.json'), call)
-            return call
-    finally:
-        if call_id:
-            freya.api('POST', '/api/v2/chat/end', {'callId': call_id})
-
-
-def variables_from(call):
-    result = {}
-    transitions = []
-    for message in call.get('messages', []):
-        snapshot = message.get('workflowSnapshot') or {}
-        for key, value in snapshot.get('variableTable', {}).items():
-            result[key] = value.get('value') if isinstance(value, dict) else value
-        try:
-            event = json.loads(message.get('message', ''))
-            if isinstance(event, dict):
-                result.update(event.get('variable_table', {}))
-                if event.get('event') in ('route_evaluated', 'node_entered', 'node_transition'):
-                    transitions.append(event)
-        except (ValueError, TypeError):
-            pass
-    return result, transitions
+        call = session.evidence()
+        save_json(out / (label + '.call.json'), call)
+        return call
 
 
 def date_check(out):

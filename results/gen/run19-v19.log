@@ -1,0 +1,127 @@
+start A-reps3 attempt 1 2026-10-10T17:33:41Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The agent failed the criterion of 'no persuasion attempt'. In message 7, the user stated they lost their job and could not pay. In message 10, the agent asked for the payment again ('Can you make the payment of 780.00 today?'), which constitutes 
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 4 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 9 / 10 passed, 86 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: - The agent failed the 'no persuasion attempt' criterion by asking for the payment a second time in [Message 10] after the user had already clearly stated they lost their job and could not pay anything in [Message 7]. - The agent successfully pro
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 5 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 9 / 10 passed, 97 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The assistant failed the success criteria regarding persuasion. In Message 10, the assistant attempted to persuade the user to make a payment ('Can you make the payment of 780.00 today?') despite the user having already stated in Message 7 that t
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 3 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 9 / 10 passed, 75 s
+
+PASS PUB-01 3/3
+PASS PUB-02 3/3
+PASS PUB-03 3/3
+PASS PUB-04 3/3
+FAIL PUB-05 0/3
+PASS PUB-06 3/3
+PASS PUB-07 3/3
+PASS PUB-08 3/3
+PASS PUB-09 3/3
+PASS PUB-10 3/3
+
+9 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 56b2000d-2c04-4ada-9492-cc05869ba86c, status completed, 258 s.
+exit A-reps3 0 2026-10-10T17:39:09Z
+start A-asks_back attempt 1 2026-10-10T17:39:10Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-14')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to meet the specific date requirement in the success criteria. While the agent correctly offered the minimum payment once and noted the remaining amount would stay overdue without asking the customer how much they could pay, the 
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 3 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 88fae72a-73fc-4051-8243-3b91b2ee2864, status completed, 87 s.
+exit A-asks_back 0 2026-10-10T17:40:59Z
+start A-corrects attempt 1 2026-10-10T17:40:59Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-15')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The conversation failed to meet all the success criteria. While the agent correctly avoided asking the customer how much she could pay and offered the minimum payment once with the note about the remaining balance staying overdue, the final promi
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 4 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation e01b2624-b6ad-40fc-9ea6-74ad9e18ffd6, status completed, 86 s.
+exit A-corrects 0 2026-10-10T17:42:43Z
+start A-talkative attempt 1 2026-10-10T17:42:44Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+FAIL PUB-04 medium Dates          | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 1250.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The agent failed to meet the success criteria because the promise date of 23 October was never mentioned. Additionally, the agent entered a repetitive loop in messages 10 and 12, responding with the same generic phrase to the user's comments inst
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The assistant failed the 'no persuasion attempt' criterion. While most criteria were met, the assistant violated the prohibition on persuasion by asking for the full payment amount of 780.00 in Message 12 after the user had explicitly stated they
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The assistant failed several success criteria and displayed poor conversational flow. First, the minimum payment was offered more than once: initially in [Message 12] for October 14th, and again in [Message 140] for October 23rd, violating the re
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 3 s. Failed calls where the customer hung up: 1.
+
+7 / 10 passed (bank records and conversation checks). Last simulation 6cf79240-8e3b-4ea8-ba12-3b614bf0549c, status completed, 280 s.
+exit A-talkative 0 2026-10-10T17:47:47Z
+start B attempt 1 2026-10-10T17:47:48Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 4 s. Failed calls where the customer hung up: 0.
+
+3 / 3 passed (bank records and conversation checks). Last simulation 8c149c7d-f536-46c4-a39d-43f5f642c053, status completed, 106 s.
+exit B 0 2026-10-10T17:49:42Z
+batch done 2026-10-10T17:49:42Z

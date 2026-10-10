@@ -1,0 +1,166 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "8455f006-7f96-41ff-864b-a57497183304",
+ "iteration_id": "47144e10-b16b-4753-9181-160535a0c4a3",
+ "seconds": 247,
+ "passed": 1,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 220.0, '2026-10-23'), ('p2', 640.0, '2026-10-23'), ('p3', 75.0, '2026-10-30')], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]"
+   ],
+   "call_id": "c56ef4e9-2f33-4469-bfdc-da0ae7abcce0",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a16a4d29-50c",
+   "slowest_turn_s": 9.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The conversation failed the success criteria because the phone question was asked a total of three times (Messages 4, 6, and 8), meaning it was asked again twice rather than once. All other criteria were met: the date of birth was asked only once (Message 2); exactly one promise was recorded for the credit card (system event for p1); 'refused' notes were added for the personal loan (p2) and car lo"
+   ],
+   "call_id": "e944c602-cb26-4593-8a79-eff30512a49b",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_d0d91a17-8e7",
+   "slowest_turn_s": 10.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "f3cc2041-697b-4d06-ba70-362c8ae87edd",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_e8da2a75-10d",
+   "slowest_turn_s": 9.0,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 220.0, '2026-10-23'), ('p2', 640.0, '2026-10-23'), ('p3', 75.0, '2026-10-30')], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]"
+    ],
+    "call_id": "c56ef4e9-2f33-4469-bfdc-da0ae7abcce0",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a16a4d29-50c",
+    "slowest_turn_s": 9.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The conversation failed the success criteria because the phone question was asked a total of three times (Messages 4, 6, and 8), meaning it was asked again twice rather than once. All other criteria were met: the date of birth was asked only once (Message 2); exactly one promise was recorded for the credit card (system event for p1); 'refused' notes were added for the personal loan (p2) and car lo"
+    ],
+    "call_id": "e944c602-cb26-4593-8a79-eff30512a49b",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_d0d91a17-8e7",
+    "slowest_turn_s": 10.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "f3cc2041-697b-4d06-ba70-362c8ae87edd",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_e8da2a75-10d",
+    "slowest_turn_s": 9.0,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

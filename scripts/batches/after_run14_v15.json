@@ -1,0 +1,157 @@
+{
+  "jobs": [
+    {
+      "name": "A",
+      "output": "a-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A"
+      ]
+    },
+    {
+      "name": "B",
+      "output": "b-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B"
+      ]
+    },
+    {
+      "name": "A-asks_back",
+      "output": "a-asksback-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "asks_back"
+      ]
+    },
+    {
+      "name": "A-talkative",
+      "output": "a-talkative-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "talkative"
+      ]
+    },
+    {
+      "name": "A-corrects",
+      "output": "a-corrects-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "corrects"
+      ]
+    },
+    {
+      "name": "A-pieces",
+      "output": "a-pieces-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "pieces"
+      ]
+    },
+    {
+      "name": "A-in_words",
+      "output": "a-inwords-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--style",
+        "in_words"
+      ]
+    },
+    {
+      "name": "B-pieces",
+      "output": "b-pieces-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--style",
+        "pieces"
+      ]
+    },
+    {
+      "name": "B-talkative",
+      "output": "b-talkative-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--style",
+        "talkative"
+      ]
+    },
+    {
+      "name": "B-corrects",
+      "output": "b-corrects-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--style",
+        "corrects"
+      ]
+    },
+    {
+      "name": "B-asks_back",
+      "output": "b-asksback-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--style",
+        "asks_back"
+      ]
+    },
+    {
+      "name": "A-reps3",
+      "output": "a-reps3-v15",
+      "slot": "gen-a",
+      "args": [
+        "--brief",
+        "A",
+        "--reps",
+        "3"
+      ]
+    },
+    {
+      "name": "B-reps3",
+      "output": "b-reps3-v14",
+      "slot": "gen-ab",
+      "args": [
+        "--brief",
+        "B",
+        "--reps",
+        "3"
+      ]
+    }
+  ],
+  "wait_for": {
+    "pattern": "^exit B-corrects",
+    "path": "results/gen/run14-v14.log"
+  },
+  "publish": [
+    {
+      "slot": "gen-a",
+      "path": "out/gen-a.workflow.json"
+    },
+    {
+      "slot": "gen-ab",
+      "path": "out/gen-ab.workflow.json"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "437b2f3b-20fd-4060-af8b-5ef090fdf5d5",
+ "iteration_id": "e7185187-34c0-41e4-b776-2bbb9e86d271",
+ "seconds": 98,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "0fb1bd19-a179-4359-88db-d10cbf5b948f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_07524119-851",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The conversation did not meet all success criteria regarding the number of payment attempts. While the security questions were handled correctly (date of birth asked once in Message 2; phone number asked and then asked again once in Messages 6 and 10), and the assistant correctly recorded exactly one promise for the credit card (Message 23 and API call) and one 'refused' note for each of the other"
+   ],
+   "call_id": "b056fbe4-b010-4f6d-bf13-0e86aafa52cd",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_917056d9-6dc",
+   "slowest_turn_s": 7.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "ada36a26-d5e1-4a85-bc55-0958dc0f4581",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_41423914-bf9",
+   "slowest_turn_s": 8.4,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "0fb1bd19-a179-4359-88db-d10cbf5b948f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_07524119-851",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The conversation did not meet all success criteria regarding the number of payment attempts. While the security questions were handled correctly (date of birth asked once in Message 2; phone number asked and then asked again once in Messages 6 and 10), and the assistant correctly recorded exactly one promise for the credit card (Message 23 and API call) and one 'refused' note for each of the other"
+    ],
+    "call_id": "b056fbe4-b010-4f6d-bf13-0e86aafa52cd",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_917056d9-6dc",
+    "slowest_turn_s": 7.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "ada36a26-d5e1-4a85-bc55-0958dc0f4581",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_41423914-bf9",
+    "slowest_turn_s": 8.4,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

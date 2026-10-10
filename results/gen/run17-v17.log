@@ -1,0 +1,125 @@
+start A-reps3 attempt 1 2026-10-10T17:06:01Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: - The agent provided two sentences of sympathy (in [Message 8] and [Message 12]) instead of one. - The agent made multiple persuasion attempts by repeatedly asking for the full payment in [Message 10] and [Message 14] after the user had already s
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 8 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 9 / 10 passed, 142 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The assistant failed two of the success criteria related to frequency: it offered the support team four times (Messages 8, 10, 14, 16) instead of the required 'once', and it repeated the sympathy sentence four times instead of providing only 'one
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 8 s, worst 12 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 9 / 10 passed, 165 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('no_promise', 'hardship')
+       - conversation: The call failed to meet several success criteria. Specifically, the agent offered the support team at least 25 times (starting at [Message 8] and repeating through [Message 66]) instead of offering it only 'once'. Additionally, the agent repeated
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 8 s, worst 13 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 9 / 10 passed, 283 s
+
+PASS PUB-01 3/3
+PASS PUB-02 3/3
+PASS PUB-03 3/3
+PASS PUB-04 3/3
+FAIL PUB-05 0/3
+PASS PUB-06 3/3
+PASS PUB-07 3/3
+PASS PUB-08 3/3
+PASS PUB-09 3/3
+PASS PUB-10 3/3
+
+9 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation d883d434-da1c-43e0-9520-62dd94cd5743, status completed, 590 s.
+exit A-reps3 0 2026-10-10T17:17:26Z
+start A-asks_back attempt 1 2026-10-10T17:17:27Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('no_promise', 'hardship')
+       - conversation: The conversation failed several success criteria. Specifically: 1. The support team was offered approximately 20 times (starting at Message 14 and repeating at 18, 22, 26, etc.), which violates the requirement that it be offered only once. 2. Whi
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 7 s, worst 22 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 1bb74b2b-65de-4dfe-a5a1-d611976d43e4, status completed, 311 s.
+exit A-asks_back 0 2026-10-10T17:23:25Z
+start A-corrects attempt 1 2026-10-10T17:23:26Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - conversation: The conversation failed on two criteria. First, the agent used the same sympathy sentence five times (Messages 8, 12, 14, 18, and 20) instead of only one. Second, the agent engaged in persuasion by repeatedly asking the customer to make the payme
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-15')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to meet the specific date requirement in the success criteria. While the agent correctly avoided asking the customer how much they could pay and offered the minimum payment once with the overdue disclaimer (Message 8), it recorde
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 4 s. Failed calls where the customer hung up: 0.
+
+8 / 10 passed (bank records and conversation checks). Last simulation 24425f13-ba39-429a-bd9e-ad1d4b175a14, status completed, 107 s.
+exit A-corrects 0 2026-10-10T17:25:51Z
+start B-reps3 attempt 1 2026-10-10T17:25:52Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 3 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 3 / 3 passed, 55 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 2 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 3 / 3 passed, 54 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 4 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 3 / 3 passed, 56 s
+
+PASS PUB-11 3/3
+PASS PUB-12 3/3
+PASS PUB-13 3/3
+
+3 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 7d4600dd-2d7a-4ed5-a2f1-0366d6f46ba7, status completed, 165 s.
+exit B-reps3 0 2026-10-10T17:29:23Z

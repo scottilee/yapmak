@@ -11,6 +11,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts'),str(ROOT/'tools')]
 import freya
+from scripts.chatlib import events as chat_events
 from score import http
 from runtime_checks import publish, route, conversation, code_node, save_json, variables_from
 from extraction_checks import capture, source_adapter
@@ -35,13 +36,7 @@ def checked_code(name, source, transitions):
 
 
 def tool_events(call):
-    events=[]
-    for message in call.get('messages',[]):
-        try: event=json.loads(message.get('message',''))
-        except (TypeError,ValueError): continue
-        if isinstance(event,dict) and event.get('event') in ('function_call_start','function_call_complete'):
-            events.append(dict(seconds=message.get('secondsFromStart'),node=message.get('nodeId'),**event))
-    return events
+    return [event for event in chat_events(call) if event['event'] in ('function_call_start', 'function_call_complete')]
 
 
 def hint(out):

@@ -1,0 +1,78 @@
+{
+  "wait_for": {
+    "pattern": "^exit B-reps3",
+    "path": "results/gen/run8.log"
+  },
+  "jobs": [
+    {
+      "name": "friday-next-friday",
+      "output": "cal-friday-next-friday",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/friday-next-friday.json"
+      ]
+    },
+    {
+      "name": "friday-attempt-next-week",
+      "output": "cal-friday-attempt-next-week",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/friday-attempt-next-week.json"
+      ]
+    },
+    {
+      "name": "saturday-pay-today",
+      "output": "cal-saturday-pay-today",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/saturday-pay-today.json"
+      ]
+    },
+    {
+      "name": "holiday-today-deadline",
+      "output": "cal-holiday-today-deadline",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/holiday-today-deadline.json"
+      ]
+    },
+    {
+      "name": "evening-callback-window",
+      "output": "cal-evening-callback-window",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/evening-callback-window.json"
+      ]
+    },
+    {
+      "name": "year-boundary-january",
+      "output": "cal-year-boundary-january",
+      "slot": "gen-a",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/year-boundary-january.json"
+      ]
+    },
+    {
+      "name": "friday-b-common-date-clamp",
+      "output": "cal-friday-b-common-date-clamp",
+      "slot": "gen-ab",
+      "runner": "scripts/run_synthetic_cases.py",
+      "args": [
+        "--cases",
+        "tests/fixtures/calendar/friday-b-common-date-clamp.json"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
 import freya
+from scripts.chatlib import Chat
 from runtime_checks import publish, save_json, variables_from, conversation, route, code_node
 
 FIXTURE = ROOT / 'tests/fixtures/extraction_schemas.json'
@@ -58,29 +59,23 @@ def make_fixture():
 
 
 def capture(ids, variables, messages, out, label):
-    records, call_id = [], None
-    try:
-        for speech in messages:
-            body = dict(workflowId=ids['workflow_id'], message=speech)
-            if call_id:
-                body['callId'] = call_id
-            else:
-                body['customerVariables'] = variables
-            response = freya.api('POST', '/api/v2/chat/message', body)
-            call_id = response['callId']
-            call = freya.get_call(call_id)
-            values, events = variables_from(call)
-            save_json(out / (label + '.call.json'), call)
-            records.append(dict(speech=speech, response=response.get('response'), values=values,
-                                routes=[dict(source=e.get('from_node'), target=e.get('target'), reason=e.get('reason')) for e in events if e.get('matched')]))
-            save_json(out / (label + '.turns.json'), records)
-        return records
-    except Exception as exc:
-        save_json(out / (label + '.error.json'), dict(error=str(exc), call_id=call_id, completed_turns=len(records)))
-        raise
-    finally:
-        if call_id:
-            freya.api('POST', '/api/v2/chat/end', dict(callId=call_id))
+    records = []
+    def cleanup(error):
+        save_json(out / (label + '.end-error.json'), {'error': str(error)})
+    with Chat(ids['workflow_id'], variables, on_cleanup_error=cleanup) as session:
+        try:
+            for speech in messages:
+                response = session.send(speech)
+                call = session.evidence()
+                values, events = variables_from(call)
+                save_json(out / (label + '.call.json'), call)
+                records.append(dict(speech=speech, response=response.get('response'), values=values,
+                                    routes=[dict(source=e.get('from_node'), target=e.get('target'), reason=e.get('reason')) for e in events if e.get('matched')]))
+                save_json(out / (label + '.turns.json'), records)
+            return records
+        except Exception as exc:
+            save_json(out / (label + '.error.json'), dict(error=str(exc), call_id=session.call_id, completed_turns=len(records)))
+            raise
 
 
 def source_adapter(mode):

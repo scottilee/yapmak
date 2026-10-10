@@ -1,0 +1,59 @@
+{
+ "workflow_id": "a54d4355-f820-4a39-94c3-112c2eb70460",
+ "policy": "out/rehearsal-a.policy.json",
+ "ok": false,
+ "elapsed_s": 27.7,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": false,
+   "checks": [
+    {
+     "name": "chat_call",
+     "pass": false,
+     "detail": "TypeError(\"dict() got multiple values for keyword argument 'node'\")"
+    }
+   ],
+   "turns": [],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": false,
+   "checks": [
+    {
+     "name": "chat_call",
+     "pass": false,
+     "detail": "TypeError(\"dict() got multiple values for keyword argument 'node'\")"
+    }
+   ],
+   "turns": [],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "car loan",
+  "collections",
+  "credit card",
+  "credit card ending {card_last4}",
+  "debt",
+  "due",
+  "facilit",
+  "installment",
+  "instalment",
+  "loan",
+  "overdue",
+  "pay ",
+  "payment",
+  "personal loan",
+  "product",
+  "promise"
+ ]
+}

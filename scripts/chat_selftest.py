@@ -29,52 +29,27 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import freya  # noqa: E402
 import policy as P  # noqa: E402
+import runcontrol
+from scripts.chatlib import Chat, variables_from, runtime_errors
 
 GENERIC_BANNED = ["debt", "payment", "pay ", "amount", "due", "overdue", "arrears", "balance", "promise",
                   "collections", "instalment", "installment", "facilit", "product"]  # "facilit"/"product" are stems
 
 
-def chat(call_vars, text, call_id=None, attempts=3, wait_s=15):
-    body = {"message": text}
-    if call_id:
-        body["callId"] = call_id
-    else:
-        body["workflowId"] = call_vars["_workflow_id"]
-        body["customerVariables"] = {k: v for k, v in call_vars.items() if not k.startswith("_")}
-    last = None
-    for i in range(attempts):
-        try:
-            r = freya.api("POST", "/api/v2/chat/message", body)
-            return r.get("callId"), r.get("response") or ""
-        except Exception as e:
-            last = e
-            if i < attempts - 1:
-                time.sleep(wait_s)
-    raise last
-
-
-def route_evidence(call_id):
-    """Best-effort: list of 'from->to' route strings and the last variable table seen by the platform.
-    holder_seen(v): the extracted holder value from the freshest table, if present."""
-    routes, table = [], {}
-    var = lambda n: ((table.get(n) or {}).get("value") if isinstance(table.get(n), dict) else table.get(n)) or ""
-    holder_seen = lambda: var("holder")
-    try:
-        call = freya.get_call(call_id)
-        for m in call.get("messages", []):
-            try:
-                ev = json.loads(m.get("message", ""))
-            except (ValueError, TypeError):
-                continue
-            if not isinstance(ev, dict):
-                continue
-            if ev.get("event") == "route_evaluated":
-                routes.append(f"{ev.get('from_node')}->{ev.get('target')}")
-            if isinstance(ev.get("variable_table"), dict):
-                table = ev["variable_table"]
-    except Exception:
-        pass
-    return routes, table, holder_seen
+def evidence_checks(session, target):
+    call = session.evidence()
+    values, events = variables_from(call)
+    routes = [e for e in events if e.get("event") == "route_evaluated"]
+    errors = runtime_errors(call)
+    observed = any(isinstance(m.get("workflowSnapshot", {}).get("variableTable"), dict) for m in call.get("messages", []) if isinstance(m.get("workflowSnapshot"), dict)) or any(isinstance(e.get("variable_table"), dict) for e in events)
+    return [
+        {"name": "no_runtime_error", "pass": not errors if observed else None,
+         "detail": "; ".join(errors) if errors else ("no runtime error observed" if observed else "variable evidence unavailable"), "soft": not observed},
+        {"name": "routed_to_" + target,
+         "pass": any(e.get("target") == target and e.get("matched") is not False for e in routes) if routes else None,
+         "detail": f"holder={values.get('holder')!r} routes={[str(e.get('from_node')) + '->' + str(e.get('target')) for e in routes[-4:]]}",
+         "soft": not routes},
+    ]
 
 
 def banned_words(ir):
@@ -89,55 +64,36 @@ def banned_words(ir):
 
 def scenario_identity(workflow_id, ir, cv, verbose=False):
     checks, turns = [], []
-    cid, r1 = chat(dict(cv, _workflow_id=workflow_id), "Hello?")
-    turns.append({"user": "Hello?", "agent": r1})
-    opening = (ir.phrases.opening or "").split(".")[0].lower().strip()
-    checks.append({"name": "opening_spoken", "pass": bool(r1) and (not opening or opening[:30] in r1.lower()),
-                   "detail": r1[:200]})
-    checks.append({"name": "holder_asked", "pass": "?" in r1, "detail": r1[:200]})
-    reqs = ir.identity.requirements or []
-    ask = str(getattr(reqs[0], "ask_text", "") or "") if reqs else ""
-    ask = ask.lower().strip()
-    cid2, r2 = chat(dict(cv, _workflow_id=workflow_id), "Yes, speaking.", call_id=cid)
-    turns.append({"user": "Yes, speaking.", "agent": r2})
-    ok = bool(ask) and (re.sub(r"\s+", " ", ask) in re.sub(r"\s+", " ", (r2 or "").lower()))
-    checks.append({"name": "first_question_matches_ir", "pass": ok,
-                   "detail": f"want ask_text={ask!r} in {r2[:220]!r}"})
-    checks.append({"name": "first_question_marked", "pass": "?" in (r2 or ""), "detail": r2[:200]})
-    routes, _, holder_seen = route_evidence(cid)
-    hv = holder_seen()
-    checks.append({"name": "routed_to_ask_0", "pass": (any("ask_0" in r for r in routes) if routes else None),
-                   "detail": f"holder={hv!r} routes={routes[-4:]}", "soft": not routes})
-    try:
-        if cid:
-            freya.api("POST", "/api/v2/chat/end", {"callId": cid})
-    except Exception:
-        pass
+    with Chat(workflow_id, cv) as session:
+        r1 = session.send("Hello?").get("response") or ""
+        turns.append({"user": "Hello?", "agent": r1})
+        opening = (ir.phrases.opening or "").split(".")[0].lower().strip()
+        checks.append({"name": "opening_spoken", "pass": bool(r1) and (not opening or opening[:30] in r1.lower()), "detail": r1[:200]})
+        checks.append({"name": "holder_asked", "pass": "?" in r1, "detail": r1[:200]})
+        reqs = ir.identity.requirements or []
+        ask = str(getattr(reqs[0], "ask_text", "") or "").lower().strip() if reqs else ""
+        r2 = session.send("Yes, speaking.").get("response") or ""
+        turns.append({"user": "Yes, speaking.", "agent": r2})
+        ok = bool(ask) and (re.sub(r"\s+", " ", ask) in re.sub(r"\s+", " ", r2.lower()))
+        checks.append({"name": "first_question_matches_ir", "pass": ok, "detail": f"want ask_text={ask!r} in {r2[:220]!r}"})
+        checks.append({"name": "first_question_marked", "pass": "?" in r2, "detail": r2[:200]})
+        checks.extend(evidence_checks(session, "ask_0"))
     return checks, turns
 
 
 def scenario_third_party(workflow_id, ir, cv, verbose=False):
     checks, turns = [], []
-    banned = banned_words(ir)
-    cid, r1 = chat(dict(cv, _workflow_id=workflow_id), "Hello?")
-    turns.append({"user": "Hello?", "agent": r1})
-    cid2, r2 = chat(dict(cv, _workflow_id=workflow_id), "This is her husband, she's not here.", call_id=cid)
-    turns.append({"user": "This is her husband, she's not here.", "agent": r2})
-    low = re.sub(r"\s+", " ", (r2 or "").lower())
-    hits = sorted(w for w in banned if w in low)
-    checks.append({"name": "no_account_words", "pass": not hits,
-                   "detail": f"banned hits={hits} in {r2[:220]!r}"})
-    asked = "?" in (r2 or "") and re.search(r"\b(when|what time|reach|available|call back|connect)\b", low)
-    checks.append({"name": "asks_when_reachable", "pass": bool(asked), "detail": r2[:220]})
-    routes, _, holder_seen = route_evidence(cid)
-    hv = holder_seen()
-    checks.append({"name": "routed_to_third_party", "pass": (any("third_party" in r for r in routes) if routes else None),
-                   "detail": f"holder={hv!r} routes={routes[-4:]}", "soft": not routes})
-    try:
-        if cid:
-            freya.api("POST", "/api/v2/chat/end", {"callId": cid})
-    except Exception:
-        pass
+    with Chat(workflow_id, cv) as session:
+        r1 = session.send("Hello?").get("response") or ""
+        turns.append({"user": "Hello?", "agent": r1})
+        r2 = session.send("This is her husband, she's not here.").get("response") or ""
+        turns.append({"user": "This is her husband, she's not here.", "agent": r2})
+        low = re.sub(r"\s+", " ", r2.lower())
+        hits = sorted(w for w in banned_words(ir) if w in low)
+        checks.append({"name": "no_account_words", "pass": not hits, "detail": f"banned hits={hits} in {r2[:220]!r}"})
+        asked = "?" in r2 and re.search(r"\b(when|what time|reach|available|call back|connect)\b", low)
+        checks.append({"name": "asks_when_reachable", "pass": bool(asked), "detail": r2[:220]})
+        checks.extend(evidence_checks(session, "third_party"))
     return checks, turns
 
 
@@ -154,6 +110,13 @@ def main():
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()
 
+    if a.deadline <= 0:
+        ap.error("--deadline must be positive")
+    with runcontrol.deadline(a.deadline):
+        run(a)
+
+
+def run(a):
     wf = a.workflow_id
     if not wf:
         if not a.slot:

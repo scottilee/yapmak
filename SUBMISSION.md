@@ -27,8 +27,8 @@ chat smoke test, and records that in the trace.
 | Artifact | Path |
 |---|---|
 | Exported phone agent (from Freya, after publication) | `out/<slot>.workflow.json` |
-| Builder trace (every model call, Freya write, test) | `traces/<slot>.jsonl` |
-| Extracted policy + audit (evidence, not submitted) | `out/<slot>.policy.json`, `out/<slot>.audit.json` |
+| Builder trace (SDK model responses/tools, Freya HTTP calls, tests) | `traces/<slot>.jsonl` |
+| Extracted policy + audit (supporting evidence committed with the submission) | `out/<slot>.policy.json`, `out/<slot>.audit.json` |
 
 ## Sunday checklist
 
@@ -39,10 +39,17 @@ chat smoke test, and records that in the trace.
    no simulation running in the workspace.
 2. Save the hidden brief files and tool API files into the repo (e.g. `hidden/hidden-1/`), **commit them unchanged**.
 3. Run build 1, then build 2 (commands above). Do not edit the exported workflows. Do not add any value from a hidden brief to code or prompts; a parser crash fix is the only permitted code change — commit it separately with a message that says what crashed.
-4. `git add out/hidden-1.workflow.json out/hidden-2.workflow.json traces/hidden-1.jsonl traces/hidden-2.jsonl out/hidden-*.policy.json out/hidden-*.audit.json && git commit -m "Hidden brief builds" && git push`.
+4. Scan generated artifacts before staging (the builder also gates policy/audit and workflow artifacts):
+   `.venv/bin/python scripts/check_artifacts.py out/hidden-1.workflow.json out/hidden-2.workflow.json out/hidden-*.policy.json out/hidden-*.audit.json traces/hidden-1.jsonl traces/hidden-2.jsonl`.
+   Stop if the scan fails; never commit `.env`, local credential stores, or an artifact containing credentials.
+   Then `git add out/hidden-1.workflow.json out/hidden-2.workflow.json traces/hidden-1.jsonl traces/hidden-2.jsonl out/hidden-*.policy.json out/hidden-*.audit.json && git commit -m "Hidden brief builds" && git push`.
 5. Fill `submission/form.json` with the commit hash (`git rev-parse HEAD`) and submit it through the event form (confirm the channel: form vs. the address in the kit email).
    Note for the reviewer: `run_start` in each trace records the HEAD *at run time* (step 3), which is necessarily one commit behind the
    submitted commit (step 4 adds only generated artifacts — `out/hidden-*`, `traces/hidden-*` — and touches no pipeline file).
+
+The policy/audit JSON is supporting evidence in the submitted repository, not a separate form attachment. The trace records
+SDK-visible responses and tool calls; provider-internal requests/retries are not exposed by the SDK. Credential scans reject
+current environment secret values and recognizable API-key/Bearer-token formats without printing the secret contents.
 
 ## Submission form (template in `submission/form.json`)
 

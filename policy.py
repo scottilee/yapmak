@@ -11,10 +11,11 @@ against the source text, and the compiler can embed its values into code nodes.
 """
 from __future__ import annotations
 
+import datetime
 import dataclasses
 import json
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, get_args, get_origin, get_type_hints
 
 # ---------------------------------------------------------------------------------------------
 # Deadline-rule DSL. Anything the compiler cannot express goes to PolicyIR.unresolved.
@@ -310,43 +311,41 @@ def merge_overlay(base: dict, overlay: dict) -> dict:
 
 
 def _build(cls, d):
-    """Recursive dataclass constructor from a dict; tolerant of missing keys, strict on unknown ones."""
-    if not dataclasses.is_dataclass(cls):
-        return d
-    kwargs = {}
+    """Typed JSON construction; missing fields use dataclass defaults, unknown/wrong types fail."""
+    if not isinstance(d, dict):
+        raise ValueError(f"{cls.__name__}: expected an object")
     fields = {f.name: f for f in dataclasses.fields(cls)}
     unknown = set(d) - set(fields)
     if unknown:
         raise ValueError(f"{cls.__name__}: unknown keys {sorted(unknown)}")
-    for name, f in fields.items():
-        if name not in d:
-            continue
-        v = d[name]
-        t = f.type if not isinstance(f.type, str) else f.type
-        kwargs[name] = _coerce(t, v)
-    return cls(**kwargs)
+    hints = get_type_hints(cls)
+    kwargs = {}
+    for name, value in d.items():
+        try:
+            kwargs[name] = _coerce(hints[name], value)
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"{cls.__name__}.{name}: {e}") from e
+    try:
+        return cls(**kwargs)
+    except TypeError as e:
+        raise ValueError(str(e)) from e
 
 
-_LISTS = {
-    "list[IdentityRequirement]": IdentityRequirement, "list[Band]": Band, "list[Attempt]": Attempt,
-    "list[SpecialCase]": SpecialCase, "list[OutcomeRow]": OutcomeRow,
-}
-_OBJS = {
-    "Span": Span, "IdentityPolicy": IdentityPolicy, "CallbackPolicy": CallbackPolicy, "ThirdPartyPolicy": ThirdPartyPolicy,
-    "Calendar": Calendar, "AmountPolicy": AmountPolicy, "DatePolicy": DatePolicy, "OutcomePolicy": OutcomePolicy,
-    "NotesPolicy": NotesPolicy, "MultiProductPolicy": MultiProductPolicy, "Phrases": Phrases, "PromiseWritePolicy": PromiseWritePolicy,
-}
-
-
-def _coerce(t, v):
-    t = str(t)
-    if t in _LISTS:
-        return [_build(_LISTS[t], x) for x in v]
-    if t in _OBJS:
-        return _build(_OBJS[t], v)
-    if t.startswith("tuple[") and isinstance(v, list):
-        return tuple(v)
-    return v
+def _coerce(t, value):
+    if t is Any:
+        return value
+    if dataclasses.is_dataclass(t):
+        return _build(t, value)
+    origin, args = get_origin(t), get_args(t)
+    if origin is list and isinstance(value, list):
+        return [_coerce(args[0], v) for v in value]
+    if origin is dict and isinstance(value, dict):
+        return {_coerce(args[0], k): _coerce(args[1], v) for k, v in value.items()}
+    if origin is tuple and isinstance(value, (list, tuple)) and len(value) == len(args):
+        return tuple(_coerce(kind, v) for kind, v in zip(args, value))
+    if t in (str, int, float, bool) and type(value) is t:
+        return value
+    raise ValueError(f"expected {t}, got {type(value).__name__}")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -354,6 +353,22 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
     """Structural problems the compiler cannot work around. `tool_enums` is {operation: {field: [values]}}
     from the OpenAPI document; when given, every outcome/reason/queue/note reason in the IR must be in it."""
     errs: list[str] = []
+    def iso_date(value):
+        try:
+            return isinstance(value, str) and datetime.date.fromisoformat(value).isoformat() == value
+        except (ValueError, TypeError):
+            return False
+
+    if not ir.calendar.business_days or any(type(d) is not int or not 0 <= d <= 6 for d in ir.calendar.business_days):
+        errs.append("calendar.business_days must contain weekdays 0..6")
+    for name, value, minimum in (
+        ("identity.wrong_answer_limit", ir.identity.wrong_answer_limit, 1),
+        ("identity.holder_confirmation_asks", ir.identity.holder_confirmation_asks, 1),
+        ("multi_product.max_products", ir.multi_product.max_products, 1),
+        ("promise_write.retry_on_failure", ir.promise_write.retry_on_failure, 0),
+    ):
+        if type(value) is not int or value < minimum:
+            errs.append(f"{name} must be an integer >= {minimum}")
     if not ir.identity.requirements:
         errs.append("identity.requirements is empty")
     for r in ir.identity.requirements:
@@ -361,7 +376,23 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
             errs.append(f"identity requirement {r.field}: bad answer_format {r.answer_format}")
     if not ir.bands:
         errs.append("bands is empty")
-    for b in ir.bands:
+    for i, b in enumerate(ir.bands):
+        if type(b.days_late_min) is not int or type(b.days_late_max) is not int or not 0 <= b.days_late_min <= b.days_late_max:
+            errs.append(f"band {b.name}: invalid days-late range")
+        else:
+            for previous in ir.bands[:i]:
+                if type(previous.days_late_min) is int and type(previous.days_late_max) is int and max(b.days_late_min, previous.days_late_min) <= min(b.days_late_max, previous.days_late_max):
+                    errs.append(f"band {b.name}: overlaps {previous.name}")
+        if not isinstance(b.deadline, dict):
+            errs.append(f"band {b.name}: deadline must be an object")
+            continue
+        kind = b.deadline.get("kind")
+        if kind in ("nth_business_day", "calendar_days"):
+            n = b.deadline.get("n")
+            if type(n) is not int or n < (1 if kind == "nth_business_day" else 0):
+                errs.append(f"band {b.name}: invalid deadline n")
+        if kind == "fixed_date" and not iso_date(b.deadline.get("date")):
+            errs.append(f"band {b.name}: invalid fixed deadline date")
         if b.deadline.get("kind") not in DEADLINE_KINDS:
             errs.append(f"band {b.name}: unknown deadline kind {b.deadline.get('kind')}")
         if b.deadline.get("kind") != "nth_business_day" and b.deadline.get("adjustment") not in ("none", "following", "preceding"):
@@ -385,7 +416,7 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
     if ir.notes.enabled and not ir.notes.reasons:
         errs.append("notes enabled without reasons")
     for h in ir.calendar.holidays:
-        if len(h) != 10 or h[4] != "-" or h[7] != "-":
+        if not iso_date(h):
             errs.append(f"calendar holiday not ISO: {h}")
     # every close reason a special case uses must be one the outcome table allows for that outcome
     allowed = {row.outcome: set(row.reasons) for row in o.table}
@@ -418,6 +449,49 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
             for r in ir.notes.reasons:
                 if r not in reasons:
                     errs.append(f"note reason {r} not in add_note enum")
+    close_enums = (tool_enums or {}).get("close_call", {})
+    outcome_enum = set(close_enums.get("outcome", []))
+    reason_enum = set(close_enums.get("reason", []))
+
+    def check_pair(label, outcome, reason="", optional=False):
+        if optional and not outcome and not reason:
+            return
+        if not outcome or (outcome_enum and outcome not in outcome_enum) or outcome not in allowed:
+            errs.append(f"{label}: unknown outcome {outcome!r}")
+        if reason and ((reason_enum and reason not in reason_enum) or reason not in allowed.get(outcome, set())):
+            errs.append(f"{label}: reason {reason!r} not allowed for {outcome!r}")
+
+    for row in o.table:
+        for reason in row.reasons:
+            if reason_enum and reason not in reason_enum:
+                errs.append(f"outcome {row.outcome}: reason {reason!r} not in close_call enum")
+    for name in ("promise_outcome", "paid_outcome", "transfer_outcome", "no_promise_outcome"):
+        check_pair("outcomes." + name, getattr(o, name))
+    for name in ("service_error_reason", "refused_reason"):
+        check_pair("outcomes." + name, o.no_promise_outcome, getattr(o, name))
+    for obj in (ir.identity, ir.third_party, ir.third_party.callback):
+        for f in dataclasses.fields(obj):
+            if f.name.endswith("_outcome"):
+                pair = getattr(obj, f.name)
+                if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+                    errs.append(f"{type(obj).__name__}.{f.name}: expected [outcome, reason]")
+                else:
+                    check_pair(f"{type(obj).__name__}.{f.name}", *pair)
+    for sc in ir.special_cases:
+        action = sc.action
+        if action.get("type") in ("close", "transfer"):
+            check_pair(f"special case {sc.name}", action.get("outcome"), action.get("reason", ""))
+        if len(sc.offer_outcome) != 2:
+            errs.append(f"special case {sc.name}: offer_outcome must have two entries")
+        else:
+            check_pair(f"special case {sc.name} offer", *sc.offer_outcome, optional=True)
+        note_reasons = set((tool_enums or {}).get("add_note", {}).get("reason", []))
+        if action.get("type") == "note" and note_reasons and action.get("reason") not in note_reasons:
+            errs.append(f"special case {sc.name}: invalid note reason")
+        queues = set((tool_enums or {}).get("transfer_to_agent", {}).get("queue", []))
+        for queue in (action.get("queue"), sc.offer_transfer_queue):
+            if queue and queues and queue not in queues:
+                errs.append(f"special case {sc.name}: invalid transfer queue {queue}")
     return errs
 
 

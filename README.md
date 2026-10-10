@@ -137,15 +137,56 @@ source .env                       # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus the
 `--briefs` is required unless `--policy` is given; `--openapi` is always required. A failed build leaves a trace with
 `run_end success:false`, and a credential failure prints a HINT line.
 
-Outputs: `out/<slot>.workflow.json` (exported from Freya after publication), `traces/<slot>.jsonl` (every model call,
-Freya write and test of this run; an earlier trace for the same slot is archived as `traces/<slot>.<time>.jsonl`),
+Outputs: `out/<slot>.workflow.json` (exported from Freya after publication), `traces/<slot>.jsonl` (SDK model responses,
+model tool calls, Freya HTTP calls from the builder and child processes, and tests; earlier traces are archived as
+`traces/<slot>.<time>.<id>.jsonl`),
 `out/<slot>.policy.json` (the policy used), `out/<slot>.audit.json` (only when the extractor ran),
-`results/<slot>.selftest.json` (the pre-bank chat self-test). Reusing a slot updates the same Freya workflow in place.
+`results/<slot>.<run-id>.chat-selftest.json` (the pre-bank chat self-test), and
+`results/<slot>.<run-id>.simulation.json` (when requested). Failed subprocesses cannot reuse results from an earlier run.
+Reusing a slot updates the same Freya workflow in place.
 
 How it works: `extract.py` turns the documents into a small structural
 policy (`policy.py`) with three bounded model passes; `compile.py` assembles a fixed multi-product workflow template in which
 every bank tool is an engine-fired `api_request` node and all dates, amounts, retries and outcomes are decided in code nodes
-(`bankcal.py` + an embedded runtime); the dialogue model only talks. `tests/offline_sim.py` drives the compiled state machine
+(`bankcal.py` + `workflow_runtime.py`); the dialogue model only talks. `tests/offline_sim.py` drives the compiled state machine
 against a mock bank with the 13 public scripts; `scripts/publish_check.py` publishes and smoke-tests a workflow.
 Builder knobs with defaults (set in the environment only to change them): `BUILDER_MODEL` (model for the extraction passes),
 `EXTRACT_PASS_TIMEOUT_S` (seconds per pass).
+
+The compiler is divided into `compiler_openapi.py` (API normalization and mapping), `compiler_nodes.py` (node and
+extraction-schema construction), `compiler_checks.py` (static checks), and `compile.py` (assembly and dependency slicing).
+Keep all these files with the builder. Runtime code still includes only the functions each stage needs.
+
+Extraction uses a temporary directory containing only copies of the briefs, OpenAPI, and policy schema. An enforced
+PreToolUse hook permits reads of those exact files and writes of only the policy/audit JSON; it denies other tools,
+source-file writes, path escapes, and symlinks outside the directory. Artifacts are checked for credentials before export.
+Model sessions and each SDK assistant response/tool call are traced separately, including errors. Provider-internal
+requests/retries not exposed by the SDK cannot be enumerated; `request_id` links messages when the SDK supplies it.
+
+`--deadline` is enforced across extraction, retries, requests, and subprocesses using a shared monotonic deadline and
+POSIX timers (Linux/macOS). A timed-out child process group is killed. The already-exported checkpoint remains available.
+Freya simulation contention waits at most 90 seconds before failing. `save_workflow` uses an atomic, locked local registry,
+records creation intent before POST, and reconciles lost responses by the unique remote name. If a pending creation cannot
+be found, it stops instead of creating a duplicate. Re-run to reconcile; remove a pending registry entry only after verifying
+that its `pending_name` does not exist remotely. Publishing re-reads saved content and versions to avoid duplicate writes on retry.
+
+Supported OpenAPI inputs use HTTPS servers, JSON object request/response schemas, local `$ref` references, and an
+unambiguous 2xx JSON response. The seven bank tools must share one HTTPS origin, with valid hostnames and ports. Optional path-level parameter metadata is accepted. External/recursive references,
+`allOf`/`oneOf`/`anyOf`, required query/header/path parameters, parameterized URLs, and conflicting success schemas fail
+with an explicit error before publishing.
+
+Batch scripts are compatibility wrappers around `scripts/run_batch.py` and `scripts/batches/*.json`. The runner reads
+agent IDs from `.freya-agents.json`, bounds predecessor/health/job waits, stops on failed publication, and keeps separate
+per-attempt evidence. Preview without API calls:
+
+```bash
+.venv/bin/python scripts/run_batch.py --config scripts/batches/batch_v17.json --dry-run
+.venv/bin/python -m pytest tests/ -q
+```
+
+Chat checks share `scripts/chatlib.py` for call cleanup, transcript events, variable snapshots, and runtime-error detection.
+The chat self-test and publish check report any `runtime_error` observed, including errors cleared by a later snapshot.
+Missing variable evidence is reported as unavailable rather than claimed clean. Chat POSTs are sent once, since retrying an
+ambiguous response can repeat a workflow action; evidence GETs and reconciled publisher operations use `retrying.py`.
+`artifact_security.py` redacts secrets at logging time and gates policy/audit and workflow artifacts. Run
+`scripts/check_artifacts.py <files...>` before staging submission artifacts, as described in SUBMISSION.md.

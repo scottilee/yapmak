@@ -1,0 +1,31 @@
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+waiting: platform and bank
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/scripts/run_batch.py", line 122, in <module>
+    if __name__ == '__main__':
+        ^^^^^^
+  File "/Users/sl/sbx/hackathon/scripts/run_batch.py", line 76, in main
+    wait_for(lambda: path.exists() and re.search(wait['pattern'], path.read_text(), re.M), a.wait_seconds, 'predecessor')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/scripts/run_batch.py", line 27, in wait_for
+    print(f'waiting: {label}', flush=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: platform and bank timed out

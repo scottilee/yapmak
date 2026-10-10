@@ -35,7 +35,7 @@ def main():
     def run(name,cmd,timeout):
         t=time.monotonic()
         log=out/(name+'.log')
-        hashes={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ('extract.py','compile.py','policy.py','scripts/publish_check.py')}
+        hashes={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ('extract.py','compile.py','compiler_nodes.py','compiler_openapi.py','compiler_checks.py','workflow_runtime.py','policy.py','bankcal.py','freya.py','trace.py','runcontrol.py','scripts/publish_check.py')}
         with log.open('w') as stream:
             try:
                 proc=subprocess.run([str(ROOT/'.venv/bin/python'),'-u']+cmd,cwd=ROOT,stdout=stream,stderr=subprocess.STDOUT,timeout=timeout)

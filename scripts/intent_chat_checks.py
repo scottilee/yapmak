@@ -16,6 +16,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
 import freya
+from scripts.chatlib import Chat
 import policy
 from runtime_checks import publish, save_json, variables_from
 
@@ -183,43 +184,36 @@ def workflow(group, node):
 def run_case(ids, case, out):
     folder = out / 'calls'
     folder.mkdir(exist_ok=True)
-    call_id = None
     records = []
     started = time.monotonic()
     variables = dict(now='2026-10-14T11:00', title='Mr', first_name='Alex', last_name='Morgan',
                      neg_instruction=CONTEXT[case['group']], readback_text=CONTEXT['readback'],
                      product_list='1: credit card', id_say=CONTEXT['identity'])
-    try:
-        for index, speech in enumerate(['Hello.'] + case['turns']):
-            body = dict(workflowId=ids['workflow_id'], message=speech)
-            body.update(dict(callId=call_id) if call_id else dict(customerVariables=variables))
-            response = freya.api('POST', '/api/v2/chat/message', body)
-            call_id = response['callId']
-            call = freya.get_call(call_id)
-            save_json(folder / (case['id'] + '.call.json'), call)
-            values, events = variables_from(call)
-            records.append(dict(speech=speech, response=response.get('response'), values=values,
-                                routed=any(e.get('matched') and e.get('target') == 'routed' for e in events)))
-            save_json(folder / (case['id'] + '.turns.json'), records)
-        final = records[-1]['values']
-        actual = final.get(case['variable'])
-        result = dict(**case, call_id=call_id, actual=actual, passed=actual == case['expected'],
-                      duration_s=round(time.monotonic()-started, 2), status='completed', turns_observed=records[1:])
-        if 'expected_time' in case:
-            result['actual_time'] = final.get('cb_time') or ''
-            result['time_passed'] = result['actual_time'] == case['expected_time']
-            if case.get('no_time_before_final'):
-                result['time_passed'] &= all(not r['values'].get('cb_time') for r in records[1:-1])
-        return result
-    except Exception as exc:
-        return dict(**case, status='infrastructure_error', error=str(exc), call_id=call_id,
-                    duration_s=round(time.monotonic()-started,2), turns_observed=records[1:])
-    finally:
-        if call_id:
-            try:
-                freya.api('POST', '/api/v2/chat/end', dict(callId=call_id))
-            except Exception as exc:
-                save_json(folder / (case['id'] + '.end-error.json'), {'error': str(exc)})
+    def cleanup(error):
+        save_json(folder / (case['id'] + '.end-error.json'), {'error': str(error)})
+    with Chat(ids['workflow_id'], variables, on_cleanup_error=cleanup) as session:
+        try:
+            for index, speech in enumerate(['Hello.'] + case['turns']):
+                response = session.send(speech)
+                call = session.evidence()
+                save_json(folder / (case['id'] + '.call.json'), call)
+                values, events = variables_from(call)
+                records.append(dict(speech=speech, response=response.get('response'), values=values,
+                                    routed=any(e.get('matched') and e.get('target') == 'routed' for e in events)))
+                save_json(folder / (case['id'] + '.turns.json'), records)
+            final = records[-1]['values']
+            actual = final.get(case['variable'])
+            result = dict(**case, call_id=session.call_id, actual=actual, passed=actual == case['expected'],
+                          duration_s=round(time.monotonic()-started, 2), status='completed', turns_observed=records[1:])
+            if 'expected_time' in case:
+                result['actual_time'] = final.get('cb_time') or ''
+                result['time_passed'] = result['actual_time'] == case['expected_time']
+                if case.get('no_time_before_final'):
+                    result['time_passed'] &= all(not r['values'].get('cb_time') for r in records[1:-1])
+            return result
+        except Exception as exc:
+            return dict(**case, status='infrastructure_error', error=str(exc), call_id=session.call_id,
+                        duration_s=round(time.monotonic()-started,2), turns_observed=records[1:])
 
 
 def main():

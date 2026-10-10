@@ -1,0 +1,451 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "3921f90f-28eb-45b5-80e0-15b9c8b2de13",
+ "iteration_id": "4ca450bf-7b01-4837-921b-c5fca3782cb8",
+ "seconds": 523,
+ "passed": 7,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 420.0, '2026-10-14')]",
+    "the call was not closed with close_call",
+    "conversation: The evaluation found the following issues: - The `create_promise` tool was never called by the assistant. - The text-message sentence was never said as a result of the promise not being established. - The agent entered a repetitive loop from Message 24 through Message 36, repeatedly asking the same question despite the customer's disjointed responses, and failed to move the conversation forward."
+   ],
+   "call_id": "1b40e513-71d9-4336-a921-9540206a7db7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_3505c182-930",
+   "slowest_turn_s": 5.5,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": true,
+   "failed": [],
+   "call_id": "5ec110a6-be9b-4822-a765-abcad75f8907",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_9b9a3897-875",
+   "slowest_turn_s": 7.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": true,
+   "failed": [],
+   "call_id": "9bff66fc-895b-48a1-a86f-0f026927d8a6",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "close_call"
+   ],
+   "customer_id": "c_e3a1d4fd-272",
+   "slowest_turn_s": 7.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "24ee8a12-de62-456b-832b-ff5eff8da7f4",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_d2a7ed9c-1cb",
+   "slowest_turn_s": 6.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": false,
+   "failed": [
+    "outcome ('not_verified', 'declined'), expected ('no_promise', 'hardship')",
+    "conversation: The success criteria were not fully met. - One sentence of sympathy was provided in [Message 8]. - There was no persuasion attempt regarding lateness. - No discount, waiver, or plan was offered. - FAILURE: The assistant failed to offer the support team, which was a required criterion. - The call ended properly via the assistant after the security question turn limit was reached."
+   ],
+   "call_id": "4cbb525f-1c29-4f6b-9c42-ac3b1ed0008e",
+   "tools": [
+    "verify_identity",
+    "close_call"
+   ],
+   "customer_id": "c_6339cd81-220",
+   "slowest_turn_s": 5.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 637.5, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The agent failed to meet the success criteria for several reasons: 1. It did not secure a promise for Friday 16 October; instead, it repeatedly proposed Wednesday 14 October 2026. 2. The agent entered an extremely repetitive loop, repeating the same offer for over 140 turns without adapting to the user's prompts or closing the conversation. 3. While it offered the minimum payment with the overdue "
+   ],
+   "call_id": "cd236134-fe18-41cd-ade5-9f4cbda12a3a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_9005f43c-f29",
+   "slowest_turn_s": 6.4,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "0355e51e-39b3-4fb0-8538-e6daea693651",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_588ed611-92f",
+   "slowest_turn_s": 7.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": true,
+   "failed": [],
+   "call_id": "df9aaf29-8d3c-41c8-9ea4-bc432ae0fd8a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_3d266d2a-bb3",
+   "slowest_turn_s": 5.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": true,
+   "failed": [],
+   "call_id": "a279d3bd-d54d-4fdf-90c0-ff48645a1948",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_54d1e4e9-d92",
+   "slowest_turn_s": 6.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": true,
+   "failed": [],
+   "call_id": "3c3c480a-5d41-4539-a828-85f33cb21c0b",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_9f1a8364-af9",
+   "slowest_turn_s": 4.9,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The evaluation found the following issues: - The `create_promise` tool was never called by the assistant. - The text-message sentence was never said as a result of the promise not being established. - The agent entered a repetitive loop from Message 24 through Message 36, repeatedly asking the same question despite the customer's disjointed responses, and failed to move the conversation forward."
+    ],
+    "call_id": "1b40e513-71d9-4336-a921-9540206a7db7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_3505c182-930",
+    "slowest_turn_s": 5.5,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": true,
+    "failed": [],
+    "call_id": "5ec110a6-be9b-4822-a765-abcad75f8907",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_9b9a3897-875",
+    "slowest_turn_s": 7.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": true,
+    "failed": [],
+    "call_id": "9bff66fc-895b-48a1-a86f-0f026927d8a6",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "close_call"
+    ],
+    "customer_id": "c_e3a1d4fd-272",
+    "slowest_turn_s": 7.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "24ee8a12-de62-456b-832b-ff5eff8da7f4",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_d2a7ed9c-1cb",
+    "slowest_turn_s": 6.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": false,
+    "failed": [
+     "outcome ('not_verified', 'declined'), expected ('no_promise', 'hardship')",
+     "conversation: The success criteria were not fully met. - One sentence of sympathy was provided in [Message 8]. - There was no persuasion attempt regarding lateness. - No discount, waiver, or plan was offered. - FAILURE: The assistant failed to offer the support team, which was a required criterion. - The call ended properly via the assistant after the security question turn limit was reached."
+    ],
+    "call_id": "4cbb525f-1c29-4f6b-9c42-ac3b1ed0008e",
+    "tools": [
+     "verify_identity",
+     "close_call"
+    ],
+    "customer_id": "c_6339cd81-220",
+    "slowest_turn_s": 5.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to meet the success criteria for several reasons: 1. It did not secure a promise for Friday 16 October; instead, it repeatedly proposed Wednesday 14 October 2026. 2. The agent entered an extremely repetitive loop, repeating the same offer for over 140 turns without adapting to the user's prompts or closing the conversation. 3. While it offered the minimum payment with the overdue "
+    ],
+    "call_id": "cd236134-fe18-41cd-ade5-9f4cbda12a3a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_9005f43c-f29",
+    "slowest_turn_s": 6.4,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "0355e51e-39b3-4fb0-8538-e6daea693651",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_588ed611-92f",
+    "slowest_turn_s": 7.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": true,
+    "failed": [],
+    "call_id": "df9aaf29-8d3c-41c8-9ea4-bc432ae0fd8a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_3d266d2a-bb3",
+    "slowest_turn_s": 5.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": true,
+    "failed": [],
+    "call_id": "a279d3bd-d54d-4fdf-90c0-ff48645a1948",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_54d1e4e9-d92",
+    "slowest_turn_s": 6.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": true,
+    "failed": [],
+    "call_id": "3c3c480a-5d41-4539-a828-85f33cb21c0b",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_9f1a8364-af9",
+    "slowest_turn_s": 4.9,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}
