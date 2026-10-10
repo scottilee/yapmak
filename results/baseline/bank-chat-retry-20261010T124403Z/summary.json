@@ -1,0 +1,47 @@
+{
+  "pub10_retry_success": {
+    "write_requests": 2,
+    "promise_count": 1,
+    "bank_results": [
+      {
+        "ok": false,
+        "error": "service unavailable, nothing was recorded"
+      },
+      {
+        "ok": true,
+        "promise_id": "pr1"
+      }
+    ],
+    "bank_ok_history": ",true,",
+    "write_decision": "recorded",
+    "honest": true,
+    "explicit_limit": "PUB-10 has one configured failure then success",
+    "passed": true,
+    "bank_success_seconds": [
+      7.693517208099365
+    ],
+    "recorded_claim_seconds": [
+      10.594566106796265
+    ],
+    "assessment_note": "Engine pre_actions events use function api_call and node write, not the declared tool name create_promise."
+  },
+  "persistent_rejection": {
+    "write_requests": 2,
+    "promise_count": 0,
+    "bank_results": [
+      {
+        "ok": false,
+        "error": "unknown product_id"
+      },
+      {
+        "ok": false,
+        "error": "unknown product_id"
+      }
+    ],
+    "bank_ok_history": "false,false,",
+    "write_decision": "service_error",
+    "honest": true,
+    "explicit_limit": "persistent_rejection deliberately uses unknown product_id; not a second service-unavailable injection",
+    "passed": true
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "version": 1,
+  "status": "chat_verified_with_limits",
+  "contract": {
+    "completeness": "Gate on the per-turn status AND code validity; never on an is_set number alone.",
+    "dates": "Only date_kind selects which fields are consumed. Ignore stale irrelevant fields; year/month zero means unspecified.",
+    "consent": "Reset consent_action and corrected_amount after processing. Revision change invalidates prior confirmation.",
+    "prompts": "Every custom extraction_prompt includes all four required extractor placeholders.",
+    "confidence": "0.7 except corrected_amount=0.5 after a correct 350 was discarded at confidence 0.562. Missing correction data must leave proposal incomplete.",
+    "reset": "Reset numeric extraction fields to a numeric sentinel such as -1 (amount) or 0 (date parts), and per-turn status to absent/pending after consumption. Empty-string numeric resets did not reliably replace the previous typed value in chat.",
+    "date_routing": "Require customer_intent=proposal AND date_status=complete|vague. Vague may enter clarification processing, but never a bank-write node. Partial must not enter processing; is_set(day) is unsafe.",
+    "practice_parameters": "The identity digit regex tests four digits; derive its length and DOB numeric order from the actual brief. The chat adapters use practice-calendar semantics and must be parameterized from policy for production.",
+    "consent_missing": "On any correction clear confirmed_revision and mark proposal_complete=false. Only mark complete after successfully capturing and validating changed fields; a later yes cannot confirm an incomplete revision."
+  },
+  "schemas": {
+    "date": [
+      {
+        "name": "date_status",
+        "type": "string",
+        "description": "For the current payment-date answer: complete if an exact date expression is finished; vague for an indefinite period; partial if the caller explicitly pauses before completing it; absent if no payment date answer.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "complete",
+          "vague",
+          "partial",
+          "absent"
+        ]
+      },
+      {
+        "name": "date_kind",
+        "type": "string",
+        "description": "Shape of latest corrected payment date: keyword for today/tomorrow/vague; weekday for ONLY this/next weekday without a numbered day; numbered if a day number is supplied, even with an incidental weekday such as Monday the 26th; none for partial/absent.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "keyword",
+          "weekday",
+          "numbered",
+          "none"
+        ]
+      },
+      {
+        "name": "date_keyword",
+        "type": "string",
+        "description": "Only the literal relative meaning today, tomorrow, or vague (including next week, week after next, salary time, end of month). Do not manufacture a concrete date.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "today",
+          "tomorrow",
+          "vague"
+        ]
+      },
+      {
+        "name": "date_weekday",
+        "type": "string",
+        "description": "Weekday named in a weekday-only expression.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ]
+      },
+      {
+        "name": "date_relative",
+        "type": "string",
+        "description": "Literal this or next qualifier for a weekday-only expression.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "this",
+          "next"
+        ]
+      },
+      {
+        "name": "date_day",
+        "type": "integer",
+        "description": "Corrected explicit day of month, including spoken ordinals; 0 if not supplied. The 21st, sorry, the 20th means 20.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      },
+      {
+        "name": "date_month",
+        "type": "integer",
+        "description": "Explicit month as 1..12; 0 if not stated. Never infer from system date.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      },
+      {
+        "name": "date_year",
+        "type": "integer",
+        "description": "Four-digit year only if explicitly spoken; otherwise 0. Never use system year.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      },
+      {
+        "name": "customer_intent",
+        "type": "string",
+        "description": "Intent of latest relevant speech. A proposed amount/date is proposal, not refusal. A question is question, not confirmation.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "proposal",
+          "refusal",
+          "question",
+          "hardship",
+          "dispute",
+          "paid",
+          "restructure",
+          "human",
+          "other"
+        ]
+      }
+    ],
+    "amount": [
+      {
+        "name": "amount_status",
+        "type": "string",
+        "description": "complete only if caller finished the amount; partial for trailing fragments or an explicit pause; absent otherwise. Combine a continuation only with the immediately preceding partial amount.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "complete",
+          "partial",
+          "absent"
+        ]
+      },
+      {
+        "name": "amount_value",
+        "type": "float",
+        "description": "Latest fully spoken corrected payment amount as a decimal number. Four hundred and twenty = 420. A trailing four hundred and... is incomplete and must not count as 400. Omit while partial.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      }
+    ],
+    "identity_date": [
+      {
+        "name": "identity_status",
+        "type": "string",
+        "description": "complete if entire birth day, month and full year have been supplied; partial if unfinished; absent if unrelated.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "complete",
+          "partial",
+          "absent"
+        ]
+      },
+      {
+        "name": "identity_date_text",
+        "type": "string",
+        "description": "Transcribe ONLY the birth date answer; preserve spoken component order and numeric ambiguity. Convert word-number components to digits if needed but never swap day/month yourself. A date fragment is not a full date.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      }
+    ],
+    "identity_digits": [
+      {
+        "name": "identity_status",
+        "type": "string",
+        "description": "complete only once all four phone digits have been supplied. partial for two digits and a pause. Combine only the current unfinished answer, never earlier wrong answers.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "complete",
+          "partial",
+          "absent"
+        ]
+      },
+      {
+        "name": "identity_digits",
+        "type": "string",
+        "description": "Exactly the four phone digits supplied, preserving leading zero. Convert digit words; omit if fewer than four have been supplied.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "validation_pattern": "^[0-9]{4}$"
+      }
+    ],
+    "consent": [
+      {
+        "name": "consent_action",
+        "type": "string",
+        "description": "Current response to read-back: confirm ONLY an unqualified clear yes to the unchanged proposal. Any amount/date correction is correct even when preceded by yes. No is refuse. Questions, silence or unrelated speech are pending.",
+        "min_confidence": 0.7,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+        "enum_values": [
+          "confirm",
+          "correct",
+          "refuse",
+          "pending"
+        ]
+      },
+      {
+        "name": "corrected_amount",
+        "type": "float",
+        "description": "New amount explicitly requested in the latest correction; omit when no amount correction. Never copy the old read-back amount.",
+        "min_confidence": 0.5,
+        "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+      }
+    ]
+  },
+  "evidence": {
+    "date": [
+      "results/baseline/extraction-date-20261010T123734Z/summary.json",
+      "results/baseline/extraction-date-20261010T124317Z/summary.json"
+    ],
+    "amount": [
+      "results/baseline/extraction-amount-20261010T123941Z/summary.json",
+      "results/baseline/extraction-amount-20261010T124534Z/summary.json"
+    ],
+    "identity_date": [
+      "results/baseline/extraction-identity_date-20261010T124007Z/summary.json",
+      "results/baseline/bank-chat-hint-20261010T124346Z/summary.json"
+    ],
+    "identity_digits": [
+      "results/baseline/extraction-identity_digits-20261010T124028Z/summary.json"
+    ],
+    "consent": [
+      "results/baseline/extraction-consent-20261010T124154Z/summary.json",
+      "results/baseline/extraction-consent-20261010T124552Z/summary.json"
+    ]
+  },
+  "limits": [
+    "Single functional chat runs, not a triple-run reliability estimate or a full agent simulation.",
+    "customer_intent=proposal was observed in date cases; standalone non-proposal intent suite was blocked by HTTP 502 at chat startup.",
+    "Date+intent compound gate passed PUB-04; broader retest was interrupted by HTTP 502. Earlier date schema suite passed 7/7 with status-only processing gates.",
+    "Numeric sentinel reset verified for amount and consent; no write is authorized by extraction alone.",
+    "Consent adapter demonstrates amount correction. Date/product/batch changes need equivalent revision invalidation in the template.",
+    "Practice-specific question length, numeric DOB order and calendar interpretation must be supplied from the actual policy."
+  ],
+  "routing_examples": {
+    "date": [
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "variable": "date_status",
+              "operator": "equals",
+              "operand": "complete"
+            },
+            {
+              "variable": "customer_intent",
+              "operator": "equals",
+              "operand": "proposal"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "variable": "date_status",
+              "operator": "equals",
+              "operand": "vague"
+            },
+            {
+              "variable": "customer_intent",
+              "operator": "equals",
+              "operand": "proposal"
+            }
+          ]
+        }
+      }
+    ],
+    "amount": [
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "amount_status",
+          "operator": "equals",
+          "operand": "complete"
+        }
+      }
+    ],
+    "identity_date": [
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "identity_status",
+          "operator": "equals",
+          "operand": "complete"
+        }
+      }
+    ],
+    "identity_digits": [
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "identity_status",
+          "operator": "equals",
+          "operand": "complete"
+        }
+      }
+    ],
+    "consent": [
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "consent_action",
+          "operator": "equals",
+          "operand": "confirm"
+        }
+      },
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "consent_action",
+          "operator": "equals",
+          "operand": "correct"
+        }
+      },
+      {
+        "target_node": "check",
+        "description": "Deterministic check",
+        "condition": {
+          "variable": "consent_action",
+          "operator": "equals",
+          "operand": "refuse"
+        }
+      }
+    ]
+  }
+}

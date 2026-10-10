@@ -1,0 +1,266 @@
+{
+  "initial_node": "readback",
+  "system_prompt": "Synthetic bank-write test. Only announce recording after confirmed bank success.",
+  "nodes": {
+    "readback": {
+      "name": "readback",
+      "node_type": "conversation",
+      "task_message": "Read back {{amount}} dollars on {{date}} for the credit card. Ask Do you confirm?",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [
+        {
+          "name": "consent_action",
+          "type": "string",
+          "description": "Current response to read-back: confirm ONLY an unqualified clear yes to the unchanged proposal. Any amount/date correction is correct even when preceded by yes. No is refuse. Questions, silence or unrelated speech are pending.",
+          "min_confidence": 0.7,
+          "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}",
+          "enum_values": [
+            "confirm",
+            "correct",
+            "refuse",
+            "pending"
+          ]
+        },
+        {
+          "name": "corrected_amount",
+          "type": "float",
+          "description": "New amount explicitly requested in the latest correction; omit when no amount correction. Never copy the old read-back amount.",
+          "min_confidence": 0.5,
+          "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "init",
+          "description": "Deterministic init",
+          "condition": {
+            "variable": "consent_action",
+            "operator": "equals",
+            "operand": "confirm"
+          }
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12
+    },
+    "init": {
+      "name": "init",
+      "node_type": "code",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "write",
+      "transitions": [
+        {
+          "target_node": "write",
+          "description": "Deterministic write",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ],
+      "pre_actions": [
+        {
+          "type": "function",
+          "function": {
+            "name": "code_exec",
+            "handler": "__function__:code_exec",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "default": "vars['write_attempts'] = 1\nvars['bank_ok_history'] = ''\nvars['bank_ok'] = 'pending'\nvars['write_decision'] = 'pending'\nvars['consent_action'] = 'pending'\n"
+                },
+                "timeout_ms": {
+                  "type": "number",
+                  "default": 10000
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "write": {
+      "name": "write",
+      "node_type": "api_request",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "evaluate",
+      "pre_actions": [
+        {
+          "type": "function",
+          "config": {
+            "maxRetries": 0,
+            "timeoutMs": 10000
+          },
+          "function": {
+            "name": "create_promise",
+            "handler": "__function__:api_call",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "default": "https://freya-bank-mock.freyavoice.workers.dev/v1/create_promise"
+                },
+                "method": {
+                  "type": "string",
+                  "default": "POST"
+                },
+                "headers": {
+                  "type": "object",
+                  "properties": {
+                    "Content-Type": {
+                      "type": "string",
+                      "default": "application/json"
+                    }
+                  }
+                },
+                "body": {
+                  "type": "object",
+                  "properties": {
+                    "customer_id": {
+                      "type": "string",
+                      "default": "{{customer_id}}"
+                    },
+                    "product_id": {
+                      "type": "string",
+                      "default": "{{product_id}}"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "default": "{{amount}}"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date",
+                      "default": "{{date}}"
+                    }
+                  },
+                  "required": [
+                    "customer_id",
+                    "product_id",
+                    "amount",
+                    "date"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "response_mapping": [
+        {
+          "path": "data.ok",
+          "variable": "bank_ok"
+        },
+        {
+          "path": "data.error",
+          "variable": "bank_error"
+        },
+        {
+          "path": "data.promise_id",
+          "variable": "promise_id"
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "evaluate",
+          "description": "Deterministic evaluate",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ]
+    },
+    "evaluate": {
+      "name": "evaluate",
+      "node_type": "code",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "failed",
+      "transitions": [
+        {
+          "target_node": "success",
+          "description": "Deterministic success",
+          "condition": {
+            "variable": "write_decision",
+            "operator": "equals",
+            "operand": "recorded"
+          }
+        },
+        {
+          "target_node": "write",
+          "description": "Deterministic write",
+          "condition": {
+            "variable": "write_decision",
+            "operator": "equals",
+            "operand": "retry"
+          }
+        },
+        {
+          "target_node": "failed",
+          "description": "Deterministic failed",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ],
+      "pre_actions": [
+        {
+          "type": "function",
+          "function": {
+            "name": "code_exec",
+            "handler": "__function__:code_exec",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "default": "ok = str(vars.get('bank_ok', '')).lower()\nvars['bank_ok_history'] = str(vars.get('bank_ok_history', '')) + ok + ','\nvars['write_decision'] = 'service_error'\ntry:\n    attempts = int(vars.get('write_attempts', 0))\n    if ok == 'true':\n        vars['write_decision'] = 'recorded'\n    elif attempts < 2:\n        vars['write_attempts'] = attempts + 1\n        vars['write_decision'] = 'retry'\n        vars['bank_ok'] = 'pending'\nexcept Exception:\n    vars['write_decision'] = 'service_error'\n"
+                },
+                "timeout_ms": {
+                  "type": "number",
+                  "default": 10000
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "success": {
+      "name": "success",
+      "node_type": "conversation",
+      "task_message": "Say the promise is recorded and You will receive a text message confirming this promise. No more bank actions in this functional check.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [],
+      "transitions": [],
+      "tools": [],
+      "max_node_turns": 12
+    },
+    "failed": {
+      "name": "failed",
+      "node_type": "conversation",
+      "task_message": "Say I could not record your promise because the service failed. Never say it was recorded. Outcome reason for the template is service_error.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [],
+      "transitions": [],
+      "tools": [],
+      "max_node_turns": 12
+    }
+  }
+}

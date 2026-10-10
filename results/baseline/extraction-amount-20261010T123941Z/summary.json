@@ -1,0 +1,90 @@
+{
+  "words": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Four hundred and twenty.",
+        "expected": "420",
+        "actual": "420.0",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "amount_status": "complete",
+          "amount_value": 420,
+          "amount_process_count": 1,
+          "amount_normalized": "420.0"
+        }
+      }
+    ]
+  },
+  "pieces": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Four hundred and...",
+        "expected": null,
+        "actual": null,
+        "process_count": 0,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "amount_status": "partial"
+        }
+      },
+      {
+        "speech": "...twenty.",
+        "expected": "420",
+        "actual": "420.0",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "amount_status": "complete",
+          "amount_value": 420,
+          "amount_process_count": 1,
+          "amount_normalized": "420.0"
+        }
+      }
+    ]
+  },
+  "corrects": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Four hundred, sorry, three hundred and fifty.",
+        "expected": "350",
+        "actual": "350.0",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "amount_status": "complete",
+          "amount_value": 350,
+          "amount_process_count": 1,
+          "amount_normalized": "350.0"
+        }
+      }
+    ]
+  }
+}

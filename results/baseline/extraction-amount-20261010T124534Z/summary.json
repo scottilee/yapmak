@@ -1,0 +1,67 @@
+{
+  "stale_partial": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Three hundred.",
+        "expected": "300",
+        "actual": "300.0",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "proposal_complete": "true",
+          "amount_status": "absent",
+          "amount_value": -1,
+          "amount_process_count": 1,
+          "amount_normalized": "300.0"
+        }
+      },
+      {
+        "speech": "Actually four hundred and...",
+        "expected": null,
+        "actual": "300.0",
+        "process_count": 1,
+        "previous_count": 1,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "proposal_complete": "true",
+          "amount_status": "partial",
+          "amount_value": -1,
+          "amount_process_count": 1,
+          "amount_normalized": "300.0"
+        }
+      },
+      {
+        "speech": "...twenty.",
+        "expected": "420",
+        "actual": "420.0",
+        "process_count": 2,
+        "previous_count": 1,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "proposal_complete": "true",
+          "amount_status": "absent",
+          "amount_value": -1,
+          "amount_process_count": 2,
+          "amount_normalized": "420.0"
+        }
+      }
+    ]
+  }
+}

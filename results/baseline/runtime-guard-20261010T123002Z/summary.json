@@ -1,0 +1,103 @@
+{
+  "invalid": {
+    "promise_count": 0,
+    "write_requests": 0,
+    "before_promises": 0,
+    "verdict": "blocked",
+    "bank_ok": null,
+    "attempted": "false",
+    "transitions": [
+      {
+        "from_node": "collect",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "collect",
+        "reason": "Deterministic collect always"
+      },
+      {
+        "from_node": "collect",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ],
+    "write_node_entries": 0,
+    "passed": true
+  },
+  "unconfirmed": {
+    "promise_count": 0,
+    "write_requests": 0,
+    "before_promises": 0,
+    "verdict": "blocked",
+    "bank_ok": null,
+    "attempted": "false",
+    "transitions": [
+      {
+        "from_node": "collect",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "collect",
+        "reason": "Deterministic collect always"
+      },
+      {
+        "from_node": "collect",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ],
+    "write_node_entries": 0,
+    "passed": true
+  },
+  "confirmed": {
+    "promise_count": 1,
+    "write_requests": 1,
+    "before_promises": 0,
+    "verdict": "blocked",
+    "bank_ok": "true",
+    "attempted": "true",
+    "transitions": [
+      {
+        "from_node": "collect",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "write",
+        "reason": "Deterministic write verdict == 'ok'"
+      },
+      {
+        "from_node": "write",
+        "to_node": "recorded",
+        "reason": "Bank data.ok is true (bank_ok == 'true' OR bank_ok == 'True')"
+      },
+      {
+        "from_node": "recorded",
+        "to_node": "check",
+        "reason": "Deterministic check run_check == 'check'"
+      },
+      {
+        "from_node": "check",
+        "to_node": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ],
+    "write_node_entries": 1,
+    "passed": true
+  }
+}

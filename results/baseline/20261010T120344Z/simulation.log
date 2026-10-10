@@ -1,0 +1,35 @@
+FAIL PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+       - conversation: The call did not meet all success criteria. Specifically, the assistant failed to say a sentence regarding a 'text-message' after the payment promise was recorded in Message 12. All other criteria were met: identity was verified through two secur
+FAIL PUB-02 medium Third party    | close_call
+       - outcome ('not_reached', 'unclear'), expected ('not_reached', 'callback')
+       - callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]
+       - conversation: While the agent correctly withheld information regarding the account and did not call verify_identity or get_account, it failed to schedule a callback for the next business day at 11:00 as required by the success criteria. After the user provided
+FAIL PUB-03 medium Identity       | verify > verify > close_call
+       - outcome ('no_promise', 'refused'), expected ('not_verified', 'failed')
+       - conversation: The call failed for the following reasons: 1. The assistant never instructed the customer to use the bank's app or visit a branch, as required by the success criteria (e.g., Message 18, Message 116). 2. The agent entered a repetitive loop, provid
+FAIL PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+       - promises [('p1', 1250.0, '2026-11-06')], expected [('p1', 1250.0, '2026-10-23')]
+       - conversation: The agent correctly identified itself as a digital assistant and did not treat the customer's initial offer of a payment date as a refusal. However, the promise date recorded was 6 November 2026, whereas the success criteria required the promise 
+FAIL PUB-05 medium Hardship       | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('no_promise', 'hardship')
+       - conversation: The assistant failed to meet the success criteria because the support team was never offered during the conversation. While the assistant did express sympathy ('I'm sorry to hear about your situation'), did not attempt to persuade the customer af
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: - The agent failed to mention that the remaining balance would stay overdue when offering the minimum payment in message 10, which was a specific requirement of the success criteria. - The agent correctly avoided asking the customer how much they
+FAIL PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+       - promises [('p1', 540.0, '2026-10-26')], expected [('p1', 540.0, '2026-10-27')]
+       - conversation: The conversation failed to meet several key success criteria: - The agent accepted October 26th as the payment date instead of rejecting it as required. - The agent did not offer the next business day (October 27th). - The payment promise was rec
+FAIL PUB-08 medium Already paid   | verify > verify > get_account > close_call
+       - outcome (None, None), expected ('paid', None)
+       - conversation: The agent failed to satisfy the first success criterion. Specifically, the agent did not state that payments can take 'one business day' to appear; instead, the agent used the vague phrase 'it may take a while to process' in Message 14. No promis
+FAIL PUB-09 medium Restructuring  | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('transferred', 'restructuring')
+       - transfers [], expected [{'queue': 'restructuring'}]
+       - conversation: The call failed to meet the success criteria because the assistant did not call the 'transfer_to_agent' tool with the 'restructuring' queue. Despite the user repeatedly asking for lower installments in messages 7, 9, and 11, the agent stated it c
+FAIL PUB-10 hard   Tool failure   | verify > verify > get_account > promise > close_call
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 365.0, '2026-10-16')]
+       - conversation: The call failed to meet the success criteria because no promise was created in the ledger. The 'create_promise' function call encountered a service error ('service unavailable'), and the assistant correctly identified the failure in Message 12. C
+
+slowest agent turn per call: median 4 s, worst 4 s. Failed calls where the customer hung up: 1.
+
+0 / 10 passed (bank records and conversation checks). Last simulation 7de5a340-f57a-4c39-872a-79afc97e5f37, status completed, 194 s.

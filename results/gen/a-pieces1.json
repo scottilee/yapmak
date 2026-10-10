@@ -1,0 +1,447 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "86dc44fc-86e2-4bb2-a868-6f101bacb98c",
+ "iteration_id": "a2acb69c-7de9-4d32-bb97-a016d322087a",
+ "seconds": 354,
+ "passed": 6,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": true,
+   "failed": [],
+   "call_id": "4a102755-065f-411d-bfc6-7485bcb3f90d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_5ed43567-930",
+   "slowest_turn_s": 2.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": true,
+   "failed": [],
+   "call_id": "295e813b-5a2e-4d57-a1f5-61b5690d13bf",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_606cba00-324",
+   "slowest_turn_s": 2.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('not_verified', 'failed')",
+    "the call was not closed with close_call",
+    "conversation: The assistant failed to meet the success criteria and did not behave properly. 1. The assistant never told the customer to use the app or visit a branch. 2. The assistant entered a repetitive loop, repeating the same prompt for over 150 messages without progressing the conversation or handling the user's frustration. 3. Because the assistant was stuck in a loop and only successfully called the ver"
+   ],
+   "call_id": "af5a4456-b730-4322-b138-386ad44ce5a1",
+   "tools": [
+    "verify_identity"
+   ],
+   "customer_id": "c_5abba1d0-42f",
+   "slowest_turn_s": 5.3,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "ce8ec423-7a77-44ef-93f8-48d8b798b6da",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_9b1fe753-ecb",
+   "slowest_turn_s": 4.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": true,
+   "failed": [],
+   "call_id": "c6e85140-b982-4fbb-94eb-04d9ab12bb69",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_1eafdb5f-b09",
+   "slowest_turn_s": 5.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "conversation: The agent successfully followed the instruction to propose specific amounts rather than asking how much the user could afford (Message 14). The agent also correctly confirmed and recorded a promise for 637.50 on Friday, 16 October 2026 (Messages 20 and 23), which matched the user's request. However, the agent violated the second criterion, which stated the minimum payment should be offered once. T"
+   ],
+   "call_id": "514783b9-2fbd-4917-939f-a9aee006f6bd",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_00aad830-545",
+   "slowest_turn_s": 2.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "5fc9eaab-133c-4ecd-8c94-8a05446b58b1",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a3b92716-71d",
+   "slowest_turn_s": 1.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('paid', None)",
+    "the call was not closed with close_call",
+    "conversation: The agent failed to meet the success criteria as it never mentioned that payments can take one business day to appear. The entire conversation consisted of the agent being stuck in a repetitive loop asking for the user's date of birth (Messages 4 through 52) and failing to progress past the security verification phase."
+   ],
+   "call_id": "307f85bd-8716-4909-aefa-2911833b7eed",
+   "tools": [],
+   "customer_id": "c_592ba37b-341",
+   "slowest_turn_s": 5.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": true,
+   "failed": [],
+   "call_id": "55778919-4509-4a81-940e-455e839c8e59",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_b5e40bd5-71b",
+   "slowest_turn_s": 1.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'refused'), expected ('promise', None)",
+    "promises [], expected [('p1', 365.0, '2026-10-16')]",
+    "conversation: The success criteria were not met because no promise was recorded in the ledger. According to the system events, the call was closed with an outcome of 'no_promise' after the agent failed to reconcile the user's split statements ('three hundred' in Message 21 and 25, followed by 'sixty-five' in Message 23 and 27) which together equalled the full balance of 365.00. Additionally, the agent used the "
+   ],
+   "call_id": "b49e6f58-e30f-49bc-ae93-36446d95a34f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_68cecd7b-451",
+   "slowest_turn_s": 7.9,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": true,
+    "failed": [],
+    "call_id": "4a102755-065f-411d-bfc6-7485bcb3f90d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_5ed43567-930",
+    "slowest_turn_s": 2.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": true,
+    "failed": [],
+    "call_id": "295e813b-5a2e-4d57-a1f5-61b5690d13bf",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_606cba00-324",
+    "slowest_turn_s": 2.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_verified', 'failed')",
+     "the call was not closed with close_call",
+     "conversation: The assistant failed to meet the success criteria and did not behave properly. 1. The assistant never told the customer to use the app or visit a branch. 2. The assistant entered a repetitive loop, repeating the same prompt for over 150 messages without progressing the conversation or handling the user's frustration. 3. Because the assistant was stuck in a loop and only successfully called the ver"
+    ],
+    "call_id": "af5a4456-b730-4322-b138-386ad44ce5a1",
+    "tools": [
+     "verify_identity"
+    ],
+    "customer_id": "c_5abba1d0-42f",
+    "slowest_turn_s": 5.3,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "ce8ec423-7a77-44ef-93f8-48d8b798b6da",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_9b1fe753-ecb",
+    "slowest_turn_s": 4.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": true,
+    "failed": [],
+    "call_id": "c6e85140-b982-4fbb-94eb-04d9ab12bb69",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_1eafdb5f-b09",
+    "slowest_turn_s": 5.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "conversation: The agent successfully followed the instruction to propose specific amounts rather than asking how much the user could afford (Message 14). The agent also correctly confirmed and recorded a promise for 637.50 on Friday, 16 October 2026 (Messages 20 and 23), which matched the user's request. However, the agent violated the second criterion, which stated the minimum payment should be offered once. T"
+    ],
+    "call_id": "514783b9-2fbd-4917-939f-a9aee006f6bd",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_00aad830-545",
+    "slowest_turn_s": 2.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "5fc9eaab-133c-4ecd-8c94-8a05446b58b1",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a3b92716-71d",
+    "slowest_turn_s": 1.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('paid', None)",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to meet the success criteria as it never mentioned that payments can take one business day to appear. The entire conversation consisted of the agent being stuck in a repetitive loop asking for the user's date of birth (Messages 4 through 52) and failing to progress past the security verification phase."
+    ],
+    "call_id": "307f85bd-8716-4909-aefa-2911833b7eed",
+    "tools": [],
+    "customer_id": "c_592ba37b-341",
+    "slowest_turn_s": 5.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": true,
+    "failed": [],
+    "call_id": "55778919-4509-4a81-940e-455e839c8e59",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_b5e40bd5-71b",
+    "slowest_turn_s": 1.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'refused'), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "conversation: The success criteria were not met because no promise was recorded in the ledger. According to the system events, the call was closed with an outcome of 'no_promise' after the agent failed to reconcile the user's split statements ('three hundred' in Message 21 and 25, followed by 'sixty-five' in Message 23 and 27) which together equalled the full balance of 365.00. Additionally, the agent used the "
+    ],
+    "call_id": "b49e6f58-e30f-49bc-ae93-36446d95a34f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_68cecd7b-451",
+    "slowest_turn_s": 7.9,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

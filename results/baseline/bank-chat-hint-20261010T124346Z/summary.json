@@ -1,0 +1,57 @@
+{
+  "calls": [
+    {
+      "n": 1,
+      "tool": "verify_identity",
+      "args": {
+        "field": "date_of_birth",
+        "answer": "1987-03-06"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": false,
+        "wrong_answers_left": 3,
+        "hint": "day_month_swapped"
+      }
+    },
+    {
+      "n": 2,
+      "tool": "verify_identity",
+      "args": {
+        "field": "date_of_birth",
+        "answer": "1987-06-03"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": true,
+        "wrong_answers_left": 3,
+        "all_verified": false
+      }
+    }
+  ],
+  "first_vars": {
+    "identity_hint": "day_month_swapped",
+    "identity_normalized": "1987-03-06",
+    "identity_status": "absent",
+    "identity_date_text": "",
+    "identity_process_count": 1,
+    "identity_digits": "",
+    "identity_ok": "true",
+    "identity_verified": "false",
+    "wrong_answers_left": 3
+  },
+  "final_vars": {
+    "identity_hint": "day_month_swapped",
+    "identity_normalized": "1987-06-03",
+    "identity_status": "absent",
+    "identity_date_text": "",
+    "identity_process_count": 2,
+    "identity_digits": "",
+    "identity_ok": "true",
+    "identity_verified": "true",
+    "wrong_answers_left": 3
+  },
+  "passed": true
+}

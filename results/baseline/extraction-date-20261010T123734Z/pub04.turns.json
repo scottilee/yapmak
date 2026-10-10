@@ -1,0 +1,88 @@
+[
+  {
+    "speech": "Hello.",
+    "response": "Hello. What is the exact day of your payment?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 1,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "528c93ef-adbb-4b01-ab9b-1ba0c05e9af9",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:37:40.491623Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:37",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:37",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:37",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "f24420f0868744b99b33b7fd2678f763",
+      "date_day": 0,
+      "date_month": 0,
+      "date_year": 0,
+      "date_status": "absent",
+      "date_kind": "none",
+      "customer_intent": "other"
+    },
+    "routes": []
+  },
+  {
+    "speech": "I can pay on 6 November.",
+    "response": "Is that 6 November 2026?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 2,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "2026-11-06",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "528c93ef-adbb-4b01-ab9b-1ba0c05e9af9",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:37:43.709345Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:37",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:37",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:37",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "f24420f0868744b99b33b7fd2678f763",
+      "date_day": 6,
+      "date_month": 11,
+      "date_year": 0,
+      "date_status": "complete",
+      "date_kind": "numbered",
+      "customer_intent": "proposal",
+      "date_ready": "yes",
+      "date_process_count": 1,
+      "date_expr_json": "{\"day\": 6, \"month\": 11}",
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check date_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  }
+]

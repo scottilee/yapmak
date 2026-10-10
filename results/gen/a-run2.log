@@ -1,0 +1,20 @@
+start 2026-10-10T12:55:58Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+FAIL PUB-07 hard   Dates          | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 540.0, '2026-10-27')]
+       - the call was not closed with close_call
+       - conversation: All success criteria regarding the payment date were met: the agent asked for the exact day (Message 8), rejected October 26th as a non-business day, suggested the 27th (Message 10), and recorded the promise (Message 12). However, the call failed
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 8 s, worst 15 s. Failed calls where the customer hung up: 1.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 0f14f3d6-cef5-461f-866b-eaa996928f08, status completed, 170 s.
+exit 0 2026-10-10T12:59:07Z

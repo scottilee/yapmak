@@ -1,0 +1,598 @@
+{
+ "workflow_id": "6219bb3f-ea81-4c00-98ef-348a12c6a836",
+ "agent_id": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+ "updated_at": "2026-10-10T12:47:37.453Z",
+ "workflow": {
+  "nodes": {
+   "init": {
+    "name": "init",
+    "tools": [],
+    "on_enter": {
+     "type": "silent"
+    },
+    "node_type": "code",
+    "assertions": [],
+    "passthrough": true,
+    "pre_actions": [
+     {
+      "type": "function",
+      "function": {
+       "name": "code_exec",
+       "handler": "__function__:code_exec",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "code": {
+          "type": "string",
+          "default": "vars['write_attempts'] = 1\nvars['bank_ok_history'] = ''\nvars['bank_ok'] = 'pending'\nvars['write_decision'] = 'pending'\nvars['consent_action'] = 'pending'\n"
+         },
+         "timeout_ms": {
+          "type": "number",
+          "default": 10000
+         }
+        }
+       },
+       "description": ""
+      }
+     }
+    ],
+    "transitions": [
+     {
+      "condition": {
+       "mode": "exact",
+       "operator": "always"
+      },
+      "description": "Deterministic write",
+      "target_node": "write"
+     }
+    ],
+    "role_message": "",
+    "task_message": "",
+    "interruptible": true,
+    "max_node_turns": null,
+    "response_mapping": [],
+    "extraction_schema": [],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": "write",
+    "return_to_previous_on_interrupt": false
+   },
+   "write": {
+    "name": "write",
+    "tools": [],
+    "on_enter": {
+     "type": "silent"
+    },
+    "node_type": "api_request",
+    "assertions": [],
+    "passthrough": true,
+    "pre_actions": [
+     {
+      "type": "function",
+      "config": {
+       "timeoutMs": 10000,
+       "maxRetries": 0
+      },
+      "function": {
+       "name": "create_promise",
+       "handler": "__function__:api_call",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "url": {
+          "type": "string",
+          "default": "https://freya-bank-mock.freyavoice.workers.dev/v1/create_promise"
+         },
+         "body": {
+          "type": "object",
+          "required": [
+           "customer_id",
+           "product_id",
+           "amount",
+           "date"
+          ],
+          "properties": {
+           "date": {
+            "type": "string",
+            "format": "date",
+            "default": "{{date}}"
+           },
+           "amount": {
+            "type": "number",
+            "default": "{{amount}}"
+           },
+           "product_id": {
+            "type": "string",
+            "default": "{{product_id}}"
+           },
+           "customer_id": {
+            "type": "string",
+            "default": "{{customer_id}}"
+           }
+          }
+         },
+         "method": {
+          "type": "string",
+          "default": "POST"
+         },
+         "headers": {
+          "type": "object",
+          "properties": {
+           "Content-Type": {
+            "type": "string",
+            "default": "application/json"
+           }
+          }
+         }
+        }
+       },
+       "description": ""
+      }
+     }
+    ],
+    "transitions": [
+     {
+      "condition": {
+       "mode": "exact",
+       "operator": "always"
+      },
+      "description": "Deterministic evaluate",
+      "target_node": "evaluate"
+     }
+    ],
+    "role_message": "",
+    "task_message": "",
+    "interruptible": true,
+    "max_node_turns": null,
+    "response_mapping": [
+     {
+      "path": "data.ok",
+      "variable": "bank_ok",
+      "description": ""
+     },
+     {
+      "path": "data.error",
+      "variable": "bank_error",
+      "description": ""
+     },
+     {
+      "path": "data.promise_id",
+      "variable": "promise_id",
+      "description": ""
+     }
+    ],
+    "extraction_schema": [],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": "evaluate",
+    "return_to_previous_on_interrupt": false
+   },
+   "failed": {
+    "name": "failed",
+    "tools": [],
+    "on_enter": {
+     "type": "llm"
+    },
+    "node_type": "conversation",
+    "assertions": [],
+    "passthrough": false,
+    "pre_actions": [],
+    "transitions": [],
+    "role_message": "",
+    "task_message": "Say I could not record your promise because the service failed. Never say it was recorded. Outcome reason for the template is service_error.",
+    "interruptible": true,
+    "max_node_turns": 12,
+    "response_mapping": [],
+    "extraction_schema": [],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": null,
+    "return_to_previous_on_interrupt": false
+   },
+   "success": {
+    "name": "success",
+    "tools": [],
+    "on_enter": {
+     "type": "llm"
+    },
+    "node_type": "conversation",
+    "assertions": [],
+    "passthrough": false,
+    "pre_actions": [],
+    "transitions": [],
+    "role_message": "",
+    "task_message": "Say the promise is recorded and You will receive a text message confirming this promise. No more bank actions in this functional check.",
+    "interruptible": true,
+    "max_node_turns": 12,
+    "response_mapping": [],
+    "extraction_schema": [],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": null,
+    "return_to_previous_on_interrupt": false
+   },
+   "evaluate": {
+    "name": "evaluate",
+    "tools": [],
+    "on_enter": {
+     "type": "silent"
+    },
+    "node_type": "code",
+    "assertions": [],
+    "passthrough": true,
+    "pre_actions": [
+     {
+      "type": "function",
+      "function": {
+       "name": "code_exec",
+       "handler": "__function__:code_exec",
+       "parameters": {
+        "type": "object",
+        "properties": {
+         "code": {
+          "type": "string",
+          "default": "ok = str(vars.get('bank_ok', '')).lower()\nvars['bank_ok_history'] = str(vars.get('bank_ok_history', '')) + ok + ','\nvars['write_decision'] = 'service_error'\ntry:\n    attempts = int(vars.get('write_attempts', 0))\n    if ok == 'true':\n        vars['write_decision'] = 'recorded'\n    elif attempts < 2:\n        vars['write_attempts'] = attempts + 1\n        vars['write_decision'] = 'retry'\n        vars['bank_ok'] = 'pending'\nexcept Exception:\n    vars['write_decision'] = 'service_error'\n"
+         },
+         "timeout_ms": {
+          "type": "number",
+          "default": 10000
+         }
+        }
+       },
+       "description": ""
+      }
+     }
+    ],
+    "transitions": [
+     {
+      "condition": {
+       "mode": "exact",
+       "operand": "recorded",
+       "operator": "equals",
+       "variable": "write_decision"
+      },
+      "description": "Deterministic success",
+      "target_node": "success"
+     },
+     {
+      "condition": {
+       "mode": "exact",
+       "operand": "retry",
+       "operator": "equals",
+       "variable": "write_decision"
+      },
+      "description": "Deterministic write",
+      "target_node": "write"
+     },
+     {
+      "condition": {
+       "mode": "exact",
+       "operator": "always"
+      },
+      "description": "Deterministic failed",
+      "target_node": "failed"
+     }
+    ],
+    "role_message": "",
+    "task_message": "",
+    "interruptible": true,
+    "max_node_turns": null,
+    "response_mapping": [],
+    "extraction_schema": [],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": "failed",
+    "return_to_previous_on_interrupt": false
+   },
+   "readback": {
+    "name": "readback",
+    "tools": [],
+    "on_enter": {
+     "type": "llm"
+    },
+    "node_type": "conversation",
+    "assertions": [],
+    "passthrough": false,
+    "pre_actions": [],
+    "transitions": [
+     {
+      "condition": {
+       "mode": "exact",
+       "operand": "confirm",
+       "operator": "equals",
+       "variable": "consent_action"
+      },
+      "description": "Deterministic init",
+      "target_node": "init"
+     }
+    ],
+    "role_message": "",
+    "task_message": "Read back {{amount}} dollars on {{date}} for the credit card. Ask Do you confirm?",
+    "interruptible": true,
+    "max_node_turns": 12,
+    "response_mapping": [],
+    "extraction_schema": [
+     {
+      "name": "consent_action",
+      "type": "string",
+      "description": "Current response to read-back: confirm ONLY an unqualified clear yes to the unchanged proposal. Any amount/date correction is correct even when preceded by yes. No is refuse. Questions, silence or unrelated speech are pending.",
+      "enum_values": [
+       "confirm",
+       "correct",
+       "refuse",
+       "pending"
+      ],
+      "min_confidence": 0.7,
+      "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+     },
+     {
+      "name": "corrected_amount",
+      "type": "float",
+      "description": "New amount explicitly requested in the latest correction; omit when no amount correction. Never copy the old read-back amount.",
+      "min_confidence": 0.5,
+      "extraction_prompt": "Extract only facts expressed by the caller. Do not invent a date, amount, or confirmation from an agent offer. The latest correction replaces the earlier value. Incomplete fragments remain partial until the caller finishes. Only combine fragments across turns when the previous answer was explicitly partial. Ignore unrelated dates in stories. Use zero for an unspecified integer; omit an unspecified optional string. These rules override built-in calendar interpretation: never convert a relative weekday or vague period to a concrete date.\n{{extractor.type_preamble}}\nVariables:\n{{extractor.variables_list}}\nRecent conversation:\n{{extractor.conversation.last-10}}\nCurrent speech:\n{{extractor.speech}}"
+     }
+    ],
+    "max_turn_transition": null,
+    "truncation_strategy": "keep_all",
+    "suppress_tool_results": false,
+    "truncation_window_size": 10,
+    "on_enter_first_entry_only": false,
+    "disable_inactivity_monitor": false,
+    "passthrough_default_transition": null,
+    "return_to_previous_on_interrupt": false
+   }
+  },
+  "agent_config": {
+   "llmConfig": {
+    "model": "experimental-5",
+    "tools": [
+     {
+      "type": "function",
+      "function": {
+       "name": "end_call",
+       "handler": "__function__:end_call",
+       "parameters": {
+        "type": "object",
+        "properties": {}
+       },
+       "description": "This is used to technically terminate the call after all the customer's questions have been answered and necessary information has been provided.\n- It should only be triggered SILENTLY in the background after the customer-related workflow is complete; never mention this tool or its name to the customer."
+      }
+     }
+    ],
+    "apiKey": null,
+    "baseUrl": null,
+    "provider": "experimental-5",
+    "maxTokens": 1000,
+    "clientType": null,
+    "temperature": 0.7,
+    "firstMessage": "Selam! Sana nas\u0131l yard\u0131mc\u0131 olabilirim?",
+    "systemPrompt": "You are a helpful assistant. Your role is to help users with their tasks. Always be friendly and professional. You can use `end_call` tool after you say goodbye to customer to hang up if call about to finish.",
+    "firstMessageMode": "assistant-speaks-first",
+    "additionalSettings": {},
+    "disableInterruptionsDuringFirstMessage": true
+   },
+   "sttConfig": {
+    "model": "freya-stt",
+    "apiKey": null,
+    "baseUrl": null,
+    "language": "tr",
+    "provider": "Freya",
+    "confidenceReask": {
+     "enabled": false,
+     "reaskMode": "phrase",
+     "reduction": "min",
+     "threshold": 0.3,
+     "reaskPhrases": null,
+     "disableOnDigitNodes": true,
+     "maxConsecutiveReasks": 2
+    },
+    "additionalSettings": {
+     "diarize": false,
+     "punctuate": true,
+     "streaming": true,
+     "aicEnabled": false,
+     "krispEnabled": false,
+     "smartTurnEnabled": true
+    }
+   },
+   "ttsConfig": {
+    "model": "freya-tts",
+    "apiKey": null,
+    "baseUrl": null,
+    "voiceId": "leyla",
+    "language": "tr",
+    "provider": "Freya",
+    "stopSpeakingPlan": {
+     "voiceSeconds": 0.1,
+     "numberOfWords": 2,
+     "backOffSeconds": 0.4,
+     "interruptionPhrases": [
+      "dur",
+      "bekle",
+      "bir dakika",
+      "bir saniye",
+      "dursana",
+      "bekle bi",
+      "anlamad\u0131m",
+      "ne diyon",
+      "ne diyorsun",
+      "ne dedin",
+      "yeter"
+     ],
+     "acknowledgementPhrases": [
+      "h\u0131",
+      "evet",
+      "tamam",
+      "aynen",
+      "okey",
+      "okay",
+      "anlad\u0131m",
+      "hee",
+      "ee",
+      "eee",
+      "\u0131\u0131",
+      "\u0131\u0131\u0131",
+      "ha",
+      "h\u0131-h\u0131",
+      "ha-ha",
+      "tabi",
+      "tabii",
+      "peki",
+      "tamamd\u0131r",
+      "h\u0131 h\u0131",
+      "h\u0131m",
+      "h\u0131mm",
+      "h\u0131h\u0131",
+      "haha",
+      "he",
+      "hahaha"
+     ]
+    },
+    "startSpeakingPlan": {
+     "waitSeconds": 0.5,
+     "backgroundNoisePhrases": [
+      "arka plan sesi",
+      "klavye sesi",
+      "klavye sesleri",
+      "\u00f6ks\u00fcr\u00fck",
+      "\u00f6ks\u00fcr\u00fck sesi",
+      "video sesi",
+      "video kayd\u0131",
+      "\u00e7\u0131lg\u0131n ses",
+      "\u00e7\u0131lg\u0131n kahkaha",
+      "g\u00fcl\u00fc\u015f",
+      "ses ses ses",
+      "\u00e7\u0131k \u00e7\u0131k \u00e7\u0131k",
+      "sim",
+      "sim izle"
+     ]
+    },
+    "textSubstitutions": [
+     {
+      "pattern": "@",
+      "replacement": "at"
+     },
+     {
+      "pattern": "\\$",
+      "replacement": "dollars"
+     },
+     {
+      "pattern": "%",
+      "replacement": "percent"
+     },
+     {
+      "pattern": "&",
+      "replacement": "and"
+     },
+     {
+      "pattern": "\\+",
+      "replacement": "plus"
+     },
+     {
+      "pattern": "turkishairlines",
+      "replacement": "turkish airlines",
+      "caseInsensitive": true
+     }
+    ],
+    "additionalSettings": {
+     "speed": 1,
+     "stability": 0.5,
+     "similarity_boost": 0.75
+    },
+    "speechNormalization": {
+     "urls": true,
+     "names": false,
+     "emails": true,
+     "emojis": true,
+     "phoneNumbers": false,
+     "generalNumbers": false,
+     "identityNumbers": false
+    }
+   },
+   "dtmfConfig": {
+    "prefix": "DTMF: ",
+    "enabled": false,
+    "timeout": 2,
+    "terminationDigit": "#"
+   },
+   "syncSource": null,
+   "privacyConfig": {
+    "enableRecording": true,
+    "getRecordingConsent": false,
+    "recordingConsentText": null
+   },
+   "complianceConfig": {
+    "soc2": false,
+    "pciDss": false,
+    "euAiAct": false,
+    "mifidIi": false
+   },
+   "routingLlmConfig": null,
+   "backgroundSoundUrl": null,
+   "piiRedactionConfig": {
+    "enabled": false,
+    "maskIban": true,
+    "maskEmail": true,
+    "maskPhone": true,
+    "customRules": [],
+    "maskNationalId": true,
+    "maskPaymentCard": true
+   },
+   "voicemailDetection": {
+    "enabled": false,
+    "messageMode": "none",
+    "staticMessage": null,
+    "voicemailResponseDelay": 2
+   },
+   "callTimeoutSettings": {
+    "maxRetries": 2,
+    "dynamicWait": null,
+    "checkInMessage": null,
+    "closureMessage": null,
+    "silenceTimeout": 10,
+    "maximumDuration": 600,
+    "maxDurationEndCall": {
+     "llmPrompt": null,
+     "messageMode": "llm",
+     "interruptible": false,
+     "spokenMessage": null,
+     "triggerTimeout": null
+    },
+    "silenceTimeoutPrompt": null
+   },
+   "extractionLlmConfig": null,
+   "postConversationAnalysis": {
+    "analysisModel": null,
+    "summaryPrompt": null,
+    "autoDetectProblems": false,
+    "problemDetectionPrompt": null,
+    "problemDetectionInstructions": null
+   }
+  },
+  "global_nodes": {},
+  "initial_node": "readback",
+  "system_prompt": "Synthetic bank-write test. Only announce recording after confirmed bank success.",
+  "test_variables": {}
+ }
+}

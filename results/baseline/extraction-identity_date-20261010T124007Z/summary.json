@@ -1,0 +1,90 @@
+{
+  "words": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Fourteenth of March nineteen eighty-eight.",
+        "expected": "1988-03-14",
+        "actual": "1988-03-14",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "identity_status": "complete",
+          "identity_date_text": "14th of March 1988",
+          "identity_process_count": 1,
+          "identity_normalized": "1988-03-14"
+        }
+      }
+    ]
+  },
+  "numeric": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "03/06/1987.",
+        "expected": "1987-06-03",
+        "actual": "1987-06-03",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "identity_status": "complete",
+          "identity_date_text": "03/06/1987",
+          "identity_process_count": 1,
+          "identity_normalized": "1987-06-03"
+        }
+      }
+    ]
+  },
+  "pieces": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Fourteenth of March...",
+        "expected": null,
+        "actual": null,
+        "process_count": 0,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "identity_status": "partial"
+        }
+      },
+      {
+        "speech": "...nineteen eighty-eight.",
+        "expected": "1988-03-14",
+        "actual": "1988-03-14",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "identity_status": "complete",
+          "identity_date_text": "Fourteenth of March nineteen eighty-eight",
+          "identity_process_count": 1,
+          "identity_normalized": "1988-03-14"
+        }
+      }
+    ]
+  }
+}

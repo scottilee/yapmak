@@ -1,0 +1,246 @@
+{
+  "pub04": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "I can pay on 6 November.",
+        "expected": "2026-11-06",
+        "actual": "2026-11-06",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-11-06",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 6,
+          "date_month": 11,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"day\": 6, \"month\": 11}"
+        }
+      }
+    ]
+  },
+  "pub07": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "The week after next.",
+        "expected": "vague",
+        "actual": "vague",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "vague",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 0,
+          "date_month": 0,
+          "date_year": 0,
+          "date_status": "vague",
+          "date_kind": "keyword",
+          "date_keyword": "vague",
+          "date_ready": "no",
+          "date_process_count": 1,
+          "date_expr_json": "{\"keyword\": \"vague\"}"
+        }
+      },
+      {
+        "speech": "Monday the 26th.",
+        "expected": "2026-10-26",
+        "actual": "2026-10-26",
+        "process_count": 2,
+        "previous_count": 1,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-26",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 26,
+          "date_month": 0,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_keyword": "vague",
+          "date_ready": "yes",
+          "date_process_count": 2,
+          "date_expr_json": "{\"day\": 26}",
+          "date_weekday": "monday"
+        }
+      }
+    ]
+  },
+  "pub13": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "30 October.",
+        "expected": "2026-10-30",
+        "actual": "2026-10-30",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-30",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 30,
+          "date_month": 10,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"day\": 30, \"month\": 10}"
+        }
+      }
+    ]
+  },
+  "in_words": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "The thirtieth of October.",
+        "expected": "2026-10-30",
+        "actual": "2026-10-30",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-30",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 30,
+          "date_month": 10,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"day\": 30, \"month\": 10}"
+        }
+      }
+    ]
+  },
+  "corrects": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "The 21st, sorry, I mean the 20th.",
+        "expected": "2026-10-20",
+        "actual": "2026-10-20",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-20",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 20,
+          "date_month": 0,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"day\": 20}"
+        }
+      }
+    ]
+  },
+  "pieces": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "The twenty...",
+        "expected": null,
+        "actual": "unset",
+        "process_count": 0,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 20,
+          "date_month": 0,
+          "date_year": 0,
+          "date_status": "partial",
+          "date_kind": "none"
+        }
+      },
+      {
+        "speech": "...third of October.",
+        "expected": "2026-10-23",
+        "actual": "2026-10-23",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-23",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 23,
+          "date_month": 10,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "numbered",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"day\": 23, \"month\": 10}"
+        }
+      }
+    ]
+  },
+  "relative": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Next Friday.",
+        "expected": "2026-10-23",
+        "actual": "2026-10-23",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "2026-10-23",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "date_day": 0,
+          "date_month": 0,
+          "date_year": 0,
+          "date_status": "complete",
+          "date_kind": "weekday",
+          "date_weekday": "friday",
+          "date_relative": "next",
+          "date_ready": "yes",
+          "date_process_count": 1,
+          "date_expr_json": "{\"weekday\": 4, \"relative\": \"next\"}"
+        }
+      }
+    ]
+  }
+}

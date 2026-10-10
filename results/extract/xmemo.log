@@ -1,0 +1,104 @@
+start 2026-10-10T13:02:29Z
+{
+ "bands": [
+  "1-10",
+  "11-60"
+ ],
+ "identity": [
+  "postcode",
+  "founded_year",
+  "company_number"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "restructuring",
+  "human",
+  "hardship",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "identity.wrong_answer_limit",
+   "text": "Brief says two wrong answers in total end the check; the API summary says three wrong answers end the check. Using the brief's 2 and counting in code, not the API's attempts_remaining.",
+   "doc": "tests/fixtures/synthetic/memo-openapi.json"
+  },
+  {
+   "topic": "get_account gating",
+   "text": "API says get_account is refused until 'both questions' are passed, but the brief has three verification questions.",
+   "doc": "tests/fixtures/synthetic/memo-openapi.json"
+  },
+  {
+   "topic": "amounts.floors",
+   "text": "API describes minimum_due as 'credit cards only' and scheduled_repayment as 'loans only'; the brief maps minimum_due to the overdraft and scheduled_repayment to loans and trade lines. Brief mapping used.",
+   "doc": "tests/fixtures/synthetic/memo-openapi.json"
+  },
+  {
+   "topic": "phrases.already_paid_sentence",
+   "text": "No verbatim sentence; the brief only says to say payments can take two business days to show.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "phrases.scam_reply",
+   "text": "No verbatim sentence; the brief only says to tell them they can call the number on their statement.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "phrases.robot_reply",
+   "text": "The documents give no reply for when the customer asks whether they are talking to a robot.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The documents give no sentence for questions the assistant cannot answer.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "phrases.recorded_promise_change_reply",
+   "text": "The documents do not say what to reply when a customer wants to change a recorded promise.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "special_cases.hardship.say",
+   "text": "The brief requires one sentence of sympathy but gives no wording.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "special_cases.refuse_to_talk",
+   "text": "The documents do not cover a customer who refuses to talk.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "identity.asking_purpose_counts_as_decline",
+   "text": "The documents do not say whether asking why the questions are needed counts as declining.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "identity.hint",
+   "text": "verify_identity can return hint day_month_swapped, but no date question is asked in this brief; no hint handling configured.",
+   "doc": "tests/fixtures/synthetic/memo-openapi.json"
+  },
+  {
+   "topic": "calendar.next_weekday_means_following_week",
+   "text": "The documents do not say how a weekday name such as 'next Friday' said on that weekday is read; default kept.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The documents do not say how to complete a promise date given without month or year; default kept.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  },
+  {
+   "topic": "phrases.settle_today_question",
+   "text": "Rule 10 dictates the question \"Can you settle this today?\" (memo (b): ask once whether they can settle all facilities today); the IR has no phrase slot for it.",
+   "doc": "tests/fixtures/synthetic/memo-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "bands[0].source: replaced the paraphrased 'MEMO (a) ... / Policy 7' quote with literal text from memo (a), rule 7 and rule 10, so the source shows that the memo overrides rule 7's 10th business day.",
+  "outcomes.source: added the literal rule 10, 11 and 13 sentences that back refused_reason, service_error_reason and goodbye_before_close.",
+  "unresolved: added calendar.next_weekday_means_following_week and calendar.missing_date_parts (the documents are silent and defaults are kept), and phrases.settle_today_question (a mandatory question the IR has no slot for).",
+  "All other values checked against the brief and the API enums (verify_identity field, product type, transfer queue, close_call outcome, add_note reason) and left unchanged."
+ ]
+}
+exit 0 2026-10-10T13:06:06Z

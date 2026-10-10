@@ -1,0 +1,65 @@
+[
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "Multi-product",
+    "level": "medium",
+    "title": "transfer after recorded promise",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Confirm your name and give correct security answers. Offer 220 dollars on the credit card this Friday, dispute the personal loan, and flatly refuse the car loan. Confirm only the credit-card read-back. As soon as the assistant says the credit-card promise was successfully recorded, immediately request lower instalments and a new payment plan for the personal loan. Do not request restructuring before the promise is recorded.",
+    "expected": {
+      "outcome": "transferred",
+      "reason": "restructuring",
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 220,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": [
+        {
+          "queue": "restructuring"
+        }
+      ]
+    },
+    "checks": [
+      "Recorded p1 promise survives transfer",
+      "Transfer is to restructuring",
+      "No notes at all, including before transfer",
+      "Final outcome is transferred/restructuring"
+    ]
+  }
+]

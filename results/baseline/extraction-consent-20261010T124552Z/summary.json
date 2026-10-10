@@ -1,0 +1,61 @@
+{
+  "revision": {
+    "passed": true,
+    "checks": [
+      {
+        "speech": "Yes, I confirm.",
+        "expected": "true",
+        "actual": "true",
+        "process_count": 1,
+        "previous_count": 0,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 420,
+          "proposal_revision": 1,
+          "confirmed_revision": 1,
+          "consent_valid": "true",
+          "proposal_complete": "true",
+          "consent_action": "pending",
+          "consent_process_count": 1
+        }
+      },
+      {
+        "speech": "Actually change the amount to three hundred and fifty.",
+        "expected": "false",
+        "actual": "false",
+        "process_count": 2,
+        "previous_count": 1,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 350,
+          "proposal_revision": 2,
+          "confirmed_revision": 0,
+          "consent_valid": "false",
+          "proposal_complete": "true",
+          "consent_action": "pending",
+          "consent_process_count": 2
+        }
+      },
+      {
+        "speech": "Yes, I confirm the new amount.",
+        "expected": "true",
+        "actual": "true",
+        "process_count": 3,
+        "previous_count": 2,
+        "passed": true,
+        "extracted": {
+          "date_resolved": "unset",
+          "proposed_amount": 350,
+          "proposal_revision": 2,
+          "confirmed_revision": 2,
+          "consent_valid": "true",
+          "proposal_complete": "true",
+          "consent_action": "pending",
+          "consent_process_count": 3
+        }
+      }
+    ]
+  }
+}

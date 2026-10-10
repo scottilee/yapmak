@@ -1,0 +1,28 @@
+start A 2026-10-10T13:00:35Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+FAIL PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+       - conversation: The conversation failed to meet all success criteria. Although there was exactly one promise in the ledger after a successful retry (as the first attempt failed and the second succeeded) and the call ended properly via the assistant-ended-call ac
+
+slowest agent turn per call: median 13 s, worst 27 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 2cd04b47-8175-487f-95f3-3cfd0e48a6ea, status completed, 138 s.
+exit A 0 2026-10-10T13:03:07Z
+start B 2026-10-10T13:03:07Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 22 s, worst 22 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+3 / 3 passed (bank records and conversation checks). Last simulation d85c67bb-dc50-4ec3-84cf-5d8cf2e6b3b4, status completed, 105 s.
+exit B 0 2026-10-10T13:04:57Z

@@ -1,9 +1,42 @@
+# Credentials and machine-local environment (keep shareable examples).
 .env
 .env.*
+!.env.example
+!.env.sample
 env.sh
+*.pem
+*.key
+.claude/settings.local.json
+.sbx/
+
+# Python environments, bytecode, and disposable test/tool caches.
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+
+# Local Freya workspace/persona identifiers; these are recreated per workspace.
 .freya-agents.json
 .personas.json
+
+# OS/editor scratch files.
 .DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+freya-*.md
+
+# Isolated baseline starter-kit copies; copy their final evidence to the parent
+# results/example-builder directory before committing. Do not ignore all logs,
+# traces/, out/, results/, or submission/: selected artifacts are required evidence.
+/results/example-builder/*/kit/

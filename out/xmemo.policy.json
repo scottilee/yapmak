@@ -1,0 +1,232 @@
+{
+ "source_docs": ["tests/fixtures/synthetic/memo-brief.md", "tests/fixtures/synthetic/memo-openapi.json"],
+ "bank_name": "Northbridge Mutual",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "What is the postcode of the registered business address?",
+    "answer_format": "text",
+    "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Verification is three questions, one at a time, in this order: the postcode of the registered business address, the year the company was founded, then the company registration number (eight digits)."}
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "In what year was the company founded?",
+    "answer_format": "year",
+    "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "the year the company was founded"}
+   },
+   {
+    "field": "company_number",
+    "ask_text": "What is the company registration number?",
+    "answer_format": "digits",
+    "digits": 8,
+    "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "then the company registration number (eight digits)"}
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "code",
+  "remaining_slot": "",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "failed_outcome": ["unverified", "failed"],
+  "declined_outcome": ["unverified", "declined"],
+  "unclear_holder_outcome": ["unreached", "unclear"],
+  "failed_instruction": "Tell the customer to contact the business desk.",
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Call verify_identity after each answer. Two wrong answers in total end the check: tell the customer to contact the business desk and close `unverified` / `failed`. If the customer declines to answer, explain once that the questions protect the account; a second refusal closes `unverified` / `declined`."}
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:00",
+   "end": "17:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": ["unreached", "callback"],
+   "no_callback_outcome": ["unreached", "no_callback"],
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Callbacks must be on the next business day only, between 09:00 and 17:30 inclusive. If the person offers a slot outside that, ask once for another; if that is also outside, close `unreached` / `no_callback`. A booked callback closes `unreached` / `callback`."}
+  },
+  "wrong_number_outcome": ["unreached", "wrong_number"],
+  "deceased_outcome": ["unreached", "deceased"],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "A wrong number closes `unreached` / `wrong_number`. If the account holder has died, say \"Please accept our condolences.\" and close `unreached` / `deceased`."}
+ },
+ "calendar": {
+  "holidays": ["2026-10-19", "2026-11-02", "2026-12-24", "2026-12-25", "2026-12-31", "2027-01-01"],
+  "business_days": [0, 1, 2, 3, 4],
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Business days are Monday to Friday except these Northbridge holidays: 2026-10-19, 2026-11-02, 2026-12-24, 2026-12-25, 2026-12-31, 2027-01-01."}
+ },
+ "bands": [
+  {
+   "name": "1-10",
+   "days_late_min": 1,
+   "days_late_max": 10,
+   "deadline": {"kind": "nth_business_day", "n": 7},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "(a) The 1–10 day band is shortened: the latest promise date in that band is now the 7th business day after today (not the 10th). | 7. Days in arrears 1–10: ... the assistant may make one persuasion attempt. | 10. attempt 1 proposes the full arrears on the last business day of this week (next week's if today is that day)"}
+  },
+  {
+   "name": "11-60",
+   "days_late_min": 11,
+   "days_late_max": 60,
+   "deadline": {"kind": "nth_business_day", "n": 5},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+    {"amount": "floor", "date": "deadline", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Days in arrears 11–60: the latest promise date is 5 business days after today; two persuasion attempts. | attempt 1 proposes the full arrears on the last business day of this week (next week's if today is that day); attempt 2, only in the 11–60 band, proposes the lowest amount on the deadline."}
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "business_overdraft": "minimum_due",
+   "equipment_loan": "scheduled_repayment",
+   "trade_finance_line": "scheduled_repayment"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the remainder stays in arrears",
+  "accept_between_floor_and_full": true,
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Ask for the full arrears first. The lowest amount that can be recorded is `minimum_due` for an overdraft and `scheduled_repayment` for a loan or a trade line. If the customer says the full amount is too much, offer the lowest amount once and say the remainder stays in arrears. An amount the customer proposes between the lowest amount and the full arrears is accepted. Never ask how much they can pay."}
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "A promise date must be today or later, a business day, and not after the deadline. A weekend or holiday rolls to the next business day if that is not after the deadline. A date after the deadline: offer the deadline. A vague period: ask once for the exact day, then propose the deadline."}
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says the facility is already settled / already paid.",
+   "action": {"type": "close", "outcome": "settled", "reason": ""},
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Already settled: say payments can take two business days to show, record nothing, close `settled`."}
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the facility or the arrears.",
+   "action": {"type": "close", "outcome": "no_arrangement", "reason": "disputed"},
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Disputed facility: do not argue, close `no_arrangement` / `disputed`."}
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to reschedule the facility or reduce the repayments.",
+   "action": {"type": "transfer", "queue": "restructure", "outcome": "handed_over", "reason": "restructure"},
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "A request to reschedule the facility or reduce repayments: transfer with queue `restructure`, close `handed_over` / `restructure`."}
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a person.",
+   "action": {"type": "transfer", "queue": "desk", "outcome": "handed_over", "reason": "person"},
+   "ask_once_first": true,
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "A request for a person: ask once if you can help; if they insist transfer with queue `desk`, close `handed_over` / `person`."}
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes financial distress such as illness, bereavement or loss of trade.",
+   "action": {"type": "close", "outcome": "no_arrangement", "reason": "distress"},
+   "offer_transfer_queue": "care",
+   "offer_outcome": ["handed_over", "care"],
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Financial distress (illness, bereavement, loss of trade): one sentence of sympathy, no persuasion, offer the `care` team; if accepted transfer with queue `care` and close `handed_over` / `care`; if declined close `no_arrangement` / `distress`."}
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether the call is genuine.",
+   "action": {"type": "continue"},
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "If asked whether the call is genuine: tell them they can call the number on their statement, and continue."}
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {"outcome": "arrangement", "reasons": [], "when": "at least one promise recorded"},
+   {"outcome": "settled", "reasons": [], "when": "customer says already paid"},
+   {"outcome": "handed_over", "reasons": ["restructure", "person", "care"], "when": ""},
+   {"outcome": "no_arrangement", "reasons": ["declined_payment", "distress", "disputed", "system_error"], "when": ""},
+   {"outcome": "unverified", "reasons": ["failed", "declined"], "when": ""},
+   {"outcome": "unreached", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": ""}
+  ],
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_arrangement",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "system_error",
+  "refused_reason": "declined_payment",
+  "goodbye_before_close": true,
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "When the attempts are used up close `no_arrangement` / `declined_payment`. | if it fails again say so and close `no_arrangement` / `system_error`. | Closing with several facilities: `arrangement` if at least one promise was recorded (unless handed over); otherwise `settled` if every facility is noted settled; otherwise `no_arrangement` with the reason of the first facility, in get_account order, whose note is not `settled`. | Thank the customer and say goodbye before it. | CODE LIST"}
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": ["declined_payment", "distress", "disputed", "settled", "system_error"],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "For every facility that ends without a promise call add_note with the reason: `declined_payment`, `distress`, `disputed`, `settled` or `system_error`. No notes at all on a call that is handed over."}
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Customers can have up to three facilities in arrears. State all of them before asking anything, ask once whether they can settle all of them today, then take the facilities one by one in the order get_account returns them, each starting at attempt 1. Attempts count per facility. One read-back for all promises, then one create_promise per facility. ... A single date given for everything that is after one facility's deadline is recorded for that facility on its own deadline; say so in the read-back."}
+ },
+ "phrases": {
+  "opening": "Good day, this is Northbridge Mutual's automated assistant. Please note this call is recorded.",
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "robot_reply": "",
+  "scam_reply": "",
+  "prohibited_before_verification": ["arrears", "overdue amounts", "facility", "payments"],
+  "after_promise_sentence": "A confirmation will be sent to the registered email address.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "",
+  "recorded_promise_change_reply": "",
+  "product_naming": {
+   "business_overdraft": "business overdraft",
+   "equipment_loan": "equipment loan",
+   "trade_finance_line": "trade finance line"
+  },
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Start every call with: \"Good day, this is Northbridge Mutual's automated assistant. Please note this call is recorded.\" Do not mention arrears, overdue amounts, a facility or payments to anyone before verification. ... State each facility that is in arrears: \"business overdraft\", \"equipment loan\" or \"trade finance line\" ... After a recorded promise say: \"A confirmation will be sent to the registered email address.\""}
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Can I record that?",
+  "source": {"doc": "tests/fixtures/synthetic/memo-brief.md", "text": "Read back facility, amount and date and ask \"Can I record that?\". Record with create_promise only after a clear yes. If create_promise fails, try once more; if it fails again say so and close `no_arrangement` / `system_error`."}
+ },
+ "unresolved": [
+  {"topic": "identity.wrong_answer_limit", "text": "Brief says two wrong answers in total end the check; the API summary says three wrong answers end the check. Using the brief's 2 and counting in code, not the API's attempts_remaining.", "doc": "tests/fixtures/synthetic/memo-openapi.json"},
+  {"topic": "get_account gating", "text": "API says get_account is refused until 'both questions' are passed, but the brief has three verification questions.", "doc": "tests/fixtures/synthetic/memo-openapi.json"},
+  {"topic": "amounts.floors", "text": "API describes minimum_due as 'credit cards only' and scheduled_repayment as 'loans only'; the brief maps minimum_due to the overdraft and scheduled_repayment to loans and trade lines. Brief mapping used.", "doc": "tests/fixtures/synthetic/memo-openapi.json"},
+  {"topic": "phrases.already_paid_sentence", "text": "No verbatim sentence; the brief only says to say payments can take two business days to show.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "phrases.scam_reply", "text": "No verbatim sentence; the brief only says to tell them they can call the number on their statement.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "phrases.robot_reply", "text": "The documents give no reply for when the customer asks whether they are talking to a robot.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "phrases.cannot_answer_sentence", "text": "The documents give no sentence for questions the assistant cannot answer.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "phrases.recorded_promise_change_reply", "text": "The documents do not say what to reply when a customer wants to change a recorded promise.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "special_cases.hardship.say", "text": "The brief requires one sentence of sympathy but gives no wording.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "special_cases.refuse_to_talk", "text": "The documents do not cover a customer who refuses to talk.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "identity.asking_purpose_counts_as_decline", "text": "The documents do not say whether asking why the questions are needed counts as declining.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "identity.hint", "text": "verify_identity can return hint day_month_swapped, but no date question is asked in this brief; no hint handling configured.", "doc": "tests/fixtures/synthetic/memo-openapi.json"},
+  {"topic": "calendar.next_weekday_means_following_week", "text": "The documents do not say how a weekday name such as 'next Friday' said on that weekday is read; default kept.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "calendar.missing_date_parts", "text": "The documents do not say how to complete a promise date given without month or year; default kept.", "doc": "tests/fixtures/synthetic/memo-brief.md"},
+  {"topic": "phrases.settle_today_question", "text": "Rule 10 dictates the question \"Can you settle this today?\" (memo (b): ask once whether they can settle all facilities today); the IR has no phrase slot for it.", "doc": "tests/fixtures/synthetic/memo-brief.md"}
+ ]
+}

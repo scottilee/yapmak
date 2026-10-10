@@ -1,0 +1,816 @@
+{
+  "id": "2e304382-9276-4bb5-b74b-9782c3cf5d10",
+  "externalCallId": null,
+  "sipCallId": null,
+  "workspaceId": "63eff5de-6686-497e-a5f1-5477319934ec",
+  "isArchived": false,
+  "isImported": false,
+  "phoneNumberId": null,
+  "phoneNumber": null,
+  "assistantId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+  "assistantName": "runtime-check 1010-052935",
+  "assistantEntityType": "workflow",
+  "assistantWorkflowId": "6219bb3f-ea81-4c00-98ef-348a12c6a836",
+  "entityVersionId": "383819a7-b318-4c1f-b03b-f0fa1a3fd67e",
+  "originCallId": null,
+  "entityVersionNumber": 1,
+  "customerNumber": "",
+  "customerLabel": null,
+  "startedAt": "2026-10-10T12:29:38.778Z",
+  "endedAt": null,
+  "duration": null,
+  "status": "180",
+  "type": "webCall",
+  "modality": "text",
+  "channel": null,
+  "endedReason": null,
+  "transcript": null,
+  "messages": [
+    {
+      "role": "user",
+      "message": "Hello.",
+      "messageId": "msg_1_1791635378936",
+      "secondsFromStart": 0.01411294937133789,
+      "nodeId": "collect",
+      "workflowSnapshot": {
+        "currentNode": "collect",
+        "previousNode": null,
+        "nodeTurnCount": 0,
+        "totalTurnCount": 0,
+        "nodeTotalTurnCounts": {},
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "check.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906183+00:00"
+          },
+          "check.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906197+00:00"
+          },
+          "collect.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906195+00:00"
+          },
+          "collect.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906198+00:00"
+          },
+          "observe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906191+00:00"
+          },
+          "observe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906200+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906202+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906203+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906205+00:00"
+          },
+          "call.call_id": {
+            "value": "2e304382-9276-4bb5-b74b-9782c3cf5d10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906206+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906208+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T12:29:38.747559Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906209+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 06:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906210+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 07:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906212+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 15:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906213+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906215+00:00"
+          },
+          "system.uuid4()": {
+            "value": "8f14faed635b440e93665ba033b82e83",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906216+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "383819a7-b318-4c1f-b03b-f0fa1a3fd67e"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:38.961Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":false,\"from_node\":\"collect\",\"confidence\":0.0,\"reason\":\"Suppressed: Missing prior assistant message\",\"branches\":[],\"total_duration_ms\":251.2,\"variable_table\":{\"check.current_turns\":0,\"check.total_turns\":0,\"collect.current_turns\":1,\"collect.total_turns\":1,\"observe.current_turns\":0,\"observe.total_turns\":0,\"now\":\"2026-10-14T11:00\",\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"2e304382-9276-4bb5-b74b-9782c3cf5d10\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T12:29:38.747559Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 06:29\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 07:29\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 15:29\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"8f14faed635b440e93665ba033b82e83\"}}",
+      "messageId": "msg_2_1791635379199",
+      "secondsFromStart": 0.2290325164794922,
+      "nodeId": "collect",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:39.207Z"
+    },
+    {
+      "role": "assistant",
+      "message": "Hello. Which date are you requesting?",
+      "messageId": "msg_3_1791635379380",
+      "secondsFromStart": 0.24472999572753906,
+      "nodeId": "collect",
+      "workflowSnapshot": {
+        "currentNode": "collect",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "collect": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "check.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906183+00:00"
+          },
+          "check.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906197+00:00"
+          },
+          "collect.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.947058+00:00"
+          },
+          "collect.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.947063+00:00"
+          },
+          "observe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906191+00:00"
+          },
+          "observe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906200+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906202+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906203+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906205+00:00"
+          },
+          "call.call_id": {
+            "value": "2e304382-9276-4bb5-b74b-9782c3cf5d10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906206+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906208+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T12:29:38.747559Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906209+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 06:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906210+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 07:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906212+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 15:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906213+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906215+00:00"
+          },
+          "system.uuid4()": {
+            "value": "8f14faed635b440e93665ba033b82e83",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906216+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "383819a7-b318-4c1f-b03b-f0fa1a3fd67e"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:39.387Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":1,\"userMessageId\":\"msg_1_1791635378936\",\"finalAssistantMessageId\":\"msg_3_1791635379380\",\"responseText\":\"Hello. Which date are you requesting?\"}",
+      "messageId": "msg_4_1791635379391",
+      "secondsFromStart": 0.42073726654052734,
+      "nodeId": "collect",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:39.638Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"conversation_resumed\",\"fromMessageId\":\"msg_3_1791635379380\",\"isBranch\":false}",
+      "messageId": "msg_1_1791635380753",
+      "secondsFromStart": 1.8424410820007324,
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:40.757Z"
+    },
+    {
+      "role": "user",
+      "message": "I would like next Friday.",
+      "messageId": "msg_2_1791635380770",
+      "secondsFromStart": 1.8521130084991455,
+      "nodeId": "collect",
+      "workflowSnapshot": {
+        "currentNode": "collect",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "collect": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [
+          "collect"
+        ],
+        "variableTable": {
+          "check.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906183+00:00"
+          },
+          "check.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906197+00:00"
+          },
+          "collect.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.947058+00:00"
+          },
+          "collect.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.947063+00:00"
+          },
+          "observe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906191+00:00"
+          },
+          "observe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906200+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906203+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906205+00:00"
+          },
+          "call.call_id": {
+            "value": "2e304382-9276-4bb5-b74b-9782c3cf5d10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906206+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906208+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T12:29:40.748246Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748285+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 06:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748287+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 07:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748290+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 15:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748293+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748295+00:00"
+          },
+          "system.uuid4()": {
+            "value": "8f14faed635b440e93665ba033b82e83",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906216+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906202+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "383819a7-b318-4c1f-b03b-f0fa1a3fd67e"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:40.806Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"wanted_date\",\"value\":\"2026-10-16\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"collect\",\"input_text\":\"I would like next Friday.\",\"raw_response\":\"{\\\"extracted\\\": {\\\"wanted_date\\\": \\\"2026-10-16\\\"}}\",\"variable_table\":{\"check.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906183+00:00\"},\"check.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906197+00:00\"},\"collect.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.777208+00:00\"},\"collect.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.777212+00:00\"},\"observe.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906191+00:00\"},\"observe.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906200+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906203+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906205+00:00\"},\"call.call_id\":{\"value\":\"2e304382-9276-4bb5-b74b-9782c3cf5d10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906206+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906208+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T12:29:40.748246Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.748285+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 06:29\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.748287+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 07:29\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.748290+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 15:29\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.748293+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:40.748295+00:00\"},\"system.uuid4()\":{\"value\":\"8f14faed635b440e93665ba033b82e83\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906216+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T12:29:38.906202+00:00\"}}}",
+      "messageId": "msg_3_1791635381969",
+      "secondsFromStart": 3.058422088623047,
+      "nodeId": "collect",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:41.973Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":true,\"from_node\":\"collect\",\"target\":\"check\",\"confidence\":1.0,\"reason\":\"Deterministic check wanted_date is set\",\"branches\":[{\"target\":\"check\",\"description\":\"wanted_date is set\",\"result\":true,\"condition_results\":{\"operator\":\"is_set\",\"variable\":\"wanted_date\",\"result\":true}}],\"total_duration_ms\":1194.0,\"variable_table\":{\"check.current_turns\":0,\"check.total_turns\":0,\"collect.current_turns\":2,\"collect.total_turns\":2,\"observe.current_turns\":0,\"observe.total_turns\":0,\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"2e304382-9276-4bb5-b74b-9782c3cf5d10\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T12:29:40.748246Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 06:29\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 07:29\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 15:29\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"8f14faed635b440e93665ba033b82e83\",\"now\":\"2026-10-14T11:00\",\"wanted_date\":\"2026-10-16\"}}",
+      "messageId": "msg_4_1791635381972",
+      "secondsFromStart": 3.061356782913208,
+      "nodeId": "collect",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.039Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"node_enter\",\"node\":\"check\",\"from_node\":\"collect\",\"reason\":\"Deterministic check wanted_date is set\"}",
+      "messageId": "msg_5_1791635381973",
+      "secondsFromStart": 3.06223726272583,
+      "nodeId": "check",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.144Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"function_call_start\",\"function\":\"code_exec\",\"args\":{\"timeout_ms\":10000,\"code\":\"vars['observed_now'] = str(vars.get('now', 'missing'))\\nvars['code_ran'] = 'yes'\\nvars['code_date'] = str(vars.get('now', ''))[:10]\\n\"}}",
+      "messageId": "msg_6_1791635381974",
+      "secondsFromStart": 3.0631957054138184,
+      "nodeId": "check",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.192Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"function_call_complete\",\"function\":\"code_exec\",\"result\":{\"status\":\"success\",\"data\":null,\"message\":\"Code executed successfully\",\"status_code\":200}}",
+      "messageId": "msg_7_1791635382200",
+      "secondsFromStart": 3.289255142211914,
+      "nodeId": "check",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.288Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":true,\"from_node\":\"check\",\"target\":\"observe\",\"confidence\":1.0,\"reason\":\"Deterministic observe always\",\"branches\":[{\"target\":\"observe\",\"description\":\"always\",\"result\":true,\"condition_results\":{\"operator\":\"always\",\"result\":true}}],\"variable_table\":{\"check.current_turns\":0,\"check.total_turns\":0,\"collect.current_turns\":0,\"collect.total_turns\":2,\"observe.current_turns\":0,\"observe.total_turns\":0,\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"2e304382-9276-4bb5-b74b-9782c3cf5d10\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T12:29:40.748246Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 06:29\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 07:29\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 15:29\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"8f14faed635b440e93665ba033b82e83\",\"now\":\"2026-10-14T11:00\",\"wanted_date\":\"2026-10-16\",\"observed_now\":\"2026-10-14T11:00\",\"code_ran\":\"yes\",\"code_date\":\"2026-10-14\",\"check_response.status\":\"success\",\"check_response.data\":\"null\",\"check_response.message\":\"Code executed successfully\",\"check_response.status_code\":200,\"check_status_code\":200,\"check_success_count\":1}}",
+      "messageId": "msg_8_1791635382203",
+      "secondsFromStart": 3.2924726009368896,
+      "nodeId": "check",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.356Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"node_enter\",\"node\":\"observe\",\"from_node\":\"check\",\"reason\":\"Deterministic observe always\"}",
+      "messageId": "msg_9_1791635382204",
+      "secondsFromStart": 3.293278455734253,
+      "nodeId": "observe",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.398Z"
+    },
+    {
+      "role": "assistant",
+      "message": "The extracted date is 16 Ekim 2026. The check is complete.",
+      "messageId": "msg_10_1791635382591",
+      "secondsFromStart": 3.312113046646118,
+      "nodeId": "observe",
+      "workflowSnapshot": {
+        "currentNode": "observe",
+        "previousNode": "check",
+        "nodeTurnCount": 0,
+        "totalTurnCount": 2,
+        "nodeTotalTurnCounts": {
+          "collect": 2
+        },
+        "transitionHistory": [
+          {
+            "from": "collect",
+            "to": "check",
+            "reason": "Deterministic check wanted_date is set"
+          },
+          {
+            "from": "check",
+            "to": "observe",
+            "reason": "Deterministic observe always"
+          }
+        ],
+        "enteredNodes": [
+          "check",
+          "collect",
+          "observe"
+        ],
+        "variableTable": {
+          "check.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:42.203604+00:00"
+          },
+          "check.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:41.972512+00:00"
+          },
+          "collect.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:41.972505+00:00"
+          },
+          "collect.total_turns": {
+            "value": 2,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.777212+00:00"
+          },
+          "observe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:42.203608+00:00"
+          },
+          "observe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:42.203611+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906203+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906205+00:00"
+          },
+          "call.call_id": {
+            "value": "2e304382-9276-4bb5-b74b-9782c3cf5d10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906206+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906208+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T12:29:40.748246Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748285+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 06:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748287+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 07:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748290+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 15:29",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748293+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:40.748295+00:00"
+          },
+          "system.uuid4()": {
+            "value": "8f14faed635b440e93665ba033b82e83",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906216+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:38.906202+00:00"
+          },
+          "wanted_date": {
+            "value": "2026-10-16",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "collect",
+            "raw_text": "I would like next Friday.",
+            "extracted_at": "2026-10-10T12:29:41.969035+00:00"
+          },
+          "observed_now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.199523+00:00"
+          },
+          "code_ran": {
+            "value": "yes",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.199528+00:00"
+          },
+          "code_date": {
+            "value": "2026-10-14",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.199530+00:00"
+          },
+          "check_response.status": {
+            "value": "success",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.200441+00:00"
+          },
+          "check_response.data": {
+            "value": "null",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.200445+00:00"
+          },
+          "check_response.message": {
+            "value": "Code executed successfully",
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.200447+00:00"
+          },
+          "check_response.status_code": {
+            "value": 200,
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": "check",
+            "extracted_at": "2026-10-10T12:29:42.200448+00:00"
+          },
+          "check_status_code": {
+            "value": 200,
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:42.200451+00:00"
+          },
+          "check_success_count": {
+            "value": 1,
+            "confidence": 1,
+            "source": "tool_result",
+            "source_node": null,
+            "extracted_at": "2026-10-10T12:29:42.200455+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "383819a7-b318-4c1f-b03b-f0fa1a3fd67e"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.598Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":2,\"userMessageId\":\"msg_2_1791635380770\",\"finalAssistantMessageId\":\"msg_10_1791635382591\",\"responseText\":\"The extracted date is 16 Ekim 2026. The check is complete.\"}",
+      "messageId": "msg_11_1791635382604",
+      "secondsFromStart": 3.693401336669922,
+      "nodeId": "observe",
+      "duration": 0,
+      "timestamp": "2026-10-10T12:29:42.879Z"
+    }
+  ],
+  "summary": null,
+  "cost": 0.003446,
+  "recordingUrl": "https://staging-app.freyavoice.ai/api/v2/call/2e304382-9276-4bb5-b74b-9782c3cf5d10/recording",
+  "analysis": {},
+  "tags": [],
+  "createdAt": "2026-10-10T12:29:38.778Z",
+  "updatedAt": "2026-10-10T12:29:43.243Z",
+  "campaign": null,
+  "problems": [],
+  "piiRedactions": []
+}

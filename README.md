@@ -102,3 +102,24 @@ So build something that reads a brief, not something that knows this one. Whatev
 - The bank answers `unknown product_id`: the model made an id up. Product ids come from `get_account` (`p1`, `p2`, ...). Give them to the model in the tool result, or fill them in with code.
 - A simulation stays at "running" and no call ever starts: the workflow cannot start a call. Try one chat turn. Leave `agent_config` out of the workflow you send.
 - The agent says nothing after a tool call and the customer hangs up: see "Tool results and the next turn" in `docs/tools-and-code.md`.
+
+## Our builder (team submission)
+
+One command, brief file(s) + tool API in, a published and exported phone agent out:
+
+```bash
+source .env                       # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus a Claude login or ANTHROPIC_API_KEY
+.venv/bin/python build.py --briefs <brief.md>[,<memo.md>,...] --openapi <openapi.json> --slot hidden-1 \
+    [--cases public-test-set.json --brief A]        # optional self-test simulation (practice briefs only)
+```
+
+Outputs: `out/<slot>.workflow.json` (exported from Freya after publication), `traces/<slot>.jsonl` (every model call,
+Freya write and test), `out/<slot>.policy.json` (the extracted policy), `out/<slot>.audit.json`.
+
+How it works (see `freya-agent-builder-implementation-plan.md`): `extract.py` turns the documents into a small structural
+policy (`policy.py`) with three bounded model passes; `compile.py` assembles a fixed multi-product workflow template in which
+every bank tool is an engine-fired `api_request` node and all dates, amounts, retries and outcomes are decided in code nodes
+(`bankcal.py` + an embedded runtime); the dialogue model only talks. `tests/offline_sim.py` drives the compiled state machine
+against a mock bank with the 13 public scripts; `scripts/publish_check.py` publishes and smoke-tests a workflow.
+
+Setup from a fresh clone: `uv venv .venv && uv pip install --python .venv/bin/python claude-agent-sdk pytest`, then `cp env.example .env` and fill it in.

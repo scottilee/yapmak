@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "case": "PUB-11",
+  "team": "34c4e854f4c778a2688181c5",
+  "now": "2026-10-14T11:00",
+  "verified": {
+    "date_of_birth": true
+  },
+  "wrong": 0,
+  "hinted": true,
+  "promises": [],
+  "notes": [],
+  "callbacks": [],
+  "transfers": [],
+  "outcome": null,
+  "reason": null,
+  "failures": {
+    "verify_identity": 0
+  },
+  "calls": [
+    {
+      "n": 1,
+      "tool": "verify_identity",
+      "args": {
+        "field": "date_of_birth",
+        "answer": "1987-03-06"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": false,
+        "wrong_answers_left": 3,
+        "hint": "day_month_swapped"
+      }
+    },
+    {
+      "n": 2,
+      "tool": "verify_identity",
+      "args": {
+        "field": "date_of_birth",
+        "answer": "1987-06-03"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": true,
+        "wrong_answers_left": 3,
+        "all_verified": false
+      }
+    }
+  ]
+}

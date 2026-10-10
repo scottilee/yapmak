@@ -1,0 +1,465 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "ccf9f83c-6da6-4337-92d5-c49348c35c27",
+ "iteration_id": "63a57817-3728-43d0-8b2c-23720d052fa3",
+ "seconds": 326,
+ "passed": 5,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 420.0, '2026-10-14')]",
+    "the call was not closed with close_call",
+    "conversation: The call failed several success criteria. 1) The agent entered a repetitive loop from Message 8 through Message 160, repeating the same confirmation question, which is an example of an agent failing to progress the conversation. 2) The tool 'create_promise' was never called, as the agent remained stuck in a confirmation loop. 3) The 'text-message' sentence was never said because the promise was ne"
+   ],
+   "call_id": "ad2976f1-2651-474a-83c1-9a425730db48",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_eb78e996-bb5",
+   "slowest_turn_s": 10.1,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": true,
+   "failed": [],
+   "call_id": "0e4cb09a-7dc7-4a65-b688-e84dd88a9d53",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_76c0ac88-7c4",
+   "slowest_turn_s": 10.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": true,
+   "failed": [],
+   "call_id": "54a1682b-8c6a-4f9e-ba88-dc0600e7d774",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "close_call"
+   ],
+   "customer_id": "c_d154321b-b3e",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+    "the call was not closed with close_call",
+    "conversation: - The agent correctly identified as a digital assistant when asked (Message 8). - The agent correctly negotiated the user's payment proposal (November 6th) without treating it as a refusal, instead countering with the late-band deadline (Message 8). - The agent recorded the promise date as the 23 October deadline as required (Message 10). - The call failed to end properly: after the conversation c"
+   ],
+   "call_id": "a00b88c7-e659-43b2-8759-0bc1b3190048",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_5224b830-a72",
+   "slowest_turn_s": 8.9,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": true,
+   "failed": [],
+   "call_id": "c2927064-5113-47a0-872b-91e10ae0ce30",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_d5cd73db-3fb",
+   "slowest_turn_s": 8.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 637.5, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: - The agent offered the minimum payment twice (Message 8 and Message 10), failing the criterion to offer it only once. - The agent entered a repetitive loop starting at Message 12, repeating the same confirmation request over 50 times despite receiving multiple confirmations from the user, failing the requirement to end the call properly or progress the conversation."
+   ],
+   "call_id": "f9fa072d-e26d-493c-8caf-70b28ba7b4ae",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_dfe0f0e1-e2b",
+   "slowest_turn_s": 3.9,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 540.0, '2026-10-27')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation satisfied some criteria but failed on the call ending requirements and recording verification. 1) The agent entered a repetitive loop from Message 16 to Message 160, repeating 'Goodbye, Mr Ortiz' long after the conversation had naturally concluded at Message 15. 2) There is no system event or API call evidence that the promise was recorded in the bank's system, despite the agent's"
+   ],
+   "call_id": "f4717f06-3bef-43ff-bd12-cb88af8e69a7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_44288ae6-0f9",
+   "slowest_turn_s": 7.2,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": true,
+   "failed": [],
+   "call_id": "788ccd45-42e1-4ec6-b693-efe58b3c2fb3",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_b32df5c9-013",
+   "slowest_turn_s": 6.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": true,
+   "failed": [],
+   "call_id": "0f0af0bc-55a8-43a5-93d7-0f80f4d839d9",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_4cfab950-30d",
+   "slowest_turn_s": 9.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 365.0, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation failed for several reasons: - The agent failed to record a promise in the ledger (no record_promise tool call was observed in system events). - The agent said 'recorded' in Message 0. - The agent entered an infinite loop, repeating the same confirmation request from Message 8 through Message 138, which constitutes a failure to end the call properly and a lack of genuine conversati"
+   ],
+   "call_id": "d8519b72-3f0f-49a7-b3b8-a38e6c66ec98",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_f233aa97-b1e",
+   "slowest_turn_s": 5.7,
+   "ended": "customer-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The call failed several success criteria. 1) The agent entered a repetitive loop from Message 8 through Message 160, repeating the same confirmation question, which is an example of an agent failing to progress the conversation. 2) The tool 'create_promise' was never called, as the agent remained stuck in a confirmation loop. 3) The 'text-message' sentence was never said because the promise was ne"
+    ],
+    "call_id": "ad2976f1-2651-474a-83c1-9a425730db48",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_eb78e996-bb5",
+    "slowest_turn_s": 10.1,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": true,
+    "failed": [],
+    "call_id": "0e4cb09a-7dc7-4a65-b688-e84dd88a9d53",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_76c0ac88-7c4",
+    "slowest_turn_s": 10.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": true,
+    "failed": [],
+    "call_id": "54a1682b-8c6a-4f9e-ba88-dc0600e7d774",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "close_call"
+    ],
+    "customer_id": "c_d154321b-b3e",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+     "the call was not closed with close_call",
+     "conversation: - The agent correctly identified as a digital assistant when asked (Message 8). - The agent correctly negotiated the user's payment proposal (November 6th) without treating it as a refusal, instead countering with the late-band deadline (Message 8). - The agent recorded the promise date as the 23 October deadline as required (Message 10). - The call failed to end properly: after the conversation c"
+    ],
+    "call_id": "a00b88c7-e659-43b2-8759-0bc1b3190048",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_5224b830-a72",
+    "slowest_turn_s": 8.9,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": true,
+    "failed": [],
+    "call_id": "c2927064-5113-47a0-872b-91e10ae0ce30",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_d5cd73db-3fb",
+    "slowest_turn_s": 8.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: - The agent offered the minimum payment twice (Message 8 and Message 10), failing the criterion to offer it only once. - The agent entered a repetitive loop starting at Message 12, repeating the same confirmation request over 50 times despite receiving multiple confirmations from the user, failing the requirement to end the call properly or progress the conversation."
+    ],
+    "call_id": "f9fa072d-e26d-493c-8caf-70b28ba7b4ae",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_dfe0f0e1-e2b",
+    "slowest_turn_s": 3.9,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 540.0, '2026-10-27')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation satisfied some criteria but failed on the call ending requirements and recording verification. 1) The agent entered a repetitive loop from Message 16 to Message 160, repeating 'Goodbye, Mr Ortiz' long after the conversation had naturally concluded at Message 15. 2) There is no system event or API call evidence that the promise was recorded in the bank's system, despite the agent's"
+    ],
+    "call_id": "f4717f06-3bef-43ff-bd12-cb88af8e69a7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_44288ae6-0f9",
+    "slowest_turn_s": 7.2,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": true,
+    "failed": [],
+    "call_id": "788ccd45-42e1-4ec6-b693-efe58b3c2fb3",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_b32df5c9-013",
+    "slowest_turn_s": 6.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": true,
+    "failed": [],
+    "call_id": "0f0af0bc-55a8-43a5-93d7-0f80f4d839d9",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_4cfab950-30d",
+    "slowest_turn_s": 9.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed for several reasons: - The agent failed to record a promise in the ledger (no record_promise tool call was observed in system events). - The agent said 'recorded' in Message 0. - The agent entered an infinite loop, repeating the same confirmation request from Message 8 through Message 138, which constitutes a failure to end the call properly and a lack of genuine conversati"
+    ],
+    "call_id": "d8519b72-3f0f-49a7-b3b8-a38e6c66ec98",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_f233aa97-b1e",
+    "slowest_turn_s": 5.7,
+    "ended": "customer-ended-call"
+   }
+  ]
+ ]
+}

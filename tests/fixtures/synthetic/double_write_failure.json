@@ -1,0 +1,78 @@
+[
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "Multi-product",
+    "level": "medium",
+    "title": "Double failure for product 2; preserve products 1 and 3",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Verify correctly. Agree to pay all three products this Friday and confirm the batch once. If told a product could not be recorded, acknowledge it. Do not invent another offer.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 220,
+          "date": "2026-10-16"
+        },
+        {
+          "product_id": "p3",
+          "amount": 75,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [
+        {
+          "product_id": "p2",
+          "reason": "service_error"
+        }
+      ],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Two failed write attempts for p2, then one service_error note",
+      "Promises p1 and p3 remain",
+      "Never claim p2 was recorded",
+      "Final outcome promise"
+    ],
+    "faults": [
+      {
+        "tool": "create_promise",
+        "product_id": "p2",
+        "fail_first_n": 2
+      }
+    ]
+  }
+]

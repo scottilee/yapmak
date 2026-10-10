@@ -1,0 +1,106 @@
+[
+  {
+    "speech": "Hello.",
+    "response": "Hello. Please provide the last four digits of your phone number.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 1,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "03a965f1-8f4f-46bd-979d-5fd1f69edba9",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:40:38.670032Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:40",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:40",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:40",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "e118e061d8bf47a7a97463a5a3c534ed",
+      "identity_status": "absent"
+    },
+    "routes": []
+  },
+  {
+    "speech": "Forty-four...",
+    "response": "Please provide the remaining two digits.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 2,
+      "collect.total_turns": 2,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "03a965f1-8f4f-46bd-979d-5fd1f69edba9",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:40:40.964957Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:40",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:40",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:40",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "e118e061d8bf47a7a97463a5a3c534ed",
+      "identity_status": "partial"
+    },
+    "routes": []
+  },
+  {
+    "speech": "...seventy-one.",
+    "response": "Thank you. I have received your digits.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 3,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "03a965f1-8f4f-46bd-979d-5fd1f69edba9",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:40:43.132563Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:40",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:40",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:40",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "e118e061d8bf47a7a97463a5a3c534ed",
+      "identity_status": "complete",
+      "identity_digits": "4471",
+      "identity_process_count": 1,
+      "identity_normalized": "4471",
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check identity_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  }
+]

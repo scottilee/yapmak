@@ -1,0 +1,86 @@
+{
+  "initial_node": "collect",
+  "system_prompt": "You are a calendar test assistant. Speak English.",
+  "nodes": {
+    "collect": {
+      "name": "collect",
+      "node_type": "conversation",
+      "task_message": "Ask which date the caller requests. Do not infer a date yourself.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [
+        {
+          "name": "wanted_date",
+          "type": "date",
+          "description": "The date the caller requests.",
+          "min_confidence": 0.0
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "check",
+          "description": "Deterministic check",
+          "condition": {
+            "variable": "wanted_date",
+            "operator": "is_set"
+          }
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12
+    },
+    "check": {
+      "name": "check",
+      "node_type": "code",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "observe",
+      "transitions": [
+        {
+          "target_node": "observe",
+          "description": "Deterministic observe",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ],
+      "pre_actions": [
+        {
+          "type": "function",
+          "function": {
+            "name": "code_exec",
+            "handler": "__function__:code_exec",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "default": "vars['observed_now'] = str(vars.get('now', 'missing'))\nvars['code_ran'] = 'yes'\nvars['code_date'] = str(vars.get('now', ''))[:10]\n"
+                },
+                "timeout_ms": {
+                  "type": "number",
+                  "default": 10000
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "observe": {
+      "name": "observe",
+      "node_type": "conversation",
+      "task_message": "State the extracted date {{wanted_date}} and say the check is complete. Do not change the date.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [],
+      "transitions": [],
+      "tools": [],
+      "max_node_turns": 12
+    }
+  }
+}

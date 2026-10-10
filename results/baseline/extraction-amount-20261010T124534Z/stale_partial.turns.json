@@ -1,0 +1,188 @@
+[
+  {
+    "speech": "Hello.",
+    "response": "Hello. What payment amount are you proposing for this extraction check?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 1,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "da152141-3a24-4bd7-8b63-fe4805ce4d7b",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:45:40.089068Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:45",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:45",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:45",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "709e6d60140743208a6af00b0b499b6e",
+      "amount_status": "absent"
+    },
+    "routes": []
+  },
+  {
+    "speech": "Three hundred.",
+    "response": "Thank you. I have recorded the amount as 300.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 2,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "da152141-3a24-4bd7-8b63-fe4805ce4d7b",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:45:42.766810Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:45",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:45",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:45",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "709e6d60140743208a6af00b0b499b6e",
+      "amount_status": "absent",
+      "amount_value": -1,
+      "amount_process_count": 1,
+      "amount_normalized": "300.0",
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check amount_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  },
+  {
+    "speech": "Actually four hundred and...",
+    "response": "Please finish the amount. You said four hundred and...",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 3,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "da152141-3a24-4bd7-8b63-fe4805ce4d7b",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:45:46.221355Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:45",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:45",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:45",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "709e6d60140743208a6af00b0b499b6e",
+      "amount_status": "partial",
+      "amount_value": -1,
+      "amount_process_count": 1,
+      "amount_normalized": "300.0",
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check amount_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  },
+  {
+    "speech": "...twenty.",
+    "response": "Thank you. I have updated the amount to 420.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 4,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "da152141-3a24-4bd7-8b63-fe4805ce4d7b",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:45:48.999015Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:45",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:45",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:45",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "709e6d60140743208a6af00b0b499b6e",
+      "amount_status": "absent",
+      "amount_value": -1,
+      "amount_process_count": 2,
+      "amount_normalized": "420.0",
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_status_code": 200,
+      "check_success_count": 2
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check amount_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      },
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check amount_status == 'complete'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  }
+]

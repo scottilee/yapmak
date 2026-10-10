@@ -1,0 +1,76 @@
+[
+  {
+    "speech": "Hello.",
+    "response": "Hello. How can I help you?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 1,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "dd5d133a-9d8a-4505-b69d-fb2a4077ef5f",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:40:55.387389Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:40",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:40",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:40",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "f40abf130958428985d3fc92d127e112"
+    },
+    "routes": []
+  },
+  {
+    "speech": "Yes, but make that three hundred and fifty instead.",
+    "response": "I cannot process a correction yet. Please tell me what you would like to do.",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 2,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 2,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "dd5d133a-9d8a-4505-b69d-fb2a4077ef5f",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:40:57.413716Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:40",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:40",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:40",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "f40abf130958428985d3fc92d127e112",
+      "consent_action": "pending",
+      "consent_process_count": 1,
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_response.validation_errors.0": "variable 'corrected_amount' rejected by schema validation",
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check consent_action == 'correct'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  }
+]

@@ -1,0 +1,71 @@
+publish 2026-10-10T13:06:00Z
+published {'workflow_id': '3a313c88-e790-43c4-ad2e-504199b115f1', 'agent_id': '82d0876d-b628-4bb3-98d8-4033740b7b53', 'version': 6} (5.7s)
+published {'workflow_id': '516d7b3d-12a7-4794-be8a-12133b653e46', 'agent_id': '8912d228-94d9-4308-b85c-3054f1ff15a6', 'version': 5} (3.2s)
+start A 2026-10-10T13:06:16Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The agent offered the minimum payment twice (Message 8 and Message 10), violating the requirement that it be offered only once. Although the dates differed, both messages offered the exact minimum amount (637.50) and included the mandatory note a
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 8 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 378f1930-c859-4ce4-81ca-a3ccc118732d, status completed, 95 s.
+exit A 0 2026-10-10T13:08:14Z
+start B 2026-10-10T13:08:14Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 6 s. Failed calls where the customer hung up: 0.
+
+3 / 3 passed (bank records and conversation checks). Last simulation e29c9e47-61d8-45fb-9018-44a21eee561d, status completed, 65 s.
+exit B 0 2026-10-10T13:09:25Z
+start A-in_words 2026-10-10T13:09:25Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 7 s, worst 9 s. Failed calls where the customer hung up: 0.
+
+10 / 10 passed (bank records and conversation checks). Last simulation d2861dc4-9150-4137-99d1-5645661163d4, status completed, 106 s.
+exit A-in_words 0 2026-10-10T13:11:35Z
+start A-pieces 2026-10-10T13:11:35Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+FAIL PUB-03 medium Identity       | verify
+       - outcome (None, None), expected ('not_verified', 'failed')
+       - the call was not closed with close_call
+       - conversation: The assistant failed to meet the success criteria and did not behave properly. 1. The assistant never told the customer to use the app or visit a branch. 2. The assistant entered a repetitive loop, repeating the same prompt for over 150 messages 
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The agent successfully followed the instruction to propose specific amounts rather than asking how much the user could afford (Message 14). The agent also correctly confirmed and recorded a promise for 637.50 on Friday, 16 October 2026 (Messages 
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+FAIL PUB-08 medium Already paid   | (no tool calls)
+       - outcome (None, None), expected ('paid', None)
+       - the call was not closed with close_call
+       - conversation: The agent failed to meet the success criteria as it never mentioned that payments can take one business day to appear. The entire conversation consisted of the agent being stuck in a repetitive loop asking for the user's date of birth (Messages 4
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+FAIL PUB-10 hard   Tool failure   | verify > verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 365.0, '2026-10-16')]
+       - conversation: The success criteria were not met because no promise was recorded in the ledger. According to the system events, the call was closed with an outcome of 'no_promise' after the agent failed to reconcile the user's split statements ('three hundred' 
+
+slowest agent turn per call: median 4 s, worst 8 s. Failed calls where the customer hung up: 2.
+
+6 / 10 passed (bank records and conversation checks). Last simulation 86dc44fc-86e2-4bb2-a868-6f101bacb98c, status completed, 354 s.
+exit A-pieces 0 2026-10-10T13:17:54Z

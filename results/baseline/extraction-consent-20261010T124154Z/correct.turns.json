@@ -1,0 +1,79 @@
+[
+  {
+    "speech": "Hello.",
+    "response": "Hello. You want to pay 420 dollars via credit card on 16 October 2026. Do you confirm?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 1,
+      "collect.total_turns": 1,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 420,
+      "proposal_revision": 1,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "73cd2ccf-a292-49a3-b62d-f36c62803e1e",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:42:02.968873Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:42",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:42",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:42",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "93f0a2847ea94680b099c823ae882658"
+    },
+    "routes": []
+  },
+  {
+    "speech": "Yes, but make that three hundred and fifty instead.",
+    "response": "Credit card, 350.0 dollars on 16 October 2026. Do you confirm?",
+    "values": {
+      "check.current_turns": 0,
+      "check.total_turns": 0,
+      "collect.current_turns": 0,
+      "collect.total_turns": 2,
+      "now": "2026-10-14T11:00",
+      "date_resolved": "unset",
+      "proposed_amount": 350,
+      "proposal_revision": 2,
+      "confirmed_revision": 0,
+      "consent_valid": "false",
+      "proposal_complete": "true",
+      "call.customer_phone_number": "",
+      "call.phone_number": "",
+      "call.call_id": "73cd2ccf-a292-49a3-b62d-f36c62803e1e",
+      "call.direction": "web",
+      "system.iso_utc_now": "2026-10-10T12:42:05.430618Z",
+      "system.todays_date_en_cst": "10 October 2026 Saturday 06:42",
+      "system.todays_date_en_est": "10 October 2026 Saturday 07:42",
+      "system.todays_date_tr": "10 Ekim 2026 Cumartesi 15:42",
+      "system.todays_date_tr.iso_8601": "2026-10-10",
+      "system.uuid4()": "93f0a2847ea94680b099c823ae882658",
+      "consent_action": "pending",
+      "corrected_amount": 350,
+      "consent_process_count": 1,
+      "check_response.status": "success",
+      "check_response.data": "null",
+      "check_response.message": "Code executed successfully",
+      "check_response.status_code": 200,
+      "check_response.validation_errors.0": "variable 'corrected_amount' rejected by schema validation",
+      "check_status_code": 200,
+      "check_success_count": 1
+    },
+    "routes": [
+      {
+        "source": "collect",
+        "target": "check",
+        "reason": "Deterministic check consent_action == 'correct'"
+      },
+      {
+        "source": "check",
+        "target": "collect",
+        "reason": "Deterministic collect always"
+      }
+    ]
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "ok": true,
+  "case": "PUB-10",
+  "team": "34c4e854f4c778a2688181c5",
+  "now": "2026-10-14T11:00",
+  "verified": {
+    "date_of_birth": true,
+    "phone_last4": true
+  },
+  "wrong": 0,
+  "hinted": false,
+  "promises": [
+    {
+      "promise_id": "pr1",
+      "product_id": "p1",
+      "type": "credit_card",
+      "amount": 365,
+      "date": "2026-10-16"
+    }
+  ],
+  "notes": [],
+  "callbacks": [],
+  "transfers": [],
+  "outcome": null,
+  "reason": null,
+  "failures": {
+    "verify_identity": 0,
+    "get_account": 0,
+    "create_promise": 1
+  },
+  "calls": [
+    {
+      "n": 1,
+      "tool": "verify_identity",
+      "args": {
+        "field": "date_of_birth",
+        "answer": "1989-02-23"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": true,
+        "wrong_answers_left": 3,
+        "all_verified": false
+      }
+    },
+    {
+      "n": 2,
+      "tool": "verify_identity",
+      "args": {
+        "field": "phone_last4",
+        "answer": "9904"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "verified": true,
+        "wrong_answers_left": 3,
+        "all_verified": true
+      }
+    },
+    {
+      "n": 3,
+      "tool": "get_account",
+      "args": {},
+      "status": 200,
+      "result": {
+        "ok": true,
+        "products": [
+          {
+            "product_id": "p1",
+            "type": "credit_card",
+            "card_last4": "7740",
+            "past_due": 365,
+            "days_late": 8,
+            "minimum_payment": 109.5
+          }
+        ]
+      }
+    },
+    {
+      "n": 4,
+      "tool": "create_promise",
+      "args": {
+        "date": "2026-10-16",
+        "amount": 365,
+        "product_id": "p1"
+      },
+      "status": 500,
+      "result": {
+        "ok": false,
+        "error": "service unavailable, nothing was recorded"
+      }
+    },
+    {
+      "n": 5,
+      "tool": "create_promise",
+      "args": {
+        "date": "2026-10-16",
+        "amount": 365,
+        "product_id": "p1"
+      },
+      "status": 200,
+      "result": {
+        "ok": true,
+        "promise_id": "pr1"
+      }
+    }
+  ]
+}

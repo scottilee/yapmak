@@ -1,0 +1,225 @@
+{
+  "initial_node": "collect",
+  "system_prompt": "You are a functional test assistant. Speak English. Do not claim recording unless bank success is reported.",
+  "nodes": {
+    "collect": {
+      "name": "collect",
+      "node_type": "conversation",
+      "task_message": "If asked to check, explain that only valid confirmed proposals can be recorded. Otherwise ask the caller to say check the proposal.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [
+        {
+          "name": "run_check",
+          "type": "string",
+          "enum_values": [
+            "check"
+          ],
+          "description": "Set check when the caller asks to check the proposal or check again.",
+          "min_confidence": 0.0
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "check",
+          "description": "Deterministic check",
+          "condition": {
+            "variable": "run_check",
+            "operator": "equals",
+            "operand": "check"
+          }
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12
+    },
+    "check": {
+      "name": "check",
+      "node_type": "code",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "collect",
+      "transitions": [
+        {
+          "target_node": "write",
+          "description": "Deterministic write",
+          "condition": {
+            "variable": "verdict",
+            "operator": "equals",
+            "operand": "ok"
+          }
+        },
+        {
+          "target_node": "collect",
+          "description": "Deterministic collect",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ],
+      "pre_actions": [
+        {
+          "type": "function",
+          "function": {
+            "name": "code_exec",
+            "handler": "__function__:code_exec",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "default": "vars['verdict'] = 'blocked'\nvars['run_check'] = ''\ntry:\n    amount = float(vars.get('proposal_amount', 0))\n    floor = float(vars.get('floor', 0))\n    full = float(vars.get('full', 0))\n    confirmed = str(vars.get('confirmed', '')).lower() == 'true'\n    attempted = str(vars.get('attempted', '')).lower() == 'true'\n    if floor <= amount <= full and confirmed and not attempted:\n        vars['verdict'] = 'ok'\n        vars['attempted'] = 'true'\nexcept Exception:\n    vars['verdict'] = 'blocked'\n"
+                },
+                "timeout_ms": {
+                  "type": "number",
+                  "default": 10000
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "write": {
+      "name": "write",
+      "node_type": "api_request",
+      "passthrough": true,
+      "on_enter": {
+        "type": "silent"
+      },
+      "passthrough_default_transition": "collect",
+      "pre_actions": [
+        {
+          "type": "function",
+          "config": {
+            "maxRetries": 0,
+            "timeoutMs": 10000
+          },
+          "function": {
+            "name": "create_promise",
+            "handler": "__function__:api_call",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "default": "https://freya-bank-mock.freyavoice.workers.dev/v1/create_promise"
+                },
+                "method": {
+                  "type": "string",
+                  "default": "POST"
+                },
+                "headers": {
+                  "type": "object",
+                  "properties": {
+                    "Content-Type": {
+                      "type": "string",
+                      "default": "application/json"
+                    }
+                  }
+                },
+                "body": {
+                  "type": "object",
+                  "properties": {
+                    "customer_id": {
+                      "type": "string",
+                      "default": "{{customer_id}}"
+                    },
+                    "product_id": {
+                      "type": "string",
+                      "default": "{{product_id}}"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "default": "{{proposal_amount}}"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date",
+                      "default": "{{date}}"
+                    }
+                  },
+                  "required": [
+                    "customer_id",
+                    "product_id",
+                    "amount",
+                    "date"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "response_mapping": [
+        {
+          "path": "data.ok",
+          "variable": "bank_ok"
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "recorded",
+          "description": "Bank data.ok is true",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "bank_ok",
+                "operator": "equals",
+                "operand": "true"
+              },
+              {
+                "variable": "bank_ok",
+                "operator": "equals",
+                "operand": "True"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "collect",
+          "description": "Deterministic collect",
+          "condition": {
+            "operator": "always"
+          }
+        }
+      ]
+    },
+    "recorded": {
+      "name": "recorded",
+      "node_type": "conversation",
+      "task_message": "The bank returned success. Say the promise is recorded. If asked to check again, run the check.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "extraction_schema": [
+        {
+          "name": "run_check",
+          "type": "string",
+          "enum_values": [
+            "check"
+          ],
+          "description": "Set check when the caller asks to check the proposal or check again.",
+          "min_confidence": 0.0
+        }
+      ],
+      "transitions": [
+        {
+          "target_node": "check",
+          "description": "Deterministic check",
+          "condition": {
+            "variable": "run_check",
+            "operator": "equals",
+            "operand": "check"
+          }
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12
+    }
+  }
+}

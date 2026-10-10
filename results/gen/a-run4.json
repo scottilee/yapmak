@@ -1,0 +1,441 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "378f1930-c859-4ce4-81ca-a3ccc118732d",
+ "iteration_id": "1dd9f394-cebc-4263-9aa7-c38ce86dc207",
+ "seconds": 95,
+ "passed": 9,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": true,
+   "failed": [],
+   "call_id": "d2084f6d-0d88-4cf3-b16a-b10a8c9ecd42",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_e95f3b71-8d9",
+   "slowest_turn_s": 6.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": true,
+   "failed": [],
+   "call_id": "d9b99903-d29e-4077-8f87-99086cd11e26",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_02c2ece7-bd8",
+   "slowest_turn_s": 7.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": true,
+   "failed": [],
+   "call_id": "2bae1af9-1706-4158-9c07-e9ee3ee4cb5a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "close_call"
+   ],
+   "customer_id": "c_ab0b4328-04e",
+   "slowest_turn_s": 2.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "9365141a-2b75-46c8-b645-f83d1d48995f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_04e20285-879",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": true,
+   "failed": [],
+   "call_id": "1a73f7a8-ea3f-47d1-b30e-e043bce91c39",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_54bcca0a-714",
+   "slowest_turn_s": 7.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "conversation: The agent offered the minimum payment twice (Message 8 and Message 10), violating the requirement that it be offered only once. Although the dates differed, both messages offered the exact minimum amount (637.50) and included the mandatory note about the rest staying overdue. The agent correctly avoided asking 'how much she can pay', and the final promise was successfully recorded for 637.50 on Fr"
+   ],
+   "call_id": "7e7d9fba-47da-4614-9085-ec223cbfffbc",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_25588a41-662",
+   "slowest_turn_s": 6.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "df747964-21a1-4606-9837-2940ba475a26",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_549f8733-987",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": true,
+   "failed": [],
+   "call_id": "42952b1d-ca86-447f-ac57-1dd26edf482f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_857f5073-ee9",
+   "slowest_turn_s": 6.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": true,
+   "failed": [],
+   "call_id": "c24cac88-9ecb-4d66-98e9-a13b04a5f500",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_27d12eea-0e6",
+   "slowest_turn_s": 6.0,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": true,
+   "failed": [],
+   "call_id": "70c1d333-db67-472c-b444-78d2481a0730",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_f447c76c-cf4",
+   "slowest_turn_s": 4.8,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": true,
+    "failed": [],
+    "call_id": "d2084f6d-0d88-4cf3-b16a-b10a8c9ecd42",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_e95f3b71-8d9",
+    "slowest_turn_s": 6.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": true,
+    "failed": [],
+    "call_id": "d9b99903-d29e-4077-8f87-99086cd11e26",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_02c2ece7-bd8",
+    "slowest_turn_s": 7.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": true,
+    "failed": [],
+    "call_id": "2bae1af9-1706-4158-9c07-e9ee3ee4cb5a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "close_call"
+    ],
+    "customer_id": "c_ab0b4328-04e",
+    "slowest_turn_s": 2.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "9365141a-2b75-46c8-b645-f83d1d48995f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_04e20285-879",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": true,
+    "failed": [],
+    "call_id": "1a73f7a8-ea3f-47d1-b30e-e043bce91c39",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_54bcca0a-714",
+    "slowest_turn_s": 7.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "conversation: The agent offered the minimum payment twice (Message 8 and Message 10), violating the requirement that it be offered only once. Although the dates differed, both messages offered the exact minimum amount (637.50) and included the mandatory note about the rest staying overdue. The agent correctly avoided asking 'how much she can pay', and the final promise was successfully recorded for 637.50 on Fr"
+    ],
+    "call_id": "7e7d9fba-47da-4614-9085-ec223cbfffbc",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_25588a41-662",
+    "slowest_turn_s": 6.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "df747964-21a1-4606-9837-2940ba475a26",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_549f8733-987",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": true,
+    "failed": [],
+    "call_id": "42952b1d-ca86-447f-ac57-1dd26edf482f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_857f5073-ee9",
+    "slowest_turn_s": 6.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": true,
+    "failed": [],
+    "call_id": "c24cac88-9ecb-4d66-98e9-a13b04a5f500",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_27d12eea-0e6",
+    "slowest_turn_s": 6.0,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": true,
+    "failed": [],
+    "call_id": "70c1d333-db67-472c-b444-78d2481a0730",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_f447c76c-cf4",
+    "slowest_turn_s": 4.8,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}
