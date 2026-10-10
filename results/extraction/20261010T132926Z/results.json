@@ -1,0 +1,2415 @@
+[
+  {
+    "id": "boundary-01",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "You tell me.",
+      "What is the smallest amount I can pay?"
+    ],
+    "ambiguity": null,
+    "call_id": "123433ce-2888-4b4f-a74b-66475566a6c0",
+    "actual": "too_much",
+    "passed": true,
+    "duration_s": 7.3,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "You tell me.",
+        "response": "I am asking if you are able to make that payment on that date.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "123433ce-2888-4b4f-a74b-66475566a6c0",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:29:45.156872Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:29",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:29",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:29",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "2257bcb54b2d42f383e739fdebb3ea4c",
+          "cust_intent": "question"
+        },
+        "routed": false
+      },
+      {
+        "speech": "What is the smallest amount I can pay?",
+        "response": "I don't have that information. Can you pay four hundred and twenty on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 3,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "123433ce-2888-4b4f-a74b-66475566a6c0",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:29:47.502032Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:29",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:29",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:29",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "2257bcb54b2d42f383e739fdebb3ea4c",
+          "cust_intent": "too_much"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-02",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "You tell me what the deadline means."
+    ],
+    "ambiguity": null,
+    "call_id": "ab4e2658-67b6-427d-9a3d-d1dbd9b607d9",
+    "actual": "question",
+    "passed": true,
+    "duration_s": 5.31,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "You tell me what the deadline means.",
+        "response": "It is the date by which the payment must be received. Can you pay four hundred and twenty on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "ab4e2658-67b6-427d-9a3d-d1dbd9b607d9",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:29:53.115896Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:29",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:29",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:29",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "033da0347ad2467ebdb683eef73ac1ff",
+          "cust_intent": "question"
+        },
+        "routed": false
+      }
+    ]
+  },
+  {
+    "id": "boundary-03",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "Can you offer a smaller payment?"
+    ],
+    "ambiguity": null,
+    "call_id": "e1701e28-fc26-43f2-97c2-626b16630da5",
+    "actual": "too_much",
+    "passed": true,
+    "duration_s": 6.64,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Can you offer a smaller payment?",
+        "response": "I cannot change the amount. Can you pay four hundred and twenty on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "e1701e28-fc26-43f2-97c2-626b16630da5",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:29:58.240340Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:29",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:29",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:29",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "ae24db04d21e452d89f252e1cccc07f3",
+          "cust_intent": "too_much"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-04",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "boundary",
+    "turns": [
+      "Yes, I can pay on Friday the sixteenth."
+    ],
+    "ambiguity": null,
+    "call_id": "d3d9ee68-97a0-472a-a51c-25eb9ca5bec5",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 5.66,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, I can pay on Friday the sixteenth.",
+        "response": "Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "d3d9ee68-97a0-472a-a51c-25eb9ca5bec5",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:30:05.698595Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:30",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:30",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:30",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "312a35af88ab4e9d8910aa737964a44e",
+          "cust_intent": "accepts",
+          "prop_day": 16,
+          "prop_kind": "date",
+          "prop_weekday": "friday",
+          "prop_relative": "this"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-05",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "boundary",
+    "turns": [
+      "Friday the sixteenth, yes, that works."
+    ],
+    "ambiguity": null,
+    "call_id": "82bccd57-aae8-4204-975b-182376b4b8dd",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 5.9,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Friday the sixteenth, yes, that works.",
+        "response": "Can you pay four hundred and twenty on that date?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "82bccd57-aae8-4204-975b-182376b4b8dd",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:30:11.770395Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:30",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:30",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:30",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "5ca456c7b1234010bb4a003ba76d4be5",
+          "cust_intent": "accepts",
+          "prop_day": 16,
+          "prop_kind": "date",
+          "prop_weekday": "friday",
+          "prop_relative": "this"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-06",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "boundary",
+    "turns": [
+      "Yes, actually no, I need the twentieth instead."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 502: error code: 502\n",
+    "call_id": "3a2744dd-cf8f-4adf-8897-82ae3ac0fcbf",
+    "duration_s": 4.26,
+    "turns_observed": []
+  },
+  {
+    "id": "boundary-07",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "I agree, sorry, no, that is too much; suggest less."
+    ],
+    "ambiguity": null,
+    "call_id": "30ff6c99-016e-4496-87e0-ebf4ada49ed0",
+    "actual": "too_much",
+    "passed": true,
+    "duration_s": 4.65,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "I agree, sorry, no, that is too much; suggest less.",
+        "response": "I cannot suggest a different amount. Can you pay four hundred and twenty on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "30ff6c99-016e-4496-87e0-ebf4ada49ed0",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:31:00.602956Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:31",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:31",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:31",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "e84f7c048a4a427cb177509c079183f0",
+          "cust_intent": "too_much"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-08",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "How much did you just say?"
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 502: error code: 502\n",
+    "call_id": null,
+    "duration_s": 0.26,
+    "turns_observed": []
+  },
+  {
+    "id": "boundary-09",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "other",
+    "style": "boundary",
+    "turns": [
+      "You tell me."
+    ],
+    "ambiguity": "underspecified",
+    "call_id": "8a3ac19c-64ac-48be-b869-7d66ba35605e",
+    "actual": "question",
+    "passed": false,
+    "duration_s": 4.57,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "You tell me.",
+        "response": "I am asking if you are able to make that payment on that date.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "8a3ac19c-64ac-48be-b869-7d66ba35605e",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:31:05.582149Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:31",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:31",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:31",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "f70ac37aa5094c6c8d08708e1ecf0d21",
+          "cust_intent": "question"
+        },
+        "routed": false
+      }
+    ]
+  },
+  {
+    "id": "negotiate-accepts-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "Yes, that works for me."
+    ],
+    "ambiguity": null,
+    "call_id": "279ca2d8-5283-4d4d-b131-4485996a235e",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 4.93,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, that works for me.",
+        "response": "Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "279ca2d8-5283-4d4d-b131-4485996a235e",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:31:11.063090Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:31",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:31",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:31",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "3c019827a19244a495f58741b3072eae",
+          "cust_intent": "accepts"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "negotiate-pays_today-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "pays_today",
+    "style": "in_words",
+    "turns": [
+      "I can pay today."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 504: error code: 504\n",
+    "call_id": "ec08957b-b471-41c6-9a83-c87071c7f4a0",
+    "duration_s": 12.62,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-proposes-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I can pay on the twentieth of October."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 504: error code: 504\n",
+    "call_id": "1d2e4ba7-dd6c-425f-b8d2-e31a3976f6b0",
+    "duration_s": 12.86,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-refuses-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "refuses",
+    "style": "in_words",
+    "turns": [
+      "No, I cannot pay."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 504: error code: 504\n",
+    "call_id": null,
+    "duration_s": 10.28,
+    "turns_observed": []
+  },
+  {
+    "id": "boundary-14",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow morning.",
+      "Around eleven."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true,
+    "call_id": "800342f8-0263-44d9-9f43-6230183c5362",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 10.67,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow morning.",
+        "response": "What exact time tomorrow morning can Alex Morgan be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "800342f8-0263-44d9-9f43-6230183c5362",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:32:52.377526Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:32",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:32",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:32",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "4a6f1fcca196418a9d26bf7ccd620641",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      },
+      {
+        "speech": "Around eleven.",
+        "response": "Thank you. Which day can Alex Morgan be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 1,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "800342f8-0263-44d9-9f43-6230183c5362",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:32:56.783276Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:32",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:32",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:32",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "4a6f1fcca196418a9d26bf7ccd620641",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow",
+          "cb_time": "11:00"
+        },
+        "routed": true
+      }
+    ],
+    "actual_time": "11:00",
+    "time_passed": true
+  },
+  {
+    "id": "boundary-15",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow.",
+      "In the morning.",
+      "Around eleven."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true,
+    "call_id": "83b95fb0-ef9e-49df-b583-600d076a1549",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 9.76,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow.",
+        "response": "What time tomorrow can Alex Morgan be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "83b95fb0-ef9e-49df-b583-600d076a1549",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:03.251666Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "194ea0684b0948938fa579e511dab476",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      },
+      {
+        "speech": "In the morning.",
+        "response": "Could you provide an exact clock time?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 1,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "83b95fb0-ef9e-49df-b583-600d076a1549",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:05.621751Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "194ea0684b0948938fa579e511dab476",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      },
+      {
+        "speech": "Around eleven.",
+        "response": "Thank you. Just to confirm, is that 11:00 AM?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 2,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "83b95fb0-ef9e-49df-b583-600d076a1549",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:07.877281Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "194ea0684b0948938fa579e511dab476",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow",
+          "cb_time": "11:00"
+        },
+        "routed": true
+      }
+    ],
+    "actual_time": "11:00",
+    "time_passed": true
+  },
+  {
+    "id": "boundary-16",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow around...",
+      "...eleven in the morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true,
+    "call_id": "a488e5f8-e05e-4a6e-9994-c12eae36a3fc",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 7.27,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow around...",
+        "response": "What time tomorrow?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "a488e5f8-e05e-4a6e-9994-c12eae36a3fc",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:13.153456Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "17a8808b328e4c76bd6dd87cd093d095",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      },
+      {
+        "speech": "...eleven in the morning.",
+        "response": "Thank you. Which day of the week is that?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 1,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "a488e5f8-e05e-4a6e-9994-c12eae36a3fc",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:15.299896Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "17a8808b328e4c76bd6dd87cd093d095",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow",
+          "cb_time": "11:00"
+        },
+        "routed": true
+      }
+    ],
+    "actual_time": "11:00",
+    "time_passed": true
+  },
+  {
+    "id": "boundary-17",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "",
+    "no_time_before_final": false,
+    "call_id": "7a568961-6c25-4d14-a134-0c650d06bc31",
+    "actual": "other",
+    "passed": false,
+    "duration_s": 5.45,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Morning.",
+        "response": "Good morning. How can I help you?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "7a568961-6c25-4d14-a134-0c650d06bc31",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:20.591238Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "03f0644188a04b4a997a5b9ea8d32e0a",
+          "tp_intent": "other"
+        },
+        "routed": false
+      }
+    ],
+    "actual_time": "",
+    "time_passed": true
+  },
+  {
+    "id": "boundary-18",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow at three, sorry, around eleven in the morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": false,
+    "call_id": "e9ad3e48-dbfa-48c4-9aa0-653355e9f010",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 4.91,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow at three, sorry, around eleven in the morning.",
+        "response": "Could you please confirm which day and exact time Alex Morgan can be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "e9ad3e48-dbfa-48c4-9aa0-653355e9f010",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:26.116540Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "ad147389e6ff472da8180ff1bc04914c",
+          "tp_intent": "gives_time",
+          "cb_time": "11:00",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      }
+    ],
+    "actual_time": "11:00",
+    "time_passed": true
+  },
+  {
+    "id": "third_party-gives_time-in_words-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "in_words",
+    "turns": [
+      "Tomorrow around eleven in the morning."
+    ],
+    "ambiguity": null,
+    "call_id": "24536652-b549-496a-9483-b72b5877da0f",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 6.0,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow around eleven in the morning.",
+        "response": "Who should be reached at that time?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "24536652-b549-496a-9483-b72b5877da0f",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:31.873894Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "84d15431e0384c578c41c7bc1b9ebbe3",
+          "tp_intent": "gives_time",
+          "cb_time": "11:00",
+          "cb_kind": "tomorrow"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "third_party-wrong_number-in_words-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "wrong_number",
+    "style": "in_words",
+    "turns": [
+      "You have the wrong number."
+    ],
+    "ambiguity": null,
+    "call_id": "f888ab67-8176-4222-a1a3-caa9c513a060",
+    "actual": "wrong_number",
+    "passed": true,
+    "duration_s": 5.53,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "You have the wrong number.",
+        "response": "I apologize. May I ask which day and time Alex Morgan can be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "f888ab67-8176-4222-a1a3-caa9c513a060",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:38.695969Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "e84547e8a37642f0a4b5f0a1ae24556a",
+          "tp_intent": "wrong_number"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "third_party-deceased-in_words-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "deceased",
+    "style": "in_words",
+    "turns": [
+      "Alex has died."
+    ],
+    "ambiguity": null,
+    "call_id": "1dcfcd47-1b97-4693-951c-a3991ca73bf8",
+    "actual": "deceased",
+    "passed": true,
+    "duration_s": 8.23,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Alex has died.",
+        "response": "I am sorry to hear that. Which day and what time can Alex Morgan be reached?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "1dcfcd47-1b97-4693-951c-a3991ca73bf8",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:33:45.635869Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:33",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:33",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:33",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "6724367294b14ef2aeaf626c2f857860",
+          "tp_intent": "deceased"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-06",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "boundary",
+    "turns": [
+      "Yes, actually no, I need the twentieth instead."
+    ],
+    "ambiguity": null,
+    "call_id": "35162838-1a92-406c-9443-42c4764fe96f",
+    "actual": "proposes",
+    "passed": true,
+    "duration_s": 7.48,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, actually no, I need the twentieth instead.",
+        "response": "Can you pay four hundred and twenty on the twentieth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "35162838-1a92-406c-9443-42c4764fe96f",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:34:10.587277Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:34",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:34",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:34",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "a77a92c337404670a7723c7d9a017908",
+          "cust_intent": "proposes",
+          "prop_day": 20,
+          "prop_kind": "date",
+          "prop_weekday": "none",
+          "prop_relative": "none"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-08",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "How much did you just say?"
+    ],
+    "ambiguity": null,
+    "call_id": "35eac60d-e67b-4746-929d-1892e60f5f1c",
+    "actual": "question",
+    "passed": true,
+    "duration_s": 6.84,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "How much did you just say?",
+        "response": "Four hundred and twenty. Can you pay this on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "35eac60d-e67b-4746-929d-1892e60f5f1c",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:34:17.634208Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:34",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:34",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:34",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "cb2d5d2fd2224440a5ad65d10d884d4f",
+          "cust_intent": "question"
+        },
+        "routed": false
+      }
+    ]
+  },
+  {
+    "id": "negotiate-pays_today-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "pays_today",
+    "style": "in_words",
+    "turns": [
+      "I can pay today."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 502: error code: 502\n",
+    "call_id": "14b9e00c-a2a9-4dfa-90e8-3512b4a84b2e",
+    "duration_s": 4.83,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-proposes-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I can pay on the twentieth of October."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 502: error code: 502\n",
+    "call_id": null,
+    "duration_s": 0.25,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-refuses-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "refuses",
+    "style": "in_words",
+    "turns": [
+      "No, I cannot pay."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"e62ac37e-e490-43aa-8b35-8e98adc9f99e\"}}}",
+    "call_id": null,
+    "duration_s": 0.32,
+    "turns_observed": []
+  },
+  {
+    "id": "boundary-10",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "boundary",
+    "turns": [
+      "Who is calling?"
+    ],
+    "ambiguity": null,
+    "call_id": "d1cf1dcd-813a-4350-9e60-3ff8e62938c7",
+    "actual": "unclear",
+    "passed": true,
+    "duration_s": 4.21,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Who is calling?",
+        "response": "I am a bank telephone assistant. Am I speaking with Alex Morgan?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "d1cf1dcd-813a-4350-9e60-3ff8e62938c7",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:15.747593Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "685e2bb01e6e43f895a95397f6a2f29a",
+          "holder": "unclear"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-11",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "boundary",
+    "turns": [
+      "Go on, I am listening."
+    ],
+    "ambiguity": null,
+    "call_id": "2e922f46-8ca8-4e95-8242-ad4557b14f6e",
+    "actual": "unclear",
+    "passed": true,
+    "duration_s": 4.04,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Go on, I am listening.",
+        "response": "Am I speaking with Alex Morgan?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "2e922f46-8ca8-4e95-8242-ad4557b14f6e",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:20.309807Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "ead8f9b1e91b406d9e2b081fb468e8bc",
+          "holder": "unclear"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-confirmed-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "in_words",
+    "turns": [
+      "Yes, speaking."
+    ],
+    "ambiguity": null,
+    "call_id": "06f0eb5c-a596-403c-9e42-37878c6138f0",
+    "actual": "confirmed",
+    "passed": true,
+    "duration_s": 3.97,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, speaking.",
+        "response": "Thank you. How can I help you today?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "06f0eb5c-a596-403c-9e42-37878c6138f0",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:24.398115Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "bc11e003d0f54bca8fe4159e80419838",
+          "holder": "confirmed"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-third_party-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "third_party",
+    "style": "in_words",
+    "turns": [
+      "I am his wife."
+    ],
+    "ambiguity": null,
+    "call_id": "3654c614-8c7c-4348-8195-e64b9f449d9c",
+    "actual": "third_party",
+    "passed": true,
+    "duration_s": 3.96,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "I am his wife.",
+        "response": "Thank you. Am I speaking with Alex Morgan?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "3654c614-8c7c-4348-8195-e64b9f449d9c",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:28.629281Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "17afc9b8ab2948caa90dc4d9dd971e5e",
+          "holder": "third_party"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-wrong_number-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "wrong_number",
+    "style": "in_words",
+    "turns": [
+      "You have the wrong number."
+    ],
+    "ambiguity": null,
+    "call_id": "595f51ae-94c8-49b8-8240-6c569ca672e7",
+    "actual": "wrong_number",
+    "passed": true,
+    "duration_s": 3.95,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "You have the wrong number.",
+        "response": "I apologize. Thank you for letting me know.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "595f51ae-94c8-49b8-8240-6c569ca672e7",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:32.891427Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "ad2c2b9a19c549e2819d60ade058eb49",
+          "holder": "wrong_number"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-deceased-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "deceased",
+    "style": "in_words",
+    "turns": [
+      "Alex has died."
+    ],
+    "ambiguity": null,
+    "call_id": "23db7e82-6c9e-45b7-95a4-71282405e9d7",
+    "actual": "deceased",
+    "passed": true,
+    "duration_s": 4.16,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Alex has died.",
+        "response": "I am sorry for your loss.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "23db7e82-6c9e-45b7-95a4-71282405e9d7",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:37.479382Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "4842b98d6f3f4d46b8d19606d839a84e",
+          "holder": "deceased"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-wants_human-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "wants_human",
+    "style": "in_words",
+    "turns": [
+      "I want to speak to a human."
+    ],
+    "ambiguity": null,
+    "call_id": "0748db77-cf95-40a6-b79a-026b6e5fd725",
+    "actual": "wants_human",
+    "passed": true,
+    "duration_s": 4.13,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "I want to speak to a human.",
+        "response": "I am a telephone assistant. Am I speaking with Alex Morgan?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "0748db77-cf95-40a6-b79a-026b6e5fd725",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:41.495566Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "7dffde3b93a949cf87cd0eb7409a8f46",
+          "holder": "wants_human"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-refuses-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "refuses",
+    "style": "in_words",
+    "turns": [
+      "I do not want to talk."
+    ],
+    "ambiguity": null,
+    "call_id": "a357ddab-13bd-4bfd-bde6-af7c4e0c8750",
+    "actual": "refuses",
+    "passed": true,
+    "duration_s": 4.49,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "I do not want to talk.",
+        "response": "I understand. Goodbye.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "a357ddab-13bd-4bfd-bde6-af7c4e0c8750",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:46.275874Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "6a6029f0abbf429aaef75d37e075fe0e",
+          "holder": "refuses"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-unclear-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Hello."
+    ],
+    "ambiguity": null,
+    "call_id": "39f4fde7-272a-45cc-8bd3-8957321c84a5",
+    "actual": "unclear",
+    "passed": true,
+    "duration_s": 4.1,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Hello.",
+        "response": "Am I speaking with Alex Morgan?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "39f4fde7-272a-45cc-8bd3-8957321c84a5",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:35:50.835351Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:35",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:35",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:35",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "9b55972c7c9f4b579e857db649c85298",
+          "holder": "unclear"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-12",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "boundary",
+    "turns": [
+      "Yes, correct, actually change it to three hundred and fifty."
+    ],
+    "ambiguity": null,
+    "call_id": "d13e670e-4d1d-4b20-87a4-d2aca7653e32",
+    "actual": "changes",
+    "passed": true,
+    "duration_s": 5.23,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, correct, actually change it to three hundred and fifty.",
+        "response": "I cannot change the amount. For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "d13e670e-4d1d-4b20-87a4-d2aca7653e32",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:36:16.087325Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:36",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:36",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:36",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "8be1efef62004fee8d22e66aa71d02e4",
+          "rb_intent": "changes",
+          "prop_amount": 350
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "boundary-13",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "Do you mean this Friday or next Friday?"
+    ],
+    "ambiguity": null,
+    "call_id": "a485b075-2551-43bc-818c-6df93ead53d9",
+    "actual": "question",
+    "passed": true,
+    "duration_s": 5.53,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Do you mean this Friday or next Friday?",
+        "response": "Friday the sixteenth of October 2026. Do you confirm?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "a485b075-2551-43bc-818c-6df93ead53d9",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:36:22.130376Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:36",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:36",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:36",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "0b53281c5d3f4903bf6a2cb0f05c0f41",
+          "rb_intent": "question"
+        },
+        "routed": false
+      }
+    ]
+  },
+  {
+    "id": "readback-confirms-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "Yes, I confirm."
+    ],
+    "ambiguity": null,
+    "call_id": "33c7e9b8-d46b-4aa0-af3b-f6fd2cc4e72e",
+    "actual": "confirms",
+    "passed": true,
+    "duration_s": 5.63,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, I confirm.",
+        "response": "Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "33c7e9b8-d46b-4aa0-af3b-f6fd2cc4e72e",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:36:28.246660Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:36",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:36",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:36",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "e3be0ee1ab08416a92a0527816110242",
+          "rb_intent": "confirms"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "readback-changes-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "Actually make it three hundred and fifty."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"2b96aa15-1966-4741-aefe-6966fd3e0983\"}}}",
+    "call_id": null,
+    "duration_s": 0.32,
+    "turns_observed": []
+  },
+  {
+    "id": "readback-declines-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "declines",
+    "style": "in_words",
+    "turns": [
+      "No, I do not confirm."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"34838f93-b30a-47dc-8f59-70aade930622\"}}}",
+    "call_id": null,
+    "duration_s": 0.31,
+    "turns_observed": []
+  },
+  {
+    "id": "readback-already_paid-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "already_paid",
+    "style": "in_words",
+    "turns": [
+      "I already paid this bill."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"92f01761-1d69-43d1-9ae0-b821c7951d94\"}}}",
+    "call_id": null,
+    "duration_s": 0.31,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-too_much-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "That full amount is too much."
+    ],
+    "ambiguity": null,
+    "call_id": "4f8ea065-0cc9-4d71-b27d-4ff1e8b1853b",
+    "actual": "too_much",
+    "passed": true,
+    "duration_s": 6.9,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "That full amount is too much.",
+        "response": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "4f8ea065-0cc9-4d71-b27d-4ff1e8b1853b",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:10.940540Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "281b78e4957540efa9c922875cc9791f",
+          "cust_intent": "too_much"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "negotiate-accepts-pieces-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "Yes, that ...",
+      "... works for me."
+    ],
+    "ambiguity": null,
+    "call_id": "3c1a4f46-2403-474c-a361-6abef68a2abb",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 7.22,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Yes, that ...",
+        "response": "Please finish your sentence.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "3c1a4f46-2403-474c-a361-6abef68a2abb",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:16.389172Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "0717288e211a4248bb643e155d23cbf7",
+          "cust_intent": "accepts"
+        },
+        "routed": true
+      },
+      {
+        "speech": "... works for me.",
+        "response": "Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 1,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "3c1a4f46-2403-474c-a361-6abef68a2abb",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:18.622850Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "0717288e211a4248bb643e155d23cbf7",
+          "cust_intent": "accepts"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "negotiate-accepts-corrects-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, that works for me."
+    ],
+    "ambiguity": null,
+    "call_id": "adab3614-d304-4f46-8953-2ed2fdb1dd89",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 4.52,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Sorry, let me say that clearly: Yes, that works for me.",
+        "response": "Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "adab3614-d304-4f46-8953-2ed2fdb1dd89",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:23.833326Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "ea79ef3480634a99bb66f9880389fa2f",
+          "cust_intent": "accepts"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "negotiate-accepts-talkative-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, that works for me. That is what I wanted to say."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"53626a1b-c7b1-4f0b-a799-af630b3a58de\"}}}",
+    "call_id": null,
+    "duration_s": 0.26,
+    "turns_observed": []
+  },
+  {
+    "id": "negotiate-accepts-asks_back-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, that works for me."
+    ],
+    "ambiguity": "mixed_question",
+    "call_id": "57a59c6e-05bd-4ae5-a350-9f2b2930c9a8",
+    "actual": "accepts",
+    "passed": true,
+    "duration_s": 4.68,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Can you hear me clearly? Yes, that works for me.",
+        "response": "Yes, I can hear you. Thank you.",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "57a59c6e-05bd-4ae5-a350-9f2b2930c9a8",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:28.659660Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "958a5f792ea24621ba0469d075e209f3",
+          "cust_intent": "accepts"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-confirmed-in_words-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "in_words",
+    "turns": [
+      "That is me."
+    ],
+    "ambiguity": null,
+    "call_id": "c087950e-003c-4b96-8b32-5b8e059a5f24",
+    "actual": "confirmed",
+    "passed": true,
+    "duration_s": 6.25,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "That is me.",
+        "response": "Thank you. How can I help you today?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "c087950e-003c-4b96-8b32-5b8e059a5f24",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:36.945702Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "3e23d8518207495895064bef9530e5b4",
+          "holder": "confirmed"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-confirmed-pieces-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "pieces",
+    "turns": [
+      "Yes, ...",
+      "... speaking."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"4bb2041c-2229-4119-abfd-7c5590cec463\"}}}",
+    "call_id": null,
+    "duration_s": 0.53,
+    "turns_observed": []
+  },
+  {
+    "id": "opening-confirmed-corrects-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, speaking."
+    ],
+    "ambiguity": null,
+    "call_id": "49d6f42d-82db-4aee-a014-e7b3ae29d1ca",
+    "actual": "confirmed",
+    "passed": true,
+    "duration_s": 4.69,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Sorry, let me say that clearly: Yes, speaking.",
+        "response": "Thank you. How can I help you today?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "49d6f42d-82db-4aee-a014-e7b3ae29d1ca",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:42.734340Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "6843765434b44ccd9447114e144cee50",
+          "holder": "confirmed"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-confirmed-talkative-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, speaking. That is what I wanted to say."
+    ],
+    "ambiguity": null,
+    "call_id": "35b08b8a-8e33-46df-9e89-43a66bbb8bf3",
+    "actual": "confirmed",
+    "passed": true,
+    "duration_s": 4.57,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "I was just getting settled and there is a bit of noise here. Yes, speaking. That is what I wanted to say.",
+        "response": "Thank you. How can I help you today?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "35b08b8a-8e33-46df-9e89-43a66bbb8bf3",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:47.908482Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "c919d6c010794185ac7f3670a6908f2a",
+          "holder": "confirmed"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "opening-confirmed-asks_back-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "confirmed",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, speaking."
+    ],
+    "ambiguity": "mixed_question",
+    "call_id": "52a02b93-0540-4886-b2e2-a40e91101c51",
+    "actual": "confirmed",
+    "passed": true,
+    "duration_s": 4.86,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Can you hear me clearly? Yes, speaking.",
+        "response": "Thank you. How can I help you today?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Am I speaking with Alex Morgan?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "52a02b93-0540-4886-b2e2-a40e91101c51",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:38:52.642126Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:38",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:38",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:38",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "dd348cd06d484b03b0beb341eb7ef6cf",
+          "holder": "confirmed"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "third_party-cannot_say-in_words-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "cannot_say",
+    "style": "in_words",
+    "turns": [
+      "I do not know when he will be back."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"9bdc8fa4-d061-4ee9-a6ab-32d665154def\"}}}",
+    "call_id": null,
+    "duration_s": 0.43,
+    "turns_observed": []
+  },
+  {
+    "id": "third_party-gives_time-pieces-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "pieces",
+    "turns": [
+      "Tomorrow around eleven ...",
+      "... in the morning."
+    ],
+    "ambiguity": null,
+    "call_id": "ab508a3e-c14a-42e5-a399-89ce005945a2",
+    "actual": "gives_time",
+    "passed": true,
+    "duration_s": 8.63,
+    "status": "completed",
+    "turns_observed": [
+      {
+        "speech": "Tomorrow around eleven ...",
+        "response": "Could you please clarify if that is 11:00 AM or 11:00 PM?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 0,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "ab508a3e-c14a-42e5-a399-89ce005945a2",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:39:01.890945Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:39",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:39",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:39",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "256f1c4144c14ad6b2e5f58305b957b8",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow",
+          "cb_time": "11:00"
+        },
+        "routed": true
+      },
+      {
+        "speech": "... in the morning.",
+        "response": "And which day is that?",
+        "values": {
+          "probe.current_turns": 0,
+          "probe.total_turns": 2,
+          "routed.current_turns": 0,
+          "routed.total_turns": 1,
+          "now": "2026-10-14T11:00",
+          "title": "Mr",
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "neg_instruction": "Which day and what time can Alex Morgan be reached?",
+          "readback_text": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+          "product_list": "1: credit card",
+          "id_say": "Please tell me the last four digits of your phone number.",
+          "call.customer_phone_number": "",
+          "call.phone_number": "",
+          "call.call_id": "ab508a3e-c14a-42e5-a399-89ce005945a2",
+          "call.direction": "web",
+          "system.iso_utc_now": "2026-10-10T13:39:04.677069Z",
+          "system.todays_date_en_cst": "10 October 2026 Saturday 07:39",
+          "system.todays_date_en_est": "10 October 2026 Saturday 08:39",
+          "system.todays_date_tr": "10 Ekim 2026 Cumartesi 16:39",
+          "system.todays_date_tr.iso_8601": "2026-10-10",
+          "system.uuid4()": "256f1c4144c14ad6b2e5f58305b957b8",
+          "tp_intent": "gives_time",
+          "cb_kind": "tomorrow",
+          "cb_time": "11:00"
+        },
+        "routed": true
+      }
+    ]
+  },
+  {
+    "id": "third_party-gives_time-corrects-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Tomorrow around eleven in the morning."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 502: error code: 502\n",
+    "call_id": null,
+    "duration_s": 0.98,
+    "turns_observed": []
+  },
+  {
+    "id": "third_party-gives_time-talkative-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Tomorrow around eleven in the morning. That is what I wanted to say."
+    ],
+    "ambiguity": null,
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"a4342ab1-3dda-4d7e-9eb7-cec0b075392b\"}}}",
+    "call_id": null,
+    "duration_s": 0.27,
+    "turns_observed": []
+  },
+  {
+    "id": "third_party-gives_time-asks_back-1",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Tomorrow around eleven in the morning."
+    ],
+    "ambiguity": "mixed_question",
+    "status": "infrastructure_error",
+    "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"649d5d5f-2369-45da-ab13-4397ad6a2d1b\"}}}",
+    "call_id": null,
+    "duration_s": 0.28,
+    "turns_observed": []
+  }
+]

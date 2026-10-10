@@ -1,0 +1,357 @@
+{
+  "initial_node": "probe",
+  "system_prompt": "You are a bank telephone assistant in an isolated extraction test. Speak English. No tools or bank actions are available.",
+  "nodes": {
+    "probe": {
+      "name": "probe",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Can you pay four hundred and twenty on Friday the sixteenth of October? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "tts",
+        "text": "Can you pay four hundred and twenty on Friday the sixteenth of October?"
+      },
+      "on_enter_first_entry_only": true,
+      "extraction_schema": [
+        {
+          "name": "cust_intent",
+          "type": "string",
+          "description": "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. proposes = names their own date and/or amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'). refuses = says no / cannot pay / nothing, without naming a date or amount. too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. hardship = mentions illness, a death in the family or losing their job. restructuring = asks for a payment plan, lower instalments or restructuring. human = asks for a human agent. scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "accepts",
+            "pays_today",
+            "proposes",
+            "refuses",
+            "too_much",
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "refuses_to_talk",
+            "question",
+            "other",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_amount",
+          "type": "float",
+          "description": "An amount of money the customer named for a payment, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_kind",
+          "type": "string",
+          "description": "How the payment date the customer named was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "today",
+            "tomorrow",
+            "weekday",
+            "date",
+            "vague",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_weekday",
+          "type": "string",
+          "description": "The weekday name if a weekday was said.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_relative",
+          "type": "string",
+          "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "this",
+            "next",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_day",
+          "type": "integer",
+          "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_month",
+          "type": "integer",
+          "description": "The month as a number (1-12) if the customer named a month, else leave empty.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_year",
+          "type": "integer",
+          "description": "The year as a 4-digit number only if the customer said one.",
+          "min_confidence": 0.5
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "cust_intent decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "accepts"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "pays_today"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "proposes"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "refuses"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "too_much"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "already_paid"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "dispute"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "hardship"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "restructuring"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "human"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "refuses_to_talk"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    },
+    "routed": {
+      "name": "routed",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Can you pay four hundred and twenty on Friday the sixteenth of October? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "on_enter_first_entry_only": false,
+      "extraction_schema": [
+        {
+          "name": "cust_intent",
+          "type": "string",
+          "description": "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. proposes = names their own date and/or amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'). refuses = says no / cannot pay / nothing, without naming a date or amount. too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. hardship = mentions illness, a death in the family or losing their job. restructuring = asks for a payment plan, lower instalments or restructuring. human = asks for a human agent. scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "accepts",
+            "pays_today",
+            "proposes",
+            "refuses",
+            "too_much",
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "refuses_to_talk",
+            "question",
+            "other",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_amount",
+          "type": "float",
+          "description": "An amount of money the customer named for a payment, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_kind",
+          "type": "string",
+          "description": "How the payment date the customer named was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "today",
+            "tomorrow",
+            "weekday",
+            "date",
+            "vague",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_weekday",
+          "type": "string",
+          "description": "The weekday name if a weekday was said.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_relative",
+          "type": "string",
+          "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "this",
+            "next",
+            "none"
+          ]
+        },
+        {
+          "name": "prop_day",
+          "type": "integer",
+          "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_month",
+          "type": "integer",
+          "description": "The month as a number (1-12) if the customer named a month, else leave empty.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "prop_year",
+          "type": "integer",
+          "description": "The year as a 4-digit number only if the customer said one.",
+          "min_confidence": 0.5
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "cust_intent decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "accepts"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "pays_today"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "proposes"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "refuses"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "too_much"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "already_paid"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "dispute"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "hardship"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "restructuring"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "human"
+              },
+              {
+                "variable": "cust_intent",
+                "operator": "equals",
+                "operand": "refuses_to_talk"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    }
+  }
+}

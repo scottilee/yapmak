@@ -1,0 +1,99 @@
+--- tested snapshot
++++ current compile.py
+@@ -183,10 +183,15 @@
+                          "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "none"}}}}}}
+ 
+ 
++CORRECTION_NOTE = " If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only."
++
++
+ def ext(name, type_, desc, enum=None, pattern=None):
+     """Extraction variable. The platform validates EVERY write to a variable (also from code) against this schema,
+     so each schema accepts an explicit "empty" value the runtime can clear to: 'none' in enums, 0 for numbers,
+     '' for strings (patterns allow the empty string)."""
++    if type_ in ("integer", "float") or name.endswith(("_kind", "_weekday", "_digits", "_time")):
++        desc = desc.rstrip() + CORRECTION_NOTE
+     e = {"name": name, "type": type_, "description": desc, "min_confidence": MIN_CONF}
+     if enum:
+         e["enum_values"] = list(enum) + ([] if "none" in enum else ["none"])
+@@ -875,6 +880,8 @@
+         return [k for k in range(n) if not S['products'][k]['proposed'] and not S['products'][k]['disposition']]
+     if sel and sel != 'all' and _int(sel) and 1 <= _int(sel) <= n:
+         return [_int(sel) - 1]
++    if sel == 'all' and n > 1:
++        return [k for k in range(n) if not S['products'][k]['disposition']]
+     c = _cur(S)
+     return [S['pi']] if c else [k for k in range(n) if not S['products'][k]['proposed']]
+ 
+@@ -969,6 +976,13 @@
+     date_status, date = _resolve_date('prop', S['today'])
+     _clear_date('prop')
+     aw = S.get('awaiting', '')
++    if intent in ('too_much', 'refuses'):
++        amount = None                      # "I cannot pay 2,500" is not an offer of 2,500
++    if intent == 'proposes' and amount is None and date_status == 'none':
++        # the customer announced a proposal but has not said it yet (speech in pieces): wait for it
++        vars['neg_instruction'] = 'The customer seems to be in the middle of a sentence. Say only "Yes?" or "Go on" and wait.'
++        _save(S)
++        return _set_next('negotiate')
+     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
+         if _special(S, intent):
+             return
+@@ -1089,7 +1103,7 @@
+     o = S.get('offer') or dict()
+     if p.get('floor_offered') and S.get('awaiting') == 'offer' and o and abs(float(o.get('amount') or 0) - float(p['floor'])) < 0.005:
+         # the floor is already on the table: answer the question, do not make a second offer and do not repeat the overdue note
+-        vars['neg_instruction'] = 'The customer asked about the amount: say that ' + _money(p['floor']) + ' is the lowest amount you can record and that you have proposed it for ' + _fmt(o.get('date')) + '. Ask whether they can make that payment. Do not say anything about the rest of the amount.'
++        vars['neg_instruction'] = 'The customer asked about the amount: say that the amount you just proposed is the lowest you can record, without saying the number again, and ask whether they can pay it on ' + _fmt(o.get('date')) + '. Do not say anything about the rest of the amount.'
+         _save(S)
+         return _set_next('negotiate')
+     if p.get('floor_offered') or not bool(A.get('floor_offered_once', True)):
+@@ -1176,6 +1190,13 @@
+         targets = [k for k in targets if k in proposed] or proposed[:1]
+         if not targets:
+             return _readback(S)
++        if len(targets) > 1 and date_status == 'ok':
++            for k in targets:
++                p = S['products'][k]
++                p['proposed'] = False
++                _apply_proposal(S, p, amount if amount is not None else p['proposed_amount'], date, date_status, True)
++            if all(S['products'][k]['proposed'] for k in targets):
++                return _readback(S)
+         k = targets[0]
+         p = S['products'][k]
+         S['phase'] = 'product'
+@@ -1560,8 +1581,8 @@
+         ),
+         "negotiate": (
+             "The customer is verified and you are arranging a payment. Follow your current instruction exactly; every amount and date comes from it. "
+-            "Never ask \"how much can you pay?\": you propose every amount. If the customer proposes a date or an amount, acknowledge it briefly; the system checks it and your next instruction tells you what to say. "
+-            "Say the sentence that the rest of the amount stays overdue at most once in the whole call; if you have said it, do not repeat it even if the instruction mentions it. If the customer asks what the lowest amount is, answer with the amount already in your instruction and ask again whether they can pay it. "
++            "Never ask the customer for an amount in any form (not \"how much can you pay\", not \"what is the lowest you could pay\"): you propose every amount, from your instruction. If the customer proposes a date or an amount, acknowledge it briefly; the system checks it and your next instruction tells you what to say. "
++            "Say the sentence that the rest of the amount stays overdue at most once in the whole call; if you have said it, do not repeat it even if the instruction mentions it. Name the lowest amount at most once in the whole call; if the customer asks what it is after you named it, say it is the amount you just proposed and ask again whether they can pay it. "
+             "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. "
+             "If they ask for a payment plan or lower instalments, say you will connect them with a colleague; do not describe any plan.\n"
+             "CURRENT INSTRUCTION: {{neg_instruction}}"
+@@ -1630,9 +1651,10 @@
+     for i, r in enumerate(reqs):
+         fmt = r.answer_format
+         schema = [ext("id_intent", "string",
+-                      "What the customer did in the LAST message: answers if they gave the security answer or part of it; declines if they do not want to answer; asks_purpose if they ask what the call is about instead of answering; "
+-                      "wants_human if they ask for a person; refuses_to_talk if they say they do not want to talk; other (a question about robots, scams, or anything else).",
+-                      ["answers", "declines", "asks_purpose", "wants_human", "refuses_to_talk", "other"])]
++                      "What the customer did in the LAST message: answers if they gave the security answer or part of it; declines if they say they will not answer; asks_purpose if they refuse to answer until told what the call is about; "
++                      "question if they ask something back before answering (why do you need that, which account is this about, is this a robot, is this a scam); "
++                      "wants_human if they ask for a person; refuses_to_talk if they say they do not want to talk; other.",
++                      ["answers", "declines", "asks_purpose", "question", "wants_human", "refuses_to_talk", "other"])]
+         if fmt == "date":
+             schema += [ext("id_day", "integer", "Day of the month of the date the customer gave (1-31). A date said only as numbers is read as day, then month, then year." if r.numeric_date_order == "dmy" else "Day of the month (1-31). A date said only as numbers is read as month, then day, then year."),
+                        ext("id_month", "integer", "Month of the date the customer gave (1-12), from a month name or a number."),
+@@ -1677,7 +1699,8 @@
+     nodes["neg_route"] = cn("neg_route", ["negotiate", "readback", "transfer", "finalize"], default="negotiate")
+     rb_schema = [ext("rb_intent", "string",
+                      "The customer's answer to the read-back in the LAST message: confirms (yes, correct, I confirm), changes (they give a different amount or date), declines (no, without a new value), "
+-                     "already_paid, dispute, hardship, restructuring, human, refuses_to_talk, question, other.",
++                     "already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), "
++                     "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, other.",
+                      ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "other"]),
+                  ext("prop_amount", "float", "A new amount the customer named, as a number. Empty if none.")] + date_ext("prop", "a new payment date the customer named")
+     if multi:

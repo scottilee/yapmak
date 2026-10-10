@@ -20,7 +20,7 @@ from typing import Any
 # Deadline-rule DSL. Anything the compiler cannot express goes to PolicyIR.unresolved.
 #   {"kind": "nth_business_day", "n": 12}      the n-th business day after today
 #   {"kind": "calendar_days", "n": 14}         today + n calendar days; explicit adjustment required
-#   {"kind": "fixed_date", "date": "2026-11-30"}
+#   {"kind": "fixed_date", "date": "YYYY-MM-DD"}
 #   {"kind": "end_of_month"}                   explicit basis=calendar|business and adjustment required
 DEADLINE_KINDS = ("nth_business_day", "calendar_days", "fixed_date", "end_of_month")
 
@@ -199,7 +199,11 @@ class MultiProductPolicy:
 @dataclass
 class Phrases:
     opening: str = ""                          # first sentence, verbatim where the brief dictates
+    opening_verbatim: bool = False             # True when the documents require the opening to be said word for word
     holder_question: str = ""                  # "Am I speaking with {{title}} {{last_name}}?"
+    debt_intro: str = ""                       # sentence introducing the reason for the call after verification, if dictated
+    today_question: str = ""                   # the first ask, e.g. "Can you make this payment today?"
+    all_today_question: str = ""               # the first ask with several products
     robot_reply: str = ""
     scam_reply: str = ""
     prohibited_before_verification: list[str] = field(default_factory=list)

@@ -27,6 +27,7 @@ htmlcov/
 # Local Freya workspace/persona identifiers; these are recreated per workspace.
 .freya-agents.json
 .personas.json
+freya-agent-builder-implementation-plan.md
 
 # OS/editor scratch files.
 .DS_Store
@@ -34,9 +35,15 @@ Thumbs.db
 *.swp
 *.swo
 *~
-freya-*.md
 
 # Isolated baseline starter-kit copies; copy their final evidence to the parent
 # results/example-builder directory before committing. Do not ignore all logs,
 # traces/, out/, results/, or submission/: selected artifacts are required evidence.
 /results/example-builder/*/kit/
+
+# Large raw call dumps are kept locally; traces and scored results stay tracked.
+results/**/calls.json
+/results/example-builder/*/kit/
+
+# Internal planning document, not part of the submission.
+freya-agent-builder-implementation-plan.md

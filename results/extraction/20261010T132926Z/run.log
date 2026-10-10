@@ -1,0 +1,19 @@
+Artifacts: results/extraction/20261010T132926Z
+{"id": "boundary-06", "status": "infrastructure_error", "expected": "proposes", "duration_s": 4.26, "error": "POST /api/v2/chat/message -> 502: error code: 502\n"}
+{"id": "boundary-07", "status": "completed", "expected": "too_much", "actual": "too_much", "passed": true, "duration_s": 4.65}
+{"id": "boundary-08", "status": "infrastructure_error", "expected": "question", "duration_s": 0.26, "error": "POST /api/v2/chat/message -> 502: error code: 502\n"}
+{"id": "boundary-09", "status": "completed", "expected": "other", "actual": "question", "passed": false, "duration_s": 4.57}
+{"id": "negotiate-accepts-in_words-1", "status": "completed", "expected": "accepts", "actual": "accepts", "passed": true, "duration_s": 4.93}
+{"id": "negotiate-pays_today-in_words-1", "status": "infrastructure_error", "expected": "pays_today", "duration_s": 12.62, "error": "POST /api/v2/chat/message -> 504: error code: 504\n"}
+{"id": "negotiate-proposes-in_words-1", "status": "infrastructure_error", "expected": "proposes", "duration_s": 12.86, "error": "POST /api/v2/chat/message -> 504: error code: 504\n"}
+{"id": "negotiate-refuses-in_words-1", "status": "infrastructure_error", "expected": "refuses", "duration_s": 10.28, "error": "POST /api/v2/chat/message -> 504: error code: 504\n"}
+Stopping after three consecutive infrastructure errors; resume is supported.
+Finished 13 attempts; 8 completed
+Artifacts: results/extraction/20261010T132926Z
+{"id": "boundary-06", "status": "completed", "expected": "proposes", "actual": "proposes", "passed": true, "duration_s": 7.48}
+{"id": "boundary-08", "status": "completed", "expected": "question", "actual": "question", "passed": true, "duration_s": 6.84}
+{"id": "negotiate-pays_today-in_words-1", "status": "infrastructure_error", "expected": "pays_today", "duration_s": 4.83, "error": "POST /api/v2/chat/message -> 502: error code: 502\n"}
+{"id": "negotiate-proposes-in_words-1", "status": "infrastructure_error", "expected": "proposes", "duration_s": 0.25, "error": "POST /api/v2/chat/message -> 502: error code: 502\n"}
+{"id": "negotiate-refuses-in_words-1", "status": "infrastructure_error", "expected": "refuses", "duration_s": 0.32, "error": "POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"e62ac37e-e490-43aa-8b35-8e98adc9f99e\"}}}"}
+Stopping after three consecutive infrastructure errors; resume is supported.
+Finished 26 attempts; 18 completed

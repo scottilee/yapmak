@@ -1,0 +1,307 @@
+[
+  {
+    "path": ".amounts.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 6)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".amounts.source.text",
+    "before": "Floors by kind are {\"revolver\": \"revolver_floor\", \"plant_loan\": \"plant_due\", \"sales_advance\": \"advance_floor\"}; ... On full being too much, offer the floor once per product and say exactly \"The remainder stays overdue.\" Never ask how much they can pay. Accept an amount between floor and full inclusive.",
+    "after": "P3 rule 6: Ask for full overdue balance first. Floors by kind are {\"revolver\": \"revolver_floor\", \"plant_loan\": \"plant_due\", \"sales_advance\": \"advance_floor\"}; the values come from those get_account fields. On full being too much, offer the floor once per product and say exactly \"The remainder stays overdue.\" Never ask how much they can pay. Accept an amount between floor and full inclusive; never accept less than floor or more than full."
+  },
+  {
+    "path": ".bands.0.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 5; unchanged by R7-C)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".bands.0.source.text",
+    "before": "Days late 1\u201315 inclusive: the latest promise date is the 9th business day after today; one persuasion attempt.",
+    "after": "P3 rule 5: Days late 1\u201315 inclusive: the latest promise date is the 9th business day after today; one persuasion attempt. In both bands attempt 1 offers the full overdue balance on the last business day of this week (next week if today is that day), substituting the floor if full was already refused. (R7-C: The 1\u201315 band's 9-business-day deadline and both bands' attempt counts are unchanged.)"
+  },
+  {
+    "path": ".bands.1.source.doc",
+    "before": "reversal-thread-brief.md (Risk memo R7-C, amending P3 rule 5)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".bands.1.source.text",
+    "before": "R7-C. Change ONLY the 16\u201360 days-late band's deadline from the 6th to the 4th business day after today. The 1\u201315 band's 9-business-day deadline and both bands' attempt counts are unchanged.",
+    "after": "R7-C. Change ONLY the 16\u201360 days-late band's deadline from the 6th to the 4th business day after today. (P3 rule 5: two persuasion attempts ... Attempt 2, only in the 16\u201360 band, offers the floor on the deadline.)"
+  },
+  {
+    "path": ".calendar.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 4)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".calendar.source.text",
+    "before": "Business days are Monday through Friday except 2026-10-19, 2026-11-02, 2026-12-24, 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; \"this Friday\" means the current week's Friday. For a missing month/year choose the next occurrence of the named day/date on or after today. No other holidays apply.",
+    "after": "P3 rule 4: Business days are Monday through Friday except 2026-10-19, 2026-11-02, 2026-12-24, 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; \"this Friday\" means the current week's Friday. For a missing month/year choose the next occurrence of the named day/date on or after today. No other holidays apply."
+  },
+  {
+    "path": ".dates.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 6)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".dates.source.text",
+    "before": "A promise date may be today, must be a business day and not exceed the deadline. Roll weekends/holidays forward only if the resulting business date is within deadline; otherwise offer the deadline. Ask once to clarify a vague period, then propose the deadline.",
+    "after": "P3 rule 6: A promise date may be today, must be a business day and not exceed the deadline. Roll weekends/holidays forward only if the resulting business date is within deadline; otherwise offer the deadline. Ask once to clarify a vague period, then propose the deadline."
+  },
+  {
+    "path": ".identity.requirements.0.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 3)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".identity.requirements.0.source.text",
+    "before": "1. `company_number`: \"What is the eight-digit company registration number?\" Answer format: digits; exactly eight digits, preserving leading zeros.",
+    "after": "P3 rule 3: 1. `company_number`: \"What is the eight-digit company registration number?\" Answer format: digits; exactly eight digits, preserving leading zeros."
+  },
+  {
+    "path": ".identity.requirements.1.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 3)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".identity.requirements.1.source.text",
+    "before": "2. `postcode`: \"What is the registered business postcode?\" Answer format: text; letters and digits only; strip spaces.",
+    "after": "P3 rule 3: 2. `postcode`: \"What is the registered business postcode?\" Answer format: text; letters and digits only; strip spaces."
+  },
+  {
+    "path": ".identity.requirements.2.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 3)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".identity.requirements.2.source.text",
+    "before": "3. `founded_year`: \"In what year was the company founded?\" Answer format: year; four-digit year.",
+    "after": "P3 rule 3: 3. `founded_year`: \"In what year was the company founded?\" Answer format: year; four-digit year."
+  },
+  {
+    "path": ".identity.source.doc",
+    "before": "reversal-thread-brief.md (P3 rules 1, 3)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".identity.source.text",
+    "before": "Maximum wrong answers across the entire check: 2. Use the API's checks_left, not a separate per-question allowance. On exhaustion say exactly \"Please contact our business desk.\" and close `harbour_unverified` / `harbour_failed`. Explain account protection once after a refusal; a second refusal closes `harbour_unverified` / `harbour_declined`. A question about why security is needed does NOT count as a refusal; answer and ask again. The API provides no recoverable-format hint, so no hint rule applies.",
+    "after": "P3 rules 1, 3 (unchanged per R7-E: identity order remains in force): Ask at most twice in total; if still unclear close `harbour_unreached` / `harbour_unclear`. ... Maximum wrong answers across the entire check: 2. Use the API's checks_left, not a separate per-question allowance. On exhaustion say exactly \"Please contact our business desk.\" and close `harbour_unverified` / `harbour_failed`. Explain account protection once after a refusal; a second refusal closes `harbour_unverified` / `harbour_declined`. A question about why security is needed does NOT count as a refusal; answer and ask again. The API provides no recoverable-format hint, so no hint rule applies."
+  },
+  {
+    "path": ".multi_product.source.doc",
+    "before": "reversal-thread-brief.md (P3 rules 4, 5, 7, 9)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".multi_product.source.text",
+    "before": "Up to 3 products may be returned in accounts. ... State all products and their amounts/days late before asking anything. ... Process products in get_account order with separate attempt counters. ... A common date after a product's deadline is clamped to that product's own deadline. ... A transfer cancels unrecorded proposals but keeps already recorded promises.",
+    "after": "P3 rules 4, 5, 7, 9: Up to 3 products may be returned in accounts. ... State all products and their amounts/days late before asking anything. ... Process products in get_account order with separate attempt counters. ... A common date after a product's deadline is clamped to that product's own deadline and explained in the read-back. ... Read back product, amount and date for all proposed payments in one batch. ... A transfer cancels unrecorded proposals but keeps already recorded promises."
+  },
+  {
+    "path": ".notes.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 9)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".notes.source.text",
+    "before": "On a non-transfer call, after processing all products, add exactly one note per unpromised product, using only harbour_refused, harbour_distress, harbour_disputed, harbour_settled, harbour_service_error. Never add notes on a transferred call, including before transfer.",
+    "after": "P3 rule 9: On a non-transfer call, after processing all products, add exactly one note per unpromised product, using only harbour_refused, harbour_distress, harbour_disputed, harbour_settled, harbour_service_error. Never add notes on a transferred call, including before transfer; defer notes until the non-transfer outcome is known."
+  },
+  {
+    "path": ".outcomes.source.doc",
+    "before": "reversal-thread-brief.md (P3 rules 9, 10)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".outcomes.source.text",
+    "before": "Outcome precedence: transfer overrides any promise; otherwise at least one recorded promise gives `harbour_arranged`; otherwise all products settled gives `harbour_settled`; otherwise `harbour_no_deal` with the first non-settled product's note reason in get_account order. Exactly one close_call is the last bank action. Thank the customer and say goodbye before calling it.",
+    "after": "P3 rules 9, 10: Outcome precedence: transfer overrides any promise; otherwise at least one recorded promise gives `harbour_arranged`; otherwise all products settled gives `harbour_settled`; otherwise `harbour_no_deal` with the first non-settled product's note reason in get_account order. Exactly one close_call is the last bank action. Thank the customer and say goodbye before calling it. ... These are the only allowed combinations; omit reason entirely for rows with none."
+  },
+  {
+    "path": ".outcomes.table.1.when",
+    "before": "all products settled",
+    "after": "no promise and all products settled"
+  },
+  {
+    "path": ".outcomes.table.2.when",
+    "before": "call transferred",
+    "after": "call transferred (overrides any promise)"
+  },
+  {
+    "path": ".outcomes.table.3.when",
+    "before": "no promise, not all settled; reason = first non-settled product's note reason",
+    "after": "no promise, not all settled; reason = first non-settled product's note reason in get_account order"
+  },
+  {
+    "path": ".phrases.source.doc",
+    "before": "reversal-thread-brief.md (P3 rules 1, 4, 5, 7, 8, 9)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".phrases.source.text",
+    "before": "Start exactly: \"Good day, this is Harbour Commercial's automated assistant. We record this call.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\" ... never say these words ...: arrears, overdue, facility, payment.",
+    "after": "P3 rules 1, 4, 5, 7, 8, 9: Start exactly: \"Good day, this is Harbour Commercial's automated assistant. We record this call.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\" ... Before ALL verification answers pass, never say these words or disclose their associated information: arrears, overdue, facility, payment. ... Name types as follows: {\"revolver\": \"working capital line\", \"plant_loan\": \"asset finance loan\", \"sales_advance\": \"merchant advance\"}. ... First ask exactly \"Can you settle all these products today?\" once for all products; for a single product use \"Can you settle this today?\". ... Debt introduction after verification is exactly \"I am calling about the overdue business products.\""
+  },
+  {
+    "path": ".promise_write.source.doc",
+    "before": "reversal-thread-brief.md (Risk memo R7-A, amending P3 rule 7)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".promise_write.source.text",
+    "before": "R7-A. Reverse P3 rule 7: NEVER retry a failed create_promise. Exactly one request per product. On the first failure mark that product `harbour_service_error`, tell the customer no promise was recorded for it, and continue other products. The earlier instruction to retry once is withdrawn.",
+    "after": "R7-A. Reverse P3 rule 7: NEVER retry a failed create_promise. Exactly one request per product. On the first failure mark that product `harbour_service_error`, tell the customer no promise was recorded for it, and continue other products. The earlier instruction to retry once is withdrawn. (P3 rule 7: Ask exactly \"May I record these promises?\")"
+  },
+  {
+    "path": ".special_cases.0.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.0.source.text",
+    "before": "Already paid: say exactly \"Payments can take two business days to appear.\", take no new promise for that product, mark `harbour_settled` and continue other products.",
+    "after": "P3 rule 8: Already paid: say exactly \"Payments can take two business days to appear.\", take no new promise for that product, mark `harbour_settled` and continue other products."
+  },
+  {
+    "path": ".special_cases.1.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.1.source.text",
+    "before": "Dispute (not their debt, never held it, or it was closed/paid off earlier): do not argue or take a promise for it; mark `harbour_disputed` and continue.",
+    "after": "P3 rule 8: Dispute (not their debt, never held it, or it was closed/paid off earlier): do not argue or take a promise for it; mark `harbour_disputed` and continue."
+  },
+  {
+    "path": ".special_cases.2.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.2.source.text",
+    "before": "Hardship means illness, bereavement or job loss: one short sentence of sympathy, no persuasion and no promise for the affected product. Offer queue `harbour_care`; if accepted transfer and close `harbour_transferred` / `harbour_care`, otherwise mark `harbour_distress` and continue other products.",
+    "after": "P3 rule 8: Hardship means illness, bereavement or job loss: one short sentence of sympathy, no persuasion and no promise for the affected product. Offer queue `harbour_care`; if accepted transfer and close `harbour_transferred` / `harbour_care`, otherwise mark `harbour_distress` and continue other products."
+  },
+  {
+    "path": ".special_cases.3.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.3.source.text",
+    "before": "A request to restructure or reduce instalments transfers immediately to `harbour_restructure` and closes `harbour_transferred` / `harbour_restructure`.",
+    "after": "P3 rule 8: A request to restructure or reduce instalments transfers immediately to `harbour_restructure` and closes `harbour_transferred` / `harbour_restructure`."
+  },
+  {
+    "path": ".special_cases.3.takes_promise",
+    "before": null,
+    "after": false
+  },
+  {
+    "path": ".special_cases.4.source.doc",
+    "before": "reversal-thread-brief.md (Risk memo R7-B, amending P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.4.takes_promise",
+    "before": null,
+    "after": false
+  },
+  {
+    "path": ".special_cases.5.action.outcome",
+    "before": "harbour_no_deal",
+    "after": null
+  },
+  {
+    "path": ".special_cases.5.action.type",
+    "before": "close",
+    "after": "note"
+  },
+  {
+    "path": ".special_cases.5.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.5.source.text",
+    "before": "A refusal to talk: ask once if you may continue; a second refusal ends the call and marks all remaining products `harbour_refused`.",
+    "after": "P3 rule 8: A refusal to talk: ask once if you may continue; a second refusal ends the call and marks all remaining products `harbour_refused`."
+  },
+  {
+    "path": ".special_cases.5.takes_promise",
+    "before": null,
+    "after": false
+  },
+  {
+    "path": ".special_cases.6.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.6.source.text",
+    "before": "If asked whether this is a robot say exactly \"I am Harbour Commercial's automated assistant.\"",
+    "after": "P3 rule 8: If asked whether this is a robot say exactly \"I am Harbour Commercial's automated assistant.\""
+  },
+  {
+    "path": ".special_cases.7.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.7.source.text",
+    "before": "If asked about a scam say exactly \"You can call the number on your bank statement to verify us.\" and continue.",
+    "after": "P3 rule 8: If asked about a scam say exactly \"You can call the number on your bank statement to verify us.\" and continue."
+  },
+  {
+    "path": ".special_cases.8.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 8)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.8.source.text",
+    "before": "If unable to answer another question, say exactly \"Our business desk can answer that question.\"",
+    "after": "P3 rule 8: If unable to answer another question, say exactly \"Our business desk can answer that question.\""
+  },
+  {
+    "path": ".special_cases.9.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 7)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".special_cases.9.source.text",
+    "before": "If asked to change an already recorded promise, say exactly \"Please contact our business desk to change a recorded promise.\"",
+    "after": "P3 rule 7: If asked to change an already recorded promise, say exactly \"Please contact our business desk to change a recorded promise.\""
+  },
+  {
+    "path": ".third_party.callback.source.doc",
+    "before": "reversal-thread-brief.md (Risk memo R7-D, amending P3 rule 2)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".third_party.callback.source.text",
+    "before": "R7-D. Replace P3's callback day eligibility: NEXT BUSINESS DAY ONLY, never today. Hours remain 09:15\u201317:45 inclusive; keep the one alternative-slot attempt.",
+    "after": "R7-D. Replace P3's callback day eligibility: NEXT BUSINESS DAY ONLY, never today. Hours remain 09:15\u201317:45 inclusive; keep the one alternative-slot attempt. (P3 rule 2: strictly after now. ... For an invalid slot ask once for another; a second failure or refusal closes `harbour_unreached` / `harbour_no_callback`. A successfully scheduled callback closes `harbour_unreached` / `harbour_callback`.)"
+  },
+  {
+    "path": ".third_party.source.doc",
+    "before": "reversal-thread-brief.md (P3 rule 2)",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".third_party.source.text",
+    "before": "Wrong number: `harbour_unreached` / `harbour_wrong_number`. Deceased holder: say exactly \"Please accept our condolences.\" and close `harbour_unreached` / `harbour_deceased`.",
+    "after": "P3 rule 2: Wrong number: `harbour_unreached` / `harbour_wrong_number`. Deceased holder: say exactly \"Please accept our condolences.\" and close `harbour_unreached` / `harbour_deceased`."
+  },
+  {
+    "path": ".unresolved.0.doc",
+    "before": "reversal-thread-brief.md",
+    "after": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+    "path": ".unresolved.0.text",
+    "before": "The documents define bands only for 1\u201315 and 16\u201360 days late; handling of products more than 60 days late (or 0) is not stated.",
+    "after": "The documents define bands only for 1\u201315 and 16\u201360 days late inclusive; handling of a product with 0 or more than 60 days late is not stated."
+  }
+]

@@ -1,0 +1,76 @@
+{
+ "bands": [
+  "1-15",
+  "16-60"
+ ],
+ "identity": [
+  "company_number",
+  "postcode",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "identity.wrong_answer_limit",
+   "text": "The brief says maximum wrong answers across the entire check is 2 and to use the API's checks_left; the API summary says three wrong answers in total end the check. Brief value 2 used, counting delegated to checks_left.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+  },
+  {
+   "topic": "get_account precondition",
+   "text": "The get_account summary says it is refused until both questions are passed, while the brief has three security questions; the brief's three-question order is used.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The brief requires one short sentence of sympathy for hardship but does not dictate its wording.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "create_promise retry vs API 500 text",
+   "text": "The API's 500 response says 'The call may be repeated.' Signed memo R7-A says NEVER retry a failed create_promise (exactly one request per product); R7-A governs, so retry_on_failure is 0. The forwarded 2 October checklist ('Retry every failed promise once') is historical and superseded.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "failed write wording",
+   "text": "R7-A: on the first create_promise failure 'tell the customer no promise was recorded for it'; P3 7: 'Never claim a failed write was recorded.' No exact sentence is dictated and the schema has no phrase field for it.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "flat refusal consumes an attempt",
+   "text": "P3 5: 'A flat refusal consumes one persuasion attempt.' The schema has no field for this; it is implied by the attempt lists in bands.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "no discount/waiver/instalment plan",
+   "text": "P3 6: 'Never offer a discount, waiver or a new instalment plan.' No schema field expresses this prohibition.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "callback missing hour",
+   "text": "P3 2: 'A missing hour must be clarified, never guessed.' No schema field expresses this; third parties must be told nothing about purpose or accounts.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "clamped date explanation",
+   "text": "P3 5: a common date after a product's deadline is clamped to that product's deadline 'and explained in the read-back'; the explanation wording is not dictated.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "No substantive value changed: every value, every enum (verify_identity field, close_call outcome and reason, transfer_to_agent queue, add_note reason, get_account kind and floor properties) and every verbatim phrase matches the brief and the API. The R7 overrides were already applied: retry_on_failure 0, human ask_once_first false, 16-60 deadline n=4, callback days next_business_day. The superseded 2 October checklist is not reinstated.",
+  "third_party.callback.source: added the P3 2 text ('between 09:15 and 17:45 inclusive, strictly after now'), which supports start, end and must_be_after_now.",
+  "identity.source: added the P3 1 text on asking at most twice / harbour_unclear, which supports holder_confirmation_asks and unclear_holder_outcome.",
+  "unresolved: added entries for the conflict between the API 500 text 'may be repeated' and R7-A's no-retry rule (R7-A wins), the undictated failed-write wording, and the P3 rules that have no schema field: a flat refusal consumes an attempt; no discount, waiver or instalment plan; a missing callback hour must be clarified; the clamped-date explanation."
+ ]
+}

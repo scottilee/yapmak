@@ -1,0 +1,285 @@
+{
+  "initial_node": "probe",
+  "system_prompt": "You are a bank telephone assistant in an isolated extraction test. Speak English. No tools or bank actions are available.",
+  "nodes": {
+    "probe": {
+      "name": "probe",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Which day and what time can Alex Morgan be reached? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "tts",
+        "text": "Which day and what time can Alex Morgan be reached?"
+      },
+      "on_enter_first_entry_only": true,
+      "extraction_schema": [
+        {
+          "name": "tp_intent",
+          "type": "string",
+          "description": "What the person said in the LAST message: gives_time if they named a day and/or a time for reaching the customer; wrong_number; deceased if the customer has died; cannot_say if they cannot say when; refuses if they do not want to help; asks_purpose if they ask what the call is about; other.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "gives_time",
+            "wrong_number",
+            "deceased",
+            "cannot_say",
+            "refuses",
+            "asks_purpose",
+            "other",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_kind",
+          "type": "string",
+          "description": "How the day the customer can be reached was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "today",
+            "tomorrow",
+            "weekday",
+            "date",
+            "vague",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_weekday",
+          "type": "string",
+          "description": "The weekday name if a weekday was said.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_relative",
+          "type": "string",
+          "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "this",
+            "next",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_day",
+          "type": "integer",
+          "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_month",
+          "type": "integer",
+          "description": "The month as a number (1-12) if the customer named a month, else leave empty.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_year",
+          "type": "integer",
+          "description": "The year as a 4-digit number only if the customer said one.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_time",
+          "type": "string",
+          "description": "The clock time they gave, as HH:MM in 24-hour form (e.g. 'around eleven in the morning' -> 11:00, 'three in the afternoon' -> 15:00, 'after six' -> 18:00). Empty if they gave only a part of the day ('morning', 'afternoon') or no time at all; never guess an hour.",
+          "min_confidence": 0.5,
+          "validation_pattern": "^$|^([01]\\d|2[0-3]):[0-5]\\d$"
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "tp_intent decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "gives_time"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "wrong_number"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "deceased"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "cannot_say"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "refuses"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    },
+    "routed": {
+      "name": "routed",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Which day and what time can Alex Morgan be reached? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "on_enter_first_entry_only": false,
+      "extraction_schema": [
+        {
+          "name": "tp_intent",
+          "type": "string",
+          "description": "What the person said in the LAST message: gives_time if they named a day and/or a time for reaching the customer; wrong_number; deceased if the customer has died; cannot_say if they cannot say when; refuses if they do not want to help; asks_purpose if they ask what the call is about; other.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "gives_time",
+            "wrong_number",
+            "deceased",
+            "cannot_say",
+            "refuses",
+            "asks_purpose",
+            "other",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_kind",
+          "type": "string",
+          "description": "How the day the customer can be reached was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "today",
+            "tomorrow",
+            "weekday",
+            "date",
+            "vague",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_weekday",
+          "type": "string",
+          "description": "The weekday name if a weekday was said.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_relative",
+          "type": "string",
+          "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "this",
+            "next",
+            "none"
+          ]
+        },
+        {
+          "name": "cb_day",
+          "type": "integer",
+          "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_month",
+          "type": "integer",
+          "description": "The month as a number (1-12) if the customer named a month, else leave empty.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_year",
+          "type": "integer",
+          "description": "The year as a 4-digit number only if the customer said one.",
+          "min_confidence": 0.5
+        },
+        {
+          "name": "cb_time",
+          "type": "string",
+          "description": "The clock time they gave, as HH:MM in 24-hour form (e.g. 'around eleven in the morning' -> 11:00, 'three in the afternoon' -> 15:00, 'after six' -> 18:00). Empty if they gave only a part of the day ('morning', 'afternoon') or no time at all; never guess an hour.",
+          "min_confidence": 0.5,
+          "validation_pattern": "^$|^([01]\\d|2[0-3]):[0-5]\\d$"
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "tp_intent decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "gives_time"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "wrong_number"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "deceased"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "cannot_say"
+              },
+              {
+                "variable": "tp_intent",
+                "operator": "equals",
+                "operand": "refuses"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    }
+  }
+}

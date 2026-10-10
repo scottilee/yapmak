@@ -1,0 +1,304 @@
+{
+ "source_docs": [
+  "tests/fixtures/synthetic/reversal-thread-brief.md",
+  "tests/fixtures/synthetic/reversal-thread-openapi.json"
+ ],
+ "bank_name": "Harbour Commercial",
+ "identity": {
+  "requirements": [
+   {
+    "field": "company_number",
+    "ask_text": "What is the eight-digit company registration number?",
+    "answer_format": "digits",
+    "digits": 8,
+    "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "1. `company_number`: \"What is the eight-digit company registration number?\" Answer format: digits; exactly eight digits, preserving leading zeros."}
+   },
+   {
+    "field": "postcode",
+    "ask_text": "What is the registered business postcode?",
+    "answer_format": "text",
+    "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "2. `postcode`: \"What is the registered business postcode?\" Answer format: text; letters and digits only; strip spaces."}
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "In what year was the company founded?",
+    "answer_format": "year",
+    "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "3. `founded_year`: \"In what year was the company founded?\" Answer format: year; four-digit year."}
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "checks_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": ["harbour_unverified", "harbour_failed"],
+  "declined_outcome": ["harbour_unverified", "harbour_declined"],
+  "unclear_holder_outcome": ["harbour_unreached", "harbour_unclear"],
+  "failed_instruction": "Please contact our business desk.",
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Maximum wrong answers across the entire check: 2. Use the API's checks_left, not a separate per-question allowance. On exhaustion say exactly \"Please contact our business desk.\" and close `harbour_unverified` / `harbour_failed`. Explain account protection once after a refusal; a second refusal closes `harbour_unverified` / `harbour_declined`. A question about why security is needed does NOT count as a refusal; answer and ask again. The API provides no recoverable-format hint, so no hint rule applies. Do not call get_account until all questions pass. / P3 1: Ask at most twice in total; if still unclear close `harbour_unreached` / `harbour_unclear`."}
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:15",
+   "end": "17:45",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": ["harbour_unreached", "harbour_callback"],
+   "no_callback_outcome": ["harbour_unreached", "harbour_no_callback"],
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "R7-D. Replace P3's callback day eligibility: NEXT BUSINESS DAY ONLY, never today. Hours remain 09:15–17:45 inclusive; keep the one alternative-slot attempt. / P3 2: Callbacks are on today or the next business day, between 09:15 and 17:45 inclusive, strictly after now. ... For an invalid slot ask once for another; a second failure or refusal closes `harbour_unreached` / `harbour_no_callback`. A successfully scheduled callback closes `harbour_unreached` / `harbour_callback`."}
+  },
+  "wrong_number_outcome": ["harbour_unreached", "harbour_wrong_number"],
+  "deceased_outcome": ["harbour_unreached", "harbour_deceased"],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Wrong number: `harbour_unreached` / `harbour_wrong_number`. Deceased holder: say exactly \"Please accept our condolences.\" and close `harbour_unreached` / `harbour_deceased`."}
+ },
+ "calendar": {
+  "holidays": ["2026-10-19", "2026-11-02", "2026-12-24", "2027-01-01"],
+  "business_days": [0, 1, 2, 3, 4],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Business days are Monday through Friday except 2026-10-19, 2026-11-02, 2026-12-24, 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; \"this Friday\" means the current week's Friday. For a missing month/year choose the next occurrence of the named day/date on or after today. No other holidays apply."}
+ },
+ "bands": [
+  {
+   "name": "1-15",
+   "days_late_min": 1,
+   "days_late_max": 15,
+   "deadline": {"kind": "nth_business_day", "n": 9},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Days late 1–15 inclusive: the latest promise date is the 9th business day after today; one persuasion attempt. (R7-C: The 1–15 band's 9-business-day deadline and both bands' attempt counts are unchanged.)"}
+  },
+  {
+   "name": "16-60",
+   "days_late_min": 16,
+   "days_late_max": 60,
+   "deadline": {"kind": "nth_business_day", "n": 4},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+    {"amount": "floor", "date": "deadline", "floor_if_full_refused": false}
+   ],
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "R7-C. Change ONLY the 16–60 days-late band's deadline from the 6th to the 4th business day after today. / P3 5: two persuasion attempts ... Attempt 2, only in the 16–60 band, offers the floor on the deadline."}
+  }
+ ],
+ "amounts": {
+  "floors": {"revolver": "revolver_floor", "plant_loan": "plant_due", "sales_advance": "advance_floor"},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Ask for full overdue balance first. Floors by kind are {\"revolver\": \"revolver_floor\", \"plant_loan\": \"plant_due\", \"sales_advance\": \"advance_floor\"} ... offer the floor once per product and say exactly \"The remainder stays overdue.\" Never ask how much they can pay. Accept an amount between floor and full inclusive."}
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "A promise date may be today, must be a business day and not exceed the deadline. Roll weekends/holidays forward only if the resulting business date is within deadline; otherwise offer the deadline. Ask once to clarify a vague period, then propose the deadline."}
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the product.",
+   "action": {"type": "note", "reason": "harbour_settled"},
+   "say": "Payments can take two business days to appear.",
+   "before_persuasion": true,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Already paid: say exactly \"Payments can take two business days to appear.\", take no new promise for that product, mark `harbour_settled` and continue other products."}
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never held the product, or it was closed or paid off earlier.",
+   "action": {"type": "note", "reason": "harbour_disputed"},
+   "before_persuasion": true,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Dispute (not their debt, never held it, or it was closed/paid off earlier): do not argue or take a promise for it; mark `harbour_disputed` and continue."}
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {"type": "note", "reason": "harbour_distress"},
+   "offer_transfer_queue": "harbour_care",
+   "offer_outcome": ["harbour_transferred", "harbour_care"],
+   "before_persuasion": true,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Hardship means illness, bereavement or job loss: one short sentence of sympathy, no persuasion and no promise for the affected product. Offer queue `harbour_care`; if accepted transfer and close `harbour_transferred` / `harbour_care`, otherwise mark `harbour_distress` and continue other products."}
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to restructure or reduce instalments.",
+   "action": {"type": "transfer", "queue": "harbour_restructure", "outcome": "harbour_transferred", "reason": "harbour_restructure"},
+   "before_persuasion": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "A request to restructure or reduce instalments transfers immediately to `harbour_restructure` and closes `harbour_transferred` / `harbour_restructure`."}
+  },
+  {
+   "name": "human",
+   "trigger": "The customer explicitly asks to speak to a human or a person.",
+   "action": {"type": "transfer", "queue": "harbour_desk", "outcome": "harbour_transferred", "reason": "harbour_person"},
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "R7-B. Reverse P3 rule 8's human-request barrier: transfer immediately to `harbour_desk` on the FIRST explicit request for a human. Do not ask whether the assistant can help first. Outcome/reason stay `harbour_transferred` / `harbour_person`."}
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the call.",
+   "action": {"type": "note", "reason": "harbour_refused"},
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "ends_call": true,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "A refusal to talk: ask once if you may continue; a second refusal ends the call and marks all remaining products `harbour_refused`."}
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether this is a robot.",
+   "action": {"type": "continue"},
+   "say": "I am Harbour Commercial's automated assistant.",
+   "before_persuasion": true,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "If asked whether this is a robot say exactly \"I am Harbour Commercial's automated assistant.\""}
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {"type": "continue"},
+   "say": "You can call the number on your bank statement to verify us.",
+   "before_persuasion": true,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "If asked about a scam say exactly \"You can call the number on your bank statement to verify us.\" and continue."}
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks another question the assistant is unable to answer.",
+   "action": {"type": "continue"},
+   "say": "Our business desk can answer that question.",
+   "before_persuasion": true,
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "If unable to answer another question, say exactly \"Our business desk can answer that question.\""}
+  },
+  {
+   "name": "change_recorded_promise",
+   "trigger": "The customer asks to change an already recorded promise.",
+   "action": {"type": "continue"},
+   "say": "Please contact our business desk to change a recorded promise.",
+   "ends_call": false,
+   "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "If asked to change an already recorded promise, say exactly \"Please contact our business desk to change a recorded promise.\""}
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {"outcome": "harbour_arranged", "reasons": [], "when": "at least one recorded promise and no transfer"},
+   {"outcome": "harbour_settled", "reasons": [], "when": "no promise and all products settled"},
+   {"outcome": "harbour_transferred", "reasons": ["harbour_restructure", "harbour_person", "harbour_care"], "when": "call transferred"},
+   {"outcome": "harbour_no_deal", "reasons": ["harbour_refused", "harbour_distress", "harbour_disputed", "harbour_service_error"], "when": "no promise; reason is first non-settled product's note reason in get_account order"},
+   {"outcome": "harbour_unverified", "reasons": ["harbour_failed", "harbour_declined"], "when": "identity check failed or declined"},
+   {"outcome": "harbour_unreached", "reasons": ["harbour_callback", "harbour_no_callback", "harbour_wrong_number", "harbour_deceased", "harbour_unclear"], "when": "holder not reached"}
+  ],
+  "promise_outcome": "harbour_arranged",
+  "paid_outcome": "harbour_settled",
+  "transfer_outcome": "harbour_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "harbour_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "harbour_service_error",
+  "refused_reason": "harbour_refused",
+  "goodbye_before_close": true,
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Outcome precedence: transfer overrides any promise; otherwise at least one recorded promise gives `harbour_arranged`; otherwise all products settled gives `harbour_settled`; otherwise `harbour_no_deal` with the first non-settled product's note reason in get_account order. ... Thank the customer and say goodbye before calling it. / 10. OUTCOME CODE TABLE."}
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": ["harbour_refused", "harbour_distress", "harbour_disputed", "harbour_settled", "harbour_service_error"],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "On a non-transfer call, after processing all products, add exactly one note per unpromised product, using only harbour_refused, harbour_distress, harbour_disputed, harbour_settled, harbour_service_error. Never add notes on a transferred call, including before transfer."}
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Up to 3 products may be returned in accounts. ... State all products and their amounts/days late before asking anything. ... Process products in get_account order with separate attempt counters. ... A common date after a product's deadline is clamped to that product's own deadline. ... A transfer cancels unrecorded proposals but keeps already recorded promises."}
+ },
+ "phrases": {
+  "opening": "Good day, this is Harbour Commercial's automated assistant. We record this call.",
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue business products.",
+  "today_question": "Can you settle this today?",
+  "all_today_question": "Can you settle all these products today?",
+  "robot_reply": "I am Harbour Commercial's automated assistant.",
+  "scam_reply": "You can call the number on your bank statement to verify us.",
+  "prohibited_before_verification": ["arrears", "overdue", "facility", "payment"],
+  "after_promise_sentence": "We will email confirmation to your registered address.",
+  "already_paid_sentence": "Payments can take two business days to appear.",
+  "cannot_answer_sentence": "Our business desk can answer that question.",
+  "recorded_promise_change_reply": "Please contact our business desk to change a recorded promise.",
+  "product_naming": {"revolver": "working capital line", "plant_loan": "asset finance loan", "sales_advance": "merchant advance"},
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "Start exactly: \"Good day, this is Harbour Commercial's automated assistant. We record this call.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\" ... never say these words or disclose their associated information: arrears, overdue, facility, payment. ... Name types as follows: {\"revolver\": \"working capital line\", \"plant_loan\": \"asset finance loan\", \"sales_advance\": \"merchant advance\"}."}
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I record these promises?",
+  "source": {"doc": "tests/fixtures/synthetic/reversal-thread-brief.md", "text": "R7-A. Reverse P3 rule 7: NEVER retry a failed create_promise. Exactly one request per product. On the first failure mark that product `harbour_service_error`, tell the customer no promise was recorded for it, and continue other products. / P3 7: Ask exactly \"May I record these promises?\""}
+ },
+ "unresolved": [
+  {
+   "topic": "identity.wrong_answer_limit",
+   "text": "The brief says maximum wrong answers across the entire check is 2 and to use the API's checks_left; the API summary says three wrong answers in total end the check. Brief value 2 used, counting delegated to checks_left.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+  },
+  {
+   "topic": "get_account precondition",
+   "text": "The get_account summary says it is refused until both questions are passed, while the brief has three security questions; the brief's three-question order is used.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The brief requires one short sentence of sympathy for hardship but does not dictate its wording.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "create_promise retry vs API 500 text",
+   "text": "The API's 500 response says 'The call may be repeated.' Signed memo R7-A says NEVER retry a failed create_promise (exactly one request per product); R7-A governs, so retry_on_failure is 0. The forwarded 2 October checklist ('Retry every failed promise once') is historical and superseded.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "failed write wording",
+   "text": "R7-A: on the first create_promise failure 'tell the customer no promise was recorded for it'; P3 7: 'Never claim a failed write was recorded.' No exact sentence is dictated and the schema has no phrase field for it.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "flat refusal consumes an attempt",
+   "text": "P3 5: 'A flat refusal consumes one persuasion attempt.' The schema has no field for this; it is implied by the attempt lists in bands.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "no discount/waiver/instalment plan",
+   "text": "P3 6: 'Never offer a discount, waiver or a new instalment plan.' No schema field expresses this prohibition.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "callback missing hour",
+   "text": "P3 2: 'A missing hour must be clarified, never guessed.' No schema field expresses this; third parties must be told nothing about purpose or accounts.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  },
+  {
+   "topic": "clamped date explanation",
+   "text": "P3 5: a common date after a product's deadline is clamped to that product's deadline 'and explained in the read-back'; the explanation wording is not dictated.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  }
+ ]
+}

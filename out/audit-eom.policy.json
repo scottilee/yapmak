@@ -1,0 +1,325 @@
+{
+ "source_docs": ["results/audit/synthetic/meridian-brief.md"],
+ "bank_name": "Meridian Commercial Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "date_of_birth",
+    "ask_text": "Could you tell me your registered date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "(1) the registered date of birth — a date given only as numbers is read month, day, year, and must be sent as YYYY-MM-DD"}
+   },
+   {
+    "field": "postcode",
+    "ask_text": "Could you tell me the business postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "(2) the business postcode, letters and digits with spaces removed"}
+   },
+   {
+    "field": "phone_last4",
+    "ask_text": "Could you tell me the last four digits of the mobile number on file?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "(3) the last four digits of the mobile number on file"}
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "In what year was the business founded?",
+    "answer_format": "year",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "(4) the year the business was founded, four digits. ... The API returns no format hints for these fields, so no hint rule exists."}
+   }
+  ],
+  "wrong_answer_limit": 3,
+  "wrong_count_source": "api",
+  "remaining_slot": "checks_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": ["id_failed", "no_match"],
+  "declined_outcome": ["id_failed", "would_not_answer"],
+  "unclear_holder_outcome": ["no_customer", "not_sure"],
+  "failed_instruction": "Please contact our business desk.",
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "The API reports the number of checks remaining; three wrong answers across the whole check end it. On exhaustion: do not state the debt, say exactly \"Please contact our business desk.\" and close `id_failed` / `no_match`. ... If the customer will not answer, explain once that the questions protect the account; a second refusal closes `id_failed` / `would_not_answer`."}
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "11:00",
+   "end": "16:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": ["no_customer", "call_back"],
+   "no_callback_outcome": ["no_customer", "no_time"],
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Book with schedule_callback when the holder can be reached today or the next business day, between 11:00 and 16:30 inclusive, and strictly later than now. If the offer is outside that window, ask once for another time; a second offer outside it is not booked: close `no_customer` / `no_time`. A booked callback closes `no_customer` / `call_back`."}
+  },
+  "wrong_number_outcome": ["no_customer", "bad_number"],
+  "deceased_outcome": ["no_customer", "passed_away"],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A wrong number closes `no_customer` / `bad_number`. If the holder has died, say exactly \"Please accept our condolences.\" and close `no_customer` / `passed_away`."}
+ },
+ "calendar": {
+  "holidays": ["2026-10-23", "2026-11-02", "2026-11-27", "2026-12-25", "2026-12-28", "2027-01-01"],
+  "business_days": [0, 1, 2, 3],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Business days are Monday to Thursday only (Friday is not a business day at Meridian), except these holidays: 2026-10-23, 2026-11-02, 2026-11-27, 2026-12-25, 2026-12-28, 2027-01-01. \"Next <weekday>\" is that weekday of the following calendar week, including when today is that weekday."}
+ },
+ "bands": [
+  {
+   "name": "1-20",
+   "days_late_min": 1,
+   "days_late_max": 20,
+   "deadline": {"kind": "end_of_month", "basis": "calendar", "adjustment": "following"},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Days overdue 1 to 20: the latest promise date is the last business day of the current month, computed as the calendar month end; if that day is not a business day, take the following business day. This is the end_of_month rule with basis calendar and adjustment following. One persuasion attempt."}
+  },
+  {
+   "name": "21-45",
+   "days_late_min": 21,
+   "days_late_max": 45,
+   "deadline": {"kind": "nth_business_day", "n": 4},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+    {"amount": "floor", "date": "deadline", "floor_if_full_refused": false}
+   ],
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Days overdue 21 to 45: the latest promise date is the 4th business day after today, counted on Meridian's four-day week. Two persuasion attempts. ... attempt 1 proposes the full (or the floor if the full was already refused) on the last business day of this week — or of next week when today is that day; attempt 2, only in the 21–45 band, proposes the floor on the deadline."}
+  }
+ ],
+ "amounts": {
+  "floors": {"overdraft": "minimum_due", "term_loan": "fixed_instalment", "invoice_line": "line_payment"},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The balance remains outstanding.",
+  "accept_between_floor_and_full": true,
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Ask for the full overdue amount first; never ask how much the customer can pay. The floor is the facility's own field in get_account: business overdraft → minimum_due, term loan → fixed_instalment, invoice financing line → line_payment. When the full amount is too much, offer the floor once per facility and say exactly: \"The balance remains outstanding.\" An amount the customer proposes between floor and full, both included, is accepted; below the floor, say it cannot be recorded and offer the floor once; refusing the floor is a flat refusal."}
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A promise date must be today or later, a business day, and not after the deadline. A named weekend or holiday date at or before the deadline rolls to the next business day; if the roll passes the deadline, offer the deadline. A date after the deadline: say the latest date you can record is the deadline and offer it; refusing the deadline is a flat refusal. A vague period: ask once for the exact day; if still vague, propose the deadline."}
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the facility.",
+   "action": {"type": "note", "reason": "paid_claim"},
+   "say": "Payments can take two business days to show on the account.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "\"I have already paid\": say exactly \"Payments can take two business days to show on the account.\", take no promise for that facility, mark it paid_claim and continue with the others; if nothing else remains and every facility is noted paid, close `paid_already` with no reason."}
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the debt: it is not theirs, they never held the facility, or it was closed or settled earlier.",
+   "action": {"type": "note", "reason": "claims_dispute"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A dispute (the debt is not theirs, they never held the facility, or it was closed or settled earlier): do not argue, take no promise, mark claims_dispute and continue."}
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes financial hardship: illness, a bereavement or the loss of the business.",
+   "action": {"type": "note", "reason": "hardship"},
+   "say": "",
+   "offer_transfer_queue": "hardship_relief",
+   "offer_outcome": ["moved_across", "hardship_relief"],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Financial hardship — illness, a bereavement or the loss of the business: say one short sentence of sympathy, make no persuasion attempt, offer to connect them to the customer care team: if they accept, transfer_to_agent with the queue for hardship relief and close `moved_across` / `hardship_relief`; if they decline, mark hardship and continue with any other facility."}
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to reschedule, restructure or reduce repayments.",
+   "action": {"type": "transfer", "queue": "restructure", "outcome": "moved_across", "reason": "restructure"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A request to reschedule, restructure or reduce repayments: do not describe any arrangement, transfer to the restructure queue and close `moved_across` / `restructure`."}
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a person.",
+   "action": {"type": "transfer", "queue": "front_desk", "outcome": "moved_across", "reason": "person"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A request to speak to a person: ask once whether this assistant may help; if they insist, transfer to the front-desk queue and close `moved_across` / `person`."}
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether the call is genuine or suspects a scam.",
+   "action": {"type": "continue"},
+   "say": "You can confirm by calling the number printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "If asked whether the call is genuine, say exactly \"You can confirm by calling the number printed on your statement.\" and continue."}
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot.",
+   "action": {"type": "continue"},
+   "say": "I am Meridian Commercial Bank's automated assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "If asked whether this is a robot, say exactly \"I am Meridian Commercial Bank's automated assistant.\""}
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk at all (twice).",
+   "action": {"type": "close", "outcome": "no_promise", "reason": "turned_down"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Two refusals to talk at all: end the call and close `no_promise` / `turned_down` before verification with `id_failed` / `would_not_answer` if identity was not yet passed."}
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks a question the tools cannot answer.",
+   "action": {"type": "continue"},
+   "say": "Our business desk can answer that.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "A question the tools cannot answer: say exactly \"Our business desk can answer that.\" and never invent figures, dates or reasons."}
+  },
+  {
+   "name": "change_promise",
+   "trigger": "The customer asks to change a promise already recorded in this call.",
+   "action": {"type": "continue"},
+   "say": "Please contact the business desk to amend a recorded promise.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "One promise per facility; a recorded promise cannot be changed in this call — if asked, say exactly \"Please contact the business desk to amend a recorded promise.\""}
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {"outcome": "promise_recorded", "reasons": [], "when": "at least one promise recorded"},
+   {"outcome": "paid_already", "reasons": [], "when": "all facilities noted paid"},
+   {"outcome": "moved_across", "reasons": ["restructure", "person", "hardship_relief"], "when": "a transfer overrides it (moved_across with the transfer's reason)"},
+   {"outcome": "no_promise", "reasons": ["turned_down", "hardship", "claims_dispute", "broken_system"], "when": "no promise was recorded"},
+   {"outcome": "id_failed", "reasons": ["no_match", "would_not_answer"], "when": ""},
+   {"outcome": "no_customer", "reasons": ["call_back", "no_time", "bad_number", "passed_away", "not_sure"], "when": ""}
+  ],
+  "promise_outcome": "promise_recorded",
+  "paid_outcome": "paid_already",
+  "transfer_outcome": "moved_across",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_promise",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "broken_system",
+  "refused_reason": "turned_down",
+  "goodbye_before_close": true,
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Every call ends with exactly one close_call, the last tool call, with one of these outcome/reason pairs and nothing else ... Thank the customer and say goodbye before close_call. On a call with a recorded promise and no transfer, the outcome is promise_recorded; a transfer overrides it (moved_across with the transfer's reason)."}
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": ["turned_down", "hardship", "claims_dispute", "paid_claim", "broken_system"],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "For every facility that ends without a recorded promise, call add_note once with that facility's id and one of the note reasons: turned_down, hardship, claims_dispute, paid_claim, broken_system. Never call add_note on a call that is handed over — no notes before or after a transfer."}
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Up to two facilities may be overdue on one call. Each facility has its own deadline band and its own attempt count; process them in the order get_account returns them. ... Recorded promises stay on the account when a transfer follows. A single date given for everything that is after one facility's deadline is recorded for that facility on its own deadline, and this is said in the read-back."}
+ },
+ "phrases": {
+  "opening": "Good day, this is Meridian Commercial Bank's automated assistant. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue facilities on your account.",
+  "today_question": "Can you settle everything today?",
+  "all_today_question": "Can you settle everything today?",
+  "robot_reply": "I am Meridian Commercial Bank's automated assistant.",
+  "scam_reply": "You can confirm by calling the number printed on your statement.",
+  "prohibited_before_verification": ["arrears", "overdue", "facility", "payment"],
+  "after_promise_sentence": "A written confirmation will be emailed to your registered address.",
+  "already_paid_sentence": "Payments can take two business days to show on the account.",
+  "cannot_answer_sentence": "Our business desk can answer that.",
+  "recorded_promise_change_reply": "Please contact the business desk to amend a recorded promise.",
+  "product_naming": {"overdraft": "business overdraft", "term_loan": "term loan", "invoice_line": "invoice financing line"},
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "The first sentence is exactly: \"Good day, this is Meridian Commercial Bank's automated assistant. This call is recorded.\" Then ask exactly: \"Am I speaking with {title} {last_name}?\" Before every identity question has passed, the words arrears, overdue, facility and payment must not be said ... The debt introduction sentence is exactly: \"I am calling about the overdue facilities on your account.\" ... First ask exactly \"Can you settle everything today?\" once for the batch. ... Name the facilities in words: overdraft → \"business overdraft\", term_loan → \"term loan\", invoice_line → \"invoice financing line\"."}
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Is that correct?",
+  "source": {"doc": "results/audit/synthetic/meridian-brief.md", "text": "Read back each proposed facility with its amount and date and ask exactly \"Is that correct?\" ... If create_promise fails, try it once more; if it fails again, tell the customer it could not be recorded, mark that facility broken_system and continue with the others; close `no_promise` / `broken_system` when nothing was recorded."}
+ },
+ "unresolved": [
+  {"topic": "missing_date_parts", "text": "The brief does not say how to read a date the customer gives without a month or year; left at default.", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "asking_purpose_counts_as_decline", "text": "The brief does not say whether asking why the security questions are needed counts as a refusal to answer; left at default.", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "no_promise_reason_mixed_notes", "text": "The brief does not say which no_promise reason to use when facilities end with different note reasons (e.g. one dispute, one turned_down); left at default (first non-paid note).", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "hardship_sympathy_sentence", "text": "Hardship requires 'one short sentence of sympathy' but no verbatim sentence is given; say left empty.", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "refuse_to_talk_wording", "text": "Section 11 reads 'close `no_promise` / `turned_down` before verification with `id_failed` / `would_not_answer` if identity was not yet passed'; interpreted as no_promise/turned_down after verification and id_failed/would_not_answer before it.", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "days_overdue_outside_bands", "text": "Section 8 defines only the bands 1 to 20 and 21 to 45 days overdue; the brief does not say what to do for a facility more than 45 days overdue.", "doc": "results/audit/synthetic/meridian-brief.md"},
+  {"topic": "api_summary_mismatch", "text": "get_account summary says 'Refused until both questions are passed' while the brief requires four identity questions; the brief's four questions were used.", "doc": "results/audit/synthetic/meridian-openapi.json"},
+  {"topic": "facility_id_vs_product_id", "text": "get_account returns facility_id while create_promise and add_note take product_id; the brief says to use the facility's id, so facility_id is passed as product_id.", "doc": "results/audit/synthetic/meridian-openapi.json"}
+ ]
+}

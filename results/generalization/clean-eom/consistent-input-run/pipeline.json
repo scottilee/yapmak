@@ -1,0 +1,115 @@
+{
+  "fixture": "clean-eom",
+  "prefix": "probe-clean-eom-v2",
+  "scratch_slot": "generalization-check",
+  "started_utc": "2026-10-10T13:49:46.958010+00:00",
+  "stages": [
+    {
+      "name": "extract",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "extract.py",
+        "tests/fixtures/synthetic/clean-eom-brief.md",
+        "tests/fixtures/synthetic/clean-eom-openapi.json",
+        "probe-clean-eom-v2"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 187.85,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "ir-diff",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "scripts/check_synthetic_ir.py",
+        "clean-eom",
+        "out/probe-clean-eom-v2.policy.json",
+        "results/generalization/clean-eom/consistent-input-run/ir-diff.json"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 0.03,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "compile",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "compile.py",
+        "out/probe-clean-eom-v2.policy.json",
+        "tests/fixtures/synthetic/clean-eom-openapi.json",
+        "out/probe-clean-eom-v2.workflow.json"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 0.22,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "publish-check",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "scripts/publish_check.py",
+        "generalization-check",
+        "out/probe-clean-eom-v2.workflow.json"
+      ],
+      "exit_code": 1,
+      "elapsed_s": 5.65,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    }
+  ],
+  "input_hashes": {
+    "tests/fixtures/synthetic/clean-eom-brief.md": "eb2707c5a0bb463ccc94653438a42d0bf3655fc3af40fd220c390a13e5134be9",
+    "tests/fixtures/synthetic/clean-eom-openapi.json": "ee43ff4eef0c208417b2318cb9d6ccb7b94860abfe1ce121588d4d3081e02180",
+    "tests/fixtures/synthetic/clean-eom-expected.json": "c343071fa6a41e8961184e4ff7d373381d2adf0b624d7dd78791165f51688ef8"
+  },
+  "published_ids": {
+    "workflow_id": "feb14436-3471-4f9b-9be6-570407b7d71f",
+    "agent_id": "5a55e67e-b5f4-48c9-bca7-7ece2590041f"
+  },
+  "finished_utc": "2026-10-10T13:53:27.114870+00:00",
+  "publication_smoke_retries": [
+    {
+      "fixture": "clean-eom",
+      "started_utc": "20261010T140742Z",
+      "exit_code": 0,
+      "elapsed_s": 18.6,
+      "candidate_sha256": "0662bba1fff01d0050814156b0f43213d95b59d15e4125205020c7b4abeaf8fb",
+      "slot": "generalization-check",
+      "chat_turns_completed": 2,
+      "artifact_dir": "results/generalization/clean-eom/consistent-input-run/smoke-retry-20261010T140742Z",
+      "published_ids": {
+        "workflow_id": "feb14436-3471-4f9b-9be6-570407b7d71f",
+        "agent_id": "5a55e67e-b5f4-48c9-bca7-7ece2590041f",
+        "version": 3
+      },
+      "call_id": "a40637e6-030c-478b-b529-4e0dc4ac5584",
+      "responses": [
+        "Good day, this is Larkspur Business Bank's automated assistant. We record this call. Am I speaking with Mr Reyes?",
+        "Thank you. Before we continue, I need to ask you four short security questions. What is the registered business postcode?"
+      ]
+    }
+  ]
+}

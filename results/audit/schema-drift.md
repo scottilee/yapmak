@@ -31,3 +31,19 @@ Evidence (mutations → compiled → run against a mock that speaks the *mutated
 3. Replace disposition literals with an IR `vocabulary` map (`intent → disposition → note reason / close reason / outcome`), defaulted from the outcome table; add a **static check** that every disposition literal the compiler emits is in `notes.reasons` (when notes enabled) and in the close_call reason vocabulary — closing the X3 class.
 4. Derive the generic `ok` slot **per tool** (verify/get_account/create/… each own response schema), not from create_promise only.
 5. Decide a policy for unknown/unmapped-but-optional fields (hint, card_last4): a logged `unresolved[]` entry (currently compile.py:1277 force-clears `d["unresolved"] = []`, so extraction doubts are erased from the artifact and the trace loses them).
+
+---
+
+## Recheck — 06:23 build (compile.py `050a8c62…`)
+
+Every previously-silent mutation now either fails loudly or adapts correctly (`.venv/bin/python results/audit/drift_mutations.py`, then drivers from `offline_probes.py`-style runs against matching mocks):
+
+| Mutation | Before | Now |
+|---|---|---|
+| X1 `ok→ack` (+`verified→passed`) | silent stale `data.ok` | **exit 1: `cannot map response slots from the tool API: verify_identity.ok; verify_identity has [ack, all_verified, error, hint, passed, wrong_answers_left]`** — enforcement-slot guard added (compile.py:98–104); `passed` is now a verified needle so only the unmappable `ack` trips it |
+| X2 `create_promise ok→executed` | silent: double-write + `no_promise/service_error` while ledger held promises | **compiles correctly** — per-tool `ok_by_tool` with `executed/accepted` needles (compile.py:96); baked `data.executed`; offline run vs renamed mock: 1 write, 1 promise, outcome `promise` |
+| X4 `days_late→overdue_since` | silent wrong band for every product | **compiles correctly** — needle added (compile.py:91); PUB-06 ladder still floors at deadline 2026-10-23 |
+| X3 note reason renamed in API+IR | note silently skipped | **adapts** — `_special` uses IR `action.reason` (compile.py:933) and dispositions route through `refused_reason`/`service_error_reason`/hardship reason; dispute note now written as `claimed_dispute` |
+| M3/M4 loud paths | loud | still loud |
+
+Residual: optional slots still default to `""`→sentinel `__none__` with runtime fallbacks (hint/remaining/all_verified/card_last4) — reasonable, documented at compile.py:105–111. `_band()` still silently assigns the **last band** to out-of-range `days_late` (compile.py:375–379) and `_int(...) or 0` remains at compile.py:704 — a renamed *near-miss* needle match (e.g. `days_since_open` matches needle `days`) would still pick the wrong band silently; only fully unmatched renames now fail. The close-vocabulary class moved from literals to IR, but the **close-rejection** behavior gap (schema-drift recommendation against `st_close_after`) reappears in offline-state-machine P17.

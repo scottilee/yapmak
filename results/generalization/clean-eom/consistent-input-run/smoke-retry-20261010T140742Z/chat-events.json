@@ -1,0 +1,48 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/message",
+    "body": {
+      "workflowId": "feb14436-3471-4f9b-9be6-570407b7d71f",
+      "message": "Hello?",
+      "customerVariables": {
+        "customer_id": "c_smoke",
+        "first_name": "Daniel",
+        "last_name": "Reyes",
+        "title": "Mr",
+        "now": "2026-10-14T11:00"
+      }
+    },
+    "result": {
+      "response": "Good day, this is Larkspur Business Bank's automated assistant. We record this call. Am I speaking with Mr Reyes?",
+      "callId": "a40637e6-030c-478b-b529-4e0dc4ac5584",
+      "messageId": "msg_4_1791641269536"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/message",
+    "body": {
+      "workflowId": "feb14436-3471-4f9b-9be6-570407b7d71f",
+      "message": "Yes, speaking.",
+      "callId": "a40637e6-030c-478b-b529-4e0dc4ac5584"
+    },
+    "result": {
+      "response": "Thank you. Before we continue, I need to ask you four short security questions. What is the registered business postcode?",
+      "callId": "a40637e6-030c-478b-b529-4e0dc4ac5584",
+      "messageId": "msg_10_1791641278931"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/end",
+    "body": {
+      "callId": "a40637e6-030c-478b-b529-4e0dc4ac5584"
+    },
+    "result": {
+      "callId": "a40637e6-030c-478b-b529-4e0dc4ac5584",
+      "ended": true,
+      "endedReason": "customer-ended-call"
+    }
+  }
+]

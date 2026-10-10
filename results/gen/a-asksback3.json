@@ -1,0 +1,459 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "bdc87aa7-d00c-429b-9018-f8d4edf48f6e",
+ "iteration_id": "a5c14695-1f7d-4f9e-904f-aaf00c49435b",
+ "seconds": 566,
+ "passed": 5,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 420.0, '2026-10-14')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation failed to meet several criteria because it ended prematurely after the security questions. Specifically: 1) 'create_promise' was never called (the criteria required exactly once). 2) The required text-message sentence was never spoken. While the security questions were passed before calling 'get_account' and the word 'collections' was not used improperly, the agent failed to reach"
+   ],
+   "call_id": "d70193b4-02e3-4646-b852-81260c6c20c9",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_b80bb317-38b",
+   "slowest_turn_s": 27.8,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": true,
+   "failed": [],
+   "call_id": "8d1c5438-ff28-4f21-829d-ff79997c6ef8",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_dd8f7748-51d",
+   "slowest_turn_s": 27.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('not_verified', 'failed')",
+    "the call was not closed with close_call",
+    "conversation: The assistant failed to meet two of the success criteria: 1. The security check did not end after the third failure; the assistant had already received failures or refusals regarding the date of birth (Message 13), pet name (Message 15), and birth city (Message 19), yet it continued to prompt for the birth city again in Message 26 after further failed attempts. 2. The assistant never instructed th"
+   ],
+   "call_id": "5bb6af4b-57a5-4015-94c4-060ee6e1b862",
+   "tools": [],
+   "customer_id": "c_07c9ef69-9a9",
+   "slowest_turn_s": 3.5,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "5ae79c3b-9cc0-4498-93c4-feb31a4df128",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_0e69b77f-701",
+   "slowest_turn_s": 4.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": true,
+   "failed": [],
+   "call_id": "af1117c3-b035-4320-a8c0-a43d34632b20",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_01e8ee65-4ef",
+   "slowest_turn_s": 3.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": true,
+   "failed": [],
+   "call_id": "a1147c29-e9a1-463f-b7ed-b68e1177dc64",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_f152cc8c-0b2",
+   "slowest_turn_s": 4.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "f6107c25-1c9e-4048-814f-d23f141fa50d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_632f590b-e17",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('paid', None)",
+    "the call was not closed with close_call",
+    "conversation: The agent failed to meet the success criteria because they never mentioned that payments can take one business day to appear. The conversation stopped immediately after the identity verification process was completed, and a system error (code_exec error) occurred. Additionally, while no promise was recorded, the primary informational requirement was not fulfilled."
+   ],
+   "call_id": "79a5828d-9bf6-468c-896d-9edc967c0bf2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_a49da496-eac",
+   "slowest_turn_s": 24.5,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('transferred', 'restructuring')",
+    "transfers [], expected [{'queue': 'restructuring'}]",
+    "the call was not closed with close_call",
+    "conversation: The conversation failed to meet the success criteria because the 'transfer_to_agent' tool was never called. Following the verification process and account lookup, a system error occurred ('Failed to reach snekbox'), and the call ended with the customer hanging up before the agent could initiate a transfer or provide further information. While the agent did not describe a plan and no promise was re"
+   ],
+   "call_id": "c0731182-0286-4456-9f44-ed51fc3a2a9e",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_4b5c5a62-bbc",
+   "slowest_turn_s": 28.9,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 365.0, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation failed to meet the success criteria because no promise was made or stored in the ledger. The system events indicate a 'code_exec' error occurred after fetching the account details, and the conversation ended shortly after the user provided their security information. Since the requirement specifies exactly one promise must exist in the ledger, the absence of any promise constitute"
+   ],
+   "call_id": "28c7af03-27bf-4ebd-9aed-450aadc3dd6a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_017fbe1a-52f",
+   "slowest_turn_s": 21.4,
+   "ended": "customer-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed to meet several criteria because it ended prematurely after the security questions. Specifically: 1) 'create_promise' was never called (the criteria required exactly once). 2) The required text-message sentence was never spoken. While the security questions were passed before calling 'get_account' and the word 'collections' was not used improperly, the agent failed to reach"
+    ],
+    "call_id": "d70193b4-02e3-4646-b852-81260c6c20c9",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_b80bb317-38b",
+    "slowest_turn_s": 27.8,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": true,
+    "failed": [],
+    "call_id": "8d1c5438-ff28-4f21-829d-ff79997c6ef8",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_dd8f7748-51d",
+    "slowest_turn_s": 27.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_verified', 'failed')",
+     "the call was not closed with close_call",
+     "conversation: The assistant failed to meet two of the success criteria: 1. The security check did not end after the third failure; the assistant had already received failures or refusals regarding the date of birth (Message 13), pet name (Message 15), and birth city (Message 19), yet it continued to prompt for the birth city again in Message 26 after further failed attempts. 2. The assistant never instructed th"
+    ],
+    "call_id": "5bb6af4b-57a5-4015-94c4-060ee6e1b862",
+    "tools": [],
+    "customer_id": "c_07c9ef69-9a9",
+    "slowest_turn_s": 3.5,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "5ae79c3b-9cc0-4498-93c4-feb31a4df128",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_0e69b77f-701",
+    "slowest_turn_s": 4.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": true,
+    "failed": [],
+    "call_id": "af1117c3-b035-4320-a8c0-a43d34632b20",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_01e8ee65-4ef",
+    "slowest_turn_s": 3.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": true,
+    "failed": [],
+    "call_id": "a1147c29-e9a1-463f-b7ed-b68e1177dc64",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_f152cc8c-0b2",
+    "slowest_turn_s": 4.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "f6107c25-1c9e-4048-814f-d23f141fa50d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_632f590b-e17",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('paid', None)",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to meet the success criteria because they never mentioned that payments can take one business day to appear. The conversation stopped immediately after the identity verification process was completed, and a system error (code_exec error) occurred. Additionally, while no promise was recorded, the primary informational requirement was not fulfilled."
+    ],
+    "call_id": "79a5828d-9bf6-468c-896d-9edc967c0bf2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_a49da496-eac",
+    "slowest_turn_s": 24.5,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('transferred', 'restructuring')",
+     "transfers [], expected [{'queue': 'restructuring'}]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed to meet the success criteria because the 'transfer_to_agent' tool was never called. Following the verification process and account lookup, a system error occurred ('Failed to reach snekbox'), and the call ended with the customer hanging up before the agent could initiate a transfer or provide further information. While the agent did not describe a plan and no promise was re"
+    ],
+    "call_id": "c0731182-0286-4456-9f44-ed51fc3a2a9e",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_4b5c5a62-bbc",
+    "slowest_turn_s": 28.9,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed to meet the success criteria because no promise was made or stored in the ledger. The system events indicate a 'code_exec' error occurred after fetching the account details, and the conversation ended shortly after the user provided their security information. Since the requirement specifies exactly one promise must exist in the ledger, the absence of any promise constitute"
+    ],
+    "call_id": "28c7af03-27bf-4ebd-9aed-450aadc3dd6a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_017fbe1a-52f",
+    "slowest_turn_s": 21.4,
+    "ended": "customer-ended-call"
+   }
+  ]
+ ]
+}

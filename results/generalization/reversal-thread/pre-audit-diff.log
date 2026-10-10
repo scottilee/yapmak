@@ -1,0 +1,118 @@
+{
+  "checks": 117,
+  "matches": 115,
+  "mismatches": [
+    {
+      "path": "bands.$rules",
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": false
+            }
+          ]
+        }
+      ],
+      "match": false,
+      "source": "R7-C overrides only late band"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.action",
+      "expected": {
+        "type": "close",
+        "outcome": "harbour_no_deal",
+        "reason": "harbour_refused"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "harbour_refused"
+      },
+      "match": false,
+      "source": "rule 8"
+    }
+  ],
+  "unresolved": [
+    {
+      "topic": "identity.wrong_answer_limit",
+      "text": "The brief says maximum wrong answers across the entire check is 2 and to use the API's checks_left; the API summary says three wrong answers in total end the check. Brief value 2 used, counting delegated to checks_left.",
+      "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+    },
+    {
+      "topic": "get_account precondition",
+      "text": "The get_account summary says it is refused until both questions are passed, while the brief has three security questions; the brief's three-question order is used.",
+      "doc": "tests/fixtures/synthetic/reversal-thread-openapi.json"
+    },
+    {
+      "topic": "hardship sympathy sentence",
+      "text": "The brief requires one short sentence of sympathy for hardship but does not dictate its wording.",
+      "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+    }
+  ],
+  "audit_unresolved": [],
+  "raw_unknown_keys": []
+}

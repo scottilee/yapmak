@@ -1,0 +1,34 @@
+{
+ "bands": [
+  "1-45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "The brief defines a deadline only for days late 1\u201345 inclusive; no rule is given for products more than 45 days late (or 0 days late).",
+   "doc": "clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[refuse_to_talk].action changed from {close lark_no_deal/lark_refused} to {note lark_refused} (ends_call stays true): the brief only says a second refusal 'ends the call and marks all remaining products lark_refused'; the close outcome follows the section 9 precedence (it would be lark_arranged if a promise was already recorded, or lark_no_deal with the first non-settled product's reason, which may be lark_disputed etc.), so hard-coding lark_no_deal/lark_refused was not supported by the text.",
+  "special_cases[cannot_answer].before_persuasion set to true: the sentence sits in section 8, which begins 'Handle these before persuasion.'"
+ ]
+}

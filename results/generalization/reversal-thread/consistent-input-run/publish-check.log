@@ -1,0 +1,53 @@
+dry-run ok (0.7s)
+published {'workflow_id': 'feb14436-3471-4f9b-9be6-570407b7d71f', 'agent_id': '5a55e67e-b5f4-48c9-bca7-7ece2590041f', 'version': 2} (2.3s)
+stored-vs-candidate differences: 668
+   .nodes.id_route_2.interruptible: added by platform
+   .nodes.id_route_2.max_node_turns: added by platform
+   .nodes.id_route_2.on_enter_first_entry_only: added by platform
+   .nodes.id_route_2.tools: added by platform
+   .nodes.id_route_2.task_message: added by platform
+   .nodes.id_route_2.suppress_tool_results: added by platform
+   .nodes.id_route_2.transitions[0].condition.conditions[0].mode: added by platform
+   .nodes.id_route_2.transitions[1].condition.conditions[0].mode: added by platform
+   .nodes.id_route_2.transitions[2].condition.conditions[0].mode: added by platform
+   .nodes.id_route_2.transitions[3].condition.conditions[0].mode: added by platform
+   .nodes.id_route_2.transitions[4].condition.mode: added by platform
+   .nodes.id_route_2.assertions: added by platform
+   .nodes.id_route_2.return_to_previous_on_interrupt: added by platform
+   .nodes.id_route_2.truncation_strategy: added by platform
+   .nodes.id_route_2.extraction_schema: added by platform
+   .nodes.id_route_2.max_turn_transition: added by platform
+   .nodes.id_route_2.pre_actions[0].function.description: added by platform
+   .nodes.id_route_2.role_message: added by platform
+   .nodes.id_route_2.response_mapping: added by platform
+   .nodes.id_route_2.truncation_window_size: added by platform
+   .nodes.close_retry.interruptible: added by platform
+   .nodes.close_retry.max_node_turns: added by platform
+   .nodes.close_retry.on_enter_first_entry_only: added by platform
+   .nodes.close_retry.tools: added by platform
+   .nodes.close_retry.task_message: added by platform
+   .nodes.close_retry.suppress_tool_results: added by platform
+   .nodes.close_retry.transitions[0].condition.mode: added by platform
+   .nodes.close_retry.assertions: added by platform
+   .nodes.close_retry.return_to_previous_on_interrupt: added by platform
+   .nodes.close_retry.truncation_strategy: added by platform
+   .nodes.close_retry.extraction_schema: added by platform
+   .nodes.close_retry.max_turn_transition: added by platform
+   .nodes.close_retry.response_mapping[0].description: added by platform
+   .nodes.close_retry.role_message: added by platform
+   .nodes.close_retry.truncation_window_size: added by platform
+   .nodes.verify_after_2.interruptible: added by platform
+   .nodes.verify_after_2.max_node_turns: added by platform
+   .nodes.verify_after_2.on_enter_first_entry_only: added by platform
+   .nodes.verify_after_2.tools: added by platform
+   .nodes.verify_after_2.task_message: added by platform
+checkpoint exported to out/generalization-check.export.json
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/scripts/publish_check.py", line 94, in <module>
+    main()
+    ~~~~^^
+  File "/Users/sl/sbx/hackathon/scripts/publish_check.py", line 71, in main
+    r = freya.api("POST", "/api/v2/chat/message", body)
+  File "/Users/sl/sbx/hackathon/freya.py", line 19, in api
+    raise RuntimeError(f"{method} {path} -> {e.code}: {e.read().decode()[:1500]}") from None
+RuntimeError: POST /api/v2/chat/message -> 503: {"success":false,"data":{"message":"Internal server error","result":{"requestId":"02a392e2-9c9a-459e-bf88-95f2fce3c575"}}}

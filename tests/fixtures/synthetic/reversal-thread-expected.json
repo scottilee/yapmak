@@ -1,0 +1,625 @@
+{
+  "fixture": "reversal-thread",
+  "brief": "reversal-thread-brief.md",
+  "openapi": "reversal-thread-openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Harbour Commercial",
+      "source": "document title"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "company_number",
+        "postcode",
+        "founded_year"
+      ],
+      "source": "rule 3 order"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "rule 3"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 8,
+      "source": "rule 3"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "rule 3: no hint"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "text",
+      "source": "rule 3"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "rule 3"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "rule 3: no hint"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "year",
+      "source": "rule 3"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 0,
+      "source": "rule 3"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "rule 3: no hint"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 2,
+      "source": "P3 + R7 where amended"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "P3 + R7 where amended"
+    },
+    "identity.remaining_slot": {
+      "expected": "checks_left",
+      "source": "P3 + R7 where amended"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "P3 + R7 where amended"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "P3 + R7 where amended"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "harbour_unverified",
+        "harbour_failed"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "harbour_unverified",
+        "harbour_declined"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "harbour_unreached",
+        "harbour_unclear"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please contact our business desk.",
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.days": {
+      "expected": "next_business_day",
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.start": {
+      "expected": "09:15",
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.end": {
+      "expected": "17:45",
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "harbour_unreached",
+        "harbour_callback"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "harbour_unreached",
+        "harbour_no_callback"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "harbour_unreached",
+        "harbour_wrong_number"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "harbour_unreached",
+        "harbour_deceased"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Please accept our condolences.",
+      "source": "P3 + R7 where amended"
+    },
+    "calendar.holidays": {
+      "expected": [
+        "2026-10-19",
+        "2026-11-02",
+        "2026-12-24",
+        "2027-01-01"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.floors": {
+      "expected": {
+        "revolver": "revolver_floor",
+        "plant_loan": "plant_due",
+        "sales_advance": "advance_floor"
+      },
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder stays overdue.",
+      "source": "P3 + R7 where amended"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 0,
+      "source": "P3 + R7 where amended"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I record these promises?",
+      "source": "P3 + R7 where amended"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "notes.reasons": {
+      "expected": [
+        "harbour_refused",
+        "harbour_distress",
+        "harbour_disputed",
+        "harbour_settled",
+        "harbour_service_error"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.max_products": {
+      "expected": 3,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "harbour_arranged": [],
+        "harbour_settled": [],
+        "harbour_transferred": [
+          "harbour_restructure",
+          "harbour_person",
+          "harbour_care"
+        ],
+        "harbour_no_deal": [
+          "harbour_refused",
+          "harbour_distress",
+          "harbour_disputed",
+          "harbour_service_error"
+        ],
+        "harbour_unverified": [
+          "harbour_failed",
+          "harbour_declined"
+        ],
+        "harbour_unreached": [
+          "harbour_callback",
+          "harbour_no_callback",
+          "harbour_wrong_number",
+          "harbour_deceased",
+          "harbour_unclear"
+        ]
+      },
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "harbour_arranged",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "harbour_settled",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "harbour_transferred",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "harbour_no_deal",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "harbour_service_error",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.refused_reason": {
+      "expected": "harbour_refused",
+      "source": "P3 + R7 where amended"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.opening": {
+      "expected": "Good day, this is Harbour Commercial's automated assistant. We record this call.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue business products.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle this today?",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle all these products today?",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.robot_reply": {
+      "expected": "I am Harbour Commercial's automated assistant.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.scam_reply": {
+      "expected": "You can call the number on your bank statement to verify us.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "arrears",
+        "overdue",
+        "facility",
+        "payment"
+      ],
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "We will email confirmation to your registered address.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Payments can take two business days to appear.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our business desk can answer that question.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Please contact our business desk to change a recorded promise.",
+      "source": "P3 + R7 where amended"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "revolver": "working capital line",
+        "plant_loan": "asset finance loan",
+        "sales_advance": "merchant advance"
+      },
+      "source": "P3 + R7 where amended"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "R7-C overrides only late band"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "harbour_settled"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "harbour_disputed"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "harbour_distress"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "harbour_care",
+      "source": "rule 8"
+    },
+    "special_cases.hardship.offer_outcome": {
+      "expected": [
+        "harbour_transferred",
+        "harbour_care"
+      ],
+      "source": "rule 8"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "harbour_restructure",
+        "outcome": "harbour_transferred",
+        "reason": "harbour_restructure"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.restructuring.takes_promise": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "rule 8"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "harbour_desk",
+        "outcome": "harbour_transferred",
+        "reason": "harbour_person"
+      },
+      "source": "R7-B"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "R7-B"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "R7-B"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "R7-B"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.scam.say": {
+      "expected": "You can call the number on your bank statement to verify us.",
+      "source": "rule 8"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "harbour_no_deal",
+        "reason": "harbour_refused"
+      },
+      "source": "rule 8"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "rule 8"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "rule 8"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "rule 8"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "rule 8: all special cases before persuasion"
+    }
+  },
+  "comparison_notes": [
+    "Expected values authored before extraction; source spans, free prose triggers and arbitrary band names require manual semantic review.",
+    "Outcome tables and note/holiday sets are compared without order; identity and attempt order are significant.",
+    "Different but equivalent special-case action representations are flagged for manual review, not automatically called errors.",
+    "No public mock simulations: identities/products/schema differ; .example.invalid tool endpoints prevent accidental bank writes."
+  ]
+}

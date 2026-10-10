@@ -1,0 +1,45 @@
+start 2026-10-10T14:18:25Z
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/extract.py", line 174, in <module>
+    ir, audit = extract(briefs, openapi, slot, tr)
+                ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/extract.py", line 150, in extract
+    ir = P.PolicyIR.load(str(ir_path))
+  File "/Users/sl/sbx/hackathon/policy.py", line 257, in load
+    with open(path) as f:
+               ^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/policy.py", line 252, in from_dict
+    def from_dict(cls, d: dict) -> "PolicyIR":
+               ^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/policy.py", line 325, in _build
+    t = f.type if not isinstance(f.type, str) else f.type
+                   ^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/policy.py", line 345, in _coerce
+    if t in _OBJS:
+               ^^^
+  File "/Users/sl/sbx/hackathon/policy.py", line 319, in _build
+    if unknown:
+        ^^^^^^^
+ValueError: Phrases: unknown keys ['opening_verbatim']
+exit meridian 1 2026-10-10T14:22:00Z
+== out/audit-eom.policy.json vs results/audit/synthetic/meridian-expected.json: 7 mismatches
+  - bands[0].name: actual='1-20' expected='early'
+  - bands[1].name: actual='21-45' expected='late'
+  - bands[1].attempts: actual=[{'amount': 'full', 'date': 'last_business_day_this_week_or_next', 'floor_if_full_refused': True}, {'amount': 'floor', 'date': 'deadline', 'floor_if_full_refused': False}] expected=[{'amount': 'full', 'date': 'last_business_day_this_week_or_next', 'floor_if_full_refused': True}, {'amount': 'floor', 'date': 'deadline', 'floor_if_full_refused': True}]
+  - unresolved: actual=[{'topic': 'missing_date_parts', 'text': 'The brief does not say how to read a date the customer gives without a month or year; left at default.', 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'asking_purpose_counts_as_decline', 'text': 'The brief does not say whether asking why the security questions are needed counts as a refusal to answer; left at default.', 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'no_promise_reason_mixed_notes', 'text': 'The brief does not say which no_promise reason to use when facilities end with different note reasons (e.g. one dispute, one turned_down); left at default (first non-paid note).', 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'hardship_sympathy_sentence', 'text': "Hardship requires 'one short sentence of sympathy' but no verbatim sentence is given; say left empty.", 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'refuse_to_talk_wording', 'text': "Section 11 reads 'close `no_promise` / `turned_down` before verification with `id_failed` / `would_not_answer` if identity was not yet passed'; interpreted as no_promise/turned_down after verification and id_failed/would_not_answer before it.", 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'days_overdue_outside_bands', 'text': 'Section 8 defines only the bands 1 to 20 and 21 to 45 days overdue; the brief does not say what to do for a facility more than 45 days overdue.', 'doc': 'results/audit/synthetic/meridian-brief.md'}, {'topic': 'api_summary_mismatch', 'text': "get_account summary says 'Refused until both questions are passed' while the brief requires four identity questions; the brief's four questions were used.", 'doc': 'results/audit/synthetic/meridian-openapi.json'}, {'topic': 'facility_id_vs_product_id', 'text': "get_account returns facility_id while create_promise and add_note take product_id; the brief says to use the facility's id, so facility_id is passed as product_id.", 'doc': 'results/audit/synthetic/meridian-openapi.json'}] expected=[]
+  - special_cases.dispute.ends_call: actual=True expected=False
+  - special_cases.already_paid.ends_call: actual=True expected=False
+  - special_cases.hardship.ends_call: actual=True expected=False
+== unresolved entries (8):
+  * {"topic": "missing_date_parts", "text": "The brief does not say how to read a date the customer gives without a month or year; left at default.", "doc": "results/audit/synthetic/meridian-brief.md"}
+  * {"topic": "asking_purpose_counts_as_decline", "text": "The brief does not say whether asking why the security questions are needed counts as a refusal to answer; left at default.", "doc": "results/audit/synthetic/meridia
+  * {"topic": "no_promise_reason_mixed_notes", "text": "The brief does not say which no_promise reason to use when facilities end with different note reasons (e.g. one dispute, one turned_down); left at default (first non-pa
+  * {"topic": "hardship_sympathy_sentence", "text": "Hardship requires 'one short sentence of sympathy' but no verbatim sentence is given; say left empty.", "doc": "results/audit/synthetic/meridian-brief.md"}
+  * {"topic": "refuse_to_talk_wording", "text": "Section 11 reads 'close `no_promise` / `turned_down` before verification with `id_failed` / `would_not_answer` if identity was not yet passed'; interpreted as no_promise/turne
+  * {"topic": "days_overdue_outside_bands", "text": "Section 8 defines only the bands 1 to 20 and 21 to 45 days overdue; the brief does not say what to do for a facility more than 45 days overdue.", "doc": "results/audit/syn
+  * {"topic": "api_summary_mismatch", "text": "get_account summary says 'Refused until both questions are passed' while the brief requires four identity questions; the brief's four questions were used.", "doc": "results/audi
+  * {"topic": "facility_id_vs_product_id", "text": "get_account returns facility_id while create_promise and add_note take product_id; the brief says to use the facility's id, so facility_id is passed as product_id.", "doc":
+== audit.json (if present):
+   fixed: ["phrases.opening_verbatim: was missing (default false), set to true because section 2 says 'The first sentence is exactly'.", "outcomes.table[].when: the id_failed and no_customer descriptions were made up, so they are now empty. The moved_across description now quotes section 13 instead of an invented phrase.", "source_docs: removed the tool API file. The task lists only the brief as a source document; the API is the separate enum reference.", "phrases.source and amounts.source: added the debt_intro, today_question and below-floor sentences so every phrase value has a quoted origin.", "unres
+   unresolved: ["How to read a date without a month or year (calendar.missing_date_parts left as 'unresolved').", "Whether asking why the security questions are needed counts as a refusal (left at default true).", "Which no_promise reason to use when facilities end with different note reasons (left at default: first non-paid note).", "Hardship sympathy sentence: 'one short sentence of sympathy', no verbatim text given.", "Section 11 refuse-to-talk sentence is garbled. Read as no_promise/turned_down after verification and id_failed/would_not_answer before it.", "No band for facilities 0 days or more than 45 d
+--- cobalt

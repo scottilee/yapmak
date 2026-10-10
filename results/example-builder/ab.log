@@ -1,0 +1,72 @@
+start 2026-10-10T13:29:36Z
+  [Skill] {'skill': 'build-phone-agent', 'args': 'briefs/brief-a.md briefs/brief-b.md'}
+  [Bash] {'command': 'ls -R | head -50 && cat briefs/brief-a.md briefs/brief-b.md'}
+  [Bash] {'command': 'cat /home/agent/.claude/projects/-Users-sl-sbx-hackathon/memory/*.md; ls -la out results tools scripts; git
+  [Bash] {'command': 'cat examples/agent_builder.py | head -80; cat tools/openapi.json'}
+  [Bash] {'command': 'cat docs/workflow-format.md docs/tools-and-code.md'}
+Reading the platform docs now, then I'll write the workflow for both briefs.
+  [Read] {'file_path': '/home/agent/.claude/projects/-Users-sl-sbx-hackathon/f4e8e770-e23a-45fd-adaa-4c4fffbffc86/tool-results/b6
+  [Read] {'file_path': '/home/agent/.claude/projects/-Users-sl-sbx-hackathon/f4e8e770-e23a-45fd-adaa-4c4fffbffc86/tool-results/b6
+  [Bash] {'command': 'cat examples/base-agent.json; cat .freya-agents.json 2>/dev/null; ls traces | tail; head -c 1500 public-tes
+  [Bash] {'command': 'python3 -c "\nimport json\nfor c in json.load(open(\'public-test-set.json\')):\n    print(c[\'id\'],c[\'bri
+  [Bash] {'command': 'grep -n "products" compile.py | head -40; grep -n "def _load_products\\|flatten\\|_response.data" -n compil
+  [Bash] {'command': 'sed -n 385,420p compile.py'}
+Now writing the workflow generator.
+  [Write] {'file_path': '/Users/sl/sbx/hackathon/out/brief-b.gen.py', 'content': '"""Generates out/brief-b.workflow.json (Brief A 
+  [Bash] {'command': 'python3 out/brief-b.gen.py && python3 -c "\nimport importlib.util,json\nspec=importlib.util.spec_from_file_
+Facts match the expected deadlines (23 Oct late band). Saving and testing on Brief B.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "import freya,json,sys; print(json.dumps(freya.save_workflow(sys.argv
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --brief B --out 
+  [Bash] {'command': 'grep -n "^def " freya.py; python3 -c "\nimport json;r=json.load(open(\'results/brief-b-run1.json\'));print(
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport freya,json\nc=freya.get_call(\'6ac22629-2132-4be1-9aae-1764
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport freya,json\nc=freya.get_call(\'6ac22629-2132-4be1-9aae-1764
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport freya,json\nc=freya.get_call(\'6ac22629-2132-4be1-9aae-1764
+First run: 0/3, because the account data landed under a different variable name, so the agent never saw the products. Fixing the lookup and re-testing.
+  [Bash] {'command': 'python3 - <<\'EOF\'\np=\'out/brief-b.gen.py\';s=open(p).read()\ns=s.replace("for key in (\'get_account_resp
+Brief B now passes 3/3. Brief B builds on Brief A, so I'm also running the ten Brief A customers against the same agent.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --brief A --out 
+PUB-08 failed with an empty outcome. Checking what `close_call` actually sent.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport json,freya\nr=json.load(open(\'results/brief-b-agent-on-a.j
+  [Bash] {'command': 'python3 - <<\'EOF\'\np=\'out/brief-b.gen.py\';s=open(p).read()\nold_pre=s[s.index("CLOSE_PRE = r\'\'\'"):s.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "import freya,json,sys; print(json.dumps(freya.save_workflow(sys.argv
+Everything broke: the agent goes silent after the customer's first reply. Checking the events log.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport json,freya\nr=json.load(open(\'results/brief-b-run3.json\')
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport json,freya\nr=json.load(open(\'results/brief-b-run3.json\')
+The workflow validates and the log shows no error, so this could be a platform outage. A one-customer check will tell.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --brief A --only
+The Freya platform is returning 502 errors. I'll wait two minutes and try again.
+  [Bash] {'command': 'source env.sh 2>/dev/null; sleep 120; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --bri
+Still silent. To tell my change apart from a platform problem, I'll run one customer against the untouched baseline agent.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 tools/run_cases.py 3d6f2fd4-6328-47cb-b785-c73375dd26a4 --brief A --only
+The baseline agent fails the same way (one 180 s turn), so the platform's model is down, not my change. I'll wait 5 minutes and retry.
+  [Bash] {'command': 'source env.sh 2>/dev/null; sleep 300; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --bri
+The platform is back and the fix works. Running the full Brief B and Brief A sets once more.
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 tools/run_cases.py 220c81e1-6ffe-4d1d-bf82-771516b11524 --brief B --out 
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport json,freya\nr=json.load(open(\'results/brief-b-agent-on-a3.
+  [Bash] {'command': 'python3 - <<\'EOF\'\np=\'out/brief-b.gen.py\';s=open(p).read()\ns=s.replace(\'\'\'        "facts": code_nod
+  [Bash] {'command': 'source env.sh 2>/dev/null; python3 -c "\nimport json,freya\nfor f,i in [(\'results/brief-b-run5.json\',\'PU
+I built one agent covering both briefs. In the last run it passed 9 of 10 Brief A customers and 2 of 3 Brief B customers, so 11 of 13 overall.
+
+**How it's built** (`out/brief-b.workflow.json`, generated by `out/brief-b.gen.py`):
+- **Setup:** a code step reads `now` and works out the allowed callback times.
+- **Who is on the line and identity:** one step handles the opening, relatives, wrong numbers, deceased customers and the two security questions. After each answer, `verify_identity` returns a plain instruction that the agent follows (correct, ask again, month as a word, or check failed).
+- **Account facts:** after `get_account`, a code step works out for each product its name in words, band, deadline, floor and the two persuasion offers. It also builds a calendar with weekends, holidays and each product's deadline, and a table of what "this Friday" and "next Friday" mean. The opening statement of the debt is a fixed line built from those facts.
+- **Negotiation:** one step with `create_promise`, `add_note` (only when there are two or more products), `transfer_to_agent` and `close_call`. A failed `create_promise` tells the agent not to say it is recorded and to retry once.
+- **Closing:** code fixes the `close_call` outcome from the reason, using the brief's table. The call only ends once `close_call` returns `ok: true`.
+
+**Test history**
+- **Run 1:** B scored 0/3, because the account data was stored under a different variable name; fixed.
+- **Run 2:** B scored 3/3, but A scored 9/10. In PUB-08 the agent closed as `no_promise` with reason `paid`, and still hung up after the service rejected it; this led to the closing fix above.
+- **Outage:** the Freya platform then went down for a while (502 errors, and a 180-second turn on the untouched baseline agent too). Runs during that time aren't meaningful.
+- **Partial outage:** in another run the platform's code steps failed in several calls, so the agent spoke a literal `{{debt_statement}}`, and the bank service returned 503 on promises. That run also showed a real bug in PUB-06: the agent went back to the full amount after the customer said it was too much. I fixed that bug and made the account-facts step run again if it produces nothing.
+
+**Still failing in the last run** (I stopped here because the skill allows three fix rounds):
+- **PUB-03:** the agent sent a date of birth the service couldn't read as a date. That retry wasn't counted as wrong by the service, but the judge counted the customer's third wrong date as the end of the check. The next fix would be a code step that puts the date of birth into `YYYY-MM-DD` before sending it.
+- **PUB-12:** the judge's cut-off reason lists the criteria as met, and the agent passed this customer in the two earlier full runs, so this looks like the run-to-run variance rather than a regression.
+
+The brief's holiday dates and band rules are written into the code steps for this agent. That's fine here, but the final rules don't allow it in a submitted builder.
+
+workflow_id `f1a66450-fae6-43f1-85d6-4df6a03c11ec`, agent_id `220c81e1-6ffe-4d1d-bf82-771516b11524`, last run 2/3 on Brief B (and 9/10 on Brief A).
+
+done: 36 turns, 2995 s, $2.31. Trace: /Users/sl/sbx/hackathon/traces/20261010-062936.jsonl
+exit 0 elapsed 2996 s

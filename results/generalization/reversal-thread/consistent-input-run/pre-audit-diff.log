@@ -1,0 +1,94 @@
+{
+  "checks": 117,
+  "matches": 116,
+  "mismatches": [
+    {
+      "path": "bands.$rules",
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": false
+            }
+          ]
+        }
+      ],
+      "match": false,
+      "source": "R7-C overrides only late band"
+    }
+  ],
+  "unresolved": [
+    {
+      "topic": "days_late_outside_bands",
+      "text": "The documents define bands only for 1\u201315 and 16\u201360 days late; handling of products more than 60 days late (or 0) is not stated.",
+      "doc": "reversal-thread-brief.md"
+    }
+  ],
+  "audit_unresolved": [],
+  "raw_unknown_keys": []
+}

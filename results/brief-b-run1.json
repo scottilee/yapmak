@@ -1,0 +1,172 @@
+{
+ "agent_id": "220c81e1-6ffe-4d1d-bf82-771516b11524",
+ "simulation_id": "739c043c-0f80-4e7d-99b6-a795da964f28",
+ "iteration_id": "7d412b24-1c02-4232-93f8-dc4a22856198",
+ "seconds": 53,
+ "passed": 0,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed to state the names of the three products before making an ask for payment. In Message 6, the assistant asks 'Can you make this payment today?' while only referring to 'a late payment' generally. Throughout the entire conversation, the specific products (credit card, personal loan, and car loan) were never explicitly named, although the assistant referred to them collectively a"
+   ],
+   "call_id": "6ac22629-2132-4be1-9aae-1764c1fea505",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_cba0d457-758",
+   "slowest_turn_s": 3.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed to make two attempts on the personal loan (late band) as required by the success criteria. In Message 10, the assistant made the first attempt for all three products. When the customer refused the personal loan and car loan in Message 11, the assistant immediately accepted the refusal in Message 12 for the loans and focused solely on the credit card promise. For a late-band it"
+   ],
+   "call_id": "decae6dd-b706-423c-9196-0f6544ef21e3",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_6bb5b2d0-d09",
+   "slowest_turn_s": 3.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 300.0, '2026-10-23'), ('p2', 900.0, '2026-10-23')], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+    "conversation: The evaluation failed because the credit card promise was recorded for 23 October instead of 30 October. Consequently, the read-back in message 12 only named a single date (23 October) for both accounts, failing the requirement to name both dates. The assistant explicitly restricted the date to 23 October in message 10, preventing the success criteria from being met."
+   ],
+   "call_id": "5d9ba041-d1b7-4989-b620-523039125fc4",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_5203cf71-f3e",
+   "slowest_turn_s": 3.7,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed to state the names of the three products before making an ask for payment. In Message 6, the assistant asks 'Can you make this payment today?' while only referring to 'a late payment' generally. Throughout the entire conversation, the specific products (credit card, personal loan, and car loan) were never explicitly named, although the assistant referred to them collectively a"
+    ],
+    "call_id": "6ac22629-2132-4be1-9aae-1764c1fea505",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_cba0d457-758",
+    "slowest_turn_s": 3.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed to make two attempts on the personal loan (late band) as required by the success criteria. In Message 10, the assistant made the first attempt for all three products. When the customer refused the personal loan and car loan in Message 11, the assistant immediately accepted the refusal in Message 12 for the loans and focused solely on the credit card promise. For a late-band it"
+    ],
+    "call_id": "decae6dd-b706-423c-9196-0f6544ef21e3",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_6bb5b2d0-d09",
+    "slowest_turn_s": 3.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 300.0, '2026-10-23'), ('p2', 900.0, '2026-10-23')], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+     "conversation: The evaluation failed because the credit card promise was recorded for 23 October instead of 30 October. Consequently, the read-back in message 12 only named a single date (23 October) for both accounts, failing the requirement to name both dates. The assistant explicitly restricted the date to 23 October in message 10, preventing the success criteria from being met."
+    ],
+    "call_id": "5d9ba041-d1b7-4989-b620-523039125fc4",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_5203cf71-f3e",
+    "slowest_turn_s": 3.7,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

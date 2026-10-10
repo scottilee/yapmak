@@ -1,0 +1,32 @@
+{
+  "checks": 120,
+  "matches": 119,
+  "mismatches": [
+    {
+      "path": "special_cases.refuse_to_talk.action",
+      "expected": {
+        "type": "close",
+        "outcome": "lark_no_deal",
+        "reason": "lark_refused"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "lark_refused"
+      },
+      "match": false,
+      "source": "rule 8"
+    }
+  ],
+  "unresolved": [
+    {
+      "topic": "bands",
+      "text": "The brief defines a deadline only for days late 1\u201345 inclusive; no rule is given for products more than 45 days late (or 0 days late).",
+      "doc": "clean-eom-brief.md"
+    }
+  ],
+  "audit_unresolved": [
+    "No deadline or attempt rule exists for products 0 days late or more than 45 days late (only band 1-45 is defined). This is already listed in policy.unresolved.",
+    "Constraints with no IR field, kept only as prompt-level rules: what counts as holder confirmation (yes, speaking, own name; not hello or a question); a missing callback hour must be clarified, never guessed; third parties are told nothing; the hardship sympathy sentence is not dictated verbatim; the wording of the service-error message ('says it failed') is not dictated; never offer a discount, waiver or new instalment plan; never call get_account before all questions pass; use call variable now, never the machine clock."
+  ],
+  "raw_unknown_keys": []
+}

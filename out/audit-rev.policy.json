@@ -1,0 +1,293 @@
+{
+ "source_docs": ["results/audit/synthetic/cobalt-brief.md", "results/audit/synthetic/cobalt-openapi.json"],
+ "bank_name": "Cobalt Trust",
+ "identity": {
+  "requirements": [
+   {
+    "field": "phone_last4",
+    "ask_text": "Could you tell me the last four digits of the mobile number we hold for you?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V5. ask TWO questions, one at a time, in this order: the last four digits of the mobile number we hold, then the year the business was founded (four digits)."}
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "And what year was the business founded?",
+    "answer_format": "year",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V5. ... then the year the business was founded (four digits). Call verify_identity after each."}
+   }
+  ],
+  "wrong_answer_limit": 3,
+  "wrong_count_source": "api",
+  "remaining_slot": "remaining_attempts",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": ["unverified", "failed"],
+  "declined_outcome": ["unverified", "declined"],
+  "unclear_holder_outcome": ["not_on_line", "unclear"],
+  "failed_instruction": "",
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V5. A wrong answer may be re-asked; THREE wrong answers across the whole check end it (the API counts them; use its remaining count). On exhaustion: state nothing about the account, close `not_verified` / `failed`. Refusal: explain once that the checks protect the account; a second refusal closes `not_verified` / `declined`. M9-E/F: unverified failed | declined. D-12 (five wrong answers) not in force until 1 December 2026."}
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "12:00",
+   "end": "18:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": ["not_on_line", "callback"],
+   "no_callback_outcome": ["not_on_line", "no_callback"],
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-C. Replace V4's window: callbacks are next business day only, between 12:00 and 18:00 inclusive, after now. One retry on an invalid offer stays. V4: a second invalid or refused closes no_callback; a booked one closes callback (M9-F: not_on_line)."}
+  },
+  "wrong_number_outcome": ["not_on_line", "wrong_number"],
+  "deceased_outcome": ["not_on_line", "deceased"],
+  "deceased_sentence": "Our sympathy to you and the family.",
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V3. A third party: disclose nothing, ask when the holder can be reached. Wrong number closes wrong_number. Deceased holder ... M9-D. Replace V3's condolence line with exactly: \"Our sympathy to you and the family.\""}
+ },
+ "calendar": {
+  "holidays": ["2026-11-06", "2026-11-27", "2026-12-25", "2026-12-28", "2027-01-01"],
+  "business_days": [0, 1, 2, 3, 4],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V7. Calendar: business days Monday to Friday except 2026-11-06, 2026-11-27, 2026-12-25, 2026-12-28, 2027-01-01."}
+ },
+ "bands": [
+  {
+   "name": "1-15",
+   "days_late_min": 1,
+   "days_late_max": 15,
+   "deadline": {"kind": "nth_business_day", "n": 6},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V8. Days late 1–15 → latest promise date is the SIXTH business day after today, one persuasion attempt."}
+  },
+  {
+   "name": "16-40",
+   "days_late_min": 16,
+   "days_late_max": 40,
+   "deadline": {"kind": "calendar_days", "n": 21, "adjustment": "following"},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+    {"amount": "floor", "date": "deadline", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V8. Days late 16–40 → latest promise date is TWENTY-ONE CALENDAR DAYS after today; if that day is not a business day, take the next business day after it. Two persuasion attempts. V10. Attempt 2 (16–40 band only): the floor on the deadline."}
+  }
+ ],
+ "amounts": {
+  "floors": {"overdraft": "minimum_due", "term_loan": "monthly_repayment"},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest remains unpaid",
+  "accept_between_floor_and_full": true,
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V9. ask full balance first, never \"how much can you pay\". Floor per facility: overdraft → its minimum_due, term loan → its monthly_repayment. Offer the floor once when the full is refused and say \"the rest remains unpaid\". Accept customer amounts from floor to full inclusive."}
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V9. Promise dates: today or later, a business day, not past the deadline; weekend/holiday dates roll forward when the rolled date is not past the deadline; a past-deadline date means offering the deadline, and refusing the deadline is a flat refusal; a vague period is clarified once, then the deadline is proposed."}
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this facility.",
+   "action": {"type": "note", "reason": "already_settled"},
+   "say": "Payments may take two working days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-G. \"already paid\" no longer ends the call. Say the V12 sentence about payments appearing, note that facility `already_settled`, take no promise for it, and continue with the other facilities."}
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the debt or says they do not owe it.",
+   "action": {"type": "note", "reason": "disputed"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V12. Dispute → no argument, no promise. M9-G. A disputed facility is noted `disputed` and the call continues with the others; only when nothing else remains does the close code come from Section F."}
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes hardship such as illness, bereavement or loss of the main contract.",
+   "action": {"type": "note", "reason": "distress"},
+   "say": "",
+   "offer_transfer_queue": "support",
+   "offer_outcome": ["handed_over", "support"],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V12. Hardship (illness, bereavement, loss of the main contract): one short sympathy sentence, no persuasion, offer the support team; accepted → transfer to queue `support` and close `transferred` / `support`; declined → close `no_promise` / `hardship`. M9-F: handed_over support; nothing_recorded distress."}
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to restructure the debt or for a new repayment plan.",
+   "action": {"type": "transfer", "queue": "restructure", "outcome": "handed_over", "reason": "restructure"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V12. Restructure request → transfer queue `restructure`, close `transferred` / `restructure`. M9-F: handed_over restructure."}
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a person or a human agent.",
+   "action": {"type": "transfer", "queue": "person", "outcome": "handed_over", "reason": "person"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-B. Reverse V12's human barrier: transfer immediately to queue `person` on the FIRST request for a person. Do not ask whether the assistant can help first."}
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is fraud or a scam.",
+   "action": {"type": "continue"},
+   "say": "You can verify us by calling the helpline printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V2. If asked whether this is fraud: say \"You can verify us by calling the helpline printed on your statement.\" and continue."}
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether the caller is a robot.",
+   "action": {"type": "continue"},
+   "say": "I am Cobalt Trust's automated assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V2. If asked whether the caller is a robot: say \"I am Cobalt Trust's automated assistant.\""}
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk at all, twice.",
+   "action": {"type": "close", "outcome": "nothing_recorded", "reason": "refusal"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V12. Two refusals to talk at all → close `no_promise` / `refusal` (identity not yet passed: `not_verified` / `declined`). M9-F: nothing_recorded refusal; unverified declined."}
+  },
+  {
+   "name": "unanswerable",
+   "trigger": "The customer asks a question the assistant has no information to answer.",
+   "action": {"type": "continue"},
+   "say": "I don't have that information.",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V12. Unanswerable question: \"I don't have that information.\" — invent nothing."}
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {"outcome": "arrangement", "reasons": [], "when": "at least one promise recorded"},
+   {"outcome": "settled", "reasons": [], "when": "every delinquent facility noted paid"},
+   {"outcome": "handed_over", "reasons": ["restructure", "person", "support"], "when": "transferred to a queue"},
+   {"outcome": "nothing_recorded", "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"], "when": "no promise recorded"},
+   {"outcome": "unverified", "reasons": ["failed", "declined"], "when": "identity check failed or declined"},
+   {"outcome": "not_on_line", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": "holder not reached"}
+  ],
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "nothing_recorded",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "failure",
+  "refused_reason": "refusal",
+  "goodbye_before_close": true,
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-F. SECTION F — FINAL CLOSE CODES ... A transfer overrides a recorded promise for the close code (handed_over with the transfer's reason); recorded promises stay. Where several facilities end without promises, the nothing_recorded reason is the first facility's note reason in get_account order whose note is not already_settled. M9-I. When one facility's promise write fails and another's succeeds, the close code is arrangement."}
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-H. With two facilities, V13 is replaced: call add_note exactly once for every facility that ends with no recorded promise, using a note reason from the add_note enum (refusal, distress, disputed, already_settled, failure). NEVER add notes on a call that is handed_over — before or after it, none."}
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "since October a customer can have UP TO TWO delinquent facilities on one call. Where Marcus's v2 says \"the facility\", read \"each facility in the order get_account returns them\"; state every delinquent facility before asking anything. V6: ask exactly \"Can you settle everything today?\" once for the batch. V10: Attempts are counted per facility."}
+ },
+ "phrases": {
+  "opening": "Good morning, this is Cobalt Trust's automated assistant; this call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "",
+  "today_question": "Can you settle everything today?",
+  "all_today_question": "Can you settle everything today?",
+  "robot_reply": "I am Cobalt Trust's automated assistant.",
+  "scam_reply": "You can verify us by calling the helpline printed on your statement.",
+  "prohibited_before_verification": ["arrears", "the amount", "what the money is for"],
+  "after_promise_sentence": "We'll send written confirmation to your address.",
+  "already_paid_sentence": "Payments may take two working days to appear.",
+  "cannot_answer_sentence": "I don't have that information.",
+  "recorded_promise_change_reply": "",
+  "product_naming": {"overdraft": "business overdraft", "term_loan": "term loan"},
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V2. Opening line exactly: \"Good morning, this is Cobalt Trust's automated assistant; this call is recorded.\" — adjust the greeting word to the time of day — then ask exactly \"Am I speaking with {title} {last_name}?\". Before verification passes, never mention arrears, the amount or what the money is for, to anyone. V6. Name facility types in words: overdraft → \"business overdraft\", term_loan → \"term loan\"."}
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Shall I put that down?",
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-A. Reverse V11's retry: create_promise is NEVER retried. On a failed write say plainly that it could not be recorded for that facility, mark that facility `failure`, and continue with the others. V11: ask exactly \"Shall I put that down?\"; only a clear yes to the final read-back allows create_promise, once per facility."}
+ },
+ "unresolved": [
+  {"topic": "debt_intro", "text": "No mandatory sentence introducing the reason for the call after verification; V6 only says to state the balance and days late per facility.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "recorded_promise_change_reply", "text": "The documents give no reply for a customer who wants to change a recorded promise.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "hardship_declined_reason", "text": "V12 closes a declined hardship offer as no_promise/hardship, but M9-E retires v2 codes and Section F has no 'hardship' reason; mapped to nothing_recorded/distress (the add_note enum value) by inference, not by explicit text.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "hardship_sympathy_sentence", "text": "V12 requires 'one short sympathy sentence' for hardship but does not dictate its wording.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "notes_single_facility", "text": "M9-H replaces V13 ('does not use add_note') only 'with two facilities'; whether add_note is used when the customer has a single facility is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "asking_purpose_counts_as_decline", "text": "The documents do not say whether asking why the questions are needed counts as a refusal of verification.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "identity_hint", "text": "verify_identity returns no hint property; unreadable values are rejected with ok=false and not counted as wrong, but no reply wording is given.", "doc": "results/audit/synthetic/cobalt-openapi.json"},
+  {"topic": "failed_instruction", "text": "On identity exhaustion the documents only say 'state nothing about the account'; no instruction to give the customer is dictated.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "days_late_outside_bands", "text": "Bands cover 1–40 days late only; handling of facilities more than 40 days late is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+ ]
+}

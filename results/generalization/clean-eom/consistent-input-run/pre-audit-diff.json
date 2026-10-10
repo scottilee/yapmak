@@ -1,0 +1,1118 @@
+{
+  "fixture": "clean-eom",
+  "checks": [
+    {
+      "path": "bank_name",
+      "expected": "Larkspur Business Bank",
+      "actual": "Larkspur Business Bank",
+      "match": true,
+      "source": "document title"
+    },
+    {
+      "path": "identity.requirements.$fields",
+      "expected": [
+        "postcode",
+        "birth_year",
+        "company_number",
+        "founded_year"
+      ],
+      "actual": [
+        "postcode",
+        "birth_year",
+        "company_number",
+        "founded_year"
+      ],
+      "match": true,
+      "source": "rule 3 order"
+    },
+    {
+      "path": "identity.requirements.0.answer_format",
+      "expected": "text",
+      "actual": "text",
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.0.digits",
+      "expected": 0,
+      "actual": 0,
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.0.hint_field",
+      "expected": "",
+      "actual": "",
+      "match": true,
+      "source": "rule 3: no hint"
+    },
+    {
+      "path": "identity.requirements.1.answer_format",
+      "expected": "year",
+      "actual": "year",
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.1.digits",
+      "expected": 0,
+      "actual": 0,
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.1.hint_field",
+      "expected": "",
+      "actual": "",
+      "match": true,
+      "source": "rule 3: no hint"
+    },
+    {
+      "path": "identity.requirements.2.answer_format",
+      "expected": "digits",
+      "actual": "digits",
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.2.digits",
+      "expected": 8,
+      "actual": 8,
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.2.hint_field",
+      "expected": "",
+      "actual": "",
+      "match": true,
+      "source": "rule 3: no hint"
+    },
+    {
+      "path": "identity.requirements.3.answer_format",
+      "expected": "year",
+      "actual": "year",
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.3.digits",
+      "expected": 0,
+      "actual": 0,
+      "match": true,
+      "source": "rule 3"
+    },
+    {
+      "path": "identity.requirements.3.hint_field",
+      "expected": "",
+      "actual": "",
+      "match": true,
+      "source": "rule 3: no hint"
+    },
+    {
+      "path": "identity.wrong_answer_limit",
+      "expected": 4,
+      "actual": 4,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.wrong_count_source",
+      "expected": "api",
+      "actual": "api",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.remaining_slot",
+      "expected": "checks_left",
+      "actual": "checks_left",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.holder_confirmation_asks",
+      "expected": 2,
+      "actual": 2,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.decline_explain_once",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.asking_purpose_counts_as_decline",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.failed_outcome",
+      "expected": [
+        "lark_unverified",
+        "lark_failed"
+      ],
+      "actual": [
+        "lark_unverified",
+        "lark_failed"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.declined_outcome",
+      "expected": [
+        "lark_unverified",
+        "lark_declined"
+      ],
+      "actual": [
+        "lark_unverified",
+        "lark_declined"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.unclear_holder_outcome",
+      "expected": [
+        "lark_unreached",
+        "lark_unclear"
+      ],
+      "actual": [
+        "lark_unreached",
+        "lark_unclear"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "identity.failed_instruction",
+      "expected": "Please contact our business desk.",
+      "actual": "Please contact our business desk.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.enabled",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.days",
+      "expected": "next_business_day",
+      "actual": "next_business_day",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.start",
+      "expected": "08:30",
+      "actual": "08:30",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.end",
+      "expected": "16:15",
+      "actual": "16:15",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.must_be_after_now",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.retry_once",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.scheduled_outcome",
+      "expected": [
+        "lark_unreached",
+        "lark_callback"
+      ],
+      "actual": [
+        "lark_unreached",
+        "lark_callback"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.callback.no_callback_outcome",
+      "expected": [
+        "lark_unreached",
+        "lark_no_callback"
+      ],
+      "actual": [
+        "lark_unreached",
+        "lark_no_callback"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.wrong_number_outcome",
+      "expected": [
+        "lark_unreached",
+        "lark_wrong_number"
+      ],
+      "actual": [
+        "lark_unreached",
+        "lark_wrong_number"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.deceased_outcome",
+      "expected": [
+        "lark_unreached",
+        "lark_deceased"
+      ],
+      "actual": [
+        "lark_unreached",
+        "lark_deceased"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "third_party.deceased_sentence",
+      "expected": "Please accept our condolences.",
+      "actual": "Please accept our condolences.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "calendar.holidays",
+      "expected": [
+        "2026-10-30",
+        "2026-11-02",
+        "2026-12-25",
+        "2027-01-01"
+      ],
+      "actual": [
+        "2026-10-30",
+        "2026-11-02",
+        "2026-12-25",
+        "2027-01-01"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "calendar.business_days",
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "actual": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "calendar.next_weekday_means_following_week",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "calendar.missing_date_parts",
+      "expected": "next_occurrence",
+      "actual": "next_occurrence",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.floors",
+      "expected": {
+        "working_line": "minimum_remittance",
+        "asset_credit": "scheduled_minimum",
+        "merchant_credit": "merchant_floor"
+      },
+      "actual": {
+        "working_line": "minimum_remittance",
+        "asset_credit": "scheduled_minimum",
+        "merchant_credit": "merchant_floor"
+      },
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.full_first",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.never_ask_how_much",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.floor_offered_once",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.floor_wording",
+      "expected": "The remainder stays overdue.",
+      "actual": "The remainder stays overdue.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "amounts.accept_between_floor_and_full",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "dates.promise_today_allowed",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "dates.weekend_or_holiday_roll_forward",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "dates.vague_ask_once_then_deadline",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "dates.after_deadline_offer_deadline",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "promise_write.retry_on_failure",
+      "expected": 1,
+      "actual": 1,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "promise_write.one_promise_per_product",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "promise_write.confirm_phrase",
+      "expected": "May I record these promises?",
+      "actual": "May I record these promises?",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "notes.enabled",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "notes.reasons",
+      "expected": [
+        "lark_disputed",
+        "lark_distress",
+        "lark_refused",
+        "lark_service_error",
+        "lark_settled"
+      ],
+      "actual": [
+        "lark_disputed",
+        "lark_distress",
+        "lark_refused",
+        "lark_service_error",
+        "lark_settled"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "notes.note_each_unpromised_product",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "notes.none_on_transfer",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.max_products",
+      "expected": 2,
+      "actual": 2,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.state_all_before_asking",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.ask_all_today_once",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.per_product_attempts",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.common_date_clamped_per_product",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.one_confirmation_for_batch",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "multi_product.recorded_promises_survive_transfer",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.$table",
+      "expected": {
+        "lark_arranged": [],
+        "lark_settled": [],
+        "lark_transferred": [
+          "lark_care",
+          "lark_person",
+          "lark_restructure"
+        ],
+        "lark_no_deal": [
+          "lark_disputed",
+          "lark_distress",
+          "lark_refused",
+          "lark_service_error"
+        ],
+        "lark_unverified": [
+          "lark_declined",
+          "lark_failed"
+        ],
+        "lark_unreached": [
+          "lark_callback",
+          "lark_deceased",
+          "lark_no_callback",
+          "lark_unclear",
+          "lark_wrong_number"
+        ]
+      },
+      "actual": {
+        "lark_arranged": [],
+        "lark_settled": [],
+        "lark_transferred": [
+          "lark_care",
+          "lark_person",
+          "lark_restructure"
+        ],
+        "lark_no_deal": [
+          "lark_disputed",
+          "lark_distress",
+          "lark_refused",
+          "lark_service_error"
+        ],
+        "lark_unverified": [
+          "lark_declined",
+          "lark_failed"
+        ],
+        "lark_unreached": [
+          "lark_callback",
+          "lark_deceased",
+          "lark_no_callback",
+          "lark_unclear",
+          "lark_wrong_number"
+        ]
+      },
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.promise_outcome",
+      "expected": "lark_arranged",
+      "actual": "lark_arranged",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.paid_outcome",
+      "expected": "lark_settled",
+      "actual": "lark_settled",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.transfer_outcome",
+      "expected": "lark_transferred",
+      "actual": "lark_transferred",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.no_promise_outcome",
+      "expected": "lark_no_deal",
+      "actual": "lark_no_deal",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.transfer_overrides_promise",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.all_paid_closes_as_paid",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.no_promise_reason_from_first_non_paid_note",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.service_error_reason",
+      "expected": "lark_service_error",
+      "actual": "lark_service_error",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.refused_reason",
+      "expected": "lark_refused",
+      "actual": "lark_refused",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "outcomes.goodbye_before_close",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.opening",
+      "expected": "Good day, this is Larkspur Business Bank's automated assistant. We record this call.",
+      "actual": "Good day, this is Larkspur Business Bank's automated assistant. We record this call.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.holder_question",
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "actual": "Am I speaking with {{title}} {{last_name}}?",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.debt_intro",
+      "expected": "I am calling about the overdue business products.",
+      "actual": "I am calling about the overdue business products.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.today_question",
+      "expected": "Can you settle this today?",
+      "actual": "Can you settle this today?",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.all_today_question",
+      "expected": "Can you settle all these products today?",
+      "actual": "Can you settle all these products today?",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.robot_reply",
+      "expected": "I am Larkspur Business Bank's automated assistant.",
+      "actual": "I am Larkspur Business Bank's automated assistant.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.scam_reply",
+      "expected": "You can call the number on your bank statement to verify us.",
+      "actual": "You can call the number on your bank statement to verify us.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.prohibited_before_verification",
+      "expected": [
+        "arrears",
+        "facility",
+        "overdue",
+        "payment"
+      ],
+      "actual": [
+        "arrears",
+        "facility",
+        "overdue",
+        "payment"
+      ],
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.after_promise_sentence",
+      "expected": "We will email confirmation to your registered address.",
+      "actual": "We will email confirmation to your registered address.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.already_paid_sentence",
+      "expected": "Payments can take two business days to appear.",
+      "actual": "Payments can take two business days to appear.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.cannot_answer_sentence",
+      "expected": "Our business desk can answer that question.",
+      "actual": "Our business desk can answer that question.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.recorded_promise_change_reply",
+      "expected": "Please contact our business desk to change a recorded promise.",
+      "actual": "Please contact our business desk to change a recorded promise.",
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "phrases.product_naming",
+      "expected": {
+        "working_line": "working capital line",
+        "asset_credit": "asset finance loan",
+        "merchant_credit": "merchant advance"
+      },
+      "actual": {
+        "working_line": "working capital line",
+        "asset_credit": "asset finance loan",
+        "merchant_credit": "merchant advance"
+      },
+      "match": true,
+      "source": "clean numbered specification"
+    },
+    {
+      "path": "bands.$rules",
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 45,
+          "deadline": {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 45,
+          "deadline": {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "match": true,
+      "source": "rule 5"
+    },
+    {
+      "path": "special_cases.already_paid.action",
+      "expected": {
+        "type": "note",
+        "reason": "lark_settled"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "lark_settled"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.already_paid.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.already_paid.ends_call",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.already_paid.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.dispute.action",
+      "expected": {
+        "type": "note",
+        "reason": "lark_disputed"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "lark_disputed"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.dispute.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.dispute.ends_call",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.dispute.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.hardship.action",
+      "expected": {
+        "type": "note",
+        "reason": "lark_distress"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "lark_distress"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.hardship.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.hardship.ends_call",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.hardship.offer_transfer_queue",
+      "expected": "lark_care",
+      "actual": "lark_care",
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.hardship.offer_outcome",
+      "expected": [
+        "lark_transferred",
+        "lark_care"
+      ],
+      "actual": [
+        "lark_transferred",
+        "lark_care"
+      ],
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.hardship.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.restructuring.action",
+      "expected": {
+        "type": "transfer",
+        "queue": "lark_restructure",
+        "outcome": "lark_transferred",
+        "reason": "lark_restructure"
+      },
+      "actual": {
+        "type": "transfer",
+        "queue": "lark_restructure",
+        "outcome": "lark_transferred",
+        "reason": "lark_restructure"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.restructuring.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.restructuring.ends_call",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.restructuring.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.human.action",
+      "expected": {
+        "type": "transfer",
+        "queue": "lark_desk",
+        "outcome": "lark_transferred",
+        "reason": "lark_person"
+      },
+      "actual": {
+        "type": "transfer",
+        "queue": "lark_desk",
+        "outcome": "lark_transferred",
+        "reason": "lark_person"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.human.ask_once_first",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.human.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.human.ends_call",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.human.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.scam.action",
+      "expected": {
+        "type": "continue"
+      },
+      "actual": {
+        "type": "continue"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.scam.ends_call",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.scam.say",
+      "expected": "You can call the number on your bank statement to verify us.",
+      "actual": "You can call the number on your bank statement to verify us.",
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.scam.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.action",
+      "expected": {
+        "type": "close",
+        "outcome": "lark_no_deal",
+        "reason": "lark_refused"
+      },
+      "actual": {
+        "type": "close",
+        "outcome": "lark_no_deal",
+        "reason": "lark_refused"
+      },
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.ask_once_first",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.takes_promise",
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.ends_call",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.before_persuasion",
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "source": "rule 8: all special cases before persuasion"
+    }
+  ],
+  "mismatches": [],
+  "raw_unknown_keys": [],
+  "unresolved": [
+    {
+      "topic": "bands",
+      "text": "The brief defines a deadline only for days late 1\u201345 inclusive; no rule is given for products more than 45 days late (or 0 days late).",
+      "doc": "clean-eom-brief.md"
+    }
+  ],
+  "audit_unresolved": [],
+  "audit_fixed": [],
+  "source_docs": [
+    "tests/fixtures/synthetic/clean-eom-brief.md",
+    "tests/fixtures/synthetic/clean-eom-openapi.json"
+  ],
+  "notes": [
+    "Expected values authored before extraction; source spans, free prose triggers and arbitrary band names require manual semantic review.",
+    "Outcome tables and note/holiday sets are compared without order; identity and attempt order are significant.",
+    "Different but equivalent special-case action representations are flagged for manual review, not automatically called errors.",
+    "No public mock simulations: identities/products/schema differ; .example.invalid tool endpoints prevent accidental bank writes."
+  ]
+}

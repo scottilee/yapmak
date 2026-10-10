@@ -1,0 +1,142 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "e12c33e0-fd45-4944-aab5-74ca10ea520d",
+ "iteration_id": "3f4390ba-af73-4e30-b6c9-d5592b0ace19",
+ "seconds": 135,
+ "passed": 0,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation ended immediately after the user confirmed their identity. As a result: 1. No products were stated. 2. No read-backs or confirmations occurred. 3. No 'create_promise' function calls were made. The success criteria require all three conditions to be met."
+   ],
+   "call_id": "253b511b-388a-4ff8-a4bb-3e8544d3229e",
+   "tools": [],
+   "customer_id": "c_ce7d9c50-3ae",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 510.0, '2026-10-15')]",
+    "notes [], expected [('p2', 'refused'), ('p3', 'refused')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation ended prematurely after the assistant confirmed the user's identity. None of the success criteria were met: the phone and date of birth questions were not asked, no loan products (credit card, personal loan, or car loan) were discussed, and no promises or refusal notes were recorded."
+   ],
+   "call_id": "ae123a8e-1ba6-414b-a0a6-5529c60cfc27",
+   "tools": [],
+   "customer_id": "c_ba39e9c3-656",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+    "the call was not closed with close_call",
+    "conversation: The call ended prematurely after the identification phase. None of the success criteria were met: the credit card was not recorded for 30 October, the loan was not recorded for 23 October, and no read-back of dates occurred."
+   ],
+   "call_id": "79e8fcb8-33ee-4574-be3f-8091ac37f59b",
+   "tools": [],
+   "customer_id": "c_02e24372-0a7",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended immediately after the user confirmed their identity. As a result: 1. No products were stated. 2. No read-backs or confirmations occurred. 3. No 'create_promise' function calls were made. The success criteria require all three conditions to be met."
+    ],
+    "call_id": "253b511b-388a-4ff8-a4bb-3e8544d3229e",
+    "tools": [],
+    "customer_id": "c_ce7d9c50-3ae",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 510.0, '2026-10-15')]",
+     "notes [], expected [('p2', 'refused'), ('p3', 'refused')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely after the assistant confirmed the user's identity. None of the success criteria were met: the phone and date of birth questions were not asked, no loan products (credit card, personal loan, or car loan) were discussed, and no promises or refusal notes were recorded."
+    ],
+    "call_id": "ae123a8e-1ba6-414b-a0a6-5529c60cfc27",
+    "tools": [],
+    "customer_id": "c_ba39e9c3-656",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the identification phase. None of the success criteria were met: the credit card was not recorded for 30 October, the loan was not recorded for 23 October, and no read-back of dates occurred."
+    ],
+    "call_id": "79e8fcb8-33ee-4574-be3f-8091ac37f59b",
+    "tools": [],
+    "customer_id": "c_02e24372-0a7",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   }
+  ]
+ ]
+}

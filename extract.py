@@ -44,7 +44,7 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
   transfer_outcome, no_promise_outcome, service_error_reason, refused_reason and the precedence booleans.
 - `notes`: enabled only if the documents use add_note; `reasons` are the add_note `reason` values the documents allow.
 - `multi_product.max_products`: how many products a customer can have according to the documents (1 if only one is ever mentioned).
-- `phrases`: mandatory sentences verbatim (opening sentence, the question that confirms who is on the line using {{title}} and {{last_name}},
+- `phrases`: mandatory sentences verbatim (opening sentence, with `opening_verbatim: true` only if the documents say it must be said exactly/word for word, the sentence that introduces the reason for the call after verification (`debt_intro`), the first question about paying today (`today_question`, and `all_today_question` for several products), the question that confirms who is on the line using {{title}} and {{last_name}},
   the sentence after a recorded promise, the already-paid sentence, the robot reply, the scam reply, the cannot-answer sentence, the reply when
   a customer wants to change a recorded promise), the words that must not be said before verification, and `product_naming`: product type ->
   how to name it in words (use {card_last4} where the documents say to name the card's last digits).
@@ -56,6 +56,21 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
 
 
 PASS_TIMEOUT_S = int(os.environ.get("EXTRACT_PASS_TIMEOUT_S", "420"))   # one model pass may not exceed this (plan §7 budget)
+
+
+def _prepare_env():
+    """The Agent SDK spawns the `claude` CLI, which (a) refuses to start inside another Claude Code session and (b) prefers
+    ANTHROPIC_API_KEY over the Claude login. In this sandbox the key can be a proxy placeholder that is not a real key;
+    when a login exists and the key does not look like a real Anthropic key, use the login."""
+    for k in ("CLAUDECODE", "CLAUDE_CODE_CHILD_SESSION"):
+        os.environ.pop(k, None)
+    key = os.environ.get("ANTHROPIC_API_KEY", "")
+    login = pathlib.Path.home() / ".claude" / ".credentials.json"
+    if key and login.exists() and not key.startswith("sk-ant-"):
+        os.environ.pop("ANTHROPIC_API_KEY", None)
+
+
+_prepare_env()
 
 
 async def _query(prompt: str, purpose: str, trace, max_turns=40) -> dict:

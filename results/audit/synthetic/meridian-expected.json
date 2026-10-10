@@ -1,0 +1,204 @@
+{
+  "bank_name": "Meridian Commercial Bank",
+  "identity.requirements": [
+    {
+      "field": "date_of_birth",
+      "answer_format": "date",
+      "numeric_date_order": "mdy"
+    },
+    {
+      "field": "postcode",
+      "answer_format": "text"
+    },
+    {
+      "field": "phone_last4",
+      "answer_format": "digits",
+      "digits": 4
+    },
+    {
+      "field": "founded_year",
+      "answer_format": "year"
+    }
+  ],
+  "identity.wrong_answer_limit": 3,
+  "identity.failed_outcome": [
+    "id_failed",
+    "no_match"
+  ],
+  "identity.declined_outcome": [
+    "id_failed",
+    "would_not_answer"
+  ],
+  "identity.unclear_holder_outcome": [
+    "no_customer",
+    "not_sure"
+  ],
+  "identity.failed_instruction": "Please contact our business desk.",
+  "third_party.callback.days": "today_or_next_business_day",
+  "third_party.callback.start": "11:00",
+  "third_party.callback.end": "16:30",
+  "third_party.callback.must_be_after_now": true,
+  "third_party.callback.retry_once": true,
+  "third_party.callback.scheduled_outcome": [
+    "no_customer",
+    "call_back"
+  ],
+  "third_party.callback.no_callback_outcome": [
+    "no_customer",
+    "no_time"
+  ],
+  "third_party.wrong_number_outcome": [
+    "no_customer",
+    "bad_number"
+  ],
+  "third_party.deceased_outcome": [
+    "no_customer",
+    "passed_away"
+  ],
+  "third_party.deceased_sentence": "Please accept our condolences.",
+  "calendar.holidays": [
+    "2026-10-23",
+    "2026-11-02",
+    "2026-11-27",
+    "2026-12-25",
+    "2026-12-28",
+    "2027-01-01"
+  ],
+  "calendar.business_days": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "calendar.next_weekday_means_following_week": true,
+  "bands": [
+    {
+      "name": "early",
+      "days_late_min": 1,
+      "days_late_max": 20,
+      "deadline": {
+        "kind": "end_of_month",
+        "basis": "calendar",
+        "adjustment": "following"
+      },
+      "attempts": [
+        {
+          "amount": "full",
+          "date": "last_business_day_this_week_or_next",
+          "floor_if_full_refused": true
+        }
+      ]
+    },
+    {
+      "name": "late",
+      "days_late_min": 21,
+      "days_late_max": 45,
+      "deadline": {
+        "kind": "nth_business_day",
+        "n": 4
+      },
+      "attempts": [
+        {
+          "amount": "full",
+          "date": "last_business_day_this_week_or_next",
+          "floor_if_full_refused": true
+        },
+        {
+          "amount": "floor",
+          "date": "deadline",
+          "floor_if_full_refused": true
+        }
+      ]
+    }
+  ],
+  "amounts.floors": {
+    "overdraft": "minimum_due",
+    "term_loan": "fixed_instalment",
+    "invoice_line": "line_payment"
+  },
+  "amounts.floor_wording": "The balance remains outstanding.",
+  "multi_product.max_products": 2,
+  "notes.enabled": true,
+  "notes.reasons": [
+    "turned_down",
+    "hardship",
+    "claims_dispute",
+    "paid_claim",
+    "broken_system"
+  ],
+  "notes.none_on_transfer": true,
+  "promise_write.retry_on_failure": 1,
+  "promise_write.confirm_phrase": "Is that correct?",
+  "outcomes.promise_outcome": "promise_recorded",
+  "outcomes.paid_outcome": "paid_already",
+  "outcomes.transfer_outcome": "moved_across",
+  "outcomes.no_promise_outcome": "no_promise",
+  "outcomes.refused_reason": "turned_down",
+  "outcomes.service_error_reason": "broken_system",
+  "outcomes.transfer_overrides_promise": true,
+  "outcomes.all_paid_closes_as_paid": true,
+  "outcomes.no_promise_reason_from_first_non_paid_note": true,
+  "special_cases.hardship.offer_transfer_queue": "hardship_relief",
+  "special_cases.hardship.offer_outcome": [
+    "moved_across",
+    "hardship_relief"
+  ],
+  "special_cases.hardship.before_persuasion": true,
+  "special_cases.human.action": {
+    "type": "transfer",
+    "queue": "front_desk",
+    "outcome": "moved_across",
+    "reason": "person"
+  },
+  "special_cases.human.ask_once_first": true,
+  "special_cases.restructuring.action": {
+    "type": "transfer",
+    "queue": "restructure",
+    "outcome": "moved_across",
+    "reason": "restructure"
+  },
+  "special_cases.dispute.action": {
+    "type": "note",
+    "reason": "claims_dispute"
+  },
+  "special_cases.already_paid.action": {
+    "type": "note",
+    "reason": "paid_claim"
+  },
+  "special_cases.refuse_to_talk.action": {
+    "type": "close",
+    "outcome": "no_promise",
+    "reason": "turned_down"
+  },
+  "phrases.opening": "Good day, this is Meridian Commercial Bank's automated assistant. This call is recorded.",
+  "phrases.robot_reply": "I am Meridian Commercial Bank's automated assistant.",
+  "phrases.scam_reply": "You can confirm by calling the number printed on your statement.",
+  "phrases.after_promise_sentence": "A written confirmation will be emailed to your registered address.",
+  "phrases.already_paid_sentence": "Payments can take two business days to show on the account.",
+  "phrases.cannot_answer_sentence": "Our business desk can answer that.",
+  "phrases.recorded_promise_change_reply": "Please contact the business desk to amend a recorded promise.",
+  "phrases.debt_intro": "I am calling about the overdue facilities on your account.",
+  "phrases.today_question": "Can you settle everything today?",
+  "phrases.prohibited_before_verification": [
+    "arrears",
+    "overdue",
+    "facility",
+    "payment"
+  ],
+  "phrases.product_naming": {
+    "overdraft": "business overdraft",
+    "term_loan": "term loan",
+    "invoice_line": "invoice financing line"
+  },
+  "unresolved": [],
+  "source_docs": [
+    "results/audit/synthetic/meridian-brief.md"
+  ],
+  "special_cases.dispute.ends_call": false,
+  "special_cases.already_paid.ends_call": false,
+  "special_cases.hardship.action": {
+    "type": "note",
+    "reason": "hardship"
+  },
+  "special_cases.hardship.ends_call": false
+}

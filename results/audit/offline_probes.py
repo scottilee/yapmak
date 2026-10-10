@@ -25,10 +25,95 @@ class FailBank(O.MockBank):
         return super().call(name, body)
 
 
-def run(wf, case, script, bank=None):
+class RejectCloseBank(O.MockBank):
+    """Rejects the first close_call (ok=false, nothing recorded) — models a transient bank rejection."""
+    def __init__(self, case, n_reject=1):
+        super().__init__(case)
+        self.n_reject = n_reject
+
+    def call(self, name, body):
+        if name == "close_call" and self.n_reject > 0:
+            self.n_reject -= 1
+            self.calls.append((name, dict(body)))
+            return {"ok": False, "error": "service unavailable; call may be repeated"}
+        return super().call(name, body)
+
+
+class CapDriver(O.Driver):
+    """Driver variant enforcing conversation-node max_node_turns via max_turn_transition (cumulative per node,
+    like a stall that keeps the node busy). Mirrors platform routing: on a capped turn the transition fires
+    with that turn's extraction variables set."""
+    def __init__(self, *a, **k):
+        super().__init__(*a, **k)
+        self.turns = {}
+
+    def run(self, max_steps=4000):
+        name = self.wf["initial_node"]
+        nodes = self.wf["nodes"]
+        for _ in range(max_steps):
+            n = nodes[name]
+            t = n["node_type"]
+            oe = n.get("on_enter", {})
+            if oe.get("type") == "tts":
+                said = O.subst(oe["text"], self.vars)
+                if not (n.get("on_enter_first_entry_only") and any(x[0] == name for x in self.trace)):
+                    self.spoken.append((name, said))
+            self.trace.append((name, t))
+            if t == "code":
+                code = n["pre_actions"][0]["function"]["parameters"]["properties"]["code"]["default"]
+                g = {"vars": self.vars}
+                exec(code, g)
+                if self.vars.get("runtime_error"):
+                    raise RuntimeError(self.vars["runtime_error"])
+                nxt = self.route(n)
+            elif t == "api_request":
+                fn = n["pre_actions"][0]["function"]
+                body = {}
+                for k, prop in fn["parameters"]["properties"]["body"]["properties"].items():
+                    v = O.subst(prop["default"], self.vars)
+                    if v is not None:
+                        body[k] = v
+                pre = n["pre_actions"][0].get("pre_process_code")
+                if pre:
+                    cfg = {"body": body}
+                    exec(pre, {"vars": self.vars, "config": cfg})
+                    body = cfg["body"]
+                data = self.bank.call(fn["name"], body)
+                self.set_mapped(n.get("response_mapping"), data)
+                nxt = self.route(n)
+            elif t == "conversation":
+                if not self.script:
+                    raise RuntimeError(f"script exhausted in node {name}; spoken so far: {self.spoken[-2:]}")
+                turn = self.script.pop(0)
+                expected_node = turn.pop("_node", None)
+                if expected_node and expected_node != name:
+                    raise AssertionError(f"expected to be in {expected_node}, was in {name}")
+                self.vars.update(turn)
+                self.turns[name] = self.turns.get(name, 0) + 1
+                cap = n.get("max_node_turns") or 10**9
+                if self.turns[name] > cap:
+                    nxt = n.get("max_turn_transition")
+                    if not nxt:
+                        raise RuntimeError(f"no max_turn_transition on {name} past cap")
+                    self.trace.append((name + ":turn-cap", "platform"))
+                else:
+                    nxt = self.route(n)
+                    if nxt == name:
+                        continue
+            elif t == "end_call":
+                return
+            else:
+                raise RuntimeError(t)
+            if not nxt:
+                raise RuntimeError(f"no route from {name}")
+            name = nxt
+        raise RuntimeError("step limit")
+
+
+def run(wf, case, script, bank=None, driver=None):
     bank = bank or O.MockBank(case)
     cv = dict(case["variables"], customer_id="c_test")
-    d = O.Driver(wf, bank, cv, list(script))
+    d = (driver or O.Driver)(wf, bank, cv, list(script))
     try:
         d.run()
     except Exception as e:
@@ -43,7 +128,7 @@ def rep(label, status, bank, want_outcome=None, want_promises=None, want_notes=N
         problems.append(status)
     else:
         got = (bank.outcome)
-        if want_outcome is not None and tuple(got) != tuple(want_outcome):
+        if want_outcome is not None and (got is None or tuple(got) != tuple(want_outcome)):
             problems.append(f"outcome {got} != {want_outcome}")
         key = lambda p: (p["product_id"], round(float(p["amount"]), 2), p["date"])
         if want_promises is not None and sorted(map(key, bank.promises)) != sorted(map(key, want_promises)):
@@ -67,6 +152,19 @@ def rep(label, status, bank, want_outcome=None, want_promises=None, want_notes=N
 CONFIRM = {"_node": "opening", "holder": "confirmed"}
 YES_RB = {"_node": "readback", "rb_intent": "confirms"}
 UNCL = {"_node": "opening", "holder": "unclear"}
+
+
+def holder_question_supported(wf):
+    """True when the opening node's holder enum distinguishes a customer question from plain unclear."""
+    for e in wf["nodes"]["opening"]["extraction_schema"]:
+        if e["name"] == "holder":
+            return "question" in (e.get("enum_values") or [])
+    return False
+
+
+def TURN(kind, wf):
+    """A non-answer at holder confirmation: 'question' intent if the compiler has one, else unclear."""
+    return {"_node": "opening", "holder": "question" if (kind == "question" and holder_question_supported(wf)) else "unclear"}
 
 
 def dob(d, m, y):
@@ -103,18 +201,19 @@ st, bank, d = run(WFA, c, s)
 results.append(rep("P2 decline-then-answer recovers", st, bank, want_outcome=("promise", None),
                    want_promises=[{"product_id": "p1", "amount": 420.0, "date": "2026-10-14"}]))
 
-# P3a. "who is this?" (unclear) then confirm -> must NOT close yet (rule 3: ask that follows is the second ask)
+# P3a. question then confirm -> must NOT close (rule 3: answer the question, the ask that follows is the second ask)
 c = CASES["PUB-01"]
-s = [UNCL, CONFIRM] + verified(c)[1:] + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB]
+s = [TURN("question", WFA), CONFIRM] + verified(c)[1:] + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB]
 st, bank, d = run(WFA, c, s)
 results.append(rep("P3a question-then-confirm survives", st, bank, want_outcome=("promise", None),
                    want_promises=[{"product_id": "p1", "amount": 420.0, "date": "2026-10-14"}]))
 
-# P3b. hello (unclear) then question (unclear) then yes -> rule 3 says the re-ask after the question IS the second ask;
-# counter here closes after two unclear turns. Expect FAIL vs brief if outcome is not_reached/unclear.
-s = [UNCL, UNCL, CONFIRM] + verified(c)[1:] + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB]
+# P3b. "hello" (unclear) then a question then "yes". Rule 3: question turns are answered first and the ask that
+# follows is the second ask, so the call must continue after this. Expect a promise.
+s = [UNCL, TURN("question", WFA), CONFIRM] + verified(c)[1:] + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB]
 st, bank, d = run(WFA, c, s)
-print("P3b unclear+question+yes -> outcome:", bank.outcome, "| close calls:", [x[0] for x in bank.calls])
+results.append(rep("P3b unclear+question+yes continues (rule 3)", st, bank, want_outcome=("promise", None),
+                   want_promises=[{"product_id": "p1", "amount": 420.0, "date": "2026-10-14"}]))
 
 # P4. third party offers time outside the window twice -> no schedule, not_reached/no_callback (rule 7)
 c = CASES["PUB-02"]
@@ -229,5 +328,29 @@ results.append(rep("P15 three wrongs end check (global across questions)", st, b
                    want_outcome=("not_verified", "failed"),
                    want_calls=["verify_identity", "verify_identity", "verify_identity", "verify_identity", "close_call"],
                    want_no_calls=("get_account",)))
+
+# P16. negotiate turn-cap exhaustion: verified customer stalls forever -> max_node_turns fires repeatedly;
+# the _stuck insurance (30+ route visits) must close cleanly with no_promise/refused, exactly one close_call,
+# no promise, and the farewell must not claim anything was recorded.
+c = CASES["PUB-06"]
+s = verified(c) + [{"_node": "state_debt", "cust_intent": "refuses"}] + [{"_node": "negotiate", "cust_intent": "other"}] * 1500
+st, bank, d = run(WFA, c, s, driver=CapDriver)
+bad = rep("P16 negotiate turn-cap -> clean close", st, bank,
+          want_outcome=("no_promise", "refused"), want_promises=[],
+          want_no_calls=("create_promise",))
+if sum(1 for x in bank.calls if x[0] == "close_call") != 1:
+    print("   - close_call count != 1")
+bye = [x for x in d.spoken if "cannot continue" in (x[1] or "").lower()] if d else []
+print("   - cap fired:", any(t[0].endswith(":turn-cap") for t in d.trace) if d else "?",
+      "| safe farewell said:", bool(bye))
+
+# P17. close_call rejected once (transient): the ledger must still end with the right outcome.
+# Rule 46 + "Nothing is recorded" -> the engine must re-close. Brief A rule 37's principle applied to close.
+c = CASES["PUB-01"]
+s = verified(c) + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB]
+st, bank, d = run(WFA, c, s, bank=RejectCloseBank(c, n_reject=1))
+rep("P17 close rejection -> outcome still recorded", st, bank,
+    want_outcome=("promise", None),
+    want_promises=[{"product_id": "p1", "amount": 420.0, "date": "2026-10-14"}])
 
 print(f"\n{sum(1 for r in results if not r)} / {len(results)} probes fully as expected by the brief")

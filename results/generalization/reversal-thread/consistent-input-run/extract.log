@@ -1,0 +1,36 @@
+{
+ "bands": [
+  "1-15",
+  "16-60"
+ ],
+ "identity": [
+  "company_number",
+  "postcode",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "days_late_outside_bands",
+   "text": "The documents define bands only for 1\u201315 and 16\u201360 days late inclusive; handling of a product with 0 or more than 60 days late is not stated.",
+   "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[refuse_to_talk].action: changed from close harbour_no_deal/harbour_refused to note harbour_refused with ends_call=true. P3 rule 8 says only that the second refusal 'ends the call and marks all remaining products harbour_refused'; the close outcome then comes from the rule 9 precedence. A fixed no_deal close would be wrong if a promise was already recorded (that gives harbour_arranged) or an earlier product has a different note reason.",
+  "All source spans: `doc` now holds the source file path (tests/fixtures/synthetic/reversal-thread-brief.md). The rule references moved into `text`, because policy.Span defines doc as the source file.",
+  "Source quotes completed where they had been cut: multi_product ('...and explained in the read-back', batch read-back), notes ('defer notes until the non-transfer outcome is known'), amounts ('Ask for full overdue balance first', 'never accept less than floor or more than full'), bands (attempt wording), callback (P3 rule 2 slot and outcome sentences), promise_write (confirm phrase origin), phrases (product naming, today questions, debt intro).",
+  "Added an explicit takes_promise=false to restructuring and human (both stay at the default; this only makes it explicit)."
+ ]
+}

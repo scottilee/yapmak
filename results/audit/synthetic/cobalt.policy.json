@@ -1,0 +1,122 @@
+{
+  "source_docs": ["results/audit/synthetic/cobalt-brief.md"],
+  "bank_name": "Cobalt Trust",
+  "identity": {
+    "requirements": [
+      {"field": "phone_last4", "ask_text": "the last four digits of the mobile number we hold", "answer_format": "digits", "digits": 4,
+       "source": {"doc": "cobalt-brief.md", "text": "MARCUS V5"}},
+      {"field": "founded_year", "ask_text": "the year the business was founded", "answer_format": "year",
+       "source": {"doc": "cobalt-brief.md", "text": "MARCUS V5"}}
+    ],
+    "wrong_answer_limit": 3,
+    "wrong_count_source": "api",
+    "remaining_slot": "remaining_attempts",
+    "holder_confirmation_asks": 2,
+    "decline_explain_once": true,
+    "asking_purpose_counts_as_decline": false,
+    "failed_outcome": ["unverified", "failed"],
+    "declined_outcome": ["unverified", "declined"],
+    "unclear_holder_outcome": ["not_on_line", "unclear"],
+    "failed_instruction": "",
+    "source": {"doc": "cobalt-brief.md", "text": "MARCUS V3,V5"}
+  },
+  "third_party": {
+    "callback": {"enabled": true, "days": "next_business_day", "start": "12:00", "end": "18:00", "must_be_after_now": true,
+                 "retry_once": true, "scheduled_outcome": ["not_on_line", "callback"], "no_callback_outcome": ["not_on_line", "no_callback"],
+                 "source": {"doc": "cobalt-brief.md", "text": "M9-C"}},
+    "wrong_number_outcome": ["not_on_line", "wrong_number"],
+    "deceased_outcome": ["not_on_line", "deceased"],
+    "deceased_sentence": "Our sympathy to you and the family.",
+    "source": {"doc": "cobalt-brief.md", "text": "MARCUS V3 + M9-D"}
+  },
+  "calendar": {
+    "holidays": ["2026-11-06", "2026-11-27", "2026-12-25", "2026-12-28", "2027-01-01"],
+    "business_days": [0, 1, 2, 3, 4],
+    "next_weekday_means_following_week": true,
+    "source": {"doc": "cobalt-brief.md", "text": "MARCUS V7"}
+  },
+  "bands": [
+    {"name": "early", "days_late_min": 1, "days_late_max": 15,
+     "deadline": {"kind": "nth_business_day", "n": 6},
+     "attempts": [{"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}],
+     "source": {"doc": "cobalt-brief.md", "text": "MARCUS V8,V10"}},
+    {"name": "late", "days_late_min": 16, "days_late_max": 40,
+     "deadline": {"kind": "calendar_days", "n": 21, "adjustment": "following"},
+     "attempts": [{"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+                  {"amount": "floor", "date": "deadline", "floor_if_full_refused": true}],
+     "source": {"doc": "cobalt-brief.md", "text": "MARCUS V8,V10"}}
+  ],
+  "amounts": {
+    "floors": {"overdraft": "minimum_due", "term_loan": "monthly_repayment"},
+    "full_first": true, "never_ask_how_much": true, "floor_offered_once": true,
+    "floor_wording": "the rest remains unpaid", "accept_between_floor_and_full": true,
+    "source": {"doc": "cobalt-brief.md", "text": "MARCUS V9"}
+  },
+  "dates": {"promise_today_allowed": true, "weekend_or_holiday_roll_forward": true, "vague_ask_once_then_deadline": true,
+            "after_deadline_offer_deadline": true, "source": {"doc": "cobalt-brief.md", "text": "MARCUS V9"}},
+  "special_cases": [
+    {"name": "already_paid", "trigger": "The customer says they have already paid",
+     "action": {"type": "note", "reason": "already_settled"}, "say": "Payments may take two working days to appear.",
+     "takes_promise": false, "ends_call": false, "source": {"doc": "cobalt-brief.md", "text": "M9-G (reverses V12)"}},
+    {"name": "dispute", "trigger": "The debt is not theirs or the facility was never held",
+     "action": {"type": "note", "reason": "disputed"}, "takes_promise": false, "ends_call": false,
+     "source": {"doc": "cobalt-brief.md", "text": "MARCUS V12 + M9-G (continues)"}},
+    {"name": "hardship", "trigger": "Illness, bereavement or loss of the main contract",
+     "action": {"type": "note", "reason": "distress"}, "say": "one short sympathy sentence",
+     "offer_transfer_queue": "support", "offer_outcome": ["handed_over", "support"],
+     "before_persuasion": true, "takes_promise": false, "ends_call": false,
+     "source": {"doc": "cobalt-brief.md", "text": "MARCUS V12; codes per M9-F"}},
+    {"name": "restructuring", "trigger": "A request to restructure the facility",
+     "action": {"type": "transfer", "queue": "restructure", "outcome": "handed_over", "reason": "restructure"},
+     "takes_promise": false, "ends_call": true, "source": {"doc": "cobalt-brief.md", "text": "MARCUS V12 + M9-F"}},
+    {"name": "human", "trigger": "A request for a person",
+     "action": {"type": "transfer", "queue": "person", "outcome": "handed_over", "reason": "person"},
+     "ask_once_first": false, "takes_promise": false, "ends_call": true,
+     "source": {"doc": "cobalt-brief.md", "text": "M9-B (reverses V12 barrier)"}},
+    {"name": "scam", "trigger": "The customer asks whether this is fraud",
+     "action": {"type": "continue"}, "say": "You can verify us by calling the helpline printed on your statement.",
+     "ends_call": false, "source": {"doc": "cobalt-brief.md", "text": "MARCUS V2"}},
+    {"name": "refuse_to_talk", "trigger": "The customer twice refuses to talk at all",
+     "action": {"type": "close", "outcome": "nothing_recorded", "reason": "refusal"}, "takes_promise": false, "ends_call": true,
+     "source": {"doc": "cobalt-brief.md", "text": "MARCUS V12 + M9-E/F"}}
+  ],
+  "outcomes": {
+    "table": [
+      {"outcome": "arrangement", "reasons": [], "when": "at least one promise recorded"},
+      {"outcome": "settled", "reasons": [], "when": "every delinquent facility noted paid (M9-F)"},
+      {"outcome": "handed_over", "reasons": ["restructure", "person", "support"], "when": "M9-F"},
+      {"outcome": "nothing_recorded", "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"], "when": "M9-F"},
+      {"outcome": "unverified", "reasons": ["failed", "declined"], "when": "M9-F"},
+      {"outcome": "not_on_line", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": "M9-F"}
+    ],
+    "promise_outcome": "arrangement", "paid_outcome": "settled", "transfer_outcome": "handed_over",
+    "transfer_overrides_promise": true, "no_promise_outcome": "nothing_recorded", "all_paid_closes_as_paid": true,
+    "no_promise_reason_from_first_non_paid_note": true, "service_error_reason": "failure", "refused_reason": "refusal",
+    "goodbye_before_close": true, "source": {"doc": "cobalt-brief.md", "text": "M9-E, Section F (supersedes V14)"}
+  },
+  "notes": {"enabled": true, "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"],
+            "note_each_unpromised_product": true, "none_on_transfer": true, "source": {"doc": "cobalt-brief.md", "text": "M9-H (reverses V13)"}},
+  "multi_product": {"max_products": 2, "state_all_before_asking": true, "ask_all_today_once": true, "per_product_attempts": true,
+                    "common_date_clamped_per_product": false, "one_confirmation_for_batch": true,
+                    "recorded_promises_survive_transfer": true, "source": {"doc": "cobalt-brief.md", "text": "Priya's note + M9-H; no common-date clamp stated"}},
+  "phrases": {
+    "opening": "Good morning, this is Cobalt Trust's automated assistant; this call is recorded.",
+    "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+    "robot_reply": "I am Cobalt Trust's automated assistant.",
+    "scam_reply": "You can verify us by calling the helpline printed on your statement.",
+    "prohibited_before_verification": ["arrears", "the amount", "what the money is for"],
+    "after_promise_sentence": "We'll send written confirmation to your address.",
+    "already_paid_sentence": "Payments may take two working days to appear.",
+    "cannot_answer_sentence": "I don't have that information.",
+    "recorded_promise_change_reply": "",
+    "today_question": "Can you settle everything today?",
+    "all_today_question": "Can you settle everything today?",
+    "product_naming": {"overdraft": "business overdraft", "term_loan": "term loan"},
+    "source": {"doc": "cobalt-brief.md", "text": "MARCUS V2,V6,V11,V12"}
+  },
+  "promise_write": {"retry_on_failure": 0, "one_promise_per_product": true, "confirm_phrase": "Shall I put that down?",
+                    "source": {"doc": "cobalt-brief.md", "text": "M9-A (reverses V11 retry)"}},
+  "unresolved": [
+    {"topic": "greeting word", "text": "V2 opening says Good morning with adjust the greeting word to the time of day; no rule for afternoon/evening variants is given.", "doc": "cobalt-brief.md"}
+  ]
+}

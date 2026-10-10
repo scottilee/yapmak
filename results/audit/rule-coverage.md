@@ -84,3 +84,20 @@ Verdicts: **code** = enforced deterministically in code nodes/routing; **bake** 
 Per-product attempt/deadline math, write-failure ladder, batch read-back/clamp, transfer-no-notes rule, global wrong-count, decline-vs-question separation in identity (P2), callback window edges (P4/P14) — all matched the brief under probes.
 
 Repro: `.venv/bin/python results/audit/offline_probes.py` from repo root (also printed in `offline-state-machine.md`).
+
+---
+
+## Recheck — 06:23 build (compile.py `050a8c62…`)
+
+Status changes against this table:
+
+- **F1 rule 3 — still open.** No holder `question` intent shipped; counter logic unchanged (see offline-state-machine recheck P3b).
+- **F3 close rejection — still open.** Close nodes route straight to `end`; `close_ok` mapped but never read (compile.py:1704–1707). Evidence: probe P17 FAIL.
+- **F7 unknown-write-outcome — fixed for promises.** `write_step` (compile.py:1211–1243) retries only on explicit `ok:false`; a missing response (timeout) is no longer treated as failed-and-repeatable. The same discipline is still missing for `close_call`.
+- **F9 vocabulary coupling — largely fixed.** Dispositions now derive from IR (`refused_reason` at the refusal sites; `hardship` action reason at :980; `service_error_reason` at write failure; `already_paid/dispute` from `action.reason` at :933). Drift X3 now adapts end-to-end. Residual: `a.get('reason') or ('paid' if ... else 'dispute')` keeps a literal fallback if the extractor omits `action.reason`.
+- **F4 partially fixed**: debt intro + today/all-today questions moved to IR phrase fields (`debt_intro`, `today_question`, `all_today_question`; compile.py:732–733, policy.py Phrases). Hardship instruction is now IR-driven (`say`/`offer_transfer_queue`, compile.py:916–921). `recorded_promise_change_reply` (F2) and `trigger` remain unused.
+- New `_stuck` route-visit insurance closes endless stalls cleanly (probe P16); `_pick` now returns empty for unmapped enforcement slots and the mapper raises `SystemExit("cannot map response slots…")` (schema-drift recheck).
+
+Residual from this audit still open: **F1, F2, F3**, decorative IR flags (F5, partially improved: `ask_once_first` and `wrong_answer_limit` are now read), and `_band`'s last-band fallback for out-of-range `days_late` (compile.py:375–379) together with `_int(...) or 0` (compile.py:704) — a days_late value outside every band or absent still resolves silently to a band instead of `unresolved[]`.
+
+## Second recheck — 07:0x build: F1 CLOSED (holder `question` intent, compile.py:461, probes P3a/P3b pass), F3 CLOSED with caveat (close_retry exists but always drops the reason — retry semantics for reason-required outcomes may still fail; see offline-state-machine second recheck). F2 (rule 36) and F4-phrase-rewriting remain open; note compile.py:1629–1630 now *rewrites* mandated opening sentences ("This call is recorded" → "We record this call") — see synthetic report for the compliance tension this creates with "say exactly" briefs.

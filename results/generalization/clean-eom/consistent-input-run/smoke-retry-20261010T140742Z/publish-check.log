@@ -1,0 +1,56 @@
+dry-run ok (0.6s)
+published {'workflow_id': 'feb14436-3471-4f9b-9be6-570407b7d71f', 'agent_id': '5a55e67e-b5f4-48c9-bca7-7ece2590041f', 'version': 3} (3.5s)
+stored-vs-candidate differences: 744
+   .nodes.init_products.interruptible: added by platform
+   .nodes.init_products.role_message: added by platform
+   .nodes.init_products.transitions[0].condition.conditions[0].mode: added by platform
+   .nodes.init_products.transitions[1].condition.mode: added by platform
+   .nodes.init_products.tools: added by platform
+   .nodes.init_products.truncation_strategy: added by platform
+   .nodes.init_products.max_node_turns: added by platform
+   .nodes.init_products.assertions: added by platform
+   .nodes.init_products.return_to_previous_on_interrupt: added by platform
+   .nodes.init_products.suppress_tool_results: added by platform
+   .nodes.init_products.response_mapping: added by platform
+   .nodes.init_products.truncation_window_size: added by platform
+   .nodes.init_products.pre_actions[0].function.description: added by platform
+   .nodes.init_products.extraction_schema: added by platform
+   .nodes.init_products.max_turn_transition: added by platform
+   .nodes.init_products.task_message: added by platform
+   .nodes.init_products.on_enter_first_entry_only: added by platform
+   .nodes.id_route_0.interruptible: added by platform
+   .nodes.id_route_0.role_message: added by platform
+   .nodes.id_route_0.transitions[0].condition.conditions[0].mode: added by platform
+   .nodes.id_route_0.transitions[1].condition.conditions[0].mode: added by platform
+   .nodes.id_route_0.transitions[2].condition.conditions[0].mode: added by platform
+   .nodes.id_route_0.transitions[3].condition.conditions[0].mode: added by platform
+   .nodes.id_route_0.transitions[4].condition.mode: added by platform
+   .nodes.id_route_0.tools: added by platform
+   .nodes.id_route_0.truncation_strategy: added by platform
+   .nodes.id_route_0.max_node_turns: added by platform
+   .nodes.id_route_0.assertions: added by platform
+   .nodes.id_route_0.return_to_previous_on_interrupt: added by platform
+   .nodes.id_route_0.suppress_tool_results: added by platform
+   .nodes.id_route_0.response_mapping: added by platform
+   .nodes.id_route_0.truncation_window_size: added by platform
+   .nodes.id_route_0.pre_actions[0].function.description: added by platform
+   .nodes.id_route_0.extraction_schema: added by platform
+   .nodes.id_route_0.max_turn_transition: added by platform
+   .nodes.id_route_0.task_message: added by platform
+   .nodes.id_route_0.on_enter_first_entry_only: added by platform
+   .nodes.neg_route.interruptible: added by platform
+   .nodes.neg_route.role_message: added by platform
+   .nodes.neg_route.transitions[0].condition.conditions[0].mode: added by platform
+checkpoint exported to out/generalization-check.export.json
+chat> Hello?
+agent< "Good day, this is Larkspur Business Bank's automated assistant. We record this call. Am I speaking with Mr Reyes?" (5.4s)
+chat> Yes, speaking.
+agent< 'Thank you. Before we continue, I need to ask you four short security questions. What is the registered business postcode?' (7.4s)
+  event: route_evaluated setup -> opening 
+  event: route_evaluated opening -> opening_route 
+  event: function_call_complete code_exec ->  
+  event: route_evaluated opening_route -> ask_0 
+  var next = ask_0
+  var today_text = Wednesday 14 October 2026
+  var id_say = Thank you. Before we continue, I need to ask you four short security questions. What is the registered business postcode?
+  var state_json = {"today": "2026-10-14", "now_time": "11:00", "holder_unclear": 0, "human_asked": false, "refuse_count": 0, "decline_count": 0, "close": null, "id_idx": 0, "id_w

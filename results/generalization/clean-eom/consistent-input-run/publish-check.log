@@ -1,0 +1,53 @@
+dry-run ok (1.0s)
+published {'workflow_id': 'feb14436-3471-4f9b-9be6-570407b7d71f', 'agent_id': '5a55e67e-b5f4-48c9-bca7-7ece2590041f'} (2.1s)
+stored-vs-candidate differences: 744
+   .nodes.create_promise.on_enter_first_entry_only: added by platform
+   .nodes.create_promise.truncation_strategy: added by platform
+   .nodes.create_promise.interruptible: added by platform
+   .nodes.create_promise.assertions: added by platform
+   .nodes.create_promise.return_to_previous_on_interrupt: added by platform
+   .nodes.create_promise.truncation_window_size: added by platform
+   .nodes.create_promise.max_node_turns: added by platform
+   .nodes.create_promise.tools: added by platform
+   .nodes.create_promise.task_message: added by platform
+   .nodes.create_promise.max_turn_transition: added by platform
+   .nodes.create_promise.response_mapping[0].description: added by platform
+   .nodes.create_promise.extraction_schema: added by platform
+   .nodes.create_promise.suppress_tool_results: added by platform
+   .nodes.create_promise.transitions[0].condition.mode: added by platform
+   .nodes.create_promise.role_message: added by platform
+   .nodes.readback_route.on_enter_first_entry_only: added by platform
+   .nodes.readback_route.truncation_strategy: added by platform
+   .nodes.readback_route.interruptible: added by platform
+   .nodes.readback_route.assertions: added by platform
+   .nodes.readback_route.return_to_previous_on_interrupt: added by platform
+   .nodes.readback_route.truncation_window_size: added by platform
+   .nodes.readback_route.max_node_turns: added by platform
+   .nodes.readback_route.pre_actions[0].function.description: added by platform
+   .nodes.readback_route.tools: added by platform
+   .nodes.readback_route.task_message: added by platform
+   .nodes.readback_route.max_turn_transition: added by platform
+   .nodes.readback_route.response_mapping: added by platform
+   .nodes.readback_route.extraction_schema: added by platform
+   .nodes.readback_route.suppress_tool_results: added by platform
+   .nodes.readback_route.transitions[0].condition.conditions[0].mode: added by platform
+   .nodes.readback_route.transitions[1].condition.conditions[0].mode: added by platform
+   .nodes.readback_route.transitions[2].condition.conditions[0].mode: added by platform
+   .nodes.readback_route.transitions[3].condition.conditions[0].mode: added by platform
+   .nodes.readback_route.transitions[4].condition.conditions[0].mode: added by platform
+   .nodes.readback_route.transitions[5].condition.mode: added by platform
+   .nodes.readback_route.role_message: added by platform
+   .nodes.id_route_3.on_enter_first_entry_only: added by platform
+   .nodes.id_route_3.truncation_strategy: added by platform
+   .nodes.id_route_3.interruptible: added by platform
+   .nodes.id_route_3.assertions: added by platform
+checkpoint exported to out/generalization-check.export.json
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/scripts/publish_check.py", line 94, in <module>
+    main()
+    ~~~~^^
+  File "/Users/sl/sbx/hackathon/scripts/publish_check.py", line 71, in main
+    r = freya.api("POST", "/api/v2/chat/message", body)
+  File "/Users/sl/sbx/hackathon/freya.py", line 19, in api
+    raise RuntimeError(f"{method} {path} -> {e.code}: {e.read().decode()[:1500]}") from None
+RuntimeError: POST /api/v2/chat/message -> 503: {"success":false,"data":{"message":"Internal server error","result":{"requestId":"f689b2e8-8cac-4361-bf68-82766cc4930c"}}}

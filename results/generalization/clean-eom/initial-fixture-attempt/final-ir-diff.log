@@ -1,0 +1,40 @@
+{
+  "checks": 120,
+  "matches": 120,
+  "mismatches": [],
+  "unresolved": [
+    {
+      "topic": "days_late_outside_band",
+      "text": "The brief defines only the 1\u201345 days-late band; it does not say how to handle a product with 0 or more than 45 days late.",
+      "doc": "clean-eom-brief.md"
+    },
+    {
+      "topic": "wrong_answer_limit_conflict",
+      "text": "The verify_identity summary says \"Three wrong answers in total end the check\" and get_account says \"Refused until both questions are passed\", but the brief sets 4 wrong answers across 4 questions and says to use the API's checks_left. The brief value (4, via checks_left) was used.",
+      "doc": "clean-eom-openapi.json"
+    },
+    {
+      "topic": "hardship_sympathy_sentence",
+      "text": "Hardship requires \"one short sentence of sympathy\" but the brief gives no verbatim wording.",
+      "doc": "clean-eom-brief.md"
+    },
+    {
+      "topic": "no_discount_rule_unrepresented",
+      "text": "Rule 6 \"Never offer a discount, waiver or a new instalment plan.\" has no dedicated IR field; it is recorded only in amounts.source and must be carried by prompt text.",
+      "doc": "clean-eom-brief.md"
+    },
+    {
+      "topic": "refuse_to_talk_close_outcome",
+      "text": "Rule 8 says a second refusal to talk ends the call and marks remaining products `lark_refused` but names no close outcome; the close follows rule 9 precedence, so `lark_no_deal` / `lark_refused` applies only when no promise was already recorded (a recorded promise still gives `lark_arranged`).",
+      "doc": "clean-eom-brief.md"
+    }
+  ],
+  "audit_unresolved": [
+    "Days late outside 1-45 (0 or >45): the brief defines no band.",
+    "The API conflicts with the brief: the verify_identity summary says three wrong answers end the check, and get_account says 'both questions'. The brief sets 4 wrong answers over 4 questions via checks_left, and the brief's value is used.",
+    "Hardship 'one short sentence of sympathy' has no verbatim wording.",
+    "'Never offer a discount, waiver or a new instalment plan' has no IR field.",
+    "Refusal to talk names no close outcome. lark_no_deal/lark_refused only applies when no promise is recorded; otherwise rule 9 precedence gives lark_arranged."
+  ],
+  "raw_unknown_keys": []
+}

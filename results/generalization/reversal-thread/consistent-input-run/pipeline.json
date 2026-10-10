@@ -1,0 +1,116 @@
+{
+  "fixture": "reversal-thread",
+  "prefix": "probe-reversal-thread-v2",
+  "scratch_slot": "generalization-check",
+  "started_utc": "2026-10-10T13:50:28.975620+00:00",
+  "stages": [
+    {
+      "name": "extract",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "extract.py",
+        "tests/fixtures/synthetic/reversal-thread-brief.md",
+        "tests/fixtures/synthetic/reversal-thread-openapi.json",
+        "probe-reversal-thread-v2"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 176.69,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "ir-diff",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "scripts/check_synthetic_ir.py",
+        "reversal-thread",
+        "out/probe-reversal-thread-v2.policy.json",
+        "results/generalization/reversal-thread/consistent-input-run/ir-diff.json"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 0.04,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "compile",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "compile.py",
+        "out/probe-reversal-thread-v2.policy.json",
+        "tests/fixtures/synthetic/reversal-thread-openapi.json",
+        "out/probe-reversal-thread-v2.workflow.json"
+      ],
+      "exit_code": 0,
+      "elapsed_s": 0.22,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    },
+    {
+      "name": "publish-check",
+      "command": [
+        ".venv/bin/python",
+        "-u",
+        "scripts/publish_check.py",
+        "generalization-check",
+        "out/probe-reversal-thread-v2.workflow.json"
+      ],
+      "exit_code": 1,
+      "elapsed_s": 4.33,
+      "implementation_hashes": {
+        "extract.py": "0d496781878084549c7db52f1383f6de31c51d65e28225bff68fd71f7a724823",
+        "compile.py": "6c97150df182486494ee35050844481bd9d66d677e2e5456dbdb67bbe98419e3",
+        "policy.py": "6d2406648cead077ff1ac8470661dff6dbf2d90d62fc542a9b8277efd70523df",
+        "scripts/publish_check.py": "a937f320fd6a55203a3ac2f3c184cc9ece6d3228e422754275cae68f000e31d4"
+      }
+    }
+  ],
+  "input_hashes": {
+    "tests/fixtures/synthetic/reversal-thread-brief.md": "5022473d1ee3d2fc58de3f7a444bafda477587647e322bad225aca750278ee4e",
+    "tests/fixtures/synthetic/reversal-thread-openapi.json": "a85c41187fa69c922392dd52404543e75e1c8ffbf5cb56f62a44f059d16d17f5",
+    "tests/fixtures/synthetic/reversal-thread-expected.json": "d3304c315849caa416f259b260311ee94e6865601891a4125d6782951009da21"
+  },
+  "published_ids": {
+    "workflow_id": "feb14436-3471-4f9b-9be6-570407b7d71f",
+    "agent_id": "5a55e67e-b5f4-48c9-bca7-7ece2590041f",
+    "version": 2
+  },
+  "finished_utc": "2026-10-10T13:53:47.631124+00:00",
+  "publication_smoke_retries": [
+    {
+      "fixture": "reversal-thread",
+      "started_utc": "20261010T140742Z",
+      "exit_code": 0,
+      "elapsed_s": 23.09,
+      "candidate_sha256": "78c0eb0fc9aac69f97614fb54161d0407fbdebccde6b0cac030c62c4a67c94ad",
+      "slot": "generalization-check",
+      "chat_turns_completed": 2,
+      "artifact_dir": "results/generalization/reversal-thread/consistent-input-run/smoke-retry-20261010T140742Z",
+      "published_ids": {
+        "workflow_id": "feb14436-3471-4f9b-9be6-570407b7d71f",
+        "agent_id": "5a55e67e-b5f4-48c9-bca7-7ece2590041f",
+        "version": 4
+      },
+      "call_id": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7",
+      "responses": [
+        "Good day, this is Harbour Commercial's automated assistant. We record this call. Am I speaking with Mr Reyes?",
+        "Thank you. Before we continue, I need to ask you three short security questions. What is the eight-digit company registration number?"
+      ]
+    }
+  ]
+}

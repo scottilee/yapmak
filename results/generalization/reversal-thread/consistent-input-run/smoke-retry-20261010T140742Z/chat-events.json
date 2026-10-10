@@ -1,0 +1,48 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/message",
+    "body": {
+      "workflowId": "feb14436-3471-4f9b-9be6-570407b7d71f",
+      "message": "Hello?",
+      "customerVariables": {
+        "customer_id": "c_smoke",
+        "first_name": "Daniel",
+        "last_name": "Reyes",
+        "title": "Mr",
+        "now": "2026-10-14T11:00"
+      }
+    },
+    "result": {
+      "response": "Good day, this is Harbour Commercial's automated assistant. We record this call. Am I speaking with Mr Reyes?",
+      "callId": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7",
+      "messageId": "msg_4_1791641289458"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/message",
+    "body": {
+      "workflowId": "feb14436-3471-4f9b-9be6-570407b7d71f",
+      "message": "Yes, speaking.",
+      "callId": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7"
+    },
+    "result": {
+      "response": "Thank you. Before we continue, I need to ask you three short security questions. What is the eight-digit company registration number?",
+      "callId": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7",
+      "messageId": "msg_10_1791641302230"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/chat/end",
+    "body": {
+      "callId": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7"
+    },
+    "result": {
+      "callId": "6d44beb8-9c3e-4f1c-b602-06891a06e5a7",
+      "ended": true,
+      "endedReason": "customer-ended-call"
+    }
+  }
+]

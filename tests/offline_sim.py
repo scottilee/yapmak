@@ -64,7 +64,7 @@ class MockBank:
                 return {"ok": False, "error": "identity not verified"}
             if self.fail_promise_first:
                 self.fail_promise_first = False
-                return {"ok": False, "error": "service unavailable"}
+                return {"__http": 500}                       # the practice mock answers PUB-10's first write with HTTP 500 (no body fields)
             if body.get("product_id") not in {p["product_id"] for p in self.products}:
                 return {"ok": False, "error": "unknown product_id"}
             self.promises.append({"product_id": body["product_id"], "amount": float(body["amount"]), "date": body["date"]})
@@ -113,7 +113,8 @@ class Driver:
         self.trace = []
 
     def set_mapped(self, mapping, data):
-        env = {"status": "success", "data": data, "status_code": 200}
+        code = data.pop("__http", 200) if isinstance(data, dict) else 200
+        env = {"status": "success" if code == 200 else "error", "data": data, "status_code": code}
         for m in mapping or []:
             cur = env
             for part in m["path"].split("."):

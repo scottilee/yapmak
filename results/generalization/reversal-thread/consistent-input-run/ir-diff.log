@@ -1,0 +1,111 @@
+{
+  "checks": 117,
+  "matches": 115,
+  "mismatches": [
+    {
+      "path": "bands.$rules",
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 15,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 9
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 16,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 4
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": false
+            }
+          ]
+        }
+      ],
+      "match": false,
+      "source": "R7-C overrides only late band"
+    },
+    {
+      "path": "special_cases.refuse_to_talk.action",
+      "expected": {
+        "type": "close",
+        "outcome": "harbour_no_deal",
+        "reason": "harbour_refused"
+      },
+      "actual": {
+        "type": "note",
+        "reason": "harbour_refused"
+      },
+      "match": false,
+      "source": "rule 8"
+    }
+  ],
+  "unresolved": [
+    {
+      "topic": "days_late_outside_bands",
+      "text": "The documents define bands only for 1\u201315 and 16\u201360 days late inclusive; handling of a product with 0 or more than 60 days late is not stated.",
+      "doc": "tests/fixtures/synthetic/reversal-thread-brief.md"
+    }
+  ],
+  "audit_unresolved": [
+    "Products 0 or more than 60 days late: there is no band and no handling rule.",
+    "Not expressible in the schema, so the prompt must carry them: 'Hello or a question does not' confirm the holder; a missing callback hour must be clarified, never guessed; a flat refusal uses up one persuasion attempt; any correction cancels consent; never claim a failed write was recorded; on write failure tell the customer no promise was recorded (no exact sentence is given); one short sentence of sympathy for hardship (no exact sentence is given); never offer a discount, waiver or new instalment plan."
+  ],
+  "raw_unknown_keys": []
+}

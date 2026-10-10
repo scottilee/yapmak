@@ -1,0 +1,51 @@
+{
+ "covered": [
+  {"rule": "Precedence: signed R7 memo amends P3; forwarded 2 Oct checklist quotation is historical and superseded ('Do not reinstate it')", "where": "promise_write.retry_on_failure, special_cases[human], third_party.callback.days, bands[1].deadline"},
+  {"rule": "R7-A never retry a failed create_promise; mark harbour_service_error, continue", "where": "promise_write.retry_on_failure=0; outcomes.service_error_reason; notes.reasons"},
+  {"rule": "R7-B transfer immediately to harbour_desk on FIRST request; harbour_transferred / harbour_person", "where": "special_cases[name=human] (ask_once_first=false)"},
+  {"rule": "R7-C 16–60 band deadline 4th business day; 1–15 stays 9; attempt counts unchanged", "where": "bands[0].deadline.n=9, bands[1].deadline.n=4, bands[*].attempts"},
+  {"rule": "R7-D callback next business day only; 09:15–17:45 inclusive; one alternative slot", "where": "third_party.callback.days/start/end/retry_once"},
+  {"rule": "R7-E identity order, holidays, floors, code list, no notes on transfer remain", "where": "identity.requirements, calendar.holidays, amounts.floors, outcomes.table, notes.none_on_transfer"},
+  {"rule": "P3 1 opening sentence", "where": "phrases.opening"},
+  {"rule": "P3 1 'Am I speaking with {{title}} {{last_name}}?'; ask at most twice; harbour_unreached / harbour_unclear", "where": "phrases.holder_question; identity.holder_confirmation_asks=2; identity.unclear_holder_outcome"},
+  {"rule": "P3 1 forbidden words before verification: arrears, overdue, facility, payment", "where": "phrases.prohibited_before_verification"},
+  {"rule": "P3 2 callback strictly after now; scheduled -> harbour_unreached/harbour_callback; second failure -> harbour_no_callback", "where": "third_party.callback.must_be_after_now, scheduled_outcome, no_callback_outcome"},
+  {"rule": "P3 2 wrong number / deceased + 'Please accept our condolences.'", "where": "third_party.wrong_number_outcome, deceased_outcome, deceased_sentence"},
+  {"rule": "P3 3 three questions in order: company_number (digits, 8), postcode (text), founded_year (year)", "where": "identity.requirements[0..2]"},
+  {"rule": "P3 3 no recoverable-format hint", "where": "identity.requirements[*].hint_field left empty"},
+  {"rule": "P3 3 max wrong answers 2, use checks_left", "where": "identity.wrong_answer_limit, wrong_count_source=api, remaining_slot=checks_left"},
+  {"rule": "P3 3 exhaustion: 'Please contact our business desk.' + harbour_unverified/harbour_failed", "where": "identity.failed_instruction, identity.failed_outcome"},
+  {"rule": "P3 3 explain once, second refusal harbour_unverified/harbour_declined; asking why is not a refusal", "where": "identity.decline_explain_once, declined_outcome, asking_purpose_counts_as_decline=false"},
+  {"rule": "P3 4 up to 3 products; state all before asking", "where": "multi_product.max_products=3, state_all_before_asking"},
+  {"rule": "P3 4 product naming", "where": "phrases.product_naming"},
+  {"rule": "P3 4 business days Mon–Fri except 4 holidays; next Friday rule; next occurrence for missing month/year", "where": "calendar"},
+  {"rule": "P3 5 attempt 1 full on last business day of week (next week if today), floor if full refused; attempt 2 floor on deadline (16–60 only)", "where": "bands[*].attempts"},
+  {"rule": "P3 5 today questions", "where": "phrases.today_question, phrases.all_today_question"},
+  {"rule": "P3 5 separate attempt counters; exhaustion harbour_refused; common date clamped per product", "where": "multi_product.per_product_attempts, outcomes.refused_reason, multi_product.common_date_clamped_per_product"},
+  {"rule": "P3 6 full first; floors by kind; floor once + 'The remainder stays overdue.'; never ask how much; accept floor..full", "where": "amounts"},
+  {"rule": "P3 6 date may be today, business day, ≤ deadline; roll forward within deadline; vague ask once then deadline", "where": "dates"},
+  {"rule": "P3 7 batch read-back; 'May I record these promises?'; one promise per product", "where": "promise_write.confirm_phrase, one_promise_per_product, multi_product.one_confirmation_for_batch"},
+  {"rule": "P3 7 after-promise sentence; change recorded promise reply", "where": "phrases.after_promise_sentence, phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"},
+  {"rule": "P3 8 already paid", "where": "special_cases[already_paid], phrases.already_paid_sentence"},
+  {"rule": "P3 8 dispute", "where": "special_cases[dispute]"},
+  {"rule": "P3 8 hardship: offer harbour_care, else harbour_distress", "where": "special_cases[hardship]"},
+  {"rule": "P3 8 restructure -> harbour_restructure", "where": "special_cases[restructuring]"},
+  {"rule": "P3 8 refusal to talk: ask once, second refusal ends call, remaining products harbour_refused", "where": "special_cases[refuse_to_talk]"},
+  {"rule": "P3 8 robot / scam / cannot-answer sentences", "where": "phrases.robot_reply, scam_reply, cannot_answer_sentence; special_cases[robot, scam, cannot_answer]"},
+  {"rule": "P3 9 one note per unpromised product, allowed reasons; no notes on transfer", "where": "notes"},
+  {"rule": "P3 9 transfer keeps recorded promises", "where": "multi_product.recorded_promises_survive_transfer"},
+  {"rule": "P3 9 outcome precedence; goodbye before close_call", "where": "outcomes.transfer_overrides_promise, promise_outcome, paid_outcome, no_promise_outcome, no_promise_reason_from_first_non_paid_note, goodbye_before_close"},
+  {"rule": "P3 9 debt introduction sentence", "where": "phrases.debt_intro"},
+  {"rule": "P3 10 outcome code table (checked against close_call enums)", "where": "outcomes.table"}
+ ],
+ "fixed": [
+  "special_cases[refuse_to_talk].action: changed from close harbour_no_deal/harbour_refused to note harbour_refused with ends_call=true. P3 rule 8 says only that the second refusal 'ends the call and marks all remaining products harbour_refused'; the close outcome then comes from the rule 9 precedence. A fixed no_deal close would be wrong if a promise was already recorded (that gives harbour_arranged) or an earlier product has a different note reason.",
+  "All source spans: `doc` now holds the source file path (tests/fixtures/synthetic/reversal-thread-brief.md). The rule references moved into `text`, because policy.Span defines doc as the source file.",
+  "Source quotes completed where they had been cut: multi_product ('...and explained in the read-back', batch read-back), notes ('defer notes until the non-transfer outcome is known'), amounts ('Ask for full overdue balance first', 'never accept less than floor or more than full'), bands (attempt wording), callback (P3 rule 2 slot and outcome sentences), promise_write (confirm phrase origin), phrases (product naming, today questions, debt intro).",
+  "Added an explicit takes_promise=false to restructuring and human (both stay at the default; this only makes it explicit)."
+ ],
+ "unresolved": [
+  "Products 0 or more than 60 days late: there is no band and no handling rule.",
+  "Not expressible in the schema, so the prompt must carry them: 'Hello or a question does not' confirm the holder; a missing callback hour must be clarified, never guessed; a flat refusal uses up one persuasion attempt; any correction cancels consent; never claim a failed write was recorded; on write failure tell the customer no promise was recorded (no exact sentence is given); one short sentence of sympathy for hardship (no exact sentence is given); never offer a discount, waiver or new instalment plan."
+ ]
+}

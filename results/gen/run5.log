@@ -2,3 +2,93 @@ publish 2026-10-10T13:19:18Z
 published {'workflow_id': '3a313c88-e790-43c4-ad2e-504199b115f1', 'agent_id': '82d0876d-b628-4bb3-98d8-4033740b7b53', 'version': 7} (6.7s)
 published {'workflow_id': '516d7b3d-12a7-4794-be8a-12133b653e46', 'agent_id': '8912d228-94d9-4308-b85c-3054f1ff15a6', 'version': 6} (3.7s)
 start A-pieces 2026-10-10T13:19:32Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+FAIL PUB-02 medium Third party    | schedule_callback > close_call
+       - callbacks [{'date': '2026-10-15', 'time': '10:00'}], expected [{'date': '2026-10-15', 'time': '11:00'}]
+       - conversation: The callback was scheduled for 10:00 instead of 11:00 as required by the success criteria. All other conditions were met: the agent did not disclose the reason for the call or any debt details to the third party, and no identity verification or a
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+FAIL PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed the 'asks once' criterion by requesting the payment date twice: first in Message 12 ('What is the exact day you have in mind?') and again in Message 14 ('Could you please choose a day from today onwards?') after the user's partia
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 7 s. Failed calls where the customer hung up: 0.
+
+8 / 10 passed (bank records and conversation checks). Last simulation 823b1b21-5f53-4810-884f-f5f2e25b4f02, status completed, 119 s.
+exit A-pieces 0 2026-10-10T13:21:47Z
+start A-corrects 2026-10-10T13:21:47Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed the first success criterion: in message 10, the agent explicitly asked the customer 'What is the lowest amount you can pay, Ms Nair?', which violated the instruction to never ask how much she can pay. All other criteria were met,
+FAIL PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+       - promises [('p1', 540.0, '2026-11-02')], expected [('p1', 540.0, '2026-10-27')]
+       - conversation: The agent failed multiple success criteria. While the agent did ask for an exact day once (Message 8), it did not handle the date 26 October nor did it offer the next business day (27 October). Instead, the user suggested 26 August, and the agent
+PASS PUB-08 medium Already paid   | verify > verify > verify > get_account > close_call
+FAIL PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+       - outcome ('transferred', 'human'), expected ('transferred', 'restructuring')
+       - transfers [{'queue': 'general'}], expected [{'queue': 'restructuring'}]
+       - conversation: The conversation failed to meet the success criteria on two counts: 1) The 'transfer_to_agent' function was called with the 'general' queue rather than the 'restructuring' queue required. 2) The agent described a specific repayment plan in Messag
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 10 s, worst 14 s. Failed calls where the customer hung up: 0.
+
+7 / 10 passed (bank records and conversation checks). Last simulation 90c033c5-3f15-4622-998c-b455a982af30, status completed, 159 s.
+exit A-corrects 0 2026-10-10T13:24:43Z
+start A-talkative 2026-10-10T13:24:43Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-23')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to meet two out of three success criteria. First, the minimum payment was offered repeatedly across dozens of turns (Messages 8 through 76) rather than just once. Second, the final promise was recorded for Friday 23 October (Mess
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 7 s, worst 12 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 9e83bfd0-6721-422c-8ca4-0ee2748d49a7, status completed, 244 s.
+exit A-talkative 0 2026-10-10T13:29:03Z
+start A-asks_back 2026-10-10T13:29:03Z
+FAIL PUB-01 easy   Happy path     | verify > close_call
+       - outcome ('not_verified', 'declined'), expected ('promise', None)
+       - promises [], expected [('p1', 420.0, '2026-10-14')]
+       - conversation: The call failed to meet several success criteria as it ended prematurely due to the user's refusal to complete the security check. Specifically: 1. Both security questions did not pass (only the date of birth was verified, and the user refused th
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: - The minimum payment of 637.50 was offered twice (Message 8 and Message 10) instead of once. - The required note that the rest of the amount stays overdue was missing in the second offer (Message 10).
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 14 s. Failed calls where the customer hung up: 0.
+
+8 / 10 passed (bank records and conversation checks). Last simulation 2da2e63b-e97a-4325-830a-6155b87d74a5, status completed, 125 s.
+exit A-asks_back 0 2026-10-10T13:31:20Z
+start B-pieces 2026-10-10T13:31:20Z
+PASS PUB-11 medium Multi-product  | verify > verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+       - promises [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-14')], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - conversation: The call failed to meet the success criteria regarding the personal loan. While the credit card was correctly recorded for 30 October, the personal loan was recorded for 14 October (as seen in the API call and the read-back in Message 21), failin
+
+slowest agent turn per call: median 11 s, worst 11 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+2 / 3 passed (bank records and conversation checks). Last simulation 6dd086f5-8ea4-4cb8-84cb-f786802781fe, status completed, 104 s.
+exit B-pieces 0 2026-10-10T13:33:10Z

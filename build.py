@@ -25,6 +25,20 @@ import policy as P  # noqa: E402
 from trace import Trace, git_head  # noqa: E402
 
 
+def retry(fn, what, tr, attempts=4, wait_s=20):
+    """Platform calls get a few attempts: a 5xx from Freya is an outage, not a build problem (seen 10 Oct 13:41 UTC)."""
+    last = None
+    for i in range(1, attempts + 1):
+        try:
+            return fn()
+        except Exception as e:
+            last = e
+            tr.event("platform_retry", step=what, attempt=i, error=repr(e)[:300])
+            if i < attempts:
+                time.sleep(wait_s)
+    raise last
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--briefs", required=True, help="comma-separated brief files, in reading order")
@@ -63,18 +77,18 @@ def main():
         # 2. compile ----------------------------------------------------------------------------
         wf = C.compile_workflow(ir, tools)
         errs = C.static_check(wf, tools)
-        tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs)
+        tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs, compiler_notes=list(C.COMPILE_NOTES))
         if errs:
             raise SystemExit("static check failed: " + "; ".join(errs))
         (out / f"{a.slot}.candidate.json").write_text(json.dumps(wf, indent=1))
 
         # 3. publish + checkpoint ---------------------------------------------------------------
-        freya.validate_workflow(a.slot, wf)
-        ids = freya.save_workflow(a.slot, wf)
+        retry(lambda: freya.validate_workflow(a.slot, wf), "validate", tr)
+        ids = retry(lambda: freya.save_workflow(a.slot, wf), "publish", tr)
         if "version" not in ids:
-            ids["version"] = freya.update_workflow(ids["workflow_id"], wf)   # first create: pin the agent model and publish
+            ids["version"] = retry(lambda: freya.update_workflow(ids["workflow_id"], wf), "publish_first", tr)   # first create: pin the agent model and publish
         tr.event("workflow_published", slot=a.slot, workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
-        freya.export_workflow(ids["workflow_id"], str(export_path))
+        retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "checkpoint_export", tr)
         tr.event("checkpoint_export", path=str(export_path.relative_to(ROOT)), version=ids.get("version"))
 
         # 4. smoke test -------------------------------------------------------------------------
@@ -102,7 +116,7 @@ def main():
             tr.event("simulation_skipped", reason="not enough time left", left_s=int(left()))
 
         # 6. final export (the published version is unchanged by the test) ----------------------------
-        freya.export_workflow(ids["workflow_id"], str(export_path))
+        retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export", tr)
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
         tr.event("run_end", success=True, elapsed_s=round(time.monotonic() - t_start, 1))
         print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "elapsed_s": round(time.monotonic() - t_start)}))
@@ -119,10 +133,11 @@ def smoke(ids, ir: P.PolicyIR, tr: Trace):
     call_id, first = None, ""
     t0 = time.time()
     try:
-        r = freya.api("POST", "/api/v2/chat/message", {"workflowId": ids["workflow_id"], "message": "Hello?", "customerVariables": cv})
+        r = retry(lambda: freya.api("POST", "/api/v2/chat/message", {"workflowId": ids["workflow_id"], "message": "Hello?", "customerVariables": cv}),
+                  "smoke_chat", tr, attempts=5, wait_s=30)
         call_id, first = r.get("callId"), r.get("response") or ""
     except Exception as e:
-        tr.event("smoke_test", ok=False, error=repr(e)[:300])
+        tr.event("smoke_test", ok=False, error=repr(e)[:300], note="platform did not answer; the published workflow is unaffected")
         return
     finally:
         if call_id:

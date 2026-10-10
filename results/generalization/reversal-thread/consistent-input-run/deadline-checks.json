@@ -1,0 +1,30 @@
+[
+  {
+    "today": "2026-10-14",
+    "band": [
+      1,
+      15
+    ],
+    "rule": {
+      "kind": "nth_business_day",
+      "n": 9
+    },
+    "expected": "2026-10-28",
+    "actual": "2026-10-28",
+    "passed": true
+  },
+  {
+    "today": "2026-10-14",
+    "band": [
+      16,
+      60
+    ],
+    "rule": {
+      "kind": "nth_business_day",
+      "n": 4
+    },
+    "expected": "2026-10-21",
+    "actual": "2026-10-21",
+    "passed": true
+  }
+]

@@ -1,0 +1,55 @@
+{
+ "bands": [
+  "late_1_45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "change_recorded_promise",
+  "cannot_answer"
+ ],
+ "unresolved": [
+  {
+   "topic": "days_late_outside_band",
+   "text": "The brief defines only the 1\u201345 days-late band; it does not say how to handle a product with 0 or more than 45 days late.",
+   "doc": "clean-eom-brief.md"
+  },
+  {
+   "topic": "wrong_answer_limit_conflict",
+   "text": "The verify_identity summary says \"Three wrong answers in total end the check\" and get_account says \"Refused until both questions are passed\", but the brief sets 4 wrong answers across 4 questions and says to use the API's checks_left. The brief value (4, via checks_left) was used.",
+   "doc": "clean-eom-openapi.json"
+  },
+  {
+   "topic": "hardship_sympathy_sentence",
+   "text": "Hardship requires \"one short sentence of sympathy\" but the brief gives no verbatim wording.",
+   "doc": "clean-eom-brief.md"
+  },
+  {
+   "topic": "no_discount_rule_unrepresented",
+   "text": "Rule 6 \"Never offer a discount, waiver or a new instalment plan.\" has no dedicated IR field; it is recorded only in amounts.source and must be carried by prompt text.",
+   "doc": "clean-eom-brief.md"
+  },
+  {
+   "topic": "refuse_to_talk_close_outcome",
+   "text": "Rule 8 says a second refusal to talk ends the call and marks remaining products `lark_refused` but names no close outcome; the close follows rule 9 precedence, so `lark_no_deal` / `lark_refused` applies only when no promise was already recorded (a recorded promise still gives `lark_arranged`).",
+   "doc": "clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases already_paid, dispute and hardship: ends_call changed from true to false. Rule 8 says to mark the product and continue with the other products. In compile.py, ends_call=false is what moves a multi-product call on to the next product instead of to finalize.",
+  "Added source text that was missing from the spans: the no-discount sentence (amounts.source), 'Do not call get_account until all questions pass.' and the at-most-twice holder rule (identity.source), the read-back sentence and 'Never claim a failed write was recorded.' (promise_write.source), the refusal and attempt-counter sentences (bands[0].source), and 'disclose nothing' (third_party.source).",
+  "Added two unresolved entries: no_discount_rule_unrepresented and refuse_to_talk_close_outcome."
+ ]
+}
