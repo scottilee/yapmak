@@ -1,0 +1,106 @@
+publish 2026-10-10T14:35:40Z
+published {'workflow_id': '3a313c88-e790-43c4-ad2e-504199b115f1', 'agent_id': '82d0876d-b628-4bb3-98d8-4033740b7b53', 'version': 10} (5.4s)
+published {'workflow_id': '516d7b3d-12a7-4794-be8a-12133b653e46', 'agent_id': '8912d228-94d9-4308-b85c-3054f1ff15a6', 'version': 9} (3.5s)
+start A-reps3 2026-10-10T14:35:53Z
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+FAIL PUB-04 medium Dates          | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 1250.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended prematurely because the customer hung up after identity verification. As a result, several success criteria were not met: 1) The promise date of 23 October was never discussed or mentioned. 2) Although the assistant identif
+PASS PUB-05 medium Hardship       | verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed to meet the success criteria regarding the minimum payment. Specifically: 1. The minimum payment ($637.50) was offered twice (Message 8 and Message 10), which violates the requirement that it be offered 'once'. 2. While the first
+FAIL PUB-07 hard   Dates          | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 540.0, '2026-10-27')]
+       - the call was not closed with close_call
+       - conversation: The agent met the specific success criteria: it asked for the exact day once (Message 8), rejected the non-business day of October 26th to suggest the next business day (Message 10), and confirmed the promise for Tuesday, October 27th (Message 12
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 17 s, worst 21 s. Failed calls where the customer hung up: 2.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 1 of 3: 7 / 10 passed, 367 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+FAIL PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+       - conversation: - The agent failed to identify itself as a digital assistant when specifically asked 'Are you a robot?' in Message 9, ignoring the question in Message 10. - The agent correctly handled the user's proposed payment date as a negotiation rather than
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 18 s, worst 21 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 3: 9 / 10 passed, 202 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+FAIL PUB-03 medium Identity       | verify > close_call
+       - outcome ('not_verified', 'declined'), expected ('not_verified', 'failed')
+       - conversation: - The security check did not end after the third wrong answer; the assistant repeated the same prompt for over 100 turns despite multiple dates being provided (Messages 3, 5, 7). - The assistant failed to instruct the customer to use the bank's a
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: The conversation did not meet all success criteria. While the agent correctly avoided asking the customer how much they could pay and recorded the correct promise for 637.50 on Friday 16 October, the agent failed the criteria regarding the minimu
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 21 s, worst 22 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 3 of 3: 8 / 10 passed, 442 s
+
+PASS PUB-01 3/3
+PASS PUB-02 3/3
+FAIL PUB-03 2/3
+FAIL PUB-04 1/3
+PASS PUB-05 3/3
+FAIL PUB-06 1/3
+FAIL PUB-07 2/3
+PASS PUB-08 3/3
+PASS PUB-09 3/3
+PASS PUB-10 3/3
+
+6 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation a5c1b072-dec6-4504-aa09-cfd51874e82d, status completed, 1012 s.
+exit A-reps3 0 2026-10-10T14:53:40Z
+start B-reps3 2026-10-10T14:53:40Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 16 s, worst 17 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 1 of 3: 3 / 3 passed, 126 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 18 s, worst 19 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 3: 3 / 3 passed, 127 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 14 s, worst 14 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 3 of 3: 3 / 3 passed, 105 s
+
+PASS PUB-11 3/3
+PASS PUB-12 3/3
+PASS PUB-13 3/3
+
+3 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 2ce9ecdb-33d3-4f01-809b-6415b99e5bc9, status completed, 358 s.
+exit B-reps3 0 2026-10-10T14:59:54Z

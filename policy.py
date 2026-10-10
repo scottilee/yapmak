@@ -373,6 +373,11 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
                 errs.append(f"band {b.name}: bad attempt {a}")
     if not ir.amounts.floors:
         errs.append("amounts.floors is empty")
+    names = {sc.name for sc in ir.special_cases}
+    if not ir.phrases.opening:
+        errs.append("phrases.opening is empty: write the opening sentence the documents require")
+    if "already_paid" in names and not (ir.phrases.already_paid_sentence or next(sc.say for sc in ir.special_cases if sc.name == "already_paid")):
+        errs.append("already_paid: neither phrases.already_paid_sentence nor special_cases[already_paid].say says what to tell the customer")
     o = ir.outcomes
     for name in ("promise_outcome", "paid_outcome", "transfer_outcome", "no_promise_outcome"):
         if not getattr(o, name):
@@ -382,6 +387,14 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
     for h in ir.calendar.holidays:
         if len(h) != 10 or h[4] != "-" or h[7] != "-":
             errs.append(f"calendar holiday not ISO: {h}")
+    # every close reason a special case uses must be one the outcome table allows for that outcome
+    allowed = {row.outcome: set(row.reasons) for row in o.table}
+    for sc in ir.special_cases:
+        a = sc.action or {}
+        if a.get("type") in ("close", "transfer") and a.get("outcome") in allowed and a.get("reason") and a["reason"] not in allowed[a["outcome"]]:
+            errs.append(f"special case {sc.name}: reason {a['reason']} is not listed for outcome {a['outcome']} in the outcome table")
+        if sc.offer_outcome and sc.offer_outcome[0] in allowed and sc.offer_outcome[1] and sc.offer_outcome[1] not in allowed[sc.offer_outcome[0]]:
+            errs.append(f"special case {sc.name}: offer reason {sc.offer_outcome[1]} is not listed for outcome {sc.offer_outcome[0]}")
     if tool_enums:
         close = tool_enums.get("close_call", {})
         allowed_outcomes = set(close.get("outcome", []))

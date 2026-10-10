@@ -1,0 +1,38 @@
+{
+ "bands": [
+  "1-45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "change_recorded_promise",
+  "cannot_answer"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "Only days late 1\u201345 inclusive is defined; the documents give no deadline or attempts for products more than 45 days late (or 0 days late).",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The documents require 'one short sentence of sympathy' for hardship but do not dictate its wording, so the hardship special case has no mandatory `say`.",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "No changes required: every value was re-checked against clean-eom-brief.md and clean-eom-openapi.json (verify_identity field enum, get_account kind enum and floor properties, close_call outcome/reason enums, transfer_to_agent queue enum, add_note reason enum); all match literally. The policy file was left unchanged."
+ ]
+}

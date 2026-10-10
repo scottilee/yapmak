@@ -124,15 +124,23 @@ class Driver:
             if cur is not None:
                 self.vars[m["variable"]] = str(cur).lower() if isinstance(cur, bool) else cur
 
+    def _cond(self, cc):
+        if "conditions" in cc:
+            results = [self._cond(x) for x in cc["conditions"]]
+            return all(results) if cc.get("logic") == "and" else any(results)
+        op, v = cc.get("operator"), str(self.vars.get(cc.get("variable"), ""))
+        if op == "equals":
+            return v == str(cc["operand"])
+        if op == "not_equals":
+            return v != str(cc["operand"])
+        if op == "always":
+            return True
+        return False
+
     def route(self, node):
         for tr in node.get("transitions", []):
-            c = tr["condition"]
-            if c.get("operator") == "always":
+            if self._cond(tr["condition"]):
                 return tr["target_node"]
-            conds = c.get("conditions", [])
-            for cc in conds:
-                if cc.get("operator") == "equals" and str(self.vars.get(cc["variable"], "")) == str(cc["operand"]):
-                    return tr["target_node"]
         return None
 
     def run(self, max_steps=400):

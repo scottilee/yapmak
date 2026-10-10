@@ -1,0 +1,2903 @@
+[
+  {
+    "id": "boundary-01",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "You tell me.",
+      "What is the smallest amount I can pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-02",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "You tell me what the deadline means."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-03",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "Can you offer a smaller payment?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-04",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "boundary",
+    "turns": [
+      "Yes, I can pay on Friday the sixteenth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-05",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "boundary",
+    "turns": [
+      "Friday the sixteenth, yes, that works."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-06",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "boundary",
+    "turns": [
+      "Yes, actually no, I need the twentieth instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-07",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "boundary",
+    "turns": [
+      "I agree, sorry, no, that is too much; suggest less."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-08",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "How much did you just say?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-09",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "other",
+    "style": "boundary",
+    "turns": [
+      "You tell me."
+    ],
+    "ambiguity": "underspecified"
+  },
+  {
+    "id": "boundary-10",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "boundary",
+    "turns": [
+      "Who is calling?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-11",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "boundary",
+    "turns": [
+      "Go on, I am listening."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-12",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "boundary",
+    "turns": [
+      "Yes, correct, actually change it to three hundred and fifty."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-13",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "boundary",
+    "turns": [
+      "Do you mean this Friday or next Friday?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "boundary-14",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow morning.",
+      "Around eleven."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true
+  },
+  {
+    "id": "boundary-15",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow.",
+      "In the morning.",
+      "Around eleven."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true
+  },
+  {
+    "id": "boundary-16",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow around...",
+      "...eleven in the morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": true
+  },
+  {
+    "id": "boundary-17",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "",
+    "no_time_before_final": false
+  },
+  {
+    "id": "boundary-18",
+    "group": "third_party",
+    "variable": "tp_intent",
+    "expected": "gives_time",
+    "style": "boundary",
+    "turns": [
+      "Tomorrow at three, sorry, around eleven in the morning."
+    ],
+    "ambiguity": null,
+    "expected_time": "11:00",
+    "no_time_before_final": false
+  },
+  {
+    "id": "negotiate-accepts-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "Yes, that works for me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I can pay on the twentieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "That full amount is too much."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-in_words-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "Okay, I agree to your offer."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I could do two hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "Could you suggest a smaller amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-in_words-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "I can do the payment you suggested."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "How about three hundred on Monday the nineteenth?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "You tell me what is the lowest I can pay."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-in_words-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "Yes, Friday the sixteenth works."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "The week after next would suit me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "That is more than I can afford; offer me something lower."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-in_words-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "Agreed, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I could pay on the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "Can you lower the amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-in_words-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "in_words",
+    "turns": [
+      "That amount on that date is fine."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-in_words-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "in_words",
+    "turns": [
+      "I can offer three hundred and fifty instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-in_words-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "in_words",
+    "turns": [
+      "I need a lower amount, but you tell me what it is."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-in_words-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "Yes, that ...",
+      "... works for me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "I can pay on ...",
+      "... the twentieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "That full amount ...",
+      "... is too much."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "What happens ...",
+      "... after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "Okay, I agree ...",
+      "... to your offer."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "I could ...",
+      "... do two hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "Could you suggest ...",
+      "... a smaller amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Which account are ...",
+      "... you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "I can do ...",
+      "... the payment you suggested."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "How about three hundred ...",
+      "... on Monday the nineteenth?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "You tell me what is ...",
+      "... the lowest I can pay."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Will you send ...",
+      "... me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "Yes, Friday ...",
+      "... the sixteenth works."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "The week after ...",
+      "... next would suit me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "That is more than I ...",
+      "... can afford; offer me something lower."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Why is ...",
+      "... this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "Agreed, four hundred and twenty ...",
+      "... on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "I could pay on ...",
+      "... the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "Can you ...",
+      "... lower the amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "You tell me what ...",
+      "... this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-pieces-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "pieces",
+    "turns": [
+      "That amount on ...",
+      "... that date is fine."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-pieces-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "pieces",
+    "turns": [
+      "I can offer three ...",
+      "... hundred and fifty instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-pieces-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "pieces",
+    "turns": [
+      "I need a lower amount, but ...",
+      "... you tell me what it is."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-pieces-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "What do you ...",
+      "... mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, that works for me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I can pay on the twentieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: That full amount is too much."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Okay, I agree to your offer."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I could do two hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Could you suggest a smaller amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I can do the payment you suggested."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: How about three hundred on Monday the nineteenth?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: You tell me what is the lowest I can pay."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, Friday the sixteenth works."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: The week after next would suit me."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: That is more than I can afford; offer me something lower."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Agreed, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I could pay on the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Can you lower the amount?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-corrects-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: That amount on that date is fine."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-corrects-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I can offer three hundred and fifty instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-corrects-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I need a lower amount, but you tell me what it is."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-corrects-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, that works for me. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I can pay on the twentieth of October. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. That full amount is too much. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. What happens after I pay? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Okay, I agree to your offer. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I could do two hundred. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Could you suggest a smaller amount? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Which account are you talking about? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I can do the payment you suggested. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. How about three hundred on Monday the nineteenth? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. You tell me what is the lowest I can pay. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Will you send me a text message? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, Friday the sixteenth works. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. The week after next would suit me. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. That is more than I can afford; offer me something lower. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Why is this amount overdue? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Agreed, four hundred and twenty on the sixteenth of October. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I could pay on the thirtieth of October. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Can you lower the amount? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. You tell me what this call is about. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-talkative-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. That amount on that date is fine. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-proposes-talkative-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I can offer three hundred and fifty instead. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-too_much-talkative-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I need a lower amount, but you tell me what it is. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-question-talkative-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. What do you mean by overdue? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, that works for me."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I can pay on the twentieth of October."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? That full amount is too much."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-1",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Okay, I agree to your offer."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I could do two hundred."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Could you suggest a smaller amount?"
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-2",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I can do the payment you suggested."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? How about three hundred on Monday the nineteenth?"
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? You tell me what is the lowest I can pay."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-3",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, Friday the sixteenth works."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? The week after next would suit me."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? That is more than I can afford; offer me something lower."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-4",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Agreed, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I could pay on the thirtieth of October."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Can you lower the amount?"
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-5",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "negotiate-accepts-asks_back-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "accepts",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? That amount on that date is fine."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-proposes-asks_back-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "proposes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I can offer three hundred and fifty instead."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-too_much-asks_back-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "too_much",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I need a lower amount, but you tell me what it is."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "negotiate-question-asks_back-6",
+    "group": "negotiate",
+    "variable": "cust_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Hello."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Go ahead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-3",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Who is this?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-4",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "What is this about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-5",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Can you hear me?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-in_words-6",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "in_words",
+    "turns": [
+      "Why are you calling?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "Let me think ...",
+      "Hello."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "Go ...",
+      "... ahead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-3",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "Who ...",
+      "... is this?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-4",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "What is ...",
+      "... this about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-5",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "Can you ...",
+      "... hear me?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-pieces-6",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "pieces",
+    "turns": [
+      "Why are ...",
+      "... you calling?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Hello."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Go ahead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-3",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Who is this?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-4",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: What is this about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-5",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Can you hear me?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-corrects-6",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Why are you calling?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Hello. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Go ahead. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-3",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Who is this? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-4",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. What is this about? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-5",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Can you hear me? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-talkative-6",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Why are you calling? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-1",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Hello."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-2",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Go ahead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-3",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Who is this?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-4",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? What is this about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-5",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Can you hear me?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "opening-unclear-asks_back-6",
+    "group": "opening",
+    "variable": "holder",
+    "expected": "unclear",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Why are you calling?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "Yes, I confirm."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "Actually make it three hundred and fifty."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "That is correct."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "Yes, but change the date to the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "Yes, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "No, I meant the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "I confirm the amount and date you read back."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "Change the amount to four hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "Yes, please proceed with that promise."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "Use Monday the nineteenth instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-in_words-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "in_words",
+    "turns": [
+      "Correct, Friday the sixteenth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-in_words-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "in_words",
+    "turns": [
+      "I need to change that to two hundred on the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-in_words-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "in_words",
+    "turns": [
+      "What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "Yes, ...",
+      "... I confirm."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "Actually make it ...",
+      "... three hundred and fifty."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "What happens ...",
+      "... after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "That ...",
+      "... is correct."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "Yes, but change the ...",
+      "... date to the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Which account are ...",
+      "... you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "Yes, four hundred and twenty ...",
+      "... on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "No, I meant ...",
+      "... the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Will you send ...",
+      "... me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "I confirm the amount ...",
+      "... and date you read back."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "Change the amount ...",
+      "... to four hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "Why is ...",
+      "... this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "Yes, please proceed ...",
+      "... with that promise."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "Use Monday ...",
+      "... the nineteenth instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "You tell me what ...",
+      "... this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-pieces-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "pieces",
+    "turns": [
+      "Correct, Friday ...",
+      "... the sixteenth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-pieces-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "pieces",
+    "turns": [
+      "I need to change that ...",
+      "... to two hundred on the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-pieces-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "pieces",
+    "turns": [
+      "What do you ...",
+      "... mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, I confirm."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Actually make it three hundred and fifty."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: That is correct."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, but change the date to the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: No, I meant the thirtieth of October."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I confirm the amount and date you read back."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Change the amount to four hundred."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Yes, please proceed with that promise."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Use Monday the nineteenth instead."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-corrects-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: Correct, Friday the sixteenth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-corrects-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: I need to change that to two hundred on the twentieth."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-corrects-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "corrects",
+    "turns": [
+      "Sorry, let me say that clearly: What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, I confirm. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Actually make it three hundred and fifty. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. What happens after I pay? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. That is correct. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, but change the date to the twentieth. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Which account are you talking about? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, four hundred and twenty on the sixteenth of October. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. No, I meant the thirtieth of October. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Will you send me a text message? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I confirm the amount and date you read back. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Change the amount to four hundred. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Why is this amount overdue? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Yes, please proceed with that promise. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Use Monday the nineteenth instead. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. You tell me what this call is about. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-talkative-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. Correct, Friday the sixteenth. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-changes-talkative-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. I need to change that to two hundred on the twentieth. That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-question-talkative-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "talkative",
+    "turns": [
+      "I was just getting settled and there is a bit of noise here. What do you mean by overdue? That is what I wanted to say."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, I confirm."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Actually make it three hundred and fifty."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-1",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? What happens after I pay?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? That is correct."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, but change the date to the twentieth."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-2",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Which account are you talking about?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, four hundred and twenty on the sixteenth of October."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? No, I meant the thirtieth of October."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-3",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Will you send me a text message?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I confirm the amount and date you read back."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Change the amount to four hundred."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-4",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Why is this amount overdue?"
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Yes, please proceed with that promise."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Use Monday the nineteenth instead."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-5",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? You tell me what this call is about."
+    ],
+    "ambiguity": null
+  },
+  {
+    "id": "readback-confirms-asks_back-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "confirms",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? Correct, Friday the sixteenth."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-changes-asks_back-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "changes",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? I need to change that to two hundred on the twentieth."
+    ],
+    "ambiguity": "mixed_question"
+  },
+  {
+    "id": "readback-question-asks_back-6",
+    "group": "readback",
+    "variable": "rb_intent",
+    "expected": "question",
+    "style": "asks_back",
+    "turns": [
+      "Can you hear me clearly? What do you mean by overdue?"
+    ],
+    "ambiguity": null
+  }
+]

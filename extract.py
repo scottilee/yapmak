@@ -51,7 +51,11 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
 - `promise_write.retry_on_failure`: how many extra attempts after a failed create_promise (0 if the documents say none).
 - Later documents in the input list override earlier ones only where they say so; a memo that changes a policy wins over the policy it changes.
   Record each value's origin in its `source` {"doc","text"}.
+- Phrase fields hold the sentence the agent must say. When the documents dictate the words, copy them; when they only dictate the content (e.g. "say that payments can take one business day to appear"), write a short sentence that says exactly that — never leave a phrase empty when the documents require something to be said. `opening_verbatim` is true only for dictated words.
+- With several products and notes, `already_paid`/`dispute` use action {"type":"note","reason":...} and `ends_call: false`; with a single product they close the call. Decide from the documents, and apply the same decision to both cases.
+- `ends_call` on already_paid/dispute/hardship is **false** whenever the documents say the call continues with the customer's other products (notes for the unpromised ones); true only when the documents end the call there.
 - No null values anywhere: use "" or [] or omit the key.
+- Write the complete JSON file with the Write tool. Do not use Edit, Bash or any other tool to change it.
 """
 
 

@@ -1,0 +1,85 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "phrases.opening",
+   "text": "The opening is described (digital assistant calling from Freya Bank, call is recorded) but no exact sentence is given and no word-for-word requirement is stated.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.debt_intro",
+   "text": "Rule 17 says to say you are calling from the collections team about a late payment, but gives no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.all_today_question",
+   "text": "Brief B says to first ask whether the customer can pay all of them today, but gives no verbatim question.",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "phrases.robot_reply",
+   "text": "Rule 4 says to say you are Freya Bank's digital assistant; no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.scam_reply",
+   "text": "Rule 43 says to tell them they can verify the call by phoning Freya Bank's customer service number; no verbatim sentence and no number given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.already_paid_sentence",
+   "text": "Rule 39 says to say that payments can take one business day to appear; no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "Rule 44 says to say you do not have that information; no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.recorded_promise_change_reply",
+   "text": "Rule 36 says to say they can change it in the mobile app; no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The documents do not say how to resolve a date given without a month or year.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "outcomes.transfer_overrides_promise",
+   "text": "Brief A: 'If a transfer follows a recorded promise, close as transferred with that transfer's reason.' Brief B: 'With several products, promise wins whenever at least one promise was recorded, except rule 10 above.' Rule 10 is about restructuring, but its last sentence names every transfer (restructuring, support, human). The documents do not settle whether a support or human transfer after a recorded promise closes as transferred or as promise when there are several products. Kept true (Brief A; rule 10 read as covering all transfers).",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "special_cases.hardship (multi-product)",
+   "text": "Brief B lists `hardship` as an add_note reason but does not say whether hardship on one product, with the support transfer declined, ends the call or is noted while the call continues with the other products (rule 9 names only dispute and already paid).",
+   "doc": "briefs/brief-b.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.prohibited_before_verification: added \"credit card\", \"personal loan\", \"car loan\". Rule A1 also bans naming the product before verification, and rule A17 gives those names.",
+  "unresolved: added an entry for the Brief A / Brief B conflict over transfer vs promise precedence with several products ('promise wins ... except rule 10'). Kept transfer_overrides_promise=true.",
+  "unresolved: added an entry for hardship with several products. Brief B gives a hardship note reason but does not say whether the call continues.",
+  "Expanded source spans (third_party, bands, amounts, dates, notes, multi_product, promise_write, phrases) so they quote the rules each value relies on (A5, A10, A23, A27, B3, B4, B11)."
+ ]
+}

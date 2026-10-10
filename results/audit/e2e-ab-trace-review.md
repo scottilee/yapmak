@@ -1,0 +1,24 @@
+# e2e-ab trace review
+
+Reviewed `traces/e2e-ab.jsonl` (10 events), the Git objects at its recorded commit `aad83ae423e24639fa37262f2efe7bd86e7d7d11`, and later committed builder code only as corroboration. No platform calls or builds were run.
+
+- **Recorded revision is not reproducible.** `aad83ae` has no `build.py`, `extract.py`, `compile.py`, or `trace.py`. The trace therefore refers to a working tree that is not captured by its commit field. No dirty-tree manifest, input/source hashes, or artifact hashes closes that gap. `b9676c0e7d31b1ba3942955d7f14212730735a86` contains those files, but must not be silently substituted as the source that produced this run.
+- **Every model call: no, only session summaries.** Lines 2–3 record policy extraction (6 turns, 73.430 s, $0.4889369) and audit (16 turns, 209.885 s, $0.9992836). These are multi-turn SDK sessions, not individual request records. They omit full prompts, responses, request IDs, and tool arguments/results. Freya's model work behind the smoke chat is not itemized. Later `extract.py` confirms aggregate logging, truncating tool lists to 40 and text to 600 characters; the missing historical source prevents proving that exact implementation was used. The audit trace includes a Read of local Claude memory (`memory/freya-platform-facts.md`) and Bash/Edit attempts whose contents and outcomes are not captured. It is not a self-contained brief/API-only provenance record.
+- **Every Freya write: no.** Line 6 is one `workflow_published` summary. At the recorded commit, `freya.py:31–63` can create a workflow, PUT it, conditionally PUT a model-config correction, and POST publication, without individual trace events. The dry-run POST is also unlogged (validation, not a persisted write). The smoke test summarizes chat creation/message; later builder code also attempts POST `/api/v2/chat/end` and suppresses its errors. This trace cannot establish the exact request count or successful cleanup. Node count is recorded separately (31); publication does not list step/tool counts or the submitted payload hash.
+- **Hand-built / hard-coded concern: defensible concern, not proof of manual assembly.** The trace supports extraction → audit → compilation → publication and contains no `policy_loaded` fixture event. A handwritten reusable compiler is not evidence of a manually assembled submitted agent. However, missing source provenance and the local-memory read prevent ruling out outside inputs or edits. There are genuine brief-shaped defaults in the recorded `policy.py`: `wrong_answer_limit=3` (line 56), holder confirmation limit 2 (line 59), and callback hours `10:00`–`19:00` (lines 73–74). They can apply when extraction omits fields, so a blanket “no brief values in source” claim is not supportable. Separately, later `b9676c0:compile.py:708–709` hard-codes the collections introduction and today-payment questions; this is corroborating evidence about that later source, not attribution to the missing historical compiler. Automatically embedding extracted policy values in generated code is normal compilation and is distinct from hand-coding them in builder source.
+- **Build time: yes.** `run_start.elapsed_s=0`; publication at **287.9 s**, checkpoint export at **288.5 s**, successful `run_end` at **292.7 s (4 min 52.7 s)**, including smoke and final export. Wall timestamps are 13:06:47–13:11:39 UTC, rounded to seconds. This is instrumented build duration, not environment setup or any prior development. No simulation event appears.
+
+## run_command
+
+The following is the exact command for the same input/mode with explicit recorded model settings, after dependency setup and loading Freya credentials plus working Claude credentials. It reconstructs the invocation; the original argv was not logged. Omitting `--cases` preserves the no-simulation run, and omitting `--policy` forces fresh extraction. Use a fresh checkout/state to avoid appending to the old trace or updating the old workflow slot.
+
+```bash
+BUILDER_MODEL=claude-opus-5-5 FREYA_AGENT_PROVIDER=experimental-5 FREYA_AGENT_MODEL=experimental-5 \
+  .venv/bin/python -u build.py \
+  --briefs briefs/brief-a.md,briefs/brief-b.md \
+  --openapi tools/openapi.json \
+  --slot e2e-ab \
+  --deadline 1800
+```
+
+**There is no working exact-revision reproduction command for the recorded commit: it lacks the entry point.** For a reviewable submission, run this command from a clean committed revision containing the builder and submit its new trace. Capture argv, dirty status and source/input/output hashes; log individual SDK requests where available and each Freya mutation with request ID, status and payload hash. Keep platform-internal model calls explicitly outside the locally observable request count. Do not relabel this old trace with a newer commit.

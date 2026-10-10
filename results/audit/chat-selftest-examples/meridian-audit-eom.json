@@ -1,0 +1,108 @@
+{
+ "workflow_id": "6c863ff7-cb80-4aab-8b66-0682e1fc3abf",
+ "policy": "results/audit/synthetic/meridian.policy.json",
+ "ok": true,
+ "elapsed_s": 23.2,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": true,
+   "checks": [
+    {
+     "name": "opening_spoken",
+     "pass": true,
+     "detail": "Good day, this is Meridian Commercial Bank's automated assistant. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "holder_asked",
+     "pass": true,
+     "detail": "Good day, this is Meridian Commercial Bank's automated assistant. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "first_question_matches_ir",
+     "pass": true,
+     "detail": "want ask_text='the registered date of birth' in 'Thank you. Before we continue, I need to ask you four short security questions. What is the registered date of birth?'"
+    },
+    {
+     "name": "first_question_marked",
+     "pass": true,
+     "detail": "Thank you. Before we continue, I need to ask you four short security questions. What is the registered date of birth?"
+    },
+    {
+     "name": "routed_to_ask_0",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->ask_0']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "Good day, this is Meridian Commercial Bank's automated assistant. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "Yes, speaking.",
+     "agent": "Thank you. Before we continue, I need to ask you four short security questions. What is the registered date of birth?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": true,
+   "checks": [
+    {
+     "name": "no_account_words",
+     "pass": true,
+     "detail": "banned hits=[] in 'I see. When would be a good day and time to reach Ms Customer?'"
+    },
+    {
+     "name": "asks_when_reachable",
+     "pass": true,
+     "detail": "I see. When would be a good day and time to reach Ms Customer?"
+    },
+    {
+     "name": "routed_to_third_party",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->third_party']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "Good day, this is Meridian Commercial Bank's automated assistant. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "This is her husband, she's not here.",
+     "agent": "I see. When would be a good day and time to reach Ms Customer?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "business overdraft",
+  "collections",
+  "debt",
+  "due",
+  "facilit",
+  "facility",
+  "installment",
+  "instalment",
+  "invoice financing line",
+  "overdue",
+  "pay ",
+  "payment",
+  "product",
+  "promise",
+  "term loan"
+ ]
+}

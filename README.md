@@ -105,13 +105,35 @@ So build something that reads a brief, not something that knows this one. Whatev
 
 ## Our builder (team submission)
 
-One command, brief file(s) + tool API in, a published and exported phone agent out:
+### Setup from a fresh clone (exactly these steps)
 
 ```bash
-source .env                       # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus a Claude login or ANTHROPIC_API_KEY
+git clone <repo> && cd <repo>
+uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt     # verified path (needs uv)
+# fallback where uv is unavailable and the system has python3-venv:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cp env.example .env        # then fill in your real keys (the file is gitignored)
+source .env
+claude -p "say OK"         # credential pre-flight: the extractor runs on Claude Code.
+                           # If this says "Invalid API key" / "Not logged in": run `claude` /login, or export a
+                           # real ANTHROPIC_API_KEY (sk-ant-…) into .env. Do this BEFORE the hidden briefs open.
+.venv/bin/python -m pytest -q          # offline self-check, seconds, no network needed for the tests themselves
+```
+
+### Run (one command per brief)
+
+```bash
+source .env                       # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus the Claude credentials from the pre-flight
 .venv/bin/python build.py --briefs <brief.md>[,<memo.md>,...] --openapi <openapi.json> --slot hidden-1 \
     [--cases public-test-set.json --brief A]        # optional self-test simulation (practice briefs only)
+
+.venv/bin/python build.py --policy <policy.json[+overlay.json]> --openapi <openapi.json> --slot <name>
+    # no LLM, ~10 s: compiles an existing policy IR and publishes it. For rehearsals and debugging only —
+    # on Sunday the policy must come from the extractor, never be hand-edited after 17:00.
 ```
+
+`--briefs` is required unless `--policy` is given; `--openapi` is always required. A failed build leaves a trace with
+`run_end success:false`, and a credential failure prints a HINT line.
 
 Outputs: `out/<slot>.workflow.json` (exported from Freya after publication), `traces/<slot>.jsonl` (every model call,
 Freya write and test), `out/<slot>.policy.json` (the extracted policy), `out/<slot>.audit.json`.
@@ -121,5 +143,5 @@ policy (`policy.py`) with three bounded model passes; `compile.py` assembles a f
 every bank tool is an engine-fired `api_request` node and all dates, amounts, retries and outcomes are decided in code nodes
 (`bankcal.py` + an embedded runtime); the dialogue model only talks. `tests/offline_sim.py` drives the compiled state machine
 against a mock bank with the 13 public scripts; `scripts/publish_check.py` publishes and smoke-tests a workflow.
-
-Setup from a fresh clone: `uv venv .venv && uv pip install --python .venv/bin/python claude-agent-sdk pytest`, then `cp env.example .env` and fill it in.
+Builder knobs with defaults (set in the environment only to change them): `BUILDER_MODEL` (model for the extraction passes),
+`EXTRACT_PASS_TIMEOUT_S` (seconds per pass).

@@ -1,0 +1,501 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "979969d0-b283-4290-9c91-e3e23ae3750a",
+ "iteration_id": "799b7f94-bc78-435b-baf1-31104ef31f5a",
+ "seconds": 306,
+ "passed": 5,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'refused'), expected ('promise', None)",
+    "promises [], expected [('p1', 420.0, '2026-10-14')]",
+    "conversation: The conversation failed to meet two success criteria: 'create_promise' was not called, and the text-message confirmation sentence was not delivered. Although the agent correctly verified the user's identity before accessing the account (Message 5) and before mentioning the word 'collections' (Message 6), it failed to reach a payment agreement. The agent repeatedly attempted to confirm an incorrect"
+   ],
+   "call_id": "72b97b6b-2bfa-40dd-9a2f-5859532e6131",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_8fd6a302-7d2",
+   "slowest_turn_s": 21.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('not_reached', 'callback')"
+   ],
+   "call_id": "59d357a6-94d1-4c29-840f-3fb9e4caefb0",
+   "tools": [
+    "schedule_callback",
+    "close_call",
+    "close_call"
+   ],
+   "customer_id": "c_6153c96d-d1b",
+   "slowest_turn_s": 15.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": false,
+   "failed": [
+    "outcome ('not_verified', 'declined'), expected ('not_verified', 'failed')",
+    "conversation: The call failed multiple success criteria. First, the assistant disclosed the debt amount (1,200 pounds) and the product (credit card) in messages 6, 14, and 32 before the user's identity was properly verified. Second, the identity check did not end correctly; although the user only provided two incorrect dates of birth (messages 35 and 37), the assistant entered a loop, repeating 'That does not m"
+   ],
+   "call_id": "800246d4-09ce-4894-8a3a-efdd7c388950",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "close_call"
+   ],
+   "customer_id": "c_851adab5-ea9",
+   "slowest_turn_s": 15.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "2e43ac94-59bc-4ac7-aaea-3c3b01fde60e",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_764b52a0-743",
+   "slowest_turn_s": 21.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": true,
+   "failed": [],
+   "call_id": "d949bba1-db55-477c-9e68-bf4b9f4b7a45",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_996ce804-467",
+   "slowest_turn_s": 21.0,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 637.5, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation failed to meet several criteria and the call did not end properly. First, the agent entered an endless loop of goodbye exchanges starting at [Message 16] and continuing through [Message 56], which violates the requirement that the agent should not keep talking once the conversation is over. Second, the minimum payment was offered twice (once in [Message 8] and once in [Message 10]"
+   ],
+   "call_id": "22fb28e7-02ac-4f4e-b4bb-3a6a382bd2d2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account"
+   ],
+   "customer_id": "c_525039bf-ee2",
+   "slowest_turn_s": 21.2,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": true,
+   "failed": [],
+   "call_id": "4792e81c-5d65-4b2b-acf3-a939bf240ed2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_9ba604f7-46c",
+   "slowest_turn_s": 20.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": true,
+   "failed": [],
+   "call_id": "dad12560-ad5c-404a-ae48-f04aa313a76d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_1c9c69e8-018",
+   "slowest_turn_s": 13.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": true,
+   "failed": [],
+   "call_id": "815b7119-b7c2-4408-99c9-2b0aa63bc0b6",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_f88e60c9-43b",
+   "slowest_turn_s": 20.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'service_error'), expected ('promise', None)",
+    "promises [], expected [('p1', 365.0, '2026-10-16')]",
+    "conversation: The promise was not successfully recorded in the ledger. While the agent correctly avoided saying 'recorded', the 'create_promise' API call failed with a 'service unavailable' error after multiple code execution retries. Consequently, there were zero promises in the ledger, failing the requirement of 'exactly one promise'."
+   ],
+   "call_id": "a246df32-6d27-4fb8-8572-1ce3f04031e3",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_e7b4313f-c1d",
+   "slowest_turn_s": 20.8,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'refused'), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "conversation: The conversation failed to meet two success criteria: 'create_promise' was not called, and the text-message confirmation sentence was not delivered. Although the agent correctly verified the user's identity before accessing the account (Message 5) and before mentioning the word 'collections' (Message 6), it failed to reach a payment agreement. The agent repeatedly attempted to confirm an incorrect"
+    ],
+    "call_id": "72b97b6b-2bfa-40dd-9a2f-5859532e6131",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_8fd6a302-7d2",
+    "slowest_turn_s": 21.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_reached', 'callback')"
+    ],
+    "call_id": "59d357a6-94d1-4c29-840f-3fb9e4caefb0",
+    "tools": [
+     "schedule_callback",
+     "close_call",
+     "close_call"
+    ],
+    "customer_id": "c_6153c96d-d1b",
+    "slowest_turn_s": 15.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome ('not_verified', 'declined'), expected ('not_verified', 'failed')",
+     "conversation: The call failed multiple success criteria. First, the assistant disclosed the debt amount (1,200 pounds) and the product (credit card) in messages 6, 14, and 32 before the user's identity was properly verified. Second, the identity check did not end correctly; although the user only provided two incorrect dates of birth (messages 35 and 37), the assistant entered a loop, repeating 'That does not m"
+    ],
+    "call_id": "800246d4-09ce-4894-8a3a-efdd7c388950",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "close_call"
+    ],
+    "customer_id": "c_851adab5-ea9",
+    "slowest_turn_s": 15.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "2e43ac94-59bc-4ac7-aaea-3c3b01fde60e",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_764b52a0-743",
+    "slowest_turn_s": 21.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": true,
+    "failed": [],
+    "call_id": "d949bba1-db55-477c-9e68-bf4b9f4b7a45",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_996ce804-467",
+    "slowest_turn_s": 21.0,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed to meet several criteria and the call did not end properly. First, the agent entered an endless loop of goodbye exchanges starting at [Message 16] and continuing through [Message 56], which violates the requirement that the agent should not keep talking once the conversation is over. Second, the minimum payment was offered twice (once in [Message 8] and once in [Message 10]"
+    ],
+    "call_id": "22fb28e7-02ac-4f4e-b4bb-3a6a382bd2d2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_525039bf-ee2",
+    "slowest_turn_s": 21.2,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": true,
+    "failed": [],
+    "call_id": "4792e81c-5d65-4b2b-acf3-a939bf240ed2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_9ba604f7-46c",
+    "slowest_turn_s": 20.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": true,
+    "failed": [],
+    "call_id": "dad12560-ad5c-404a-ae48-f04aa313a76d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_1c9c69e8-018",
+    "slowest_turn_s": 13.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": true,
+    "failed": [],
+    "call_id": "815b7119-b7c2-4408-99c9-2b0aa63bc0b6",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_f88e60c9-43b",
+    "slowest_turn_s": 20.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'service_error'), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "conversation: The promise was not successfully recorded in the ledger. While the agent correctly avoided saying 'recorded', the 'create_promise' API call failed with a 'service unavailable' error after multiple code execution retries. Consequently, there were zero promises in the ledger, failing the requirement of 'exactly one promise'."
+    ],
+    "call_id": "a246df32-6d27-4fb8-8572-1ce3f04031e3",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_e7b4313f-c1d",
+    "slowest_turn_s": 20.8,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

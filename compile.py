@@ -124,6 +124,16 @@ def on_next(target, value=None):
             "condition": {"logic": "or", "conditions": [{"variable": "next", "operator": "equals", "operand": value or target}]}}
 
 
+def guarded_dispatch(target, flag):
+    """Transition into an engine-fired call only when `next` names it AND the previous result flag was consumed
+    (the code node clears it). If the code node was skipped, the stale flag blocks a repeat call instead of a loop."""
+    return {"target_node": target, "description": f"{target}, previous result consumed",
+            "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [
+                {"variable": "next", "operator": "equals", "operand": target},
+                {"variable": flag, "operator": "not_equals", "operand": "true"},
+                {"variable": flag, "operator": "not_equals", "operand": "True"}]}]}}
+
+
 def on_enum(var, values, target):
     return {"target_node": target, "description": f"{var} decided",
             "condition": {"logic": "or", "conditions": [{"variable": var, "operator": "equals", "operand": x} for x in values]}}
@@ -136,7 +146,7 @@ def code_node(name, code, targets, default=None):
         "on_enter": {"type": "silent"}, "disable_inactivity_monitor": True,
         "pre_actions": [{"type": "function", "function": {"name": "code_exec", "handler": "__function__:code_exec",
                          "parameters": {"type": "object", "properties": {"code": {"type": "string", "default": code},
-                                                                         "timeout_ms": {"type": "number", "default": 15000}}}}}],
+                                                                         "timeout_ms": {"type": "number", "default": 40000}}}}}],
         "transitions": [on_next(t) for t in targets] + [always(default or targets[-1])],
     }
 
@@ -562,6 +572,10 @@ def st_id_route(i):
     r = I['requirements'][i]
     intent = _get('id_intent')
     _clear('id_intent')
+    if intent == 'question':
+        vars['id_say'] = 'These questions protect your account, and I can tell you more once your identity is confirmed. ' + _q(r)
+        _save(S)
+        return _set_next('ask_' + str(i))
     if intent == 'asks_purpose' and not bool(I.get('asking_purpose_counts_as_decline', True)):
         vars['id_say'] = 'I can explain once your identity is confirmed. ' + _q(r)
         _save(S)
@@ -952,12 +966,13 @@ def _special(S, intent):
         if intent == 'already_paid':
             say = POLICY['phrases'].get('already_paid_sentence') or say
         rest = _undecided(S)
-        if multi and rest and not sc.get('ends_call', True) is True or (multi and rest and sc.get('ends_call') is False):
+        if multi and rest:
+            # with several products and notes in the policy, a paid/dispute claim on one product never ends the call
             vars['neg_instruction'] = (say + ' ' if say else '') + 'Do not argue and take no promise for that product. Then continue with the next product.'
             S['awaiting'] = 'next'
             _save(S)
             return _advance_with_prefix(S, vars['neg_instruction'])
-        if multi and (rest or any(q['proposed'] for q in S['products'])):
+        if multi and any(q['proposed'] for q in S['products']):
             # other products already proposed: go to read-back / finalization
             vars['neg_instruction'] = say
             _save(S)
@@ -1137,7 +1152,7 @@ def _proposal(S, amount, date, date_status):
     targets = _targets(S)
     if not targets:
         return _advance(S)
-    multi_all = S.get('phase') == 'all' and len(targets) > 1
+    multi_all = len(targets) > 1
     if date_status == 'none':
         date_status, date = 'ok', (S.get('offer') or dict()).get('date') or S['today']
     if amount is None and S.get('offer') and not multi_all:
@@ -1569,7 +1584,9 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
         f"- If asked something you cannot answer from your instructions: say \"{ph.cannot_answer_sentence or 'I do not have that information.'}\" Never invent figures, dates or reasons.\n"
         "- Never offer a discount, a waiver, an instalment plan or any term that is not in your instructions.\n"
         "- Every amount and date you say comes from your current instruction. Never compute dates yourself.\n"
-        "- Do not describe steps that have not happened. Do not narrate tool calls."
+        "- Do not describe steps that have not happened. Do not narrate tool calls.\n"
+        "- Never state or invent an amount, balance, date, product or account detail that is not in your current instruction; before the "
+        "security check is complete you know nothing about the account. If you have nothing new to say, ask the customer to hold on for a moment."
     )
     extra = [u.get("text", "") for u in ir.unresolved if isinstance(u, dict) and u.get("text")]
     if extra:
@@ -1662,6 +1679,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
         [on_enum("tp_intent", ["gives_time", "wrong_number", "deceased", "cannot_say", "refuses"], "cb_route")],
         max_turns=8, max_turn_target="cb_route")
     nodes["cb_route"] = cn("cb_route", ["schedule_callback", "third_party", "finalize"], default="finalize")
+    nodes["cb_route"]["transitions"][0] = guarded_dispatch("schedule_callback", "cb_ok")
     nodes["schedule_callback"] = api_node("schedule_callback", tools["schedule_callback"],
                                          {"customer_id": "{{customer_id}}", "date": "{{cb_date}}", "time": "{{cb_time}}"},
                                          "cb_after", [{"path": "data." + slots["ok_by_tool"]["schedule_callback"], "variable": "cb_ok"}])
@@ -1687,9 +1705,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
         else:
             schema += [ext("id_text", "string", "The answer the customer gave, verbatim, letters and digits only.")]
         nodes[f"ask_{i}"] = conv_node(f"ask_{i}", prompts.stages["identity"], schema,
-                                      [on_enum("id_intent", ["answers", "declines", "asks_purpose", "wants_human", "refuses_to_talk"], f"id_route_{i}")],
+                                      [on_enum("id_intent", ["answers", "declines", "asks_purpose", "question", "wants_human", "refuses_to_talk"], f"id_route_{i}")],
                                       on_enter={"type": "tts", "text": "{{id_say}}"}, max_turns=10, max_turn_target=f"id_route_{i}")
         nodes[f"id_route_{i}"] = cn(f"id_route_{i}", [f"verify_{i}", f"ask_{i}", "finalize", "transfer"], default=f"ask_{i}")
+        nodes[f"id_route_{i}"]["transitions"][0] = guarded_dispatch(f"verify_{i}", "v_ok")
         nodes[f"verify_{i}"] = api_node(f"verify_{i}", tools["verify_identity"],
                                         {"customer_id": "{{customer_id}}", "field": r.field, "answer": "{{id_answer}}"},
                                         f"verify_after_{i}",
@@ -1733,6 +1752,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
 
     # --- writes, notes, transfer, close -----------------------------------------------------------
     nodes["write_step"] = cn("write_step", ["create_promise", "notes_step", "close_reason", "close_noreason"], default="close_reason")
+    nodes["write_step"]["transitions"][0] = guarded_dispatch("create_promise", "w_ok")
     nodes["write_step"]["on_enter"] = {"type": "tts", "text": "Thank you, one moment please."}   # covers the write chain's wait
     nodes["write_step"]["on_enter_first_entry_only"] = True
     nodes["create_promise"] = api_node("create_promise", tools["create_promise"],
@@ -1742,6 +1762,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
                                  "finalize", [{"path": "data." + slots["ok_by_tool"]["transfer_to_agent"], "variable": "t_ok"}])
     nodes["finalize"] = cn("finalize", ["notes_step", "close_reason", "close_noreason"], default="close_reason")
     nodes["notes_step"] = cn("notes_step", ["add_note", "close_reason", "close_noreason"], default="close_reason")
+    nodes["notes_step"]["transitions"][0] = guarded_dispatch("add_note", "n_ok")
     nodes["add_note"] = api_node("add_note", tools["add_note"], {"customer_id": "{{customer_id}}", "product_id": "{{n_product_id}}", "reason": "{{n_reason}}"},
                                  "notes_step", [{"path": "data." + slots["ok_by_tool"]["add_note"], "variable": "n_ok"}])
     goodbye = {"type": "tts", "text": "{{goodbye_text}}"}
@@ -1765,6 +1786,9 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["create_promise"]["pre_actions"][0]["pre_process_code"] = (
         "try:\n    b = config.get('body') if isinstance(config, dict) else None\n    if isinstance(b, dict) and 'amount' in b:\n        b['amount'] = float(str(b['amount']).replace(',', ''))\nexcept Exception:\n    pass\n")
 
+    for n in nodes.values():
+        if n["node_type"] == "code":
+            n["transitions"] = [guarded_dispatch("transfer", "t_ok") if t.get("target_node") == "transfer" and "conditions" in t["condition"] and "logic" in t["condition"] and t["condition"]["conditions"][0].get("variable") == "next" else t for t in n["transitions"]]
     # second pass: now that every extraction schema is known, embed the "empty" values into the code nodes
     empties = {}
     for n in nodes.values():

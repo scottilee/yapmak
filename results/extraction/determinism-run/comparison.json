@@ -1,0 +1,1553 @@
+{
+  "a": {
+    "runs": [
+      {
+        "slot": "det-a-1",
+        "exit_code": 0,
+        "duration_s": 220.82,
+        "started_epoch": 1791642401.3856127,
+        "briefs": "briefs/brief-a.md",
+        "openapi": "tools/openapi.json"
+      },
+      {
+        "slot": "det-a-2",
+        "exit_code": 0,
+        "duration_s": 291.02,
+        "started_epoch": 1791642622.2106876,
+        "briefs": "briefs/brief-a.md",
+        "openapi": "tools/openapi.json"
+      },
+      {
+        "slot": "det-a-3",
+        "exit_code": 0,
+        "duration_s": 218.82,
+        "started_epoch": 1791642913.2271318,
+        "briefs": "briefs/brief-a.md",
+        "openapi": "tools/openapi.json"
+      }
+    ],
+    "costs": [
+      1.3133013999999998,
+      1.6327044000000002,
+      1.3374268000000002
+    ],
+    "passes": [
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ]
+    ],
+    "effective_differences": [
+      {
+        "field": "identity.requirements[0].ask_text",
+        "values": [
+          "Ask for the customer's date of birth.",
+          "What is your date of birth?",
+          "Ask for the customer's date of birth."
+        ]
+      },
+      {
+        "field": "identity.requirements[0].hint_reply",
+        "values": [
+          "Ask them to say the month as a word.",
+          "Please say the month as a word.",
+          "Ask them to say the month as a word."
+        ]
+      },
+      {
+        "field": "identity.requirements[1].ask_text",
+        "values": [
+          "Ask for the last four digits of the phone number on file.",
+          "What are the last four digits of the phone number on file?",
+          "Ask for the last four digits of the phone number on file."
+        ]
+      },
+      {
+        "field": "special_cases.__order__",
+        "values": [
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "refuse_to_talk_before_verification",
+            "cannot_answer",
+            "change_recorded_promise"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "refuse_to_talk_before_verification",
+            "cannot_answer",
+            "change_recorded_promise"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "cannot_answer",
+            "change_recorded_promise"
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[human].trigger",
+        "values": [
+          "The customer asks to speak to a human (before or after verification).",
+          "The customer asks to speak to a human.",
+          "The customer asks to speak to a human."
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].trigger",
+        "values": [
+          "The customer says twice, after identity is verified, that they do not want to talk.",
+          "After identity is verified, the customer says twice that they do not want to talk.",
+          "The customer says twice that they do not want to talk (before identity is verified this closes as not_verified / declined)."
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].action.outcome",
+        "values": [
+          "not_verified",
+          "not_verified",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].action.reason",
+        "values": [
+          "declined",
+          "declined",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].action.type",
+        "values": [
+          "close",
+          "close",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].ask_once_first",
+        "values": [
+          false,
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].before_persuasion",
+        "values": [
+          false,
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].ends_call",
+        "values": [
+          true,
+          true,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].name",
+        "values": [
+          "refuse_to_talk_before_verification",
+          "refuse_to_talk_before_verification",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].offer_transfer_queue",
+        "values": [
+          "",
+          "",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].say",
+        "values": [
+          "",
+          "",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].takes_promise",
+        "values": [
+          false,
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk_before_verification].trigger",
+        "values": [
+          "The customer says twice, before identity is verified, that they do not want to talk.",
+          "Before identity is verified, the customer says twice that they do not want to talk.",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[robot].trigger",
+        "values": [
+          "The customer asks whether they are talking to a robot or an AI.",
+          "The customer asks whether they are speaking to a robot or an AI.",
+          "The customer asks whether they are speaking to a robot or an AI."
+        ]
+      }
+    ],
+    "raw_only_differences": [
+      {
+        "field": "special_cases[already_paid].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[dispute].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[dispute].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[human].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[human].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[restructuring].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[restructuring].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[robot].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[robot].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[scam].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[scam].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          ""
+        ]
+      }
+    ],
+    "unresolved_topics": [
+      [
+        "calendar.missing_date_parts",
+        "no_ir_field.change_at_confirmation",
+        "no_ir_field.hardship_before_restructuring",
+        "no_ir_field.holder_question_after_customer_question",
+        "no_ir_field.no_invention",
+        "no_ir_field.no_other_terms",
+        "no_ir_field.no_repeat_refused_offer",
+        "no_ir_field.proposal_not_refusal",
+        "no_ir_field.relative",
+        "phrases.all_today_question",
+        "phrases.already_paid_sentence",
+        "phrases.cannot_answer_sentence",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.recorded_promise_change_reply",
+        "phrases.robot_reply",
+        "phrases.scam_reply",
+        "special_cases.hardship.say"
+      ],
+      [
+        "calendar.missing_date_parts",
+        "phrases.all_today_question",
+        "phrases.already_paid_sentence",
+        "phrases.cannot_answer_sentence",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.recorded_promise_change_reply",
+        "phrases.robot_reply",
+        "phrases.scam_reply",
+        "prohibited_offers",
+        "special_cases.hardship.precedence_over_restructuring",
+        "special_cases.hardship.say"
+      ],
+      [
+        "calendar.missing_date_parts",
+        "phrases.already_paid_sentence",
+        "phrases.cannot_answer_sentence",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.recorded_promise_change_reply",
+        "phrases.robot_reply",
+        "phrases.scam_reply",
+        "special_cases priority",
+        "special_cases.hardship.say"
+      ]
+    ]
+  },
+  "ab": {
+    "runs": [
+      {
+        "slot": "det-ab-1",
+        "exit_code": 0,
+        "duration_s": 229.44,
+        "started_epoch": 1791642401.3858464,
+        "briefs": "briefs/brief-a.md,briefs/brief-b.md",
+        "openapi": "tools/openapi.json"
+      },
+      {
+        "slot": "det-ab-2",
+        "exit_code": 0,
+        "duration_s": 232.51,
+        "started_epoch": 1791642630.8308265,
+        "briefs": "briefs/brief-a.md,briefs/brief-b.md",
+        "openapi": "tools/openapi.json"
+      },
+      {
+        "slot": "det-ab-3",
+        "exit_code": 0,
+        "duration_s": 223.45,
+        "started_epoch": 1791642863.3365374,
+        "briefs": "briefs/brief-a.md,briefs/brief-b.md",
+        "openapi": "tools/openapi.json"
+      }
+    ],
+    "costs": [
+      1.3564685,
+      1.3515522,
+      1.2930614
+    ],
+    "passes": [
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ]
+    ],
+    "effective_differences": [
+      {
+        "field": "identity.failed_instruction",
+        "values": [
+          "Please use the mobile app or a branch.",
+          "Tell the customer to use the mobile app or a branch.",
+          "Tell the customer to use the mobile app or a branch."
+        ]
+      },
+      {
+        "field": "identity.requirements[0].ask_text",
+        "values": [
+          "Could you tell me your date of birth?",
+          "Could you tell me your date of birth?",
+          "Could you please tell me your date of birth?"
+        ]
+      },
+      {
+        "field": "identity.requirements[0].hint_reply",
+        "values": [
+          "Could you say the month as a word?",
+          "Ask them to say the month as a word.",
+          "Could you please say the month as a word?"
+        ]
+      },
+      {
+        "field": "identity.requirements[1].ask_text",
+        "values": [
+          "Could you tell me the last four digits of the phone number on file?",
+          "Could you tell me the last four digits of the phone number on file?",
+          "Could you please tell me the last four digits of the phone number we have on file for you?"
+        ]
+      },
+      {
+        "field": "outcomes.table[paid].when",
+        "values": [
+          "rule 39; Brief B: every product noted paid",
+          "rule 39",
+          "rule 39; Brief B: no promise recorded and every product noted paid"
+        ]
+      },
+      {
+        "field": "phrases.all_today_question",
+        "values": [
+          "Can you pay all of them today?",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.already_paid_sentence",
+        "values": [
+          "Payments can take one business day to appear.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.cannot_answer_sentence",
+        "values": [
+          "I do not have that information.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.debt_intro",
+        "values": [
+          "I am calling from the collections team about a late payment.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.opening",
+        "values": [
+          "I am a digital assistant calling from Freya Bank, and this call is recorded.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.recorded_promise_change_reply",
+        "values": [
+          "You can change it in the mobile app.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.robot_reply",
+        "values": [
+          "I am Freya Bank's digital assistant.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "phrases.scam_reply",
+        "values": [
+          "You can verify this call by phoning Freya Bank's customer service number.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases.__order__",
+        "values": [
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "change_promise",
+            "cannot_answer"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "cannot_answer",
+            "change_recorded_promise"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "scam",
+            "robot",
+            "refuse_to_talk",
+            "cannot_answer",
+            "change_recorded_promise"
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].action.outcome",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "paid",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].action.reason",
+        "values": [
+          "paid",
+          "",
+          "paid"
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].action.type",
+        "values": [
+          "note",
+          "close",
+          "note"
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].before_persuasion",
+        "values": [
+          false,
+          false,
+          true
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].ends_call",
+        "values": [
+          false,
+          true,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[already_paid].say",
+        "values": [
+          "Payments can take one business day to appear.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].say",
+        "values": [
+          "I do not have that information.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].action.type",
+        "values": [
+          "continue",
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].ask_once_first",
+        "values": [
+          false,
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].before_persuasion",
+        "values": [
+          false,
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].ends_call",
+        "values": [
+          false,
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].name",
+        "values": [
+          "change_promise",
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].offer_outcome",
+        "values": [
+          [
+            "",
+            ""
+          ],
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].offer_transfer_queue",
+        "values": [
+          "",
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].say",
+        "values": [
+          "You can change it in the mobile app.",
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].takes_promise",
+        "values": [
+          false,
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_promise].trigger",
+        "values": [
+          "The customer asks to change or cancel a promise that was already recorded.",
+          {
+            "__missing__": true
+          },
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].action.type",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "continue",
+          "continue"
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].before_persuasion",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].ends_call",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].name",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "change_recorded_promise",
+          "change_recorded_promise"
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].offer_outcome",
+        "values": [
+          {
+            "__missing__": true
+          },
+          [
+            "",
+            ""
+          ],
+          [
+            "",
+            ""
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].offer_transfer_queue",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].say",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].takes_promise",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].trigger",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "The customer asks to change or cancel a promise that was already recorded in this call.",
+          "The customer asks to change or cancel a promise already recorded in this call."
+        ]
+      },
+      {
+        "field": "special_cases[dispute].action.outcome",
+        "values": [
+          {
+            "__missing__": true
+          },
+          "no_promise",
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[dispute].action.type",
+        "values": [
+          "note",
+          "close",
+          "note"
+        ]
+      },
+      {
+        "field": "special_cases[dispute].before_persuasion",
+        "values": [
+          false,
+          false,
+          true
+        ]
+      },
+      {
+        "field": "special_cases[dispute].ends_call",
+        "values": [
+          false,
+          true,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[dispute].trigger",
+        "values": [
+          "The customer says the debt is not theirs, they never had this product, or the product was closed or paid off in the past.",
+          "The customer says the debt is not theirs, they never had this product, or the product was closed or paid off in the past.",
+          "The customer says the debt is not theirs, that they never had this product, or that the product was closed or paid off in the past."
+        ]
+      },
+      {
+        "field": "special_cases[human].before_persuasion",
+        "values": [
+          false,
+          false,
+          true
+        ]
+      },
+      {
+        "field": "special_cases[human].trigger",
+        "values": [
+          "The customer asks to speak with a human.",
+          "The customer asks to speak to a human.",
+          "The customer asks to speak to a human. Applies before and after verification."
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].ask_once_first",
+        "values": [
+          true,
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].trigger",
+        "values": [
+          "The customer says twice that they do not want to talk.",
+          "The customer says twice that they do not want to talk (before verification this closes as not_verified / declined).",
+          "The customer says twice that they do not want to talk. Before identity is verified this closes as not_verified / declined instead."
+        ]
+      },
+      {
+        "field": "special_cases[restructuring].before_persuasion",
+        "values": [
+          false,
+          false,
+          true
+        ]
+      },
+      {
+        "field": "special_cases[robot].say",
+        "values": [
+          "I am Freya Bank's digital assistant.",
+          "",
+          ""
+        ]
+      },
+      {
+        "field": "special_cases[robot].trigger",
+        "values": [
+          "The customer asks whether they are speaking with a robot or an AI.",
+          "The customer asks whether they are speaking to a robot or an AI.",
+          "The customer asks whether they are talking to a robot or an AI."
+        ]
+      },
+      {
+        "field": "special_cases[scam].say",
+        "values": [
+          "You can verify this call by phoning Freya Bank's customer service number.",
+          "",
+          ""
+        ]
+      }
+    ],
+    "raw_only_differences": [],
+    "unresolved_topics": [
+      [
+        "calendar.missing_date_parts",
+        "identity.ask_text",
+        "identity.failed_instruction",
+        "identity.requirements.hint_reply",
+        "negotiation rules without IR fields",
+        "phrases.all_today_question",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.robot_reply/scam_reply/already_paid_sentence/cannot_answer_sentence/recorded_promise_change_reply",
+        "prohibited offers",
+        "special_cases.hardship precedence over restructuring",
+        "special_cases.hardship/refuse_to_talk in multi-product calls",
+        "special_cases.refuse_to_talk two-strike",
+        "third_party relative restrictions"
+      ],
+      [
+        "calendar.missing_date_parts",
+        "outcomes.transfer_overrides_promise",
+        "phrases.all_today_question",
+        "phrases.already_paid_sentence",
+        "phrases.cannot_answer_sentence",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.recorded_promise_change_reply",
+        "phrases.robot_reply",
+        "phrases.scam_reply",
+        "special_cases.hardship (multi-product)"
+      ],
+      [
+        "calendar.missing_date_parts",
+        "outcomes.transfer_overrides_promise",
+        "phrases.all_today_question",
+        "phrases.already_paid_sentence",
+        "phrases.cannot_answer_sentence",
+        "phrases.debt_intro",
+        "phrases.opening",
+        "phrases.recorded_promise_change_reply",
+        "phrases.robot_reply",
+        "phrases.scam_reply",
+        "special_cases.hardship.ends_call",
+        "special_cases.hardship.say"
+      ]
+    ]
+  },
+  "clean-eom": {
+    "runs": [
+      {
+        "slot": "det-clean-eom-1",
+        "exit_code": 0,
+        "duration_s": 114.4,
+        "started_epoch": 1791642401.3861594,
+        "briefs": "tests/fixtures/synthetic/clean-eom-brief.md",
+        "openapi": "tests/fixtures/synthetic/clean-eom-openapi.json"
+      },
+      {
+        "slot": "det-clean-eom-2",
+        "exit_code": 0,
+        "duration_s": 188.94,
+        "started_epoch": 1791642515.7881021,
+        "briefs": "tests/fixtures/synthetic/clean-eom-brief.md",
+        "openapi": "tests/fixtures/synthetic/clean-eom-openapi.json"
+      },
+      {
+        "slot": "det-clean-eom-3",
+        "exit_code": 0,
+        "duration_s": 132.03,
+        "started_epoch": 1791642704.7245588,
+        "briefs": "tests/fixtures/synthetic/clean-eom-brief.md",
+        "openapi": "tests/fixtures/synthetic/clean-eom-openapi.json"
+      }
+    ],
+    "costs": [
+      0.8581375,
+      1.2231504,
+      0.9018468
+    ],
+    "passes": [
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ],
+      [
+        "policy_extraction",
+        "policy_audit"
+      ]
+    ],
+    "effective_differences": [
+      {
+        "field": "bands[1..45].name",
+        "values": [
+          "1-45",
+          "days_1_45",
+          "1-45"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_arranged].when",
+        "values": [
+          "",
+          "at least one recorded promise and no transfer",
+          "at least one recorded promise and no transfer"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_no_deal].when",
+        "values": [
+          "",
+          "no promise; reason is first non-settled product's note reason in get_account order",
+          "no promise; reason is the first non-settled product's note reason in get_account order"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_settled].when",
+        "values": [
+          "",
+          "all products settled",
+          "no promise and all products settled"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_transferred].when",
+        "values": [
+          "",
+          "call transferred",
+          "call transferred"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_unreached].when",
+        "values": [
+          "",
+          "holder not reached",
+          "holder not reached"
+        ]
+      },
+      {
+        "field": "outcomes.table[lark_unverified].when",
+        "values": [
+          "",
+          "identity check failed or declined",
+          "identity check failed or declined"
+        ]
+      },
+      {
+        "field": "special_cases.__order__",
+        "values": [
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "refuse_to_talk",
+            "robot",
+            "scam",
+            "cannot_answer",
+            "change_recorded_promise"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "refuse_to_talk",
+            "robot",
+            "scam",
+            "change_recorded_promise",
+            "cannot_answer"
+          ],
+          [
+            "already_paid",
+            "dispute",
+            "hardship",
+            "restructuring",
+            "human",
+            "refuse_to_talk",
+            "robot",
+            "scam",
+            "change_recorded_promise",
+            "cannot_answer"
+          ]
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].trigger",
+        "values": [
+          "The customer asks another question the assistant cannot answer.",
+          "The customer asks another question the assistant is unable to answer.",
+          "The customer asks another question the assistant cannot answer."
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].trigger",
+        "values": [
+          "The customer asks to change an already recorded promise.",
+          "The customer asks to change an already recorded promise.",
+          "The customer asks to change a promise that has already been recorded."
+        ]
+      },
+      {
+        "field": "special_cases[dispute].trigger",
+        "values": [
+          "The customer says it is not their debt, they never held the product, or it was closed or paid off earlier.",
+          "The customer says it is not their debt, they never held the product, or it was closed or paid off earlier.",
+          "The customer says the debt is not theirs, they never held the product, or it was closed or paid off earlier."
+        ]
+      },
+      {
+        "field": "special_cases[human].trigger",
+        "values": [
+          "The customer asks to speak to a human / a person.",
+          "The customer asks to speak to a human.",
+          "The customer asks to speak to a human or a person."
+        ]
+      },
+      {
+        "field": "special_cases[refuse_to_talk].trigger",
+        "values": [
+          "The customer refuses to talk / does not want to continue the call.",
+          "The customer refuses to talk or continue the call.",
+          "The customer refuses to talk or continue the call."
+        ]
+      },
+      {
+        "field": "special_cases[restructuring].trigger",
+        "values": [
+          "The customer asks to restructure or reduce instalments.",
+          "The customer asks to restructure or reduce instalments.",
+          "The customer asks to restructure the debt or reduce instalments."
+        ]
+      },
+      {
+        "field": "special_cases[scam].trigger",
+        "values": [
+          "The customer asks whether this call is a scam.",
+          "The customer asks whether the call is a scam.",
+          "The customer asks whether this call is a scam."
+        ]
+      }
+    ],
+    "raw_only_differences": [
+      {
+        "field": "special_cases[already_paid].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[cannot_answer].takes_promise",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].before_persuasion",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[change_recorded_promise].takes_promise",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[dispute].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[hardship].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[restructuring].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          false
+        ]
+      },
+      {
+        "field": "special_cases[robot].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[robot].takes_promise",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[scam].ask_once_first",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      },
+      {
+        "field": "special_cases[scam].takes_promise",
+        "values": [
+          {
+            "__missing__": true
+          },
+          false,
+          {
+            "__missing__": true
+          }
+        ]
+      }
+    ],
+    "unresolved_topics": [
+      [
+        "bands beyond 45 days late"
+      ],
+      [
+        "bands"
+      ],
+      [
+        "bands",
+        "hardship sympathy sentence"
+      ]
+    ]
+  }
+}

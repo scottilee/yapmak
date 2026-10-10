@@ -69,7 +69,7 @@
    "attempts": [
     {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
    ],
-   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V8. Days late 1–15 → latest promise date is the SIXTH business day after today, one persuasion attempt."}
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V8. Days late 1–15 → latest promise date is the SIXTH business day after today, one persuasion attempt. V10. Attempt 1: the full amount (or the floor if the full was already refused) on the last business day of this week — or of next week if today is that day."}
   },
   {
    "name": "16-40",
@@ -111,7 +111,7 @@
    "ask_once_first": false,
    "takes_promise": false,
    "ends_call": true,
-   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-G. \"already paid\" no longer ends the call. Say the V12 sentence about payments appearing, note that facility `already_settled`, take no promise for it, and continue with the other facilities."}
+   "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-G. \"already paid\" no longer ends the call. Say the V12 sentence about payments appearing, note that facility `already_settled`, take no promise for it, and continue with the other facilities. V12: \"Payments may take two working days to appear.\""}
   },
   {
    "name": "dispute",
@@ -141,7 +141,7 @@
   },
   {
    "name": "restructuring",
-   "trigger": "The customer asks to restructure the debt or for a new repayment plan.",
+   "trigger": "The customer asks to restructure the debt.",
    "action": {"type": "transfer", "queue": "restructure", "outcome": "handed_over", "reason": "restructure"},
    "say": "",
    "offer_transfer_queue": "",
@@ -221,11 +221,11 @@
  "outcomes": {
   "table": [
    {"outcome": "arrangement", "reasons": [], "when": "at least one promise recorded"},
-   {"outcome": "settled", "reasons": [], "when": "every delinquent facility noted paid"},
-   {"outcome": "handed_over", "reasons": ["restructure", "person", "support"], "when": "transferred to a queue"},
-   {"outcome": "nothing_recorded", "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"], "when": "no promise recorded"},
-   {"outcome": "unverified", "reasons": ["failed", "declined"], "when": "identity check failed or declined"},
-   {"outcome": "not_on_line", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": "holder not reached"}
+   {"outcome": "settled", "reasons": [], "when": "every delinquent facility noted paid (see M9-G)"},
+   {"outcome": "handed_over", "reasons": ["restructure", "person", "support"], "when": ""},
+   {"outcome": "nothing_recorded", "reasons": ["refusal", "distress", "disputed", "already_settled", "failure"], "when": ""},
+   {"outcome": "unverified", "reasons": ["failed", "declined"], "when": ""},
+   {"outcome": "not_on_line", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": ""}
   ],
   "promise_outcome": "arrangement",
   "paid_outcome": "settled",
@@ -237,7 +237,7 @@
   "service_error_reason": "failure",
   "refused_reason": "refusal",
   "goodbye_before_close": true,
-  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-F. SECTION F — FINAL CLOSE CODES ... A transfer overrides a recorded promise for the close code (handed_over with the transfer's reason); recorded promises stay. Where several facilities end without promises, the nothing_recorded reason is the first facility's note reason in get_account order whose note is not already_settled. M9-I. When one facility's promise write fails and another's succeeds, the close code is arrangement."}
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "M9-F. SECTION F — FINAL CLOSE CODES ... A transfer overrides a recorded promise for the close code (handed_over with the transfer's reason); recorded promises stay. Where several facilities end without promises, the nothing_recorded reason is the first facility's note reason in get_account order whose note is not already_settled. M9-I. When one facility's promise write fails and another's succeeds, the close code is arrangement. V14: Goodbye before it."}
  },
  "notes": {
   "enabled": true,
@@ -254,7 +254,7 @@
   "common_date_clamped_per_product": true,
   "one_confirmation_for_batch": true,
   "recorded_promises_survive_transfer": true,
-  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "since October a customer can have UP TO TWO delinquent facilities on one call. Where Marcus's v2 says \"the facility\", read \"each facility in the order get_account returns them\"; state every delinquent facility before asking anything. V6: ask exactly \"Can you settle everything today?\" once for the batch. V10: Attempts are counted per facility."}
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "since October a customer can have UP TO TWO delinquent facilities on one call. Where Marcus's v2 says \"the facility\", read \"each facility in the order get_account returns them\"; state every delinquent facility before asking anything. V6: ask exactly \"Can you settle everything today?\" once for the batch. V10: Attempts are counted per facility. M9-F: recorded promises stay."}
  },
  "phrases": {
   "opening": "Good morning, this is Cobalt Trust's automated assistant; this call is recorded.",
@@ -271,7 +271,7 @@
   "cannot_answer_sentence": "I don't have that information.",
   "recorded_promise_change_reply": "",
   "product_naming": {"overdraft": "business overdraft", "term_loan": "term loan"},
-  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V2. Opening line exactly: \"Good morning, this is Cobalt Trust's automated assistant; this call is recorded.\" — adjust the greeting word to the time of day — then ask exactly \"Am I speaking with {title} {last_name}?\". Before verification passes, never mention arrears, the amount or what the money is for, to anyone. V6. Name facility types in words: overdraft → \"business overdraft\", term_loan → \"term loan\"."}
+  "source": {"doc": "results/audit/synthetic/cobalt-brief.md", "text": "V2. Opening line exactly: \"Good morning, this is Cobalt Trust's automated assistant; this call is recorded.\" — adjust the greeting word to the time of day — then ask exactly \"Am I speaking with {title} {last_name}?\". Before verification passes, never mention arrears, the amount or what the money is for, to anyone. V6. Name facility types in words: overdraft → \"business overdraft\", term_loan → \"term loan\". V11: After a recorded promise say: \"We'll send written confirmation to your address.\""}
  },
  "promise_write": {
   "retry_on_failure": 0,
@@ -285,9 +285,16 @@
   {"topic": "hardship_declined_reason", "text": "V12 closes a declined hardship offer as no_promise/hardship, but M9-E retires v2 codes and Section F has no 'hardship' reason; mapped to nothing_recorded/distress (the add_note enum value) by inference, not by explicit text.", "doc": "results/audit/synthetic/cobalt-brief.md"},
   {"topic": "hardship_sympathy_sentence", "text": "V12 requires 'one short sympathy sentence' for hardship but does not dictate its wording.", "doc": "results/audit/synthetic/cobalt-brief.md"},
   {"topic": "notes_single_facility", "text": "M9-H replaces V13 ('does not use add_note') only 'with two facilities'; whether add_note is used when the customer has a single facility is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"},
-  {"topic": "asking_purpose_counts_as_decline", "text": "The documents do not say whether asking why the questions are needed counts as a refusal of verification.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "asking_purpose_counts_as_decline", "text": "The documents do not say whether asking why the questions are needed counts as a refusal of verification; left at default.", "doc": "results/audit/synthetic/cobalt-brief.md"},
   {"topic": "identity_hint", "text": "verify_identity returns no hint property; unreadable values are rejected with ok=false and not counted as wrong, but no reply wording is given.", "doc": "results/audit/synthetic/cobalt-openapi.json"},
   {"topic": "failed_instruction", "text": "On identity exhaustion the documents only say 'state nothing about the account'; no instruction to give the customer is dictated.", "doc": "results/audit/synthetic/cobalt-brief.md"},
-  {"topic": "days_late_outside_bands", "text": "Bands cover 1–40 days late only; handling of facilities more than 40 days late is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  {"topic": "days_late_outside_bands", "text": "Bands cover 1–40 days late only; handling of facilities more than 40 days late is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "december_change_d12", "text": "D-12 (five wrong answers instead of three; callbacks today-or-next-business-day) takes effect 1 December 2026 and is NOT applied here. The IR has no effective-date switch, so calls on or after 1 December 2026 would need wrong_answer_limit=5 and callback.days=today_or_next_business_day.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "no_discount_rule", "text": "V10 'Never offer a discount, waiver or new plan.' has no dedicated IR field; it must be enforced in prompt text.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "common_date_clamped_per_product", "text": "The documents do not say how a single date the customer names for several facilities is handled when it is past one facility's deadline; left at default.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "read_back_batch", "text": "V11: 'read each facility with its amount and date and ask exactly \"Shall I put that down?\"; only a clear yes to the final read-back allows create_promise'. It is not explicit whether one confirmation covers both facilities; one_confirmation_for_batch left at default (true).", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "opening_greeting_word", "text": "V2 requires the opening 'exactly' but also says to 'adjust the greeting word to the time of day'; the time-of-day boundaries and alternative greetings are not given.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "promise_write_failure_sentence", "text": "M9-A says to 'say plainly that it could not be recorded for that facility' but dictates no exact wording.", "doc": "results/audit/synthetic/cobalt-brief.md"},
+  {"topic": "close_call_reason_description", "text": "The API's close_call.reason description says reasons are required 'except promise and paid' (retired v2 names); per M9-F, arrangement and settled carry no reason.", "doc": "results/audit/synthetic/cobalt-openapi.json"}
  ]
 }

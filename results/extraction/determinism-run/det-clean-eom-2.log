@@ -1,0 +1,33 @@
+{
+ "bands": [
+  "days_1_45"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "change_recorded_promise",
+  "cannot_answer"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "Only days late 1\u201345 inclusive is defined (\"Days late 1\u201345 inclusive: the latest promise date is the last business day of the current calendar month.\"). The brief gives no deadline or attempts for products with 0 or more than 45 days late.",
+   "doc": "tests/fixtures/synthetic/clean-eom-brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added an unresolved entry (topic 'bands') for days-late values outside 1-45: the brief defines only the 1-45 band and says nothing about 0 or more than 45 days late. All other values were checked against the brief and the OpenAPI enums (verify_identity field, get_account kind, add_note reason, transfer_to_agent queue, close_call outcome/reason) and needed no change."
+ ]
+}

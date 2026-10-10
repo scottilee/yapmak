@@ -1,0 +1,927 @@
+{
+  "id": "fc48dfef-c452-400b-ac82-a2bd33733d97",
+  "externalCallId": null,
+  "sipCallId": null,
+  "workspaceId": "63eff5de-6686-497e-a5f1-5477319934ec",
+  "isArchived": false,
+  "isImported": false,
+  "phoneNumberId": null,
+  "phoneNumber": null,
+  "assistantId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+  "assistantName": "runtime-check 1010-052935",
+  "assistantEntityType": "workflow",
+  "assistantWorkflowId": "6219bb3f-ea81-4c00-98ef-348a12c6a836",
+  "entityVersionId": "53f2fcb9-4510-4f9f-bff7-08aa9f4225cf",
+  "originCallId": null,
+  "entityVersionNumber": 25,
+  "customerNumber": "",
+  "customerLabel": null,
+  "startedAt": "2026-10-10T14:50:41.894Z",
+  "endedAt": null,
+  "duration": null,
+  "status": "180",
+  "type": "webCall",
+  "modality": "text",
+  "channel": null,
+  "endedReason": null,
+  "transcript": null,
+  "messages": [
+    {
+      "role": "user",
+      "message": "Hello.",
+      "messageId": "msg_1_1791643842161",
+      "secondsFromStart": 0.006675004959106445,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 0,
+        "totalTurnCount": 0,
+        "nodeTotalTurnCounts": {},
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145537+00:00"
+          },
+          "probe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145539+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145533+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145540+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145542+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145543+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145545+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145546+00:00"
+          },
+          "neg_instruction": {
+            "value": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145547+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145548+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145549+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145550+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145551+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145552+00:00"
+          },
+          "call.call_id": {
+            "value": "fc48dfef-c452-400b-ac82-a2bd33733d97",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145554+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145555+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:50:41.765905Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145556+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145557+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145558+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145559+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145560+00:00"
+          },
+          "system.uuid4()": {
+            "value": "36417c1ebe46492f84693aa57f85d17c",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145561+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "53f2fcb9-4510-4f9f-bff7-08aa9f4225cf"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:42.213Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"cust_intent\",\"value\":\"other\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Hello.\",\"raw_response\":\"{\\\"extracted\\\": {\\\"cust_intent\\\": \\\"other\\\"}}\",\"variable_table\":{\"probe.current_turns\":{\"value\":1,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.167261+00:00\"},\"probe.total_turns\":{\"value\":1,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.167264+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145533+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145540+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145542+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145543+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145545+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145546+00:00\"},\"neg_instruction\":{\"value\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145547+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145548+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145549+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145550+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145551+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145552+00:00\"},\"call.call_id\":{\"value\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145554+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145555+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:50:41.765905Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145556+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145557+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145558+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145559+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145560+00:00\"},\"system.uuid4()\":{\"value\":\"36417c1ebe46492f84693aa57f85d17c\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145561+00:00\"}}}",
+      "messageId": "msg_2_1791643842510",
+      "secondsFromStart": 0.3304471969604492,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:42.517Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":false,\"from_node\":\"probe\",\"confidence\":0.0,\"reason\":\"Suppressed: Missing prior assistant message\",\"branches\":[],\"total_duration_ms\":615.8,\"variable_table\":{\"probe.current_turns\":1,\"probe.total_turns\":1,\"routed.current_turns\":0,\"routed.total_turns\":0,\"now\":\"2026-10-14T11:00\",\"title\":\"Mr\",\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"neg_instruction\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"readback_text\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"product_list\":\"1: credit card\",\"id_say\":\"Please tell me the last four digits of your phone number.\",\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T14:50:41.765905Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 08:50\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 09:50\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 17:50\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"36417c1ebe46492f84693aa57f85d17c\",\"cust_intent\":\"other\"}}",
+      "messageId": "msg_3_1791643842783",
+      "secondsFromStart": 0.6040372848510742,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:42.793Z"
+    },
+    {
+      "role": "assistant",
+      "message": "Hello. Can you pay four hundred and twenty on Friday the sixteenth of October?",
+      "messageId": "msg_4_1791643843608",
+      "secondsFromStart": 0.6153311729431152,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "probe": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.167261+00:00"
+          },
+          "probe.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.167264+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145533+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145540+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145542+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145543+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145545+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145546+00:00"
+          },
+          "neg_instruction": {
+            "value": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145547+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145548+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145549+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145550+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145551+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145552+00:00"
+          },
+          "call.call_id": {
+            "value": "fc48dfef-c452-400b-ac82-a2bd33733d97",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145554+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145555+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:50:41.765905Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145556+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145557+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145558+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145559+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145560+00:00"
+          },
+          "system.uuid4()": {
+            "value": "36417c1ebe46492f84693aa57f85d17c",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145561+00:00"
+          },
+          "cust_intent": {
+            "value": "other",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Hello.",
+            "extracted_at": "2026-10-10T14:50:42.509905+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "53f2fcb9-4510-4f9f-bff7-08aa9f4225cf"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:43.624Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":1,\"userMessageId\":\"msg_1_1791643842161\",\"finalAssistantMessageId\":\"msg_4_1791643843608\",\"responseText\":\"Hello. Can you pay four hundred and twenty on Friday the sixteenth of October?\"}",
+      "messageId": "msg_5_1791643843616",
+      "secondsFromStart": 1.4366612434387207,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:43.828Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"conversation_resumed\",\"fromMessageId\":\"msg_4_1791643843608\",\"isBranch\":false}",
+      "messageId": "msg_1_1791643847839",
+      "secondsFromStart": 5.689954042434692,
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:47.846Z"
+    },
+    {
+      "role": "user",
+      "message": "Sorry, let me say that clearly: I can pay on the twentieth of October.",
+      "messageId": "msg_2_1791643847852",
+      "secondsFromStart": 5.696675062179565,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "probe": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [
+          "probe"
+        ],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.167261+00:00"
+          },
+          "probe.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.167264+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145533+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145540+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145551+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145552+00:00"
+          },
+          "call.call_id": {
+            "value": "fc48dfef-c452-400b-ac82-a2bd33733d97",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145554+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145555+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:50:47.835553Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835589+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835591+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835592+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835593+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835594+00:00"
+          },
+          "system.uuid4()": {
+            "value": "36417c1ebe46492f84693aa57f85d17c",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145561+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145542+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145543+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145545+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145546+00:00"
+          },
+          "neg_instruction": {
+            "value": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145547+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145548+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145549+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145550+00:00"
+          },
+          "cust_intent": {
+            "value": "other",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Hello.",
+            "extracted_at": "2026-10-10T14:50:42.509905+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "53f2fcb9-4510-4f9f-bff7-08aa9f4225cf"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:48.088Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"prop_day\",\"value\":20,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"raw_response\":\"{\\\"extracted\\\": {\\\"prop_day\\\": 20, \\\"prop_month\\\": 10}}\",\"variable_table\":{\"probe.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856582+00:00\"},\"probe.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856585+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145533+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145540+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145551+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145552+00:00\"},\"call.call_id\":{\"value\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145554+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145555+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:50:47.835553Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835589+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835591+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835592+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835593+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835594+00:00\"},\"system.uuid4()\":{\"value\":\"36417c1ebe46492f84693aa57f85d17c\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145561+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145542+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145543+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145545+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145546+00:00\"},\"neg_instruction\":{\"value\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145547+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145548+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145549+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145550+00:00\"},\"cust_intent\":{\"value\":\"other\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Hello.\",\"extracted_at\":\"2026-10-10T14:50:42.509905+00:00\"}}}",
+      "messageId": "msg_3_1791643848289",
+      "secondsFromStart": 6.140187501907349,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:48.377Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"prop_month\",\"value\":10,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"raw_response\":\"{\\\"extracted\\\": {\\\"prop_day\\\": 20, \\\"prop_month\\\": 10}}\",\"variable_table\":{\"probe.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856582+00:00\"},\"probe.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856585+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145533+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145540+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145551+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145552+00:00\"},\"call.call_id\":{\"value\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145554+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145555+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:50:47.835553Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835589+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835591+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835592+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835593+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835594+00:00\"},\"system.uuid4()\":{\"value\":\"36417c1ebe46492f84693aa57f85d17c\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145561+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145542+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145543+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145545+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145546+00:00\"},\"neg_instruction\":{\"value\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145547+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145548+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145549+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145550+00:00\"},\"cust_intent\":{\"value\":\"other\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Hello.\",\"extracted_at\":\"2026-10-10T14:50:42.509905+00:00\"},\"prop_day\":{\"value\":20,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.289254+00:00\"}}}",
+      "messageId": "msg_4_1791643848291",
+      "secondsFromStart": 6.142374277114868,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:48.550Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"cust_intent\",\"value\":\"proposes\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"raw_response\":\"{\\n  \\\"extracted\\\": {\\n    \\\"cust_intent\\\": \\\"proposes\\\",\\n    \\\"prop_kind\\\": \\\"date\\\"\\n  }\\n}\",\"variable_table\":{\"probe.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856582+00:00\"},\"probe.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856585+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145533+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145540+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145551+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145552+00:00\"},\"call.call_id\":{\"value\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145554+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145555+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:50:47.835553Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835589+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835591+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835592+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835593+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835594+00:00\"},\"system.uuid4()\":{\"value\":\"36417c1ebe46492f84693aa57f85d17c\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145561+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145542+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145543+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145545+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145546+00:00\"},\"neg_instruction\":{\"value\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145547+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145548+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145549+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145550+00:00\"},\"cust_intent\":{\"value\":\"other\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Hello.\",\"extracted_at\":\"2026-10-10T14:50:42.509905+00:00\"},\"prop_day\":{\"value\":20,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.289254+00:00\"},\"prop_month\":{\"value\":10,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.291539+00:00\"}}}",
+      "messageId": "msg_5_1791643848463",
+      "secondsFromStart": 6.314249038696289,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:49.020Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"prop_kind\",\"value\":\"date\",\"confidence\":0.6513548793721767,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"raw_response\":\"{\\n  \\\"extracted\\\": {\\n    \\\"cust_intent\\\": \\\"proposes\\\",\\n    \\\"prop_kind\\\": \\\"date\\\"\\n  }\\n}\",\"variable_table\":{\"probe.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856582+00:00\"},\"probe.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.856585+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145533+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145540+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145551+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145552+00:00\"},\"call.call_id\":{\"value\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145554+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145555+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:50:47.835553Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835589+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835591+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835592+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:50\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835593+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:47.835594+00:00\"},\"system.uuid4()\":{\"value\":\"36417c1ebe46492f84693aa57f85d17c\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145561+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145542+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145543+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145545+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145546+00:00\"},\"neg_instruction\":{\"value\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145547+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145548+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145549+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:50:42.145550+00:00\"},\"cust_intent\":{\"value\":\"proposes\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.463312+00:00\"},\"prop_day\":{\"value\":20,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.289254+00:00\"},\"prop_month\":{\"value\":10,\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Sorry, let me say that clearly: I can pay on the twentieth of October.\",\"extracted_at\":\"2026-10-10T14:50:48.291539+00:00\"}}}",
+      "messageId": "msg_6_1791643848464",
+      "secondsFromStart": 6.314754247665405,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:49.315Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":true,\"from_node\":\"probe\",\"target\":\"routed\",\"confidence\":1.0,\"reason\":\"cust_intent decided (cust_intent == 'accepts' OR cust_intent == 'pays_today' OR cust_intent == 'proposes' OR cust_intent == 'refuses' OR cust_intent == 'too_much' OR cust_intent == 'already_paid' OR cust_intent == 'dispute' OR cust_intent == 'hardship' OR cust_intent == 'restructuring' OR cust_intent == 'human' OR cust_intent == 'refuses_to_talk')\",\"branches\":[{\"target\":\"routed\",\"description\":\"(cust_intent == 'accepts' OR cust_intent == 'pays_today' OR cust_intent == 'proposes' OR cust_intent == 'refuses' OR cust_intent == 'too_much' OR cust_intent == 'already_paid' OR cust_intent == 'dispute' OR cust_intent == 'hardship' OR cust_intent == 'restructuring' OR cust_intent == 'human' OR cust_intent == 'refuses_to_talk')\",\"result\":true,\"condition_results\":{\"logic\":\"or\",\"result\":true,\"conditions\":[{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"accepts\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"pays_today\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"proposes\",\"result\":true},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"refuses\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"too_much\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"already_paid\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"dispute\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"hardship\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"restructuring\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"human\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"cust_intent\",\"operand\":\"refuses_to_talk\",\"result\":false}]}},{\"target\":\"probe\",\"description\":\"always\",\"result\":null,\"condition_results\":null}],\"total_duration_ms\":608.5,\"variable_table\":{\"probe.current_turns\":2,\"probe.total_turns\":2,\"routed.current_turns\":0,\"routed.total_turns\":0,\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"fc48dfef-c452-400b-ac82-a2bd33733d97\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T14:50:47.835553Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 08:50\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 09:50\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 17:50\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"36417c1ebe46492f84693aa57f85d17c\",\"now\":\"2026-10-14T11:00\",\"title\":\"Mr\",\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"neg_instruction\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\",\"readback_text\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"product_list\":\"1: credit card\",\"id_say\":\"Please tell me the last four digits of your phone number.\",\"cust_intent\":\"proposes\",\"prop_day\":20,\"prop_month\":10,\"prop_kind\":\"date\"}}",
+      "messageId": "msg_7_1791643848465",
+      "secondsFromStart": 6.31665563583374,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:49.561Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"node_enter\",\"node\":\"routed\",\"from_node\":\"probe\",\"reason\":\"cust_intent decided (cust_intent == 'accepts' OR cust_intent == 'pays_today' OR cust_intent == 'proposes' OR cust_intent == 'refuses' OR cust_intent == 'too_much' OR cust_intent == 'already_paid' OR cust_intent == 'dispute' OR cust_intent == 'hardship' OR cust_intent == 'restructuring' OR cust_intent == 'human' OR cust_intent == 'refuses_to_talk')\"}",
+      "messageId": "msg_8_1791643848466",
+      "secondsFromStart": 6.317358493804932,
+      "nodeId": "routed",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:49.665Z"
+    },
+    {
+      "role": "assistant",
+      "message": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+      "messageId": "msg_9_1791643848714",
+      "secondsFromStart": 6.328675031661987,
+      "nodeId": "routed",
+      "workflowSnapshot": {
+        "currentNode": "routed",
+        "previousNode": "probe",
+        "nodeTurnCount": 0,
+        "totalTurnCount": 2,
+        "nodeTotalTurnCounts": {
+          "probe": 2
+        },
+        "transitionHistory": [
+          {
+            "from": "probe",
+            "to": "routed",
+            "reason": "cust_intent decided (cust_intent == 'accepts' OR cust_intent == 'pays_today' OR cust_intent == 'proposes' OR cust_intent == 'refuses' OR cust_intent == 'too_much' OR cust_intent == 'already_paid' OR cust_intent == 'dispute' OR cust_intent == 'hardship' OR cust_intent == 'restructuring' OR cust_intent == 'human' OR cust_intent == 'refuses_to_talk')"
+          }
+        ],
+        "enteredNodes": [
+          "probe",
+          "routed"
+        ],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:48.466245+00:00"
+          },
+          "probe.total_turns": {
+            "value": 2,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.856585+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:48.466248+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:48.466250+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145551+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145552+00:00"
+          },
+          "call.call_id": {
+            "value": "fc48dfef-c452-400b-ac82-a2bd33733d97",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145554+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145555+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:50:47.835553Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835589+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835591+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835592+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:50",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835593+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:47.835594+00:00"
+          },
+          "system.uuid4()": {
+            "value": "36417c1ebe46492f84693aa57f85d17c",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145561+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145542+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145543+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145545+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145546+00:00"
+          },
+          "neg_instruction": {
+            "value": "Can you pay four hundred and twenty on Friday the sixteenth of October?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145547+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145548+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145549+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:50:42.145550+00:00"
+          },
+          "cust_intent": {
+            "value": "proposes",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Sorry, let me say that clearly: I can pay on the twentieth of October.",
+            "extracted_at": "2026-10-10T14:50:48.463312+00:00"
+          },
+          "prop_day": {
+            "value": 20,
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Sorry, let me say that clearly: I can pay on the twentieth of October.",
+            "extracted_at": "2026-10-10T14:50:48.289254+00:00"
+          },
+          "prop_month": {
+            "value": 10,
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Sorry, let me say that clearly: I can pay on the twentieth of October.",
+            "extracted_at": "2026-10-10T14:50:48.291539+00:00"
+          },
+          "prop_kind": {
+            "value": "date",
+            "confidence": 0.6513548793721767,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Sorry, let me say that clearly: I can pay on the twentieth of October.",
+            "extracted_at": "2026-10-10T14:50:48.463937+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "53f2fcb9-4510-4f9f-bff7-08aa9f4225cf"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:50.524Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":2,\"userMessageId\":\"msg_2_1791643847852\",\"finalAssistantMessageId\":\"msg_9_1791643848714\",\"responseText\":\"Can you pay four hundred and twenty on Friday the sixteenth of October?\"}",
+      "messageId": "msg_10_1791643848721",
+      "secondsFromStart": 6.572104215621948,
+      "nodeId": "routed",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:50:50.739Z"
+    }
+  ],
+  "summary": null,
+  "cost": 0.006082,
+  "recordingUrl": "https://staging-app.freyavoice.ai/api/v2/call/fc48dfef-c452-400b-ac82-a2bd33733d97/recording",
+  "analysis": {},
+  "tags": [],
+  "createdAt": "2026-10-10T14:50:41.894Z",
+  "updatedAt": "2026-10-10T14:50:54.055Z",
+  "campaign": null,
+  "problems": [],
+  "piiRedactions": []
+}

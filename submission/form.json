@@ -2,7 +2,7 @@
   "team": "<team name>",
   "repo": "<GitHub URL of this repository>",
   "commit": "<git rev-parse HEAD of the commit that contains out/hidden-*.workflow.json and traces/hidden-*.jsonl>",
-  "run_command": "source .env && python3 build.py --briefs <hidden-1 brief file(s)> --openapi <hidden-1 tool API file> --slot hidden-1 ; source .env && python3 build.py --briefs <hidden-2 brief file(s)> --openapi <hidden-2 tool API file> --slot hidden-2",
+  "run_command": "source .env && .venv/bin/python build.py --briefs <hidden-1 brief file(s)> --openapi <hidden-1 tool API file> --slot hidden-1 ; source .env && .venv/bin/python build.py --briefs <hidden-2 brief file(s)> --openapi <hidden-2 tool API file> --slot hidden-2",
   "workflows": {
     "hidden-1": "out/hidden-1.workflow.json",
     "hidden-2": "out/hidden-2.workflow.json"

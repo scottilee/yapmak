@@ -1,7 +1,8 @@
 """Build the builder: one command, brief file(s) + tool API in, a published and exported Freya phone agent out.
 
     source .env   # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus a Claude login or ANTHROPIC_API_KEY for the extractor
-    python3 build.py --briefs briefs/brief-a.md[,briefs/brief-b.md] --openapi tools/openapi.json --slot hidden-1 [--cases public-test-set.json --brief A]
+    .venv/bin/python build.py --briefs briefs/brief-a.md[,briefs/brief-b.md] --openapi tools/openapi.json --slot hidden-1 [--cases public-test-set.json --brief A]
+    .venv/bin/python build.py --policy <policy.json[+overlay.json]> --openapi tools/openapi.json --slot <name>   # no LLM; rehearsal path
 
 Fixed shape (plan §7): extract policy (3 bounded model passes) -> compile -> static check -> dry-run -> publish -> checkpoint export
 -> chat smoke test -> one simulation (when a case file is given) -> final export. Every step is logged to traces/<slot>.jsonl.
@@ -39,9 +40,35 @@ def retry(fn, what, tr, attempts=4, wait_s=20):
     raise last
 
 
+def instrument_freya(tr: Trace):
+    """Every Freya HTTP call that writes (POST/PUT/DELETE) becomes a trace event, so the trace accounts for each create,
+    update, publish, simulation and chat turn — not only the summaries."""
+    real = freya.api
+
+    def api(method, path, body=None, **params):
+        t0 = time.time()
+        try:
+            out = real(method, path, body, **params)
+            if method != "GET":
+                tr.event("freya_call", method=method, path=path, ok=True, duration_ms=int((time.time() - t0) * 1000))
+            return out
+        except Exception as e:
+            tr.event("freya_call", method=method, path=path, ok=False, error=repr(e)[:200], duration_ms=int((time.time() - t0) * 1000))
+            raise
+    freya.api = api
+
+
+def file_sha(path):
+    import hashlib
+    try:
+        return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()[:16]
+    except Exception:
+        return ""
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--briefs", required=True, help="comma-separated brief files, in reading order")
+    ap.add_argument("--briefs", help="comma-separated brief files, in reading order; required unless --policy is given")
     ap.add_argument("--openapi", required=True)
     ap.add_argument("--slot", required=True, help="workflow slot and output name, e.g. hidden-1")
     ap.add_argument("--cases", help="case file for the self-test simulation (public-test-set.json format); omit to skip the simulation")
@@ -50,15 +77,21 @@ def main():
     ap.add_argument("--deadline", type=int, default=1800, help="seconds for the whole build")
     ap.add_argument("--no-smoke", action="store_true")
     a = ap.parse_args()
+    if not a.briefs and not a.policy:
+        ap.error("--briefs is required unless --policy is given")
 
     t_start = time.monotonic()
     left = lambda: a.deadline - (time.monotonic() - t_start)
-    briefs = a.briefs.split(",")
+    briefs = a.briefs.split(",") if a.briefs else []
     out = ROOT / "out"
     out.mkdir(exist_ok=True)
     tr = Trace(ROOT / "traces" / f"{a.slot}.jsonl")
-    tr.event("run_start", slot=a.slot, brief_paths=briefs, openapi_path=a.openapi, commit=git_head(ROOT), deadline_s=a.deadline,
-             builder_model=X.MODEL, agent_model=freya.AGENT_LLM)
+    dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    tr.event("run_start", slot=a.slot, brief_paths=briefs, openapi_path=a.openapi, commit=git_head(ROOT), tree_dirty=bool(dirty),
+             argv=sys.argv, input_sha256_16={p: file_sha(p) for p in briefs + [a.openapi]},
+             code_sha256_16={f: file_sha(ROOT / f) for f in ("build.py", "extract.py", "compile.py", "policy.py", "bankcal.py", "freya.py")},
+             deadline_s=a.deadline, builder_model=X.MODEL, agent_model=freya.AGENT_LLM)
+    instrument_freya(tr)
     export_path = out / f"{a.slot}.workflow.json"
     ids = None
     try:
@@ -91,9 +124,10 @@ def main():
         retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "checkpoint_export", tr)
         tr.event("checkpoint_export", path=str(export_path.relative_to(ROOT)), version=ids.get("version"))
 
-        # 4. smoke test -------------------------------------------------------------------------
+        # 4. pre-bank chat self-test (identity start + third party); never a simulation, never fatal ------------
         if not a.no_smoke:
             smoke(ids, ir, tr)
+            selftest(ids, ir, tr, a.slot)
 
         # 5. one simulation (only with a case file and enough time) ------------------------------
         if a.cases and left() > 13 * 60:
@@ -122,9 +156,31 @@ def main():
         print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:
         tr.event("run_end", success=False, error=repr(e)[:500], elapsed_s=round(time.monotonic() - t_start, 1), exported=export_path.exists())
+        if ids is not None:
+            print("published workflow exists; the failing step was after it:", str(e)[:160], file=sys.stderr)
+        if "API key" in str(e) or "Not logged in" in str(e):
+            print("HINT: the extractor's Claude credentials are dead. Check with:  claude -p \"say OK\"  "
+                  "— if that fails, re-login (claude /login) or export a real ANTHROPIC_API_KEY (sk-ant-…) into .env, then re-run.", file=sys.stderr)
         raise
     finally:
         tr.close()
+
+
+def selftest(ids, ir: P.PolicyIR, tr: Trace, slot: str):
+    """scripts/chat_selftest.py (chat route only, never a simulation): the first security question matches the IR, and a
+    third party hears nothing about the account and is asked when the holder can be reached. `pass` is the strict first
+    attempt; one retry tells flaky (the Freya extractor is stochastic) from broken. Informational: the checkpoint is
+    already exported and the published workflow does not depend on it."""
+    res = ROOT / "results" / f"{slot}.selftest.json"
+    cmd = [sys.executable, str(ROOT / "scripts" / "chat_selftest.py"), "--workflow-id", ids["workflow_id"],
+           "--policy", str(ROOT / "out" / f"{slot}.policy.json"), "--retry-on-fail", "1", "--deadline", "300", "--out", str(res)]
+    t0 = time.time()
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=360)
+        out = json.load(open(res)) if res.exists() else {"ok": None, "stdout": p.stdout[-1500:], "stderr": p.stderr[-800:]}
+        tr.event("selftest", ok=out.get("ok"), result=out, exit_code=p.returncode, duration_ms=int((time.time() - t0) * 1000))
+    except Exception as e:
+        tr.event("selftest", ok=None, error=repr(e)[:300], duration_ms=int((time.time() - t0) * 1000))
 
 
 def smoke(ids, ir: P.PolicyIR, tr: Trace):

@@ -43,3 +43,142 @@ exit meridian 1 2026-10-10T14:22:00Z
    fixed: ["phrases.opening_verbatim: was missing (default false), set to true because section 2 says 'The first sentence is exactly'.", "outcomes.table[].when: the id_failed and no_customer descriptions were made up, so they are now empty. The moved_across description now quotes section 13 instead of an invented phrase.", "source_docs: removed the tool API file. The task lists only the brief as a source document; the API is the separate enum reference.", "phrases.source and amounts.source: added the debt_intro, today_question and below-floor sentences so every phrase value has a quoted origin.", "unres
    unresolved: ["How to read a date without a month or year (calendar.missing_date_parts left as 'unresolved').", "Whether asking why the security questions are needed counts as a refusal (left at default true).", "Which no_promise reason to use when facilities end with different note reasons (left at default: first non-paid note).", "Hardship sympathy sentence: 'one short sentence of sympathy', no verbatim text given.", "Section 11 refuse-to-talk sentence is garbled. Read as no_promise/turned_down after verification and id_failed/would_not_answer before it.", "No band for facilities 0 days or more than 45 d
 --- cobalt
+{
+ "bands": [
+  "1-15",
+  "16-40"
+ ],
+ "identity": [
+  "phone_last4",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "unanswerable"
+ ],
+ "unresolved": [
+  {
+   "topic": "debt_intro",
+   "text": "No mandatory sentence introducing the reason for the call after verification; V6 only says to state the balance and days late per facility.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "recorded_promise_change_reply",
+   "text": "The documents give no reply for a customer who wants to change a recorded promise.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "hardship_declined_reason",
+   "text": "V12 closes a declined hardship offer as no_promise/hardship, but M9-E retires v2 codes and Section F has no 'hardship' reason; mapped to nothing_recorded/distress (the add_note enum value) by inference, not by explicit text.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "hardship_sympathy_sentence",
+   "text": "V12 requires 'one short sympathy sentence' for hardship but does not dictate its wording.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "notes_single_facility",
+   "text": "M9-H replaces V13 ('does not use add_note') only 'with two facilities'; whether add_note is used when the customer has a single facility is not stated.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "asking_purpose_counts_as_decline",
+   "text": "The documents do not say whether asking why the questions are needed counts as a refusal of verification; left at default.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "identity_hint",
+   "text": "verify_identity returns no hint property; unreadable values are rejected with ok=false and not counted as wrong, but no reply wording is given.",
+   "doc": "results/audit/synthetic/cobalt-openapi.json"
+  },
+  {
+   "topic": "failed_instruction",
+   "text": "On identity exhaustion the documents only say 'state nothing about the account'; no instruction to give the customer is dictated.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "days_late_outside_bands",
+   "text": "Bands cover 1\u201340 days late only; handling of facilities more than 40 days late is not stated.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "december_change_d12",
+   "text": "D-12 (five wrong answers instead of three; callbacks today-or-next-business-day) takes effect 1 December 2026 and is NOT applied here. The IR has no effective-date switch, so calls on or after 1 December 2026 would need wrong_answer_limit=5 and callback.days=today_or_next_business_day.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "no_discount_rule",
+   "text": "V10 'Never offer a discount, waiver or new plan.' has no dedicated IR field; it must be enforced in prompt text.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "common_date_clamped_per_product",
+   "text": "The documents do not say how a single date the customer names for several facilities is handled when it is past one facility's deadline; left at default.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "read_back_batch",
+   "text": "V11: 'read each facility with its amount and date and ask exactly \"Shall I put that down?\"; only a clear yes to the final read-back allows create_promise'. It is not explicit whether one confirmation covers both facilities; one_confirmation_for_batch left at default (true).",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "opening_greeting_word",
+   "text": "V2 requires the opening 'exactly' but also says to 'adjust the greeting word to the time of day'; the time-of-day boundaries and alternative greetings are not given.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "promise_write_failure_sentence",
+   "text": "M9-A says to 'say plainly that it could not be recorded for that facility' but dictates no exact wording.",
+   "doc": "results/audit/synthetic/cobalt-brief.md"
+  },
+  {
+   "topic": "close_call_reason_description",
+   "text": "The API's close_call.reason description says reasons are required 'except promise and paid' (retired v2 names); per M9-F, arrangement and settled carry no reason.",
+   "doc": "results/audit/synthetic/cobalt-openapi.json"
+  }
+ ],
+ "audit_fixed": [
+  "outcomes.table: removed invented 'when' text for handed_over, nothing_recorded, unverified, not_on_line (Section F gives none); settled 'when' now quotes Section F literally incl. '(see M9-G)'.",
+  "special_cases[restructuring].trigger: removed 'or for a new repayment plan' \u2014 not in the documents (V10 only forbids offering a new plan).",
+  "Source spans enriched: bands[0] cites V10 attempt 1; already_paid cites the V12 sentence; outcomes cites V14 goodbye; phrases cites V11 after-promise sentence; multi_product cites M9-F 'recorded promises stay'.",
+  "Added unresolved entries: D-12 effective-date switch, V10 no-discount rule without an IR field, common-date clamping, batch read-back ambiguity, opening greeting-word boundaries, M9-A failure sentence wording, stale close_call reason description in the API."
+ ]
+}
+exit cobalt 0 2026-10-10T14:25:41Z
+== out/audit-rev.policy.json vs results/audit/synthetic/cobalt-expected.json: 7 mismatches
+  - bands[0].name: actual='1-15' expected='early'
+  - bands[1].name: actual='16-40' expected='late'
+  - special_cases.already_paid.ends_call: actual=True expected=False
+  - special_cases.dispute.ends_call: actual=True expected=False
+  - special_cases.hardship.ends_call: actual=True expected=False
+  - unresolved: actual=[{'topic': 'debt_intro', 'text': 'No mandatory sentence introducing the reason for the call after verification; V6 only says to state the balance and days late per facility.', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'recorded_promise_change_reply', 'text': 'The documents give no reply for a customer who wants to change a recorded promise.', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'hardship_declined_reason', 'text': "V12 closes a declined hardship offer as no_promise/hardship, but M9-E retires v2 codes and Section F has no 'hardship' reason; mapped to nothing_recorded/distress (the add_note enum value) by inference, not by explicit text.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'hardship_sympathy_sentence', 'text': "V12 requires 'one short sympathy sentence' for hardship but does not dictate its wording.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'notes_single_facility', 'text': "M9-H replaces V13 ('does not use add_note') only 'with two facilities'; whether add_note is used when the customer has a single facility is not stated.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'asking_purpose_counts_as_decline', 'text': 'The documents do not say whether asking why the questions are needed counts as a refusal of verification; left at default.', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'identity_hint', 'text': 'verify_identity returns no hint property; unreadable values are rejected with ok=false and not counted as wrong, but no reply wording is given.', 'doc': 'results/audit/synthetic/cobalt-openapi.json'}, {'topic': 'failed_instruction', 'text': "On identity exhaustion the documents only say 'state nothing about the account'; no instruction to give the customer is dictated.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'days_late_outside_bands', 'text': 'Bands cover 1–40 days late only; handling of facilities more than 40 days late is not stated.', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'december_change_d12', 'text': 'D-12 (five wrong answers instead of three; callbacks today-or-next-business-day) takes effect 1 December 2026 and is NOT applied here. The IR has no effective-date switch, so calls on or after 1 December 2026 would need wrong_answer_limit=5 and callback.days=today_or_next_business_day.', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'no_discount_rule', 'text': "V10 'Never offer a discount, waiver or new plan.' has no dedicated IR field; it must be enforced in prompt text.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'common_date_clamped_per_product', 'text': "The documents do not say how a single date the customer names for several facilities is handled when it is past one facility's deadline; left at default.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'read_back_batch', 'text': 'V11: \'read each facility with its amount and date and ask exactly "Shall I put that down?"; only a clear yes to the final read-back allows create_promise\'. It is not explicit whether one confirmation covers both facilities; one_confirmation_for_batch left at default (true).', 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'opening_greeting_word', 'text': "V2 requires the opening 'exactly' but also says to 'adjust the greeting word to the time of day'; the time-of-day boundaries and alternative greetings are not given.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'promise_write_failure_sentence', 'text': "M9-A says to 'say plainly that it could not be recorded for that facility' but dictates no exact wording.", 'doc': 'results/audit/synthetic/cobalt-brief.md'}, {'topic': 'close_call_reason_description', 'text': "The API's close_call.reason description says reasons are required 'except promise and paid' (retired v2 names); per M9-F, arrangement and settled carry no reason.", 'doc': 'results/audit/synthetic/cobalt-openapi.json'}] expected=[]
+  - source_docs: actual=['results/audit/synthetic/cobalt-brief.md', 'results/audit/synthetic/cobalt-openapi.json'] expected=['results/audit/synthetic/cobalt-brief.md']
+== unresolved entries (16):
+  * {"topic": "debt_intro", "text": "No mandatory sentence introducing the reason for the call after verification; V6 only says to state the balance and days late per facility.", "doc": "results/audit/synthetic/cobalt-brief.
+  * {"topic": "recorded_promise_change_reply", "text": "The documents give no reply for a customer who wants to change a recorded promise.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  * {"topic": "hardship_declined_reason", "text": "V12 closes a declined hardship offer as no_promise/hardship, but M9-E retires v2 codes and Section F has no 'hardship' reason; mapped to nothing_recorded/distress (the add_n
+  * {"topic": "hardship_sympathy_sentence", "text": "V12 requires 'one short sympathy sentence' for hardship but does not dictate its wording.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  * {"topic": "notes_single_facility", "text": "M9-H replaces V13 ('does not use add_note') only 'with two facilities'; whether add_note is used when the customer has a single facility is not stated.", "doc": "results/audit/
+  * {"topic": "asking_purpose_counts_as_decline", "text": "The documents do not say whether asking why the questions are needed counts as a refusal of verification; left at default.", "doc": "results/audit/synthetic/cobalt-b
+  * {"topic": "identity_hint", "text": "verify_identity returns no hint property; unreadable values are rejected with ok=false and not counted as wrong, but no reply wording is given.", "doc": "results/audit/synthetic/cobalt
+  * {"topic": "failed_instruction", "text": "On identity exhaustion the documents only say 'state nothing about the account'; no instruction to give the customer is dictated.", "doc": "results/audit/synthetic/cobalt-brief.md
+  * {"topic": "days_late_outside_bands", "text": "Bands cover 1\u201340 days late only; handling of facilities more than 40 days late is not stated.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  * {"topic": "december_change_d12", "text": "D-12 (five wrong answers instead of three; callbacks today-or-next-business-day) takes effect 1 December 2026 and is NOT applied here. The IR has no effective-date switch, so cal
+  * {"topic": "no_discount_rule", "text": "V10 'Never offer a discount, waiver or new plan.' has no dedicated IR field; it must be enforced in prompt text.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  * {"topic": "common_date_clamped_per_product", "text": "The documents do not say how a single date the customer names for several facilities is handled when it is past one facility's deadline; left at default.", "doc": "re
+  * {"topic": "read_back_batch", "text": "V11: 'read each facility with its amount and date and ask exactly \"Shall I put that down?\"; only a clear yes to the final read-back allows create_promise'. It is not explicit wheth
+  * {"topic": "opening_greeting_word", "text": "V2 requires the opening 'exactly' but also says to 'adjust the greeting word to the time of day'; the time-of-day boundaries and alternative greetings are not given.", "doc": "
+  * {"topic": "promise_write_failure_sentence", "text": "M9-A says to 'say plainly that it could not be recorded for that facility' but dictates no exact wording.", "doc": "results/audit/synthetic/cobalt-brief.md"}
+  * {"topic": "close_call_reason_description", "text": "The API's close_call.reason description says reasons are required 'except promise and paid' (retired v2 names); per M9-F, arrangement and settled carry no reason.", "do
+== audit.json (if present):
+   fixed: ["outcomes.table: removed invented 'when' text for handed_over, nothing_recorded, unverified, not_on_line (Section F gives none); settled 'when' now quotes Section F literally incl. '(see M9-G)'.", "special_cases[restructuring].trigger: removed 'or for a new repayment plan' \u2014 not in the documents (V10 only forbids offering a new plan).", "Source spans enriched: bands[0] cites V10 attempt 1; already_paid cites the V12 sentence; outcomes cites V14 goodbye; phrases cites V11 after-promise sentence; multi_product cites M9-F 'recorded promises stay'.", "Added unresolved entries: D-12 effective
+   unresolved: ["Declined hardship: V12 used no_promise/hardship; Section F has no 'hardship' reason, mapped to nothing_recorded/distress by inference.", "Hardship sympathy sentence wording not dictated.", "Whether add_note is used with a single facility (M9-H only covers two facilities).", "Whether asking why the questions are needed counts as a decline.", "No reply wording for an unreadable identity answer (API rejects with ok=false, not counted).", "No instruction to give the customer after failed identity.", "Facilities more than 40 days late not covered by any band.", "D-12 changes (5 wrong answers, tod
+done 2026-10-10T14:25:41Z

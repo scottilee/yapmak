@@ -1,0 +1,79 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "phrases.opening",
+   "text": "The brief describes the content of the opening (digital assistant calling from Freya Bank, call is recorded) but gives no verbatim sentence and does not require word-for-word wording.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.debt_intro",
+   "text": "The brief says to state that you are calling from the collections team about a late payment, but gives no verbatim sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.robot_reply",
+   "text": "Rule 4 says to say you are Freya Bank's digital assistant; no verbatim sentence is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.scam_reply",
+   "text": "Rule 43 says to say the call can be verified by phoning Freya Bank's customer service number; no verbatim sentence or number is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.already_paid_sentence",
+   "text": "Rule 39 says to say payments can take one business day to appear; no verbatim sentence is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "Rule 44 says to say you do not have that information; no verbatim sentence is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.recorded_promise_change_reply",
+   "text": "Rule 36 says to say they can change it in the mobile app; no verbatim sentence is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "special_cases.hardship.say",
+   "text": "Rule 32 requires one short sentence of sympathy but gives no wording.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "special_cases priority",
+   "text": "Rule 32 says hardship comes before rule 41 (restructuring); the IR has no field for precedence between special cases beyond before_persuasion.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The brief does not say how to resolve a date given without a month or year.",
+   "doc": "briefs/brief-a.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.prohibited_before_verification: replaced the literal \"the product\" with the product names rule 17 gives (\"credit card\", \"personal loan\", \"car loan\"). Rule 1 bans naming the product, and a forbidden-word check cannot match the string \"the product\".",
+  "Source spans widened to quote rules that had no home: rule 15 (second refusal closes), rule 3 (second-ask detail) and rule 16 in identity.source; rules 5 and 10 in third_party.source; the rule 26/27 flat-refusal tails and rule 33 in amounts.source; the rule 20/23 tails and rule 29 in dates.source; rules 34-36 in promise_write.source; rule 31 in outcomes.source; the floor clause of rules 30 and 26 in the band sources.",
+  "Added unresolved entries for the hardship sympathy sentence (no wording given) and for hardship-over-restructuring precedence (rule 32), which the IR cannot express."
+ ]
+}

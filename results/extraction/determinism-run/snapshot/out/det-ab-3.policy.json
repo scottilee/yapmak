@@ -1,0 +1,317 @@
+{
+ "source_docs": ["briefs/brief-a.md", "briefs/brief-b.md"],
+ "bank_name": "Freya Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "date_of_birth",
+    "ask_text": "Could you please tell me your date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "hint",
+    "hint_reply": "Could you please say the month as a word?",
+    "source": {"doc": "briefs/brief-a.md", "text": "Ask two security questions, one at a time: first the date of birth, then the last four digits of the phone number on file. ... Send a date of birth as `YYYY-MM-DD`, whatever way the customer said it. ... Read a date given only as numbers as day, then month, then year. ... If the customer gives day and month the other way round, `verify_identity` returns `hint: \"day_month_swapped\"`. Ask them to say the month as a word. That retry does not count as a wrong answer."}
+   },
+   {
+    "field": "phone_last4",
+    "ask_text": "Could you please tell me the last four digits of the phone number we have on file for you?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {"doc": "briefs/brief-a.md", "text": "then the last four digits of the phone number on file. Call `verify_identity` with the answer."}
+   }
+  ],
+  "wrong_answer_limit": 3,
+  "wrong_count_source": "api",
+  "remaining_slot": "wrong_answers_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": ["not_verified", "failed"],
+  "declined_outcome": ["not_verified", "declined"],
+  "unclear_holder_outcome": ["not_reached", "unclear"],
+  "failed_instruction": "Tell the customer to use the mobile app or a branch.",
+  "source": {"doc": "briefs/brief-a.md", "text": "A wrong answer may be asked again. Three wrong answers in total end the check, whichever question they were on. ... After three wrong answers, do not state the debt. Tell the customer to use the mobile app or a branch. Close as `not_verified` / `failed`. ... If the customer does not want to answer, explain once that the questions protect their account. If they still decline, close as `not_verified` / `declined`. Asking what the call is about instead of answering counts as declining."}
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": ["not_reached", "callback"],
+   "no_callback_outcome": ["not_reached", "no_callback"],
+   "source": {"doc": "briefs/brief-a.md", "text": "A callback is for today or the next business day, from 10:00 to 19:00, both included, and later than `now`. Call `schedule_callback` with the date and the time, then close as `not_reached` / `callback`. If the person offers a day or a time outside that window, ask once for another time. If that is also outside it, do not schedule. Close as `not_reached` / `no_callback`."}
+  },
+  "wrong_number_outcome": ["not_reached", "wrong_number"],
+  "deceased_outcome": ["not_reached", "deceased"],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {"doc": "briefs/brief-a.md", "text": "If the person says the number does not belong to the customer, close as `not_reached` / `wrong_number`. If the person says the customer has died, say \"I am sorry for your loss.\", ask nothing else, and close as `not_reached` / `deceased`."}
+ },
+ "calendar": {
+  "holidays": ["2026-10-26", "2026-11-11", "2026-11-26", "2026-12-25", "2027-01-01"],
+  "business_days": [0, 1, 2, 3, 4],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {"doc": "briefs/brief-a.md", "text": "Business days are Monday to Friday, except Freya Bank holidays: 2026-10-26, 2026-11-11, 2026-11-26, 2026-12-25, 2027-01-01. ... \"Next <weekday>\" means that weekday in the following calendar week. \"This <weekday>\" means the one in the current week. So \"next Friday\" said on a Friday is the Friday of the following week."}
+ },
+ "bands": [
+  {
+   "name": "early",
+   "days_late_min": 1,
+   "days_late_max": 7,
+   "deadline": {"kind": "nth_business_day", "n": 12},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true}
+   ],
+   "source": {"doc": "briefs/brief-a.md", "text": "| 1 to 7 | early | the 12th business day after today | 1 | ... Attempt 1: propose the last business day of this week. If today is that day, propose the last business day of next week."}
+  },
+  {
+   "name": "late",
+   "days_late_min": 8,
+   "days_late_max": 45,
+   "deadline": {"kind": "nth_business_day", "n": 7},
+   "attempts": [
+    {"amount": "full", "date": "last_business_day_this_week_or_next", "floor_if_full_refused": true},
+    {"amount": "floor", "date": "deadline", "floor_if_full_refused": false}
+   ],
+   "source": {"doc": "briefs/brief-a.md", "text": "| 8 to 45 | late | the 7th business day after today | 2 | ... Attempt 2, late band only: propose the floor amount on the deadline."}
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "credit_card": "minimum_payment",
+   "personal_loan": "instalment_amount",
+   "car_loan": "instalment_amount"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest stays overdue",
+  "accept_between_floor_and_full": true,
+  "source": {"doc": "briefs/brief-a.md", "text": "Ask for the full past-due amount first. Never ask \"how much can you pay?\". ... The **floor** is `minimum_payment` for a credit card and `instalment_amount` for a personal loan or a car loan. If the customer says the full amount is too much, offer the floor, once. Say that the rest stays overdue. ... If the customer proposes an amount from the floor up to the full amount, both included, accept it."}
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {"doc": "briefs/brief-a.md", "text": "A promise date must be today or later, a business day, and not after the deadline. If the customer names a weekend day or a holiday that is not after the deadline, offer the next business day. ... If the customer gives a vague period ... ask once for the exact day. If they still give none, propose the deadline. ... If the customer asks for a date after the deadline, say the latest date you can record is the deadline and offer it."}
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they already paid this past-due amount.",
+   "action": {"type": "note", "reason": "paid"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-b.md", "text": "Brief A rule 39: \"I already paid\": say that payments can take one business day to appear, take no promise, and close as `paid`. Brief B rule 9: A dispute or an \"already paid\" claim on one product does not end the call. Note it and continue with the others."}
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, that they never had this product, or that the product was closed or paid off in the past.",
+   "action": {"type": "note", "reason": "dispute"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-b.md", "text": "Brief A rule 40: \"This debt is not mine\" or \"I never had this product\": do not argue and do not take a promise. Close as `no_promise` / `dispute`. A claim that the product was closed or paid off in the past is a dispute. Brief B rule 9: A dispute or an \"already paid\" claim on one product does not end the call. Note it and continue with the others."}
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, a death in the family or job loss.",
+   "action": {"type": "close", "outcome": "no_promise", "reason": "hardship"},
+   "say": "",
+   "offer_transfer_queue": "support",
+   "offer_outcome": ["transferred", "support"],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {"doc": "briefs/brief-a.md", "text": "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and make no persuasion attempt. Offer to connect them with the customer support team. If they accept, call `transfer_to_agent` with queue `support` and close as `transferred` / `support`. If they decline, close as `no_promise` / `hardship`. This rule comes before rules 30 and 41. If the customer still names a date or an amount themselves, record the promise under sections 7 and 8."}
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a new payment plan or lower instalments.",
+   "action": {"type": "transfer", "queue": "restructuring", "outcome": "transferred", "reason": "restructuring"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "briefs/brief-b.md", "text": "Brief A rule 41: do not describe a plan. Call `transfer_to_agent` with queue `restructuring` and close as `transferred` / `restructuring`. Brief B rule 10: A restructuring request still transfers the call. Promises recorded before the request stay. Promises agreed but not yet recorded are not recorded. Close as `transferred` / `restructuring`. On any transfer (restructuring, support, human) add no notes at all, before or after it."}
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human. Applies before and after verification.",
+   "action": {"type": "transfer", "queue": "general", "outcome": "transferred", "reason": "human"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "briefs/brief-a.md", "text": "A request for a human: ask once whether you can help first. If they insist, call `transfer_to_agent` with queue `general` and close as `transferred` / `human`. ... Rule 42 applies before and after verification."}
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {"type": "continue"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-a.md", "text": "\"Is this a scam?\": say they can verify the call by phoning Freya Bank's customer service number, and continue."}
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot or an AI.",
+   "action": {"type": "continue"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-a.md", "text": "If the customer asks whether you are a robot or an AI, say that you are Freya Bank's digital assistant and continue."}
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer says twice that they do not want to talk. Before identity is verified this closes as not_verified / declined instead.",
+   "action": {"type": "close", "outcome": "no_promise", "reason": "refused"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {"doc": "briefs/brief-a.md", "text": "If the customer says twice that they do not want to talk, close as `no_promise` / `refused`. Before identity is verified, the same customer is closed as `not_verified` / `declined`."}
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks a question that cannot be answered from the tools.",
+   "action": {"type": "continue"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-a.md", "text": "A question you cannot answer from the tools: say you do not have that information. Do not invent figures, dates or reasons."}
+  },
+  {
+   "name": "change_recorded_promise",
+   "trigger": "The customer asks to change or cancel a promise already recorded in this call.",
+   "action": {"type": "continue"},
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": ["", ""],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {"doc": "briefs/brief-a.md", "text": "One promise per product. A recorded promise cannot be changed or cancelled in the same call. If the customer asks, say they can change it in the mobile app."}
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {"outcome": "promise", "reasons": [], "when": "at least one promise was recorded"},
+   {"outcome": "paid", "reasons": [], "when": "rule 39; Brief B: no promise recorded and every product noted paid"},
+   {"outcome": "transferred", "reasons": ["restructuring", "human", "support"], "when": "rules 41, 42, 32"},
+   {"outcome": "no_promise", "reasons": ["refused", "hardship", "dispute", "service_error"], "when": "rules 31 and 45, 32, 40, 37"},
+   {"outcome": "not_verified", "reasons": ["failed", "declined"], "when": "rules 14, 15"},
+   {"outcome": "not_reached", "reasons": ["callback", "no_callback", "wrong_number", "deceased", "unclear"], "when": "rules 6, 7, 8, 9, 3"}
+  ],
+  "promise_outcome": "promise",
+  "paid_outcome": "paid",
+  "transfer_outcome": "transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_promise",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "service_error",
+  "refused_reason": "refused",
+  "goodbye_before_close": true,
+  "source": {"doc": "briefs/brief-b.md", "text": "The outcome table of Brief A applies. With no promise recorded: if every product is noted `paid`, close as `paid`. Otherwise close as `no_promise` with the reason of the first product, in `get_account` order, whose note is not `paid`. With several products, `promise` wins whenever at least one promise was recorded, except rule 10 above. (Brief A: If a transfer follows a recorded promise, close as `transferred` with that transfer's reason. Thank the customer and say goodbye before `close_call`.)"}
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": ["refused", "hardship", "dispute", "paid", "service_error"],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {"doc": "briefs/brief-b.md", "text": "For each product without a promise call `add_note` with that `product_id` and a reason: `refused`, `hardship`, `dispute`, `paid` or `service_error`. This also applies when no product gets a promise. ... On any transfer (restructuring, support, human) add no notes at all, before or after it."}
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {"doc": "briefs/brief-b.md", "text": "`get_account` returns one to three products. ... State every late product, one sentence each, before asking for anything. ... First ask whether the customer can pay all of them today. If not, go through the products one by one ... Persuasion attempts are counted per product. If the customer names one date for everything and it is after one product's deadline, record that product on its own deadline ... Read all promises back together and ask for one confirmation. ... Promises recorded before the request stay."}
+ },
+ "phrases": {
+  "opening": "",
+  "opening_verbatim": false,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "",
+  "today_question": "Can you make this payment today?",
+  "all_today_question": "",
+  "robot_reply": "",
+  "scam_reply": "",
+  "prohibited_before_verification": ["collections", "debt", "payment", "credit card", "personal loan", "car loan"],
+  "after_promise_sentence": "You will receive a text message confirming this promise.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "",
+  "recorded_promise_change_reply": "",
+  "product_naming": {
+   "credit_card": "credit card ending {card_last4}",
+   "personal_loan": "personal loan",
+   "car_loan": "car loan"
+  },
+  "source": {"doc": "briefs/brief-a.md", "text": "Do not say \"collections\", \"debt\", \"payment\" or the product before identity is verified. ... Ask \"Am I speaking with {title} {last_name}?\". ... Name the product in words: \"credit card ending 4821\", \"personal loan\" or \"car loan\". ... First ask: \"Can you make this payment today?\". ... \"You will receive a text message confirming this promise.\""}
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you confirm?",
+  "source": {"doc": "briefs/brief-a.md", "text": "Read the product, the amount and the date back and ask \"Do you confirm?\". ... Say the promise is recorded only after `create_promise` returns `ok: true`. If it fails, try once more. If it fails again, say you could not record it and close as `no_promise` / `service_error`. (Brief B rule 11: If one `create_promise` fails twice, keep the promises that were recorded and call `add_note` with reason `service_error` for the failed product.)"}
+ },
+ "unresolved": [
+  {"topic": "phrases.opening", "text": "The opening sentence is described (digital assistant calling from Freya Bank, call is recorded) but no exact wording is given and it is not required word for word.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.debt_intro", "text": "The debt introduction is described (calling from the collections team about a late payment) but no exact sentence is given.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.all_today_question", "text": "Brief B says to first ask whether the customer can pay all of them today, but gives no exact sentence.", "doc": "briefs/brief-b.md"},
+  {"topic": "phrases.robot_reply", "text": "Only described: say that you are Freya Bank's digital assistant and continue. No exact sentence.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.scam_reply", "text": "Only described: say they can verify the call by phoning Freya Bank's customer service number. No exact sentence and no number given.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.already_paid_sentence", "text": "Only described: say that payments can take one business day to appear. No exact sentence.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.cannot_answer_sentence", "text": "Only described: say you do not have that information. No exact sentence.", "doc": "briefs/brief-a.md"},
+  {"topic": "phrases.recorded_promise_change_reply", "text": "Only described: say they can change it in the mobile app. No exact sentence.", "doc": "briefs/brief-a.md"},
+  {"topic": "special_cases.hardship.say", "text": "Hardship requires one short sentence of sympathy, but the wording is not given.", "doc": "briefs/brief-a.md"},
+  {"topic": "calendar.missing_date_parts", "text": "The documents do not say how to resolve a promise date given without a month or year (e.g. 'the 5th').", "doc": "briefs/brief-a.md"},
+  {"topic": "outcomes.transfer_overrides_promise", "text": "Brief A: 'If a transfer follows a recorded promise, close as `transferred` with that transfer's reason.' Brief B: 'With several products, `promise` wins whenever at least one promise was recorded, except rule 10 above' (rule 10 = restructuring). The documents do not settle whether a human (general) or hardship (support) transfer after a recorded promise with several products closes as `transferred` or `promise`. Kept true (Brief A rule; also correct for restructuring and for one product).", "doc": "briefs/brief-b.md"},
+  {"topic": "special_cases.hardship.ends_call", "text": "Brief B lists `hardship` as an add_note reason and says only disputes and 'already paid' claims on one product do not end the call. It does not say whether a declined hardship transfer ends the call for all products (noting each unpromised product `hardship`) or only notes the product being discussed and continues with the others. Kept Brief A behaviour (close as `no_promise` / `hardship`).", "doc": "briefs/brief-b.md"}
+ ]
+}

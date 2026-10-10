@@ -1,0 +1,655 @@
+{
+  "negotiate": {
+    "name": "negotiate",
+    "node_type": "conversation",
+    "task_message": "The customer is verified and you are arranging a payment. Follow your current instruction exactly; every amount and date comes from it. Never ask the customer for an amount in any form (not \"how much can you pay\", not \"what is the lowest you could pay\"): you propose every amount, from your instruction. If the customer proposes a date or an amount, acknowledge it briefly; the system checks it and your next instruction tells you what to say. Say the sentence that the rest of the amount stays overdue at most once in the whole call; if you have said it, do not repeat it even if the instruction mentions it. Name the lowest amount at most once in the whole call; if the customer asks what it is after you named it, say it is the amount you just proposed and ask again whether they can pay it. If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. If they ask for a payment plan or lower instalments, say you will connect them with a colleague; do not describe any plan.\nCURRENT INSTRUCTION: {{neg_instruction}}",
+    "on_enter": {
+      "type": "llm"
+    },
+    "on_enter_first_entry_only": false,
+    "extraction_schema": [
+      {
+        "name": "cust_intent",
+        "type": "string",
+        "description": "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. proposes = names their own date and/or amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'). refuses = says no / cannot pay / nothing, without naming a date or amount. too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. hardship = mentions illness, a death in the family or losing their job. restructuring = asks for a payment plan, lower instalments or restructuring. human = asks for a human agent. scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "accepts",
+          "pays_today",
+          "proposes",
+          "refuses",
+          "too_much",
+          "already_paid",
+          "dispute",
+          "hardship",
+          "restructuring",
+          "human",
+          "scam",
+          "refuses_to_talk",
+          "question",
+          "other",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_amount",
+        "type": "float",
+        "description": "An amount of money the customer named for a payment, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_kind",
+        "type": "string",
+        "description": "How the payment date the customer named was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "today",
+          "tomorrow",
+          "weekday",
+          "date",
+          "vague",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_weekday",
+        "type": "string",
+        "description": "The weekday name if a weekday was said. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_relative",
+        "type": "string",
+        "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "this",
+          "next",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_day",
+        "type": "integer",
+        "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_month",
+        "type": "integer",
+        "description": "The month as a number (1-12) if the customer named a month, else leave empty. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_year",
+        "type": "integer",
+        "description": "The year as a 4-digit number only if the customer said one. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      }
+    ],
+    "tools": [],
+    "max_node_turns": 40,
+    "transitions": [
+      {
+        "target_node": "neg_route",
+        "description": "cust_intent decided",
+        "condition": {
+          "logic": "or",
+          "conditions": [
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "accepts"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "pays_today"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "proposes"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "refuses"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "too_much"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "already_paid"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "dispute"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "hardship"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "restructuring"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "human"
+            },
+            {
+              "variable": "cust_intent",
+              "operator": "equals",
+              "operand": "refuses_to_talk"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "negotiate",
+        "description": "always",
+        "condition": {
+          "operator": "always"
+        }
+      }
+    ],
+    "max_turn_transition": "neg_route"
+  },
+  "opening": {
+    "name": "opening",
+    "node_type": "conversation",
+    "task_message": "You have said the opening line and asked whether you are speaking with {{title}} {{last_name}}. Your only job is to find out who is on the line. Do NOT mention collections, debt, payment, credit card, loan or any account to anyone in this step; if asked why you are calling, say you can only discuss it with {{title}} {{last_name}} personally.\nOnly \"yes\", \"that's me\", \"speaking\" or the customer's own name counts as confirmation. \"Hello\", \"go ahead\" and \"who is this\" do not: answer any question first, then ask once more \"Am I speaking with {{title}} {{last_name}}?\".\nIf another person answers, say nothing about the reason for the call and do not ask them security questions.\n{{neg_instruction}}",
+    "on_enter": {
+      "type": "tts",
+      "text": "Hello, this is the digital assistant of Freya Bank. We record this call. Am I speaking with {{title}} {{last_name}}?"
+    },
+    "on_enter_first_entry_only": true,
+    "extraction_schema": [
+      {
+        "name": "holder",
+        "type": "string",
+        "description": "Who is on the line, from the LAST message. confirmed ONLY if the person answered yes, that's me, speaking, or said the customer's own name {{first_name}} {{last_name}}. third_party if they said they are someone else (husband, wife, relative, friend, colleague) or that the customer is not available. wrong_number if they said the number does not belong to the customer. deceased if they said the customer has died. wants_human if they ask for a human agent. refuses if they say they do not want to talk. question if they asked something without confirming (who is this, is this a robot, is this a scam, what is this about). unclear for hello, go ahead, or anything else.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "confirmed",
+          "third_party",
+          "wrong_number",
+          "deceased",
+          "wants_human",
+          "refuses",
+          "question",
+          "unclear",
+          "none"
+        ]
+      }
+    ],
+    "tools": [],
+    "max_node_turns": 8,
+    "transitions": [
+      {
+        "target_node": "opening_route",
+        "description": "holder decided",
+        "condition": {
+          "logic": "or",
+          "conditions": [
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "confirmed"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "third_party"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "wrong_number"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "deceased"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "wants_human"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "refuses"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "question"
+            },
+            {
+              "variable": "holder",
+              "operator": "equals",
+              "operand": "unclear"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "opening",
+        "description": "always",
+        "condition": {
+          "operator": "always"
+        }
+      }
+    ],
+    "max_turn_transition": "opening_route"
+  },
+  "third_party": {
+    "name": "third_party",
+    "node_type": "conversation",
+    "task_message": "Another person answered. Do not say why you are calling and give no account information, even if they ask or offer to pay. Ask when {{title}} {{last_name}} can be reached: which day and what time. Do not propose or compute dates yourself; just collect what they say. If they say the number is wrong or that the customer has died, do not ask anything else.\n{{neg_instruction}}",
+    "on_enter": {
+      "type": "llm"
+    },
+    "on_enter_first_entry_only": false,
+    "extraction_schema": [
+      {
+        "name": "tp_intent",
+        "type": "string",
+        "description": "What the person said in the LAST message: gives_time if they named a day and/or a time for reaching the customer; wrong_number; deceased if the customer has died; cannot_say if they cannot say when; refuses if they do not want to help; asks_purpose if they ask what the call is about; other.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "gives_time",
+          "wrong_number",
+          "deceased",
+          "cannot_say",
+          "refuses",
+          "asks_purpose",
+          "other",
+          "none"
+        ]
+      },
+      {
+        "name": "cb_kind",
+        "type": "string",
+        "description": "How the day the customer can be reached was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "today",
+          "tomorrow",
+          "weekday",
+          "date",
+          "vague",
+          "none"
+        ]
+      },
+      {
+        "name": "cb_weekday",
+        "type": "string",
+        "description": "The weekday name if a weekday was said. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+          "none"
+        ]
+      },
+      {
+        "name": "cb_relative",
+        "type": "string",
+        "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "this",
+          "next",
+          "none"
+        ]
+      },
+      {
+        "name": "cb_day",
+        "type": "integer",
+        "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "cb_month",
+        "type": "integer",
+        "description": "The month as a number (1-12) if the customer named a month, else leave empty. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "cb_year",
+        "type": "integer",
+        "description": "The year as a 4-digit number only if the customer said one. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "cb_time",
+        "type": "string",
+        "description": "The clock time they gave, as HH:MM in 24-hour form (e.g. 'around eleven in the morning' -> 11:00, 'three in the afternoon' -> 15:00, 'after six' -> 18:00). Empty if they gave only a part of the day ('morning', 'afternoon') or no time at all; never guess an hour. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "validation_pattern": "^$|^([01]\\d|2[0-3]):[0-5]\\d$"
+      }
+    ],
+    "tools": [],
+    "max_node_turns": 8,
+    "transitions": [
+      {
+        "target_node": "cb_route",
+        "description": "tp_intent decided",
+        "condition": {
+          "logic": "or",
+          "conditions": [
+            {
+              "variable": "tp_intent",
+              "operator": "equals",
+              "operand": "gives_time"
+            },
+            {
+              "variable": "tp_intent",
+              "operator": "equals",
+              "operand": "wrong_number"
+            },
+            {
+              "variable": "tp_intent",
+              "operator": "equals",
+              "operand": "deceased"
+            },
+            {
+              "variable": "tp_intent",
+              "operator": "equals",
+              "operand": "cannot_say"
+            },
+            {
+              "variable": "tp_intent",
+              "operator": "equals",
+              "operand": "refuses"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "third_party",
+        "description": "always",
+        "condition": {
+          "operator": "always"
+        }
+      }
+    ],
+    "max_turn_transition": "cb_route"
+  },
+  "identity": {
+    "name": "ask_1",
+    "node_type": "conversation",
+    "task_message": "You are running the security check for {{title}} {{last_name}}. Do NOT mention collections, debt, payment, credit card, loan or any account information yet. The question to ask now is in your opening line; if the customer gives only part of the answer, ask for the rest. If they ask why you need it, say these questions protect their account and ask again. Ask one question at a time; never move to another question yourself.",
+    "on_enter": {
+      "type": "tts",
+      "text": "{{id_say}}"
+    },
+    "on_enter_first_entry_only": false,
+    "extraction_schema": [
+      {
+        "name": "id_intent",
+        "type": "string",
+        "description": "What the customer did in the LAST message: answers if they gave the security answer or part of it; declines if they say they will not answer; asks_purpose if they refuse to answer until told what the call is about; question if they ask something back before answering (why do you need that, which account is this about, is this a robot, is this a scam); wants_human if they ask for a person; refuses_to_talk if they say they do not want to talk; other.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "answers",
+          "declines",
+          "asks_purpose",
+          "question",
+          "wants_human",
+          "refuses_to_talk",
+          "other",
+          "none"
+        ]
+      },
+      {
+        "name": "id_digits",
+        "type": "string",
+        "description": "The digits the customer gave in the LAST message, digits only, in order (e.g. 'one five' -> 15, 'zero two' -> 02). If they gave all 4 digits, all of them. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "validation_pattern": "^$|^[0-9]{1,4}$"
+      }
+    ],
+    "tools": [],
+    "max_node_turns": 10,
+    "transitions": [
+      {
+        "target_node": "id_route_1",
+        "description": "id_intent decided",
+        "condition": {
+          "logic": "or",
+          "conditions": [
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "answers"
+            },
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "declines"
+            },
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "asks_purpose"
+            },
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "question"
+            },
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "wants_human"
+            },
+            {
+              "variable": "id_intent",
+              "operator": "equals",
+              "operand": "refuses_to_talk"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "ask_1",
+        "description": "always",
+        "condition": {
+          "operator": "always"
+        }
+      }
+    ],
+    "max_turn_transition": "id_route_1"
+  },
+  "readback": {
+    "name": "readback",
+    "node_type": "conversation",
+    "task_message": "You have read the promise back and asked for confirmation. Wait for a clear yes. If the customer changes the amount or the date, acknowledge it briefly; the system checks it and you will read it back again. Do not say anything is recorded.",
+    "on_enter": {
+      "type": "tts",
+      "text": "{{readback_text}}"
+    },
+    "on_enter_first_entry_only": false,
+    "extraction_schema": [
+      {
+        "name": "rb_intent",
+        "type": "string",
+        "description": "The customer's answer to the read-back in the LAST message: confirms (yes, correct, I confirm), changes (they give a different amount or date), declines (no, without a new value), already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, other.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "confirms",
+          "changes",
+          "declines",
+          "already_paid",
+          "dispute",
+          "hardship",
+          "restructuring",
+          "human",
+          "refuses_to_talk",
+          "question",
+          "other",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_amount",
+        "type": "float",
+        "description": "A new amount the customer named, as a number. Empty if none. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_kind",
+        "type": "string",
+        "description": "How a new payment date the customer named was expressed. today / tomorrow / weekday (a day name, with or without 'this' or 'next') / date (a day of the month, with or without a month) / vague (a period without an exact day: next week, end of the month, when my salary comes, the week after next, in a few days) / none if no day was mentioned. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "today",
+          "tomorrow",
+          "weekday",
+          "date",
+          "vague",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_weekday",
+        "type": "string",
+        "description": "The weekday name if a weekday was said. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_relative",
+        "type": "string",
+        "description": "'next' if the customer said 'next <weekday>', otherwise 'this' (also for a bare weekday name).",
+        "min_confidence": 0.5,
+        "enum_values": [
+          "this",
+          "next",
+          "none"
+        ]
+      },
+      {
+        "name": "prop_day",
+        "type": "integer",
+        "description": "The day of the month as a number (1-31) if a date was said, for example 26 for 'Monday the 26th' or 'the twenty-sixth'. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_month",
+        "type": "integer",
+        "description": "The month as a number (1-12) if the customer named a month, else leave empty. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      },
+      {
+        "name": "prop_year",
+        "type": "integer",
+        "description": "The year as a 4-digit number only if the customer said one. If the customer corrects themselves ('the 21st, sorry, the 20th'; '600, I mean 637.50'), use the corrected value only.",
+        "min_confidence": 0.5
+      }
+    ],
+    "tools": [],
+    "max_node_turns": 6,
+    "transitions": [
+      {
+        "target_node": "readback_route",
+        "description": "rb_intent decided",
+        "condition": {
+          "logic": "or",
+          "conditions": [
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "confirms"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "changes"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "declines"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "already_paid"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "dispute"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "hardship"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "restructuring"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "human"
+            },
+            {
+              "variable": "rb_intent",
+              "operator": "equals",
+              "operand": "refuses_to_talk"
+            }
+          ]
+        }
+      },
+      {
+        "target_node": "readback",
+        "description": "always",
+        "condition": {
+          "operator": "always"
+        }
+      }
+    ],
+    "max_turn_transition": "readback_route"
+  }
+}

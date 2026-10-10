@@ -1,0 +1,88 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "date_of_birth",
+  "phone_last4"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "phrases.opening",
+   "text": "The opening sentence is described (digital assistant calling from Freya Bank, call is recorded) but no exact wording is given and it is not required word for word.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.debt_intro",
+   "text": "The debt introduction is described (calling from the collections team about a late payment) but no exact sentence is given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.all_today_question",
+   "text": "Brief B says to first ask whether the customer can pay all of them today, but gives no exact sentence.",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "phrases.robot_reply",
+   "text": "Only described: say that you are Freya Bank's digital assistant and continue. No exact sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.scam_reply",
+   "text": "Only described: say they can verify the call by phoning Freya Bank's customer service number. No exact sentence and no number given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.already_paid_sentence",
+   "text": "Only described: say that payments can take one business day to appear. No exact sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "Only described: say you do not have that information. No exact sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "phrases.recorded_promise_change_reply",
+   "text": "Only described: say they can change it in the mobile app. No exact sentence.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "special_cases.hardship.say",
+   "text": "Hardship requires one short sentence of sympathy, but the wording is not given.",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The documents do not say how to resolve a promise date given without a month or year (e.g. 'the 5th').",
+   "doc": "briefs/brief-a.md"
+  },
+  {
+   "topic": "outcomes.transfer_overrides_promise",
+   "text": "Brief A: 'If a transfer follows a recorded promise, close as `transferred` with that transfer's reason.' Brief B: 'With several products, `promise` wins whenever at least one promise was recorded, except rule 10 above' (rule 10 = restructuring). The documents do not settle whether a human (general) or hardship (support) transfer after a recorded promise with several products closes as `transferred` or `promise`. Kept true (Brief A rule; also correct for restructuring and for one product).",
+   "doc": "briefs/brief-b.md"
+  },
+  {
+   "topic": "special_cases.hardship.ends_call",
+   "text": "Brief B lists `hardship` as an add_note reason and says only disputes and 'already paid' claims on one product do not end the call. It does not say whether a declined hardship transfer ends the call for all products (noting each unpromised product `hardship`) or only notes the product being discussed and continues with the others. Kept Brief A behaviour (close as `no_promise` / `hardship`).",
+   "doc": "briefs/brief-b.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added unresolved entry for outcomes.transfer_overrides_promise: Brief A says a transfer after a recorded promise closes as transferred, while Brief B says that with several products promise wins except rule 10 (restructuring). The documents do not settle human/support transfers after a promise when there are several products. Kept true.",
+  "Added unresolved entry for special_cases.hardship.ends_call: Brief B does not say whether a declined hardship offer ends the call for every product or only notes that product as hardship and continues. Kept Brief A behaviour."
+ ]
+}

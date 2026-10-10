@@ -1,0 +1,172 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "22b43239-1e1b-4dbd-a496-f33a87435baf",
+ "iteration_id": "7efa164c-878e-42eb-b2b4-b37e4147e85c",
+ "seconds": 245,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "7bb8dc0f-fba5-4f7d-86ce-a193ef18203c",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_669361eb-194",
+   "slowest_turn_s": 21.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "7fdc42f0-20ab-468e-8bb8-85ab1cf3daaa",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_29f38155-abd",
+   "slowest_turn_s": 18.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-16')], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+    "notes [('p1', 'service_error')], expected []",
+    "conversation: The call failed to meet several success criteria: - Credit card promise: While the agent confirmed it in [Message 22] and the API technically recorded it (according to system events), the agent told the customer in [Message 26] that it could not be recorded due to a technical problem. This makes the record unreliable for the customer. - Loan date: The success criteria required the loan to be recor"
+   ],
+   "call_id": "b71d3f60-28b0-4434-98b1-9536a460ff0d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_16ebb6d5-d0c",
+   "slowest_turn_s": 23.6,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "7bb8dc0f-fba5-4f7d-86ce-a193ef18203c",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_669361eb-194",
+    "slowest_turn_s": 21.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "7fdc42f0-20ab-468e-8bb8-85ab1cf3daaa",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_29f38155-abd",
+    "slowest_turn_s": 18.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-16')], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]",
+     "notes [('p1', 'service_error')], expected []",
+     "conversation: The call failed to meet several success criteria: - Credit card promise: While the agent confirmed it in [Message 22] and the API technically recorded it (according to system events), the agent told the customer in [Message 26] that it could not be recorded due to a technical problem. This makes the record unreliable for the customer. - Loan date: The success criteria required the loan to be recor"
+    ],
+    "call_id": "b71d3f60-28b0-4434-98b1-9536a460ff0d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_16ebb6d5-d0c",
+    "slowest_turn_s": 23.6,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}
