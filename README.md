@@ -112,6 +112,7 @@ git clone <repo> && cd <repo>
 uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt     # verified path (needs uv)
 # fallback where uv is unavailable and the system has python3-venv:
 #   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+npm install -g @anthropic-ai/claude-code   # the `claude` CLI; the extractor drives it through claude-agent-sdk
 cp env.example .env        # then fill in your real keys (the file is gitignored)
 source .env
 claude -p "say OK"         # credential pre-flight: the extractor runs on Claude Code.
@@ -128,17 +129,20 @@ source .env                       # FREYA_API_KEY, FREYA_BANK_TEAM_KEY; plus the
     [--cases public-test-set.json --brief A]        # optional self-test simulation (practice briefs only)
 
 .venv/bin/python build.py --policy <policy.json[+overlay.json]> --openapi <openapi.json> --slot <name>
-    # no LLM, ~10 s: compiles an existing policy IR and publishes it. For rehearsals and debugging only —
-    # on Sunday the policy must come from the extractor, never be hand-edited after 17:00.
+    # no extraction model: compiles an existing policy IR, publishes it and runs the same platform checks as a full
+    # build (one chat smoke turn + the two pre-bank chat self-test scenarios, ~20 s in total). Rehearsals and
+    # debugging only — on Sunday the policy must come from the extractor, never be hand-edited after 17:00.
 ```
 
 `--briefs` is required unless `--policy` is given; `--openapi` is always required. A failed build leaves a trace with
 `run_end success:false`, and a credential failure prints a HINT line.
 
 Outputs: `out/<slot>.workflow.json` (exported from Freya after publication), `traces/<slot>.jsonl` (every model call,
-Freya write and test), `out/<slot>.policy.json` (the extracted policy), `out/<slot>.audit.json`.
+Freya write and test of this run; an earlier trace for the same slot is archived as `traces/<slot>.<time>.jsonl`),
+`out/<slot>.policy.json` (the policy used), `out/<slot>.audit.json` (only when the extractor ran),
+`results/<slot>.selftest.json` (the pre-bank chat self-test). Reusing a slot updates the same Freya workflow in place.
 
-How it works (see `freya-agent-builder-implementation-plan.md`): `extract.py` turns the documents into a small structural
+How it works: `extract.py` turns the documents into a small structural
 policy (`policy.py`) with three bounded model passes; `compile.py` assembles a fixed multi-product workflow template in which
 every bank tool is an engine-fired `api_request` node and all dates, amounts, retries and outcomes are decided in code nodes
 (`bankcal.py` + an embedded runtime); the dialogue model only talks. `tests/offline_sim.py` drives the compiled state machine

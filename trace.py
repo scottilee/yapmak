@@ -16,11 +16,17 @@ def git_head(root: pathlib.Path) -> str:
 
 
 class Trace:
+    """One file per run. A previous trace for the same slot is archived next to it (`<slot>.<time>.jsonl`), so the
+    submitted `traces/<slot>.jsonl` always holds exactly the run that produced `out/<slot>.workflow.json`."""
+
     def __init__(self, path: pathlib.Path):
         self.path = pathlib.Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        if self.path.exists() and self.path.stat().st_size:
+            stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime(self.path.stat().st_mtime))
+            self.path.rename(self.path.with_name(f"{self.path.stem}.{stamp}{self.path.suffix}"))
         self.t0 = time.monotonic()
-        self.f = self.path.open("a", encoding="utf-8")
+        self.f = self.path.open("w", encoding="utf-8")
 
     def event(self, name: str, **fields):
         rec = {"event": name, "time": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "elapsed_s": round(time.monotonic() - self.t0, 1)}

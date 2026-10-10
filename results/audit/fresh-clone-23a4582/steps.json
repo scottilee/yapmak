@@ -1,0 +1,89 @@
+[
+  {
+    "step": "clone",
+    "command": [
+      "git",
+      "clone",
+      "--no-hardlinks",
+      "/Users/sl/sbx/hackathon",
+      "/tmp/freya-fresh-clone-dntc3a08/repo"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.168
+  },
+  {
+    "step": "venv",
+    "command": [
+      "uv",
+      "venv",
+      ".venv"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.066
+  },
+  {
+    "step": "dependencies",
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      ".venv/bin/python",
+      "-r",
+      "requirements.txt"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 2.555
+  },
+  {
+    "step": "claude-preflight",
+    "command": [
+      "bash",
+      "-c",
+      "source .env\nclaude -p \"say OK\""
+    ],
+    "exit_code": 0,
+    "elapsed_s": 2.51
+  },
+  {
+    "step": "offline-tests",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 1.028
+  },
+  {
+    "step": "policy-build",
+    "command": [
+      "bash",
+      "-c",
+      "source .env\n.venv/bin/python -u build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot rehearsal-a"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 21.823
+  },
+  {
+    "step": "full-build",
+    "command": [
+      "bash",
+      "-c",
+      "source .env\n.venv/bin/python -u build.py --briefs briefs/brief-a.md,briefs/brief-b.md --openapi tools/openapi.json --slot rehearsal-ab"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 248.822
+  },
+  {
+    "step": "final-status",
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exit_code": 0,
+    "elapsed_s": 0.004
+  }
+]

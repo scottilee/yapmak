@@ -1,0 +1,20 @@
+start B-in_words 2026-10-10T15:16:32Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 2 s. Failed calls where the customer hung up: 0.
+
+3 / 3 passed (bank records and conversation checks). Last simulation 1d993e98-fb44-4fc3-9463-96a4364c43c7, status completed, 55 s.
+exit B-in_words 0 2026-10-10T15:17:46Z
+start B-corrects 2026-10-10T15:17:46Z
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - promises [('p1', 510.0, '2026-10-16')], expected [('p1', 510.0, '2026-10-15')]
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 4 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation 14b286af-9744-4e3a-8b3e-36bcf8f18034, status completed, 54 s.
+exit B-corrects 0 2026-10-10T15:18:46Z
+start B-talkative 2026-10-10T15:18:46Z

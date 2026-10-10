@@ -1,0 +1,876 @@
+{
+  "id": "e6d6ee77-e98b-47f3-b46c-65567a044c13",
+  "externalCallId": null,
+  "sipCallId": null,
+  "workspaceId": "63eff5de-6686-497e-a5f1-5477319934ec",
+  "isArchived": false,
+  "isImported": false,
+  "phoneNumberId": null,
+  "phoneNumber": null,
+  "assistantId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+  "assistantName": "runtime-check 1010-052935",
+  "assistantEntityType": "workflow",
+  "assistantWorkflowId": "6219bb3f-ea81-4c00-98ef-348a12c6a836",
+  "entityVersionId": "14d975fb-2106-4d9c-9a87-04bb50ac5a69",
+  "originCallId": null,
+  "entityVersionNumber": 27,
+  "customerNumber": "",
+  "customerLabel": null,
+  "startedAt": "2026-10-10T14:59:11.621Z",
+  "endedAt": null,
+  "duration": null,
+  "status": "180",
+  "type": "webCall",
+  "modality": "text",
+  "channel": null,
+  "endedReason": null,
+  "transcript": null,
+  "messages": [
+    {
+      "role": "user",
+      "message": "Hello.",
+      "messageId": "msg_1_1791644351789",
+      "secondsFromStart": 0.00857686996459961,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 0,
+        "totalTurnCount": 0,
+        "nodeTotalTurnCounts": {},
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768025+00:00"
+          },
+          "probe.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768027+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768021+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768028+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768031+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768032+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768034+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768035+00:00"
+          },
+          "neg_instruction": {
+            "value": "Am I speaking with Alex Morgan?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768036+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768038+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768039+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768040+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768042+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768043+00:00"
+          },
+          "call.call_id": {
+            "value": "e6d6ee77-e98b-47f3-b46c-65567a044c13",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768044+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768045+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:59:11.589520Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768047+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768048+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768049+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768050+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768052+00:00"
+          },
+          "system.uuid4()": {
+            "value": "e3c124c089e74fc7aeaa398dad5a0486",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768053+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "14d975fb-2106-4d9c-9a87-04bb50ac5a69"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:11.837Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"holder\",\"value\":\"unclear\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Hello.\",\"raw_response\":\"{\\\"extracted\\\": {\\\"holder\\\": \\\"unclear\\\"}}\",\"variable_table\":{\"probe.current_turns\":{\"value\":1,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.797041+00:00\"},\"probe.total_turns\":{\"value\":1,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.797045+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768021+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768028+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768031+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768032+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768034+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768035+00:00\"},\"neg_instruction\":{\"value\":\"Am I speaking with Alex Morgan?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768036+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768038+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768039+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768040+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768042+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768043+00:00\"},\"call.call_id\":{\"value\":\"e6d6ee77-e98b-47f3-b46c-65567a044c13\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768044+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768045+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:59:11.589520Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768047+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768048+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768049+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768050+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768052+00:00\"},\"system.uuid4()\":{\"value\":\"e3c124c089e74fc7aeaa398dad5a0486\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768053+00:00\"}}}",
+      "messageId": "msg_2_1791644352142",
+      "secondsFromStart": 0.33002233505249023,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:12.176Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":false,\"from_node\":\"probe\",\"confidence\":0.0,\"reason\":\"Suppressed: Missing prior assistant message\",\"branches\":[],\"total_duration_ms\":347.6,\"variable_table\":{\"probe.current_turns\":1,\"probe.total_turns\":1,\"routed.current_turns\":0,\"routed.total_turns\":0,\"now\":\"2026-10-14T11:00\",\"title\":\"Mr\",\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"neg_instruction\":\"Am I speaking with Alex Morgan?\",\"readback_text\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"product_list\":\"1: credit card\",\"id_say\":\"Please tell me the last four digits of your phone number.\",\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"e6d6ee77-e98b-47f3-b46c-65567a044c13\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T14:59:11.589520Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 08:59\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 09:59\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 17:59\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"e3c124c089e74fc7aeaa398dad5a0486\",\"holder\":\"unclear\"}}",
+      "messageId": "msg_3_1791644352145",
+      "secondsFromStart": 0.33324408531188965,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:12.296Z"
+    },
+    {
+      "role": "assistant",
+      "message": "Hello. Am I speaking with Alex Morgan?",
+      "messageId": "msg_4_1791644352349",
+      "secondsFromStart": 0.35557103157043457,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "probe": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.797041+00:00"
+          },
+          "probe.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.797045+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768021+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768028+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768031+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768032+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768034+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768035+00:00"
+          },
+          "neg_instruction": {
+            "value": "Am I speaking with Alex Morgan?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768036+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768038+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768039+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768040+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768042+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768043+00:00"
+          },
+          "call.call_id": {
+            "value": "e6d6ee77-e98b-47f3-b46c-65567a044c13",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768044+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768045+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:59:11.589520Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768047+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768048+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768049+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768050+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768052+00:00"
+          },
+          "system.uuid4()": {
+            "value": "e3c124c089e74fc7aeaa398dad5a0486",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768053+00:00"
+          },
+          "holder": {
+            "value": "unclear",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Hello.",
+            "extracted_at": "2026-10-10T14:59:12.142108+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "14d975fb-2106-4d9c-9a87-04bb50ac5a69"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:12.371Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":1,\"userMessageId\":\"msg_1_1791644351789\",\"finalAssistantMessageId\":\"msg_4_1791644352349\",\"responseText\":\"Hello. Am I speaking with Alex Morgan?\"}",
+      "messageId": "msg_5_1791644352360",
+      "secondsFromStart": 0.5476281642913818,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:12.587Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"conversation_resumed\",\"fromMessageId\":\"msg_4_1791644352349\",\"isBranch\":false}",
+      "messageId": "msg_1_1791644355566",
+      "secondsFromStart": 3.7945241928100586,
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:15.571Z"
+    },
+    {
+      "role": "user",
+      "message": "Can you hear me clearly? Who is this?",
+      "messageId": "msg_2_1791644355580",
+      "secondsFromStart": 3.801576852798462,
+      "nodeId": "probe",
+      "workflowSnapshot": {
+        "currentNode": "probe",
+        "previousNode": null,
+        "nodeTurnCount": 1,
+        "totalTurnCount": 1,
+        "nodeTotalTurnCounts": {
+          "probe": 1
+        },
+        "transitionHistory": [],
+        "enteredNodes": [
+          "probe"
+        ],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.797041+00:00"
+          },
+          "probe.total_turns": {
+            "value": 1,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.797045+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768021+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768028+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768042+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768043+00:00"
+          },
+          "call.call_id": {
+            "value": "e6d6ee77-e98b-47f3-b46c-65567a044c13",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768044+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768045+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:59:15.563274Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563310+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563311+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563312+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563313+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563314+00:00"
+          },
+          "system.uuid4()": {
+            "value": "e3c124c089e74fc7aeaa398dad5a0486",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768053+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768031+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768032+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768034+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768035+00:00"
+          },
+          "neg_instruction": {
+            "value": "Am I speaking with Alex Morgan?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768036+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768038+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768039+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768040+00:00"
+          },
+          "holder": {
+            "value": "unclear",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Hello.",
+            "extracted_at": "2026-10-10T14:59:12.142108+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "14d975fb-2106-4d9c-9a87-04bb50ac5a69"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:15.610Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"variable_extracted\",\"name\":\"holder\",\"value\":\"question\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"input_text\":\"Can you hear me clearly? Who is this?\",\"raw_response\":\"{\\\"extracted\\\": {\\\"holder\\\": \\\"question\\\"}}\",\"variable_table\":{\"probe.current_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.584763+00:00\"},\"probe.total_turns\":{\"value\":2,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.584766+00:00\"},\"routed.current_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768021+00:00\"},\"routed.total_turns\":{\"value\":0,\"confidence\":1.0,\"source\":\"system\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768028+00:00\"},\"call.customer_phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768042+00:00\"},\"call.phone_number\":{\"value\":\"\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768043+00:00\"},\"call.call_id\":{\"value\":\"e6d6ee77-e98b-47f3-b46c-65567a044c13\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768044+00:00\"},\"call.direction\":{\"value\":\"web\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768045+00:00\"},\"system.iso_utc_now\":{\"value\":\"2026-10-10T14:59:15.563274Z\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.563310+00:00\"},\"system.todays_date_en_cst\":{\"value\":\"10 October 2026 Saturday 08:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.563311+00:00\"},\"system.todays_date_en_est\":{\"value\":\"10 October 2026 Saturday 09:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.563312+00:00\"},\"system.todays_date_tr\":{\"value\":\"10 Ekim 2026 Cumartesi 17:59\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.563313+00:00\"},\"system.todays_date_tr.iso_8601\":{\"value\":\"2026-10-10\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:15.563314+00:00\"},\"system.uuid4()\":{\"value\":\"e3c124c089e74fc7aeaa398dad5a0486\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768053+00:00\"},\"now\":{\"value\":\"2026-10-14T11:00\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768031+00:00\"},\"title\":{\"value\":\"Mr\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768032+00:00\"},\"first_name\":{\"value\":\"Alex\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768034+00:00\"},\"last_name\":{\"value\":\"Morgan\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768035+00:00\"},\"neg_instruction\":{\"value\":\"Am I speaking with Alex Morgan?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768036+00:00\"},\"readback_text\":{\"value\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768038+00:00\"},\"product_list\":{\"value\":\"1: credit card\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768039+00:00\"},\"id_say\":{\"value\":\"Please tell me the last four digits of your phone number.\",\"confidence\":1.0,\"source\":\"customer\",\"source_node\":null,\"extracted_at\":\"2026-10-10T14:59:11.768040+00:00\"},\"holder\":{\"value\":\"unclear\",\"confidence\":1.0,\"source\":\"extraction\",\"source_node\":\"probe\",\"raw_text\":\"Hello.\",\"extracted_at\":\"2026-10-10T14:59:12.142108+00:00\"}}}",
+      "messageId": "msg_3_1791644355841",
+      "secondsFromStart": 4.069227933883667,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:15.845Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"route_evaluated\",\"matched\":true,\"from_node\":\"probe\",\"target\":\"routed\",\"confidence\":1.0,\"reason\":\"holder decided (holder == 'confirmed' OR holder == 'third_party' OR holder == 'wrong_number' OR holder == 'deceased' OR holder == 'wants_human' OR holder == 'refuses' OR holder == 'question' OR holder == 'unclear')\",\"branches\":[{\"target\":\"routed\",\"description\":\"(holder == 'confirmed' OR holder == 'third_party' OR holder == 'wrong_number' OR holder == 'deceased' OR holder == 'wants_human' OR holder == 'refuses' OR holder == 'question' OR holder == 'unclear')\",\"result\":true,\"condition_results\":{\"logic\":\"or\",\"result\":true,\"conditions\":[{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"confirmed\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"third_party\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"wrong_number\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"deceased\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"wants_human\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"refuses\",\"result\":false},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"question\",\"result\":true},{\"operator\":\"equals\",\"variable\":\"holder\",\"operand\":\"unclear\",\"result\":false}]}},{\"target\":\"probe\",\"description\":\"always\",\"result\":null,\"condition_results\":null}],\"total_duration_ms\":258.6,\"variable_table\":{\"probe.current_turns\":2,\"probe.total_turns\":2,\"routed.current_turns\":0,\"routed.total_turns\":0,\"call.customer_phone_number\":\"\",\"call.phone_number\":\"\",\"call.call_id\":\"e6d6ee77-e98b-47f3-b46c-65567a044c13\",\"call.direction\":\"web\",\"system.iso_utc_now\":\"2026-10-10T14:59:15.563274Z\",\"system.todays_date_en_cst\":\"10 October 2026 Saturday 08:59\",\"system.todays_date_en_est\":\"10 October 2026 Saturday 09:59\",\"system.todays_date_tr\":\"10 Ekim 2026 Cumartesi 17:59\",\"system.todays_date_tr.iso_8601\":\"2026-10-10\",\"system.uuid4()\":\"e3c124c089e74fc7aeaa398dad5a0486\",\"now\":\"2026-10-14T11:00\",\"title\":\"Mr\",\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"neg_instruction\":\"Am I speaking with Alex Morgan?\",\"readback_text\":\"For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?\",\"product_list\":\"1: credit card\",\"id_say\":\"Please tell me the last four digits of your phone number.\",\"holder\":\"question\"}}",
+      "messageId": "msg_4_1791644355844",
+      "secondsFromStart": 4.071755647659302,
+      "nodeId": "probe",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:15.947Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"node_enter\",\"node\":\"routed\",\"from_node\":\"probe\",\"reason\":\"holder decided (holder == 'confirmed' OR holder == 'third_party' OR holder == 'wrong_number' OR holder == 'deceased' OR holder == 'wants_human' OR holder == 'refuses' OR holder == 'question' OR holder == 'unclear')\"}",
+      "messageId": "msg_5_1791644355844",
+      "secondsFromStart": 4.072431802749634,
+      "nodeId": "routed",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:16.009Z"
+    },
+    {
+      "role": "assistant",
+      "message": "Yes, I can. I am a bank telephone assistant. Am I speaking with Alex Morgan?",
+      "messageId": "msg_6_1791644356116",
+      "secondsFromStart": 4.0845770835876465,
+      "nodeId": "routed",
+      "workflowSnapshot": {
+        "currentNode": "routed",
+        "previousNode": "probe",
+        "nodeTurnCount": 0,
+        "totalTurnCount": 2,
+        "nodeTotalTurnCounts": {
+          "probe": 2
+        },
+        "transitionHistory": [
+          {
+            "from": "probe",
+            "to": "routed",
+            "reason": "holder decided (holder == 'confirmed' OR holder == 'third_party' OR holder == 'wrong_number' OR holder == 'deceased' OR holder == 'wants_human' OR holder == 'refuses' OR holder == 'question' OR holder == 'unclear')"
+          }
+        ],
+        "enteredNodes": [
+          "probe",
+          "routed"
+        ],
+        "variableTable": {
+          "probe.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.844458+00:00"
+          },
+          "probe.total_turns": {
+            "value": 2,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.584766+00:00"
+          },
+          "routed.current_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.844461+00:00"
+          },
+          "routed.total_turns": {
+            "value": 0,
+            "confidence": 1,
+            "source": "system",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.844463+00:00"
+          },
+          "call.customer_phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768042+00:00"
+          },
+          "call.phone_number": {
+            "value": "",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768043+00:00"
+          },
+          "call.call_id": {
+            "value": "e6d6ee77-e98b-47f3-b46c-65567a044c13",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768044+00:00"
+          },
+          "call.direction": {
+            "value": "web",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768045+00:00"
+          },
+          "system.iso_utc_now": {
+            "value": "2026-10-10T14:59:15.563274Z",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563310+00:00"
+          },
+          "system.todays_date_en_cst": {
+            "value": "10 October 2026 Saturday 08:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563311+00:00"
+          },
+          "system.todays_date_en_est": {
+            "value": "10 October 2026 Saturday 09:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563312+00:00"
+          },
+          "system.todays_date_tr": {
+            "value": "10 Ekim 2026 Cumartesi 17:59",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563313+00:00"
+          },
+          "system.todays_date_tr.iso_8601": {
+            "value": "2026-10-10",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:15.563314+00:00"
+          },
+          "system.uuid4()": {
+            "value": "e3c124c089e74fc7aeaa398dad5a0486",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768053+00:00"
+          },
+          "now": {
+            "value": "2026-10-14T11:00",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768031+00:00"
+          },
+          "title": {
+            "value": "Mr",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768032+00:00"
+          },
+          "first_name": {
+            "value": "Alex",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768034+00:00"
+          },
+          "last_name": {
+            "value": "Morgan",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768035+00:00"
+          },
+          "neg_instruction": {
+            "value": "Am I speaking with Alex Morgan?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768036+00:00"
+          },
+          "readback_text": {
+            "value": "For the credit card, four hundred and twenty on Friday the sixteenth of October 2026. Do you confirm?",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768038+00:00"
+          },
+          "product_list": {
+            "value": "1: credit card",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768039+00:00"
+          },
+          "id_say": {
+            "value": "Please tell me the last four digits of your phone number.",
+            "confidence": 1,
+            "source": "customer",
+            "source_node": null,
+            "extracted_at": "2026-10-10T14:59:11.768040+00:00"
+          },
+          "holder": {
+            "value": "question",
+            "confidence": 1,
+            "source": "extraction",
+            "source_node": "probe",
+            "raw_text": "Can you hear me clearly? Who is this?",
+            "extracted_at": "2026-10-10T14:59:15.841164+00:00"
+          }
+        },
+        "identity": {
+          "agentId": "917e33fc-0c8b-4bbe-b8ff-9e2390b8bb43",
+          "entityVersionId": "14d975fb-2106-4d9c-9a87-04bb50ac5a69"
+        },
+        "controlFlags": {
+          "terminalActionFired": false
+        }
+      },
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:16.128Z"
+    },
+    {
+      "role": "system",
+      "message": "{\"event\":\"turn_completed\",\"turnIndex\":2,\"userMessageId\":\"msg_2_1791644355580\",\"finalAssistantMessageId\":\"msg_6_1791644356116\",\"responseText\":\"Yes, I can. I am a bank telephone assistant. Am I speaking with Alex Morgan?\"}",
+      "messageId": "msg_7_1791644356125",
+      "secondsFromStart": 4.353398084640503,
+      "nodeId": "routed",
+      "duration": 0,
+      "timestamp": "2026-10-10T14:59:16.365Z"
+    }
+  ],
+  "summary": null,
+  "cost": 0.003878,
+  "recordingUrl": "https://staging-app.freyavoice.ai/api/v2/call/e6d6ee77-e98b-47f3-b46c-65567a044c13/recording",
+  "analysis": {},
+  "tags": [],
+  "createdAt": "2026-10-10T14:59:11.621Z",
+  "updatedAt": "2026-10-10T14:59:16.927Z",
+  "campaign": null,
+  "problems": [],
+  "piiRedactions": []
+}

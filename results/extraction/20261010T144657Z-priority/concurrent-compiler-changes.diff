@@ -1,0 +1,11 @@
+--- frozen
++++ current
+@@ -136,7 +136,7 @@
+         "on_enter": {"type": "silent"}, "disable_inactivity_monitor": True,
+         "pre_actions": [{"type": "function", "function": {"name": "code_exec", "handler": "__function__:code_exec",
+                          "parameters": {"type": "object", "properties": {"code": {"type": "string", "default": code},
+-                                                                         "timeout_ms": {"type": "number", "default": 15000}}}}}],
++                                                                         "timeout_ms": {"type": "number", "default": 40000}}}}}],
+         "transitions": [on_next(t) for t in targets] + [always(default or targets[-1])],
+     }
+ 

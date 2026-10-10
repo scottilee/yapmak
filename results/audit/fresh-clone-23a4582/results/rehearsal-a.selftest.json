@@ -1,0 +1,109 @@
+{
+ "workflow_id": "d324a0d7-e20e-4a53-a7eb-f570bc89cd22",
+ "policy": "/tmp/freya-fresh-clone-dntc3a08/repo/out/rehearsal-a.policy.json",
+ "ok": true,
+ "elapsed_s": 12.5,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": true,
+   "checks": [
+    {
+     "name": "opening_spoken",
+     "pass": true,
+     "detail": "Hello, this is the digital assistant of Freya Bank. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "holder_asked",
+     "pass": true,
+     "detail": "Hello, this is the digital assistant of Freya Bank. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "name": "first_question_matches_ir",
+     "pass": true,
+     "detail": "want ask_text='your date of birth' in 'Thank you. Before we continue, I need to ask you two short security questions. What is your date of birth?'"
+    },
+    {
+     "name": "first_question_marked",
+     "pass": true,
+     "detail": "Thank you. Before we continue, I need to ask you two short security questions. What is your date of birth?"
+    },
+    {
+     "name": "routed_to_ask_0",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->ask_0']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "Hello, this is the digital assistant of Freya Bank. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "Yes, speaking.",
+     "agent": "Thank you. Before we continue, I need to ask you two short security questions. What is your date of birth?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": true,
+   "checks": [
+    {
+     "name": "no_account_words",
+     "pass": true,
+     "detail": "banned hits=[] in 'I see. When would be a good day and time to reach Ms Customer?'"
+    },
+    {
+     "name": "asks_when_reachable",
+     "pass": true,
+     "detail": "I see. When would be a good day and time to reach Ms Customer?"
+    },
+    {
+     "name": "routed_to_third_party",
+     "pass": true,
+     "detail": "holder='none' routes=['setup->opening', 'opening->opening_route', 'opening_route->third_party']",
+     "soft": false
+    }
+   ],
+   "turns": [
+    {
+     "user": "Hello?",
+     "agent": "Hello, this is the digital assistant of Freya Bank. We record this call. Am I speaking with Ms Customer?"
+    },
+    {
+     "user": "This is her husband, she's not here.",
+     "agent": "I see. When would be a good day and time to reach Ms Customer?"
+    }
+   ],
+   "attempts": 1,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "car loan",
+  "collections",
+  "credit card",
+  "credit card ending {card_last4}",
+  "debt",
+  "due",
+  "facilit",
+  "installment",
+  "instalment",
+  "loan",
+  "overdue",
+  "pay ",
+  "payment",
+  "personal loan",
+  "product",
+  "promise"
+ ]
+}

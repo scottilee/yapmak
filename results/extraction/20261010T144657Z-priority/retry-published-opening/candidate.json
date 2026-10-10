@@ -1,0 +1,185 @@
+{
+  "initial_node": "probe",
+  "system_prompt": "You are a bank telephone assistant in an isolated extraction test. Speak English. No tools or bank actions are available.",
+  "nodes": {
+    "probe": {
+      "name": "probe",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Am I speaking with Alex Morgan? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "tts",
+        "text": "Am I speaking with Alex Morgan?"
+      },
+      "on_enter_first_entry_only": true,
+      "extraction_schema": [
+        {
+          "name": "holder",
+          "type": "string",
+          "description": "Who is on the line, from the LAST message. confirmed ONLY if the person answered yes, that's me, speaking, or said the customer's own name {{first_name}} {{last_name}}. third_party if they said they are someone else (husband, wife, relative, friend, colleague) or that the customer is not available. wrong_number if they said the number does not belong to the customer. deceased if they said the customer has died. wants_human if they ask for a human agent. refuses if they say they do not want to talk. question if they asked something without confirming (who is this, is this a robot, is this a scam, what is this about). unclear for hello, go ahead, or anything else.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "confirmed",
+            "third_party",
+            "wrong_number",
+            "deceased",
+            "wants_human",
+            "refuses",
+            "question",
+            "unclear",
+            "none"
+          ]
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "holder decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "confirmed"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "third_party"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "wrong_number"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "deceased"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "wants_human"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "refuses"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "question"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "unclear"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    },
+    "routed": {
+      "name": "routed",
+      "node_type": "conversation",
+      "task_message": "You are collecting the answer to: Am I speaking with Alex Morgan? If the caller trails off, ask them to finish. If they ask a question, answer briefly. Do not invent an amount, date, time or consent. Do not say any action has been recorded. Keep replies short. For a callback, ask for the missing day or exact clock time. Otherwise ask them to clarify or continue.",
+      "on_enter": {
+        "type": "llm"
+      },
+      "on_enter_first_entry_only": false,
+      "extraction_schema": [
+        {
+          "name": "holder",
+          "type": "string",
+          "description": "Who is on the line, from the LAST message. confirmed ONLY if the person answered yes, that's me, speaking, or said the customer's own name {{first_name}} {{last_name}}. third_party if they said they are someone else (husband, wife, relative, friend, colleague) or that the customer is not available. wrong_number if they said the number does not belong to the customer. deceased if they said the customer has died. wants_human if they ask for a human agent. refuses if they say they do not want to talk. question if they asked something without confirming (who is this, is this a robot, is this a scam, what is this about). unclear for hello, go ahead, or anything else.",
+          "min_confidence": 0.5,
+          "enum_values": [
+            "confirmed",
+            "third_party",
+            "wrong_number",
+            "deceased",
+            "wants_human",
+            "refuses",
+            "question",
+            "unclear",
+            "none"
+          ]
+        }
+      ],
+      "tools": [],
+      "max_node_turns": 12,
+      "transitions": [
+        {
+          "target_node": "routed",
+          "description": "holder decided",
+          "condition": {
+            "logic": "or",
+            "conditions": [
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "confirmed"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "third_party"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "wrong_number"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "deceased"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "wants_human"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "refuses"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "question"
+              },
+              {
+                "variable": "holder",
+                "operator": "equals",
+                "operand": "unclear"
+              }
+            ]
+          }
+        },
+        {
+          "target_node": "probe",
+          "condition": {
+            "operator": "always"
+          },
+          "description": "Continue collecting"
+        }
+      ],
+      "max_turn_transition": "probe"
+    }
+  }
+}

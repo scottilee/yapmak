@@ -1,0 +1,164 @@
+{
+  "rehearsal-a": {
+    "prior_trace_runs": 1,
+    "run_start": {
+      "event": "run_start",
+      "time": "2026-10-10T08:05:23-0700",
+      "elapsed_s": 0.1,
+      "slot": "rehearsal-a",
+      "brief_paths": [],
+      "openapi_path": "tools/openapi.json",
+      "commit": "23a4582129f9bbd6fbeb00ec81dbace58af8a021",
+      "tree_dirty": false,
+      "argv": [
+        "build.py",
+        "--policy",
+        "tests/fixtures/brief_a.policy.json",
+        "--openapi",
+        "tools/openapi.json",
+        "--slot",
+        "rehearsal-a"
+      ],
+      "input_sha256_16": {
+        "tools/openapi.json": "9a8410b12e5c82b6"
+      },
+      "code_sha256_16": {
+        "build.py": "386f7f2b25c01fba",
+        "extract.py": "adeb88339bf56937",
+        "compile.py": "296b32b06f8d83fd",
+        "policy.py": "2e474562433dcee3",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "881c5c86c784e16f"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "run_end": {
+      "event": "run_end",
+      "time": "2026-10-10T08:05:45-0700",
+      "elapsed_s": 21.8,
+      "success": true
+    },
+    "selftest": [
+      {
+        "ok": true,
+        "result_ok": true,
+        "scenarios": [
+          [
+            "identity_start",
+            true,
+            false
+          ],
+          [
+            "third_party_no_disclosure",
+            true,
+            false
+          ]
+        ]
+      }
+    ],
+    "model_calls": []
+  },
+  "rehearsal-ab": {
+    "prior_trace_runs": 0,
+    "run_start": {
+      "event": "run_start",
+      "time": "2026-10-10T08:05:45-0700",
+      "elapsed_s": 0.0,
+      "slot": "rehearsal-ab",
+      "brief_paths": [
+        "briefs/brief-a.md",
+        "briefs/brief-b.md"
+      ],
+      "openapi_path": "tools/openapi.json",
+      "commit": "23a4582129f9bbd6fbeb00ec81dbace58af8a021",
+      "tree_dirty": true,
+      "argv": [
+        "build.py",
+        "--briefs",
+        "briefs/brief-a.md,briefs/brief-b.md",
+        "--openapi",
+        "tools/openapi.json",
+        "--slot",
+        "rehearsal-ab"
+      ],
+      "input_sha256_16": {
+        "briefs/brief-a.md": "d57c049c89aec461",
+        "briefs/brief-b.md": "c59c70099148b91c",
+        "tools/openapi.json": "9a8410b12e5c82b6"
+      },
+      "code_sha256_16": {
+        "build.py": "386f7f2b25c01fba",
+        "extract.py": "adeb88339bf56937",
+        "compile.py": "296b32b06f8d83fd",
+        "policy.py": "2e474562433dcee3",
+        "bankcal.py": "9d29ea9802f59e62",
+        "freya.py": "881c5c86c784e16f"
+      },
+      "deadline_s": 1800,
+      "builder_model": "claude-opus-5-5",
+      "agent_model": {
+        "provider": "experimental-5",
+        "model": "experimental-5"
+      }
+    },
+    "run_end": {
+      "event": "run_end",
+      "time": "2026-10-10T08:09:54-0700",
+      "elapsed_s": 248.7,
+      "success": true
+    },
+    "selftest": [
+      {
+        "ok": true,
+        "result_ok": true,
+        "scenarios": [
+          [
+            "identity_start",
+            true,
+            false
+          ],
+          [
+            "third_party_no_disclosure",
+            true,
+            false
+          ]
+        ]
+      }
+    ],
+    "model_calls": [
+      {
+        "purpose": "policy_extraction",
+        "duration_ms": 79506,
+        "cost_usd": 0.5006475000000001,
+        "timed_out": false,
+        "tools": [
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/briefs/brief-a.md",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/briefs/brief-b.md",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/tools/openapi.json",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/policy.py",
+          "Write:freya-fresh-clone-dntc3a08/repo/out/rehearsal-ab.policy.json"
+        ]
+      },
+      {
+        "purpose": "policy_audit",
+        "duration_ms": 139238,
+        "cost_usd": 0.7854426000000001,
+        "timed_out": false,
+        "tools": [
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/briefs/brief-a.md",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/briefs/brief-b.md",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/policy.py",
+          "Read:freya-fresh-clone-dntc3a08/repo/out/rehearsal-ab.policy.json",
+          "Read:/tmp/freya-fresh-clone-dntc3a08/repo/tools/openapi.json",
+          "Write:freya-fresh-clone-dntc3a08/repo/out/rehearsal-ab.policy.json",
+          "Write:/freya-fresh-clone-dntc3a08/repo/out/rehearsal-ab.audit.json"
+        ]
+      }
+    ]
+  }
+}

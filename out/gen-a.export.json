@@ -1,7 +1,7 @@
 {
  "workflow_id": "3a313c88-e790-43c4-ad2e-504199b115f1",
  "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
- "updated_at": "2026-10-10T14:35:42.244Z",
+ "updated_at": "2026-10-10T15:01:08.578Z",
  "workflow": {
   "nodes": {
    "end": {
@@ -292,7 +292,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -580,7 +580,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -667,7 +667,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -681,14 +681,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "schedule_callback",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "schedule_callback",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "cb_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "cb_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is schedule_callback",
+      "description": "schedule_callback, previous result consumed",
       "target_node": "schedule_callback"
      },
      {
@@ -769,7 +786,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -1400,7 +1417,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -1444,14 +1461,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "transfer",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "transfer",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is transfer",
+      "description": "transfer, previous result consumed",
       "target_node": "transfer"
      },
      {
@@ -1716,7 +1750,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -1730,14 +1764,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "verify_0",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "verify_0",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "v_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "v_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is verify_0",
+      "description": "verify_0, previous result consumed",
       "target_node": "verify_0"
      },
      {
@@ -1775,14 +1826,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "transfer",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "transfer",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is transfer",
+      "description": "transfer, previous result consumed",
       "target_node": "transfer"
      },
      {
@@ -1833,7 +1901,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -1847,14 +1915,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "verify_1",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "verify_1",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "v_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "v_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is verify_1",
+      "description": "verify_1, previous result consumed",
       "target_node": "verify_1"
      },
      {
@@ -1892,14 +1977,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "transfer",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "transfer",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is transfer",
+      "description": "transfer, previous result consumed",
       "target_node": "transfer"
      },
      {
@@ -1950,7 +2052,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -1988,7 +2090,7 @@
         }
        ]
       },
-      "description": "next note, previous result consumed",
+      "description": "add_note, previous result consumed",
       "target_node": "add_note"
      },
      {
@@ -2270,7 +2372,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -2308,7 +2410,7 @@
         }
        ]
       },
-      "description": "next write, previous result consumed",
+      "description": "create_promise, previous result consumed",
       "target_node": "create_promise"
      },
      {
@@ -2878,7 +2980,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -2950,7 +3052,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -3009,14 +3111,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "transfer",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "transfer",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is transfer",
+      "description": "transfer, previous result consumed",
       "target_node": "transfer"
      },
      {
@@ -3315,7 +3434,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -3374,14 +3493,31 @@
        "logic": "or",
        "conditions": [
         {
-         "mode": "exact",
-         "operand": "transfer",
-         "operator": "equals",
-         "variable": "next"
+         "logic": "and",
+         "conditions": [
+          {
+           "mode": "exact",
+           "operand": "transfer",
+           "operator": "equals",
+           "variable": "next"
+          },
+          {
+           "mode": "exact",
+           "operand": "true",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          },
+          {
+           "mode": "exact",
+           "operand": "True",
+           "operator": "not_equals",
+           "variable": "t_ok"
+          }
+         ]
         }
        ]
       },
-      "description": "next is transfer",
+      "description": "transfer, previous result consumed",
       "target_node": "transfer"
      },
      {
@@ -3447,7 +3583,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -3564,7 +3700,7 @@
          },
          "timeout_ms": {
           "type": "number",
-          "default": 15000
+          "default": 40000
          }
         }
        },
@@ -4099,7 +4235,7 @@
   },
   "global_nodes": {},
   "initial_node": "setup",
-  "system_prompt": "You are Freya Bank's digital assistant on an outbound phone call to {{title}} {{last_name}}. Speak English. Keep every turn to one to three short sentences and ask one question at a time. Address the customer as {{title}} {{last_name}}.\nYou have no tools. The system records promises, callbacks, notes and transfers itself and tells you in your current instruction what was done; never say that anything is recorded, booked, transferred or scheduled unless your current instruction says so.\n- If asked whether you are a robot or an AI: say \"I am Freya Bank's digital assistant.\" and continue.\n- If asked whether this is a scam: say \"You can verify this call by phoning Freya Bank's customer service number.\" and continue.\n- If asked something you cannot answer from your instructions: say \"I do not have that information.\" Never invent figures, dates or reasons.\n- Never offer a discount, a waiver, an instalment plan or any term that is not in your instructions.\n- Every amount and date you say comes from your current instruction. Never compute dates yourself.\n- Do not describe steps that have not happened. Do not narrate tool calls.",
+  "system_prompt": "You are Freya Bank's digital assistant on an outbound phone call to {{title}} {{last_name}}. Speak English. Keep every turn to one to three short sentences and ask one question at a time. Address the customer as {{title}} {{last_name}}.\nYou have no tools. The system records promises, callbacks, notes and transfers itself and tells you in your current instruction what was done; never say that anything is recorded, booked, transferred or scheduled unless your current instruction says so.\n- If asked whether you are a robot or an AI: say \"I am Freya Bank's digital assistant.\" and continue.\n- If asked whether this is a scam: say \"You can verify this call by phoning Freya Bank's customer service number.\" and continue.\n- If asked something you cannot answer from your instructions: say \"I do not have that information.\" Never invent figures, dates or reasons.\n- Never offer a discount, a waiver, an instalment plan or any term that is not in your instructions.\n- Every amount and date you say comes from your current instruction. Never compute dates yourself.\n- Do not describe steps that have not happened. Do not narrate tool calls.\n- Never state or invent an amount, balance, date, product or account detail that is not in your current instruction; before the security check is complete you know nothing about the account. If you have nothing new to say, ask the customer to hold on for a moment.",
   "test_variables": {}
  }
 }
