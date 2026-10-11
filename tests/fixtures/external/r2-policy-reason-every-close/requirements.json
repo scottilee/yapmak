@@ -1,0 +1,22 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "reason-on-every-close",
+      "source": "01-specification.md \u00a711",
+      "expected": {
+        "required": true,
+        "promise": [
+          "AGREED",
+          "SAVED"
+        ],
+        "all_paid": [
+          "SETTLED",
+          "PAYMENT-REPORTED"
+        ]
+      },
+      "schema_gap": "Outcome table stores allowed reasons but no separate successful-promise/paid reason selectors. Do not issue reasonless closes."
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

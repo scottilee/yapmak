@@ -1,0 +1,414 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/orrery-seven/01-register.txt",
+  "tests/fixtures/external/orrery-seven/02-signed-memo.txt",
+  "tests/fixtures/external/orrery-seven/03-codes.txt"
+ ],
+ "bank_name": "Orrery Community Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "member_pin",
+    "ask_text": "What is your six-digit member code?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+     "text": "ONE question only: `member_pin`, \"What is your six-digit member code?\" Digits, exactly six; preserve leading zeros. ... No hint mechanism."
+    }
+   }
+  ],
+  "wrong_answer_limit": 1,
+  "wrong_count_source": "code",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "ID0",
+   "F1"
+  ],
+  "declined_outcome": [
+   "ID0",
+   "D1"
+  ],
+  "unclear_holder_outcome": [
+   "NR0",
+   "U0"
+  ],
+  "failed_instruction": "Please visit our service counter.",
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt",
+   "text": "(1) Clause 3: ONE wrong answer exhausts security, not three. | O-6 clause 3: API tries_left is the global wrong-answer allowance ... A refused answer gets one account-protection explanation, then a second refusal closes ID0/D1. Questions about purpose do not count as refusal. Exhaustion: say \"Please visit our service counter.\" then ID0/F1. | Clause 2: Ask at most twice ... Still unclear: NR0/U0."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": false,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": false,
+   "scheduled_outcome": [
+    "NR0",
+    "N0"
+   ],
+   "no_callback_outcome": [
+    "NR0",
+    "N0"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+    "text": "If a relative answers, say \"Please ask the customer to call our published number.\" Close NR0/N0. Do not collect availability or schedule callbacks. No callback window exists."
+   }
+  },
+  "wrong_number_outcome": [
+   "NR0",
+   "W0"
+  ],
+  "deceased_outcome": [
+   "NR0",
+   "D0"
+  ],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "Wrong number: NR0/W0. Death: \"I am sorry for your loss.\" then NR0/D0."
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "ask",
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "We operate every day, Monday through Sunday; there are NO holidays. Next weekday means that day in the following calendar week; this weekday means this week. Ask for missing month/year; never infer them."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-60",
+   "days_late_min": 1,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 20,
+    "month_offset": 1,
+    "adjustment": "none"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt",
+    "text": "(2) Clause 4: read TWENTIETH of NEXT month, unadjusted, for fifteenth. (3) Clause 5: ZERO persuasion/follow-up attempts."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "percent",
+    "percent": 100,
+    "min_amount": 0
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": false,
+  "floor_wording": "",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "There is no reduced floor and no partial-payment concession: only exactly amt_due is acceptable. Mechanically this is a singleton permitted interval, 100 percent of amt_due through amt_due. Never ask how much the customer can pay."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "Today allowed. ... If a nonbusiness date were encountered, offer the next business date only within deadline, otherwise deadline. Vague period: clarify once, then propose deadline. After-deadline proposal: offer deadline. | If a computed deadline is already past, no promise is available and close No-PTP/R01."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "Customer disputes the debt: says they never held the product, it is not their debt, or it was previously closed.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "R07"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+    "text": "Dispute (never held product, not their debt, previously closed): no promise, no argument, immediately No-PTP/R07."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "Customer asks to speak to a human / a person / an agent.",
+   "action": {
+    "type": "transfer",
+    "queue": "Desk-1",
+    "outcome": "Xfer",
+    "reason": "H1"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+    "text": "Human request: transfer immediately, no offer to help first, queue Desk-1, Xfer/H1."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "Customer refuses to talk / does not want to continue the conversation.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "R01"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+    "text": "Refusal to talk: immediately No-PTP/R01 after verification, ID0/D1 before it."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "Customer asks whether this call is a scam or doubts the call is really from the bank.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please call the number on your statement to verify us.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+    "text": "Scam question: \"Please call the number on your statement to verify us.\" then continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "PTP",
+    "reasons": [],
+    "when": "saved promise (omit reason)"
+   },
+   {
+    "outcome": "No-PTP",
+    "reasons": [
+     "R01",
+     "R07",
+     "R99"
+    ],
+    "when": "R01 refusal or no eligible commitment; R07 dispute; R99 save failure"
+   },
+   {
+    "outcome": "Xfer",
+    "reasons": [
+     "H1"
+    ],
+    "when": "H1 human transfer"
+   },
+   {
+    "outcome": "ID0",
+    "reasons": [
+     "F1",
+     "D1"
+    ],
+    "when": "F1 failed security; D1 declined security"
+   },
+   {
+    "outcome": "NR0",
+    "reasons": [
+     "U0",
+     "N0",
+     "W0",
+     "D0"
+    ],
+    "when": "U0 unclear holder; N0 relative/no contact; W0 wrong number; D0 deceased"
+   }
+  ],
+  "promise_outcome": "PTP",
+  "paid_outcome": "",
+  "transfer_outcome": "Xfer",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "No-PTP",
+  "all_paid_closes_as_paid": false,
+  "no_promise_reason_from_first_non_paid_note": false,
+  "service_error_reason": "R99",
+  "refused_reason": "R01",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/03-codes.txt",
+   "text": "PTP: omit reason \u2014 saved promise / No-PTP: R01 refusal or no eligible commitment; R07 dispute; R99 save failure / Xfer: H1 human transfer / ID0: F1 failed security; D1 declined security / NR0: U0 unclear holder; N0 relative/no contact; W0 wrong number; D0 deceased | O-6 clause 9: Transfer overrides a saved promise and preserves it ... No all-paid closing rule or note-based precedence exists. Thank the customer and say goodbye before exactly one close_call."
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": false,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "add_note is never used; no note reasons are activated. Its transport endpoint is retained for interface compatibility only."
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "One `daybook` product per call, spoken as \"daybook account\"."
+  }
+ },
+ "phrases": {
+  "opening": "This is Orrery Community Bank's digital assistant. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue daybook account.",
+  "today_question": "Can you pay the full amount today?",
+  "all_today_question": "",
+  "robot_reply": "I am Orrery Community Bank's digital assistant.",
+  "scam_reply": "Please call the number on your statement to verify us.",
+  "prohibited_before_verification": [
+   "debt",
+   "overdue",
+   "payment",
+   "account"
+  ],
+  "after_promise_sentence": "Your promise is available in online banking.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "I do not have that information.",
+  "recorded_promise_change_reply": "Use online banking to request a change.",
+  "product_naming": {
+   "daybook": "daybook account"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt",
+   "text": "Say exactly \"This is Orrery Community Bank's digital assistant. This call is recorded.\" Ask \"Am I speaking with {{title}} {{last_name}}?\" ... Before verification do not say debt, overdue, payment or account ... Say \"I am calling about the overdue daybook account.\" Ask \"Can you pay the full amount today?\" ... Say after success \"Your promise is available in online banking.\" ... say \"Use online banking to request a change.\" ... Robot question: \"I am Orrery Community Bank's digital assistant.\" Unknown information: \"I do not have that information.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Shall I record that exact promise?",
+  "source": {
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt",
+   "text": "(4) Clause 6: ZERO retries. A first unsuccessful create_promise closes R99 and must be described as unsuccessful. | O-6 clause 6: Read back product, amount, date and ask \"Shall I record that exact promise?\" ... One saved promise per product."
+  }
+ },
+ "api_fields": {
+  "get_account.list": "cartera",
+  "get_account.id": "contrato",
+  "get_account.type": "clase",
+  "get_account.past_due": "amt_due",
+  "get_account.days_late": "dl_days",
+  "verify_identity.remaining": "tries_left",
+  "create_promise.product_id": "contrato"
+ },
+ "unresolved": [
+  {
+   "topic": "hardship",
+   "text": "There is NO hardship rule ... These remarks alone trigger no special action; answer unavailable questions honestly and continue the ordinary full-only discussion.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "restructuring",
+   "text": "There is NO restructuring rule ... Never offer discounts, waivers or plans.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule in this campaign. Do not invent a support queue, a paid outcome or a payment-posting delay. There is no paid outcome.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "callback outcomes",
+   "text": "Callback endpoint retained, not enabled; no callback outcome or window. Callbacks are disabled; the callback outcome slots carry NR0/N0 (relative/no contact) only because a relative answering closes NR0/N0.",
+   "doc": "tests/fixtures/external/orrery-seven/03-codes.txt"
+  },
+  {
+   "topic": "relative sentence",
+   "text": "If a relative answers, say \"Please ask the customer to call our published number.\" Close NR0/N0. No security answers from relatives. (No dedicated IR phrase field.)",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "below-full proposals",
+   "text": "Below-full proposals are not promises; explain full-only and ask for the full amount, then treat rejection as a flat no. A single flat refusal closes R01; clarifying a volunteered proposal is still allowed.",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  },
+  {
+   "topic": "refuse_to_talk before verification",
+   "text": "Refusal to talk: immediately No-PTP/R01 after verification, ID0/D1 before it.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "promise write failure wording",
+   "text": "A first unsuccessful create_promise closes R99 and must be described as unsuccessful. No success claim before success=true. (No dedicated IR phrase field; no dictated wording.)",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  },
+  {
+   "topic": "wrong-answer count vs API",
+   "text": "O-6: API tries_left is the global wrong-answer allowance: THREE wrong answers end the check. O-7 (1): ONE wrong answer exhausts security, not three. The API may still report tries_left > 0 after one wrong answer; the memo's limit of 1 governs (counted in code).",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  }
+ ]
+}

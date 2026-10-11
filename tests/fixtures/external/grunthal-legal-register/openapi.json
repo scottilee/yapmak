@@ -1,0 +1,505 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Grunthal Handelsbank AG collections API",
+    "version": "ghb-2026.1"
+  },
+  "servers": [
+    {
+      "url": "https://ghb-r-2026.example.invalid/v1"
+    }
+  ],
+  "components": {},
+  "paths": {
+    "/col/verify_identity": {
+      "post": {
+        "summary": "Check one identity answer. The supplied regulation fixes question order and the global wrong-answer ceiling; versuche_verbleibend is authoritative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "kontonummer",
+                      "gruendungsdatum",
+                      "plz"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "kontonummer: exactly six digits, leading zeros preserved; gruendungsdatum: ISO date (use mdy for numeric dates only); plz: letters and digits only."
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "field",
+                  "answer"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "answer_verified": {
+                      "type": "boolean"
+                    },
+                    "all_verified": {
+                      "type": "boolean"
+                    },
+                    "versuche_verbleibend": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "verify_identity"
+      }
+    },
+    "/col/get_account": {
+      "post": {
+        "summary": "Return overdue obligations only after every identity answer required by the supplied regulation has passed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cust_ref"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "obligations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "item_id": {
+                            "type": "string"
+                          },
+                          "categorie": {
+                            "type": "string",
+                            "enum": [
+                              "darlehen",
+                              "kontokorrent",
+                              "leasing",
+                              "kreditkarte",
+                              "hypothek"
+                            ]
+                          },
+                          "amt_due": {
+                            "type": "number",
+                            "minimum": 0.01
+                          },
+                          "dl_days": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 90
+                          },
+                          "tilgung_min": {
+                            "type": "number",
+                            "description": "Floor for darlehen."
+                          },
+                          "kk_min": {
+                            "type": "number",
+                            "description": "Floor for kontokorrent and kreditkarte."
+                          },
+                          "l_min": {
+                            "type": "number",
+                            "description": "Floor for leasing."
+                          },
+                          "h_min": {
+                            "type": "number",
+                            "description": "Floor for hypothek."
+                          }
+                        }
+                      },
+                      "minItems": 1,
+                      "maxItems": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "get_account"
+      }
+    },
+    "/col/create_promise": {
+      "post": {
+        "summary": "Record a payment promise. One per obligation.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "item_id": {
+                    "type": "string"
+                  },
+                  "sum": {
+                    "type": "number"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "item_id",
+                  "sum",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "create_promise"
+      }
+    },
+    "/col/add_note": {
+      "post": {
+        "summary": "Record the permitted reason for an obligation without a promise, only when the supplied regulation authorizes a note.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "item_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "ghb-refuse",
+                      "ghb-distress",
+                      "ghb-dispute",
+                      "ghb-cleared",
+                      "ghb-R07"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "item_id",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "add_note"
+      }
+    },
+    "/col/schedule_callback": {
+      "post": {
+        "summary": "Book a callback.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "HH:MM"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "schedule_callback"
+      }
+    },
+    "/col/transfer_to_agent": {
+      "post": {
+        "summary": "Hand the call to a human.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "ghb-rework",
+                      "ghb-desk"
+                    ]
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "queue"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "transfer_to_agent"
+      }
+    },
+    "/col/close_call": {
+      "post": {
+        "summary": "End the call. Always the last tool call. Nothing is accepted after it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "ghb-arranged",
+                      "ghb-settled",
+                      "ghb-transferred",
+                      "ghb-no-deal",
+                      "ghb-unverified",
+                      "ghb-unreached"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "ghb-rework",
+                      "ghb-person",
+                      "ghb-refuse",
+                      "ghb-distress",
+                      "ghb-dispute",
+                      "ghb-R07",
+                      "ghb-failed",
+                      "ghb-declined",
+                      "ghb-cb",
+                      "ghb-no-cb",
+                      "ghb-wrong",
+                      "ghb-deceased",
+                      "ghb-unclear"
+                    ],
+                    "description": "Omit reason for arranged and settled. Other combinations are constrained by the regulation."
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "outcome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "close_call"
+      }
+    }
+  }
+}

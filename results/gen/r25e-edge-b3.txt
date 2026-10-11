@@ -1,0 +1,11 @@
+PASS PUB-11 hard   Edge           | verify > verify > get_account > promise > add_note > add_note > close_call
+FAIL PUB-12 hard   Edge           | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 510.0, '2026-10-16')]
+       - notes [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'refused')]
+       - conversation: The call failed to meet several success criteria: - The credit card did not receive a promise for 510; system events show product p1 was assigned a 'refused' note. - The outcome was recorded as 'no_promise' instead of 'promise'. - The assistant h
+PASS PUB-13 hard   Edge           | schedule_callback > close_call
+
+slowest agent turn per call: median 4 s, worst 17 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation 54285baa-8384-4164-a7d7-1f26808efa23, status completed, 159 s.

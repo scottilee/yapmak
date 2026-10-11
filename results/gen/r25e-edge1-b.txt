@@ -1,0 +1,7 @@
+PASS PUB-11 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-12 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+PASS PUB-13 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 21 s. Failed calls where the customer hung up: 0.
+
+3 / 3 passed (bank records and conversation checks). Last simulation d993b45b-ed67-40e0-b0cd-48c0f3831cf8, status completed, 106 s.

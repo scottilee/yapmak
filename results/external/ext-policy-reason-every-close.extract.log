@@ -1,0 +1,60 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "close reasons for AGREED and SETTLED",
+   "text": "A reason is REQUIRED on EVERY close, including AGREED/SAVED and SETTLED/PAYMENT-REPORTED. The IR has no dedicated reason field for promise_outcome/paid_outcome; the reasons are carried only in outcomes.table (AGREED -> SAVED, SETTLED -> PAYMENT-REPORTED).",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence \u2014 the exact words are not dictated; the hardship `say` is a written sentence matching that content.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "debt introduction wording",
+   "text": "State every product, amount and days late before asking for anything. No introductory sentence is dictated; phrases.debt_intro is a written sentence matching that content.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "callback missing clock time",
+   "text": "Missing clock time: ask, never guess. The IR has no dedicated field; behaviour must be enforced by the dialogue.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "date before earliest eligible date",
+   "text": "If it precedes the earliest eligible date, offer the earliest eligible date, provided it is within deadline. The IR has no dedicated flag for this rule.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "no discounts or plans; consent invalidated by corrections",
+   "text": "Never offer a discount, waiver or a new payment plan. A correction invalidates consent and requires revalidation and a fresh combined read-back. No dedicated IR fields; enforced by the template.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late before asking for anything; wrote a short sentence with that content and reworded the related unresolved entry.",
+  "api_fields: \u00a71 explicitly names the get_account fields (products list, product_id, type, past_due, days_late) and \u00a78 names ok=true for create_promise; recorded them alongside verify_identity.remaining.",
+  "Expanded source spans (hint retry, multi-product, phrases, promise_write) to cite the sentences that support the values.",
+  "Added unresolved entries for rules with no IR field: callback missing clock time, date before earliest eligible date, no discounts/plans and correction invalidating consent."
+ ]
+}

@@ -1,0 +1,165 @@
+{
+ "covered": [
+  {
+   "rule": "O-6 header: read O-6, then O-7, then C-2; O-7 overrides only its four entries; C-2 controls codes",
+   "where": "source_docs; identity.wrong_answer_limit; bands[0]; bands[0].attempts; promise_write.retry_on_failure; outcomes.table"
+  },
+  {
+   "rule": "1. One `daybook` product per call, spoken as \"daybook account\"",
+   "where": "multi_product.max_products; phrases.product_naming.daybook"
+  },
+  {
+   "rule": "1. cartera / contrato / clase / amt_due / dl_days",
+   "where": "api_fields"
+  },
+  {
+   "rule": "1. No minimum-payment field exists",
+   "where": "amounts.floors (empty); amounts.floor_rules"
+  },
+  {
+   "rule": "2. Say exactly opening sentence",
+   "where": "phrases.opening; phrases.opening_verbatim"
+  },
+  {
+   "rule": "2. Ask \"Am I speaking with {{title}} {{last_name}}?\" at most twice; still unclear NR0/U0",
+   "where": "phrases.holder_question; identity.holder_confirmation_asks; identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "2. Before verification do not say debt, overdue, payment or account",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "2. Relative: published-number sentence, close NR0/N0; no callbacks; no window",
+   "where": "third_party.callback.enabled=false; third_party.callback.no_callback_outcome; unresolved[relative sentence]; unresolved[callback outcomes]"
+  },
+  {
+   "rule": "2. Wrong number NR0/W0; Death \"I am sorry for your loss.\" NR0/D0",
+   "where": "third_party.wrong_number_outcome; third_party.deceased_sentence; third_party.deceased_outcome"
+  },
+  {
+   "rule": "3. ONE question member_pin, six digits, no hint",
+   "where": "identity.requirements[0]"
+  },
+  {
+   "rule": "3 + O-7(1). ONE wrong answer exhausts security",
+   "where": "identity.wrong_answer_limit=1; identity.wrong_count_source=code"
+  },
+  {
+   "rule": "3. Refusal: one explanation then ID0/D1; purpose questions are not refusal",
+   "where": "identity.decline_explain_once; identity.asking_purpose_counts_as_decline=false; identity.declined_outcome"
+  },
+  {
+   "rule": "3. Exhaustion: \"Please visit our service counter.\" then ID0/F1",
+   "where": "identity.failed_instruction; identity.failed_outcome"
+  },
+  {
+   "rule": "4. Every day operates, NO holidays",
+   "where": "calendar.business_days; calendar.holidays"
+  },
+  {
+   "rule": "4. Next weekday = following week; ask for missing month/year",
+   "where": "calendar.next_weekday_means_following_week; calendar.missing_date_parts=ask"
+  },
+  {
+   "rule": "4 + O-7(2). Days late 1\u201360: TWENTIETH of NEXT month, unadjusted",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "4. Computed deadline already past: no promise, No-PTP/R01",
+   "where": "dates.past_deadline=no_promise; outcomes.refused_reason"
+  },
+  {
+   "rule": "5. debt intro and today question",
+   "where": "phrases.debt_intro; phrases.today_question"
+  },
+  {
+   "rule": "5. Only exactly amt_due acceptable (100 percent)",
+   "where": "amounts.floor_rules.*"
+  },
+  {
+   "rule": "5. Never ask how much",
+   "where": "amounts.never_ask_how_much"
+  },
+  {
+   "rule": "5 + O-7(3). ZERO follow-up attempts; single flat refusal closes R01",
+   "where": "bands[0].attempts=[]; amounts.floor_offered_once=false; outcomes.refused_reason"
+  },
+  {
+   "rule": "5. Below-full proposals not promises",
+   "where": "unresolved[below-full proposals]"
+  },
+  {
+   "rule": "6. Today allowed; nonbusiness date -> next business date within deadline; vague -> clarify once then deadline; after-deadline -> offer deadline",
+   "where": "dates.*"
+  },
+  {
+   "rule": "6. Read back and ask \"Shall I record that exact promise?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "6. One saved promise per product",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "6 + O-7(4). ZERO retries; failure closes R99",
+   "where": "promise_write.retry_on_failure=0; outcomes.service_error_reason"
+  },
+  {
+   "rule": "6. After success / change-request sentences",
+   "where": "phrases.after_promise_sentence; phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "7. Dispute -> immediately No-PTP/R07",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "7. Human request -> Desk-1, Xfer/H1, no offer first",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "7. Refusal to talk -> No-PTP/R01 (ID0/D1 before verification)",
+   "where": "special_cases[refuse_to_talk]; identity.declined_outcome; unresolved[refuse_to_talk before verification]"
+  },
+  {
+   "rule": "7. Scam / robot / unknown information replies",
+   "where": "special_cases[scam].say; phrases.scam_reply; phrases.robot_reply; phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "8. NO hardship, restructuring, already-paid rule; no paid outcome",
+   "where": "unresolved[hardship|restructuring|already_paid]; outcomes.paid_outcome=\"\""
+  },
+  {
+   "rule": "8. add_note never used",
+   "where": "notes.enabled=false; notes.reasons=[]"
+  },
+  {
+   "rule": "9. Transfer overrides saved promise; PTP omit reason; otherwise No-PTP/R01",
+   "where": "outcomes.transfer_overrides_promise; outcomes.promise_outcome; outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "9. No all-paid / note-based precedence",
+   "where": "outcomes.all_paid_closes_as_paid=false; outcomes.no_promise_reason_from_first_non_paid_note=false"
+  },
+  {
+   "rule": "9. Goodbye before exactly one close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "C-2 code table, Queue Desk-1 only",
+   "where": "outcomes.table; special_cases[human].action.queue"
+  }
+ ],
+ "fixed": [
+  "identity.wrong_count_source changed from \"api\" to \"code\": O-7(1) sets ONE wrong answer as exhausting security, replacing O-6's statement that the API's tries_left (three) is the allowance. Trusting the API count could allow a second answer, so the limit of 1 is counted in code. Added an unresolved entry for this.",
+  "Added an unresolved entry for O-7(4): a failed create_promise 'must be described as unsuccessful'. There is no IR phrase field for this and the documents do not dictate the wording."
+ ],
+ "unresolved": [
+  "Hardship, restructuring and already-paid: the documents explicitly have no rule for them (continue the ordinary full-only discussion), so they are not routed as special cases.",
+  "Callback outcomes: the documents say callbacks are disabled and there is no callback outcome. The slots are filled with NR0/N0 (relative/no contact) only so the file passes validation.",
+  "The relative's sentence \"Please ask the customer to call our published number.\" has no IR field.",
+  "Below-full proposals: explain full-only, then treat rejection as a flat no. This is not expressible beyond floor=100%.",
+  "Refusal to talk before verification closes ID0/D1, not No-PTP/R01.",
+  "The wording for a failed promise save is not dictated.",
+  "The API's tries_left may disagree with the memo's one-wrong-answer limit."
+ ]
+}

@@ -1,0 +1,37 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "reason-on-every-close",
+      "source": "01-specification.md \u00a711",
+      "expected": {
+        "required": true,
+        "successful_promise": [
+          "AGREED",
+          "SAVED"
+        ],
+        "all_paid": [
+          "SETTLED",
+          "PAYMENT-REPORTED"
+        ]
+      },
+      "schema_gap": "Outcome table stores allowed reasons but has no distinct successful-promise/paid reason selectors. Do not emit a reasonless close."
+    },
+    {
+      "id": "callback-weekday-intersection",
+      "source": "01-specification.md \u00a74",
+      "expected": {
+        "days": "next_business_day",
+        "allowed_weekdays": [
+          1,
+          3
+        ],
+        "start": "08:10",
+        "end": "11:40",
+        "skip_to_later_allowed_weekday": false
+      },
+      "schema_gap": "CallbackPolicy has no allowed_weekdays member. Keeping only next_business_day loses the Tuesday/Thursday restriction."
+    }
+  ],
+  "acceptance": "Every source rule must either be faithfully supported or explicitly reported unsupported/degraded with affected actions blocked. Degradation is an expected diagnostic, not a successful runnable-agent result. No exact diagnostic wording is prescribed."
+}

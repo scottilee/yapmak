@@ -1,0 +1,473 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fenbrook Community Credit Union collections API",
+    "version": "fccu-1.0"
+  },
+  "servers": [
+    {
+      "url": "https://fccu-1.example.invalid/v1"
+    }
+  ],
+  "components": {},
+  "paths": {
+    "/col/verify_identity": {
+      "post": {
+        "summary": "Check the single security answer required by call sheet v1.0; tries_left is authoritative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "pi_code"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "pi_code: exactly four digits, leading zeros preserved."
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "field",
+                  "answer"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "verified": {
+                      "type": "boolean"
+                    },
+                    "all_verified": {
+                      "type": "boolean"
+                    },
+                    "tries_left": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "verify_identity"
+      }
+    },
+    "/col/get_account": {
+      "post": {
+        "summary": "Return the single overdue share loan after the security answer passes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cust_ref"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "obligations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "type": "string",
+                            "enum": [
+                              "share_loan"
+                            ]
+                          },
+                          "amt_due": {
+                            "type": "number",
+                            "minimum": 0.01
+                          },
+                          "dl_days": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 90
+                          },
+                          "minimum": {
+                            "type": "number",
+                            "description": "Floor for share_loan."
+                          }
+                        }
+                      },
+                      "minItems": 1,
+                      "maxItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "get_account"
+      }
+    },
+    "/col/create_promise": {
+      "post": {
+        "summary": "Record a promise. One per share loan; floor is the minimum field, full is amt_due.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "payment": {
+                    "type": "number"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "product_id",
+                  "payment",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "create_promise"
+      }
+    },
+    "/col/add_note": {
+      "post": {
+        "summary": "Not used by call sheet v1.0.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "F-no"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "product_id",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "add_note"
+      }
+    },
+    "/col/schedule_callback": {
+      "post": {
+        "summary": "Not used by call sheet v1.0.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "HH:MM"
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "schedule_callback"
+      }
+    },
+    "/col/transfer_to_agent": {
+      "post": {
+        "summary": "Hand the call to a person when the customer asks for a human.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "fcc-desk"
+                    ]
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "queue"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "transfer_to_agent"
+      }
+    },
+    "/col/close_call": {
+      "post": {
+        "summary": "End the call. Always the last tool call. Nothing is accepted after it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cust_ref": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "CCC-OK",
+                      "CCC-NO",
+                      "CCC-FAIL",
+                      "CCC-TR"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "F-no",
+                      "F-wrong",
+                      "F-unclear",
+                      "F-pin",
+                      "F-dec",
+                      "F-person"
+                    ],
+                    "description": "Omit reason for CCC-OK. Other combinations are fixed by the codes list."
+                  }
+                },
+                "required": [
+                  "cust_ref",
+                  "outcome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        },
+        "operationId": "close_call"
+      }
+    }
+  }
+}

@@ -30,7 +30,7 @@ from compiler_nodes import MIN_CONF, WEEKDAY_ENUM
 # =============================================================================================
 # OpenAPI mapper
 # =============================================================================================
-from compiler_openapi import ToolSpec, parse_openapi, tool_enums, response_slots, request_slots
+from compiler_openapi import ToolSpec, parse_openapi, tool_enums, response_slots, request_slots, request_aliases, unmapped_request_slots, MAPPING_NOTES  # noqa: F401
 
 
 # =============================================================================================
@@ -80,6 +80,7 @@ def embed_policy(ir: P.PolicyIR) -> str:
         return o
     d = debrace(strip(d))
     d["unresolved"] = []
+    d["_api"] = dict(API_FACTS)
     txt = json.dumps(d, separators=(",", ":"))
     while "}}" in txt:                                  # JSON tolerates whitespace between structural braces
         txt = txt.replace("}}", "}\n}")
@@ -135,7 +136,15 @@ def runtime_for(stage: str) -> str:
 
 
 EMPTY_VALUES: dict = {}   # filled by compile_workflow from the extraction schemas before code nodes are built
-COMPILE_NOTES: list = []  # decisions the compiler took that the trace should show (e.g. a reworded phrase)
+# Extraction entries for several statements in one sentence ("the card gets 220 on Friday; the loan is not mine"):
+#   "full"    = second and third statement + product, second amount, the minimum, move-onto-another-date (read-back)
+#   "compact" = second statement + product, second amount, the minimum, with short descriptions
+#   "off"     = none (the runtime support stays, dormant)
+# Live evidence (11 Oct, PUB-12 0/3 on "full" vs 3/3 twice on the old schema) suggests a large extraction schema makes the
+# dialogue model ignore the instruction after a product hand-over; "compact" is the default until the experiment settles it.
+COMPOUND_SCHEMA = "compact"
+COMPILE_NOTES: list = []
+API_FACTS: dict = {}       # facts about the supplied tool API the runtime needs (embedded into POLICY["_api"])  # decisions the compiler took that the trace should show (e.g. a reworded phrase)
 
 
 _BANKCAL_TREE = None
@@ -274,17 +283,26 @@ ROUTED_INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "a
 
 
 def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.PromptSet | None = None) -> dict:
-    problems = P.validate(ir, tool_enums(tools))
+    problems = P.validate(ir, tool_enums(tools, ir.api_fields))
     if problems:
         raise ValueError("policy invalid: " + "; ".join(problems))
     COMPILE_NOTES.clear()
+    MAPPING_NOTES.clear()
     prompts = prompts or default_prompts(ir)
-    slots = response_slots(tools)
-    R = request_slots(tools)
+    slots = response_slots(tools, ir.api_fields)
+    R = request_slots(tools, ir.api_fields)
+    AL = request_aliases(tools, R)
+    API_FACTS.clear()
+    API_FACTS["close_reason_required"] = bool(R["close_call"].get("reason")) and R["close_call"]["reason"] in (tools["close_call"].required or [])
 
     def body(tool, **sem):
-        """Semantic arguments -> the supplied schema's property names; arguments the schema does not have are omitted."""
-        return {R[tool][k]: v for k, v in sem.items() if R[tool].get(k)}
+        """Semantic arguments -> the supplied schema's property names; arguments the schema does not have are omitted.
+        A required name without a property of its own (alias) is sent too, with the same value."""
+        b = {R[tool][k]: v for k, v in sem.items() if R[tool].get(k)}
+        for k, v in sem.items():
+            for alias in AL.get(tool, {}).get(k, []):
+                b[alias] = v
+        return b
     V, A = slots["verify"], slots["account"]
     nodes = {}
 
@@ -370,33 +388,53 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["init_products"] = cn("init_products", ["state_debt"])
     neg_schema = [
         ext("cust_intent", "string",
-            "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. "
-            "proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. "
+            "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that), or said yes to an offer the assistant just made. pays_today = says they can pay today / now. "
+            "proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount; also declining an offer the assistant just made (no thank you, just note it, keep my promise as it is). "
             "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. " + "dispute = " + sc_clause(ir, "dispute", "says the debt is not theirs, they never had the product, or it was closed or paid off before") + ". "
             "hardship = " + sc_clause(ir, "hardship", "mentions illness, a death in the family or losing their job") + " — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). " + "restructuring = " + sc_clause(ir, "restructuring", "asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question)") + ". human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
             "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. goodbye = says goodbye or that they are hanging up or ending the call now. other.", INTENTS),
         ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
         ext("prop_amount", "float", "An amount of money the customer offers to pay, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none; an amount they say they cannot pay, or one unrelated to a payment, does not count."),
-    ] + date_ext("prop", "the payment date the customer named")
+    ] + ([ext("prop_minimum", "string", "yes if the customer offered to pay 'the minimum' or 'the lowest amount' instead of a number; no otherwise.", ["yes", "no"])] if COMPOUND_SCHEMA != "off" else []) + date_ext("prop", "the payment date the customer named")
     multi = ir.multi_product.max_products > 1
     if multi:
         nums = [str(i) for i in range(1, ir.multi_product.max_products + 1)]
         nums_text = ", ".join(nums[:-1]) + " or " + nums[-1]
-        neg_schema.append(ext("prop_product", "string", f"Which product the customer's statement is about, when they named one: {nums_text} as in the list {{{{product_list}}}}; all if they said all of them or named none.", nums + ["all"]))
+        neg_schema.append(ext("prop_product", "string", f"Which product the customer's statement is about, when they named one: {nums_text} as in the list {{{{product_list}}}}; all if they said all of them or gave one payment for everything; none if they named no product.", nums + ["all", "none"]))
+        SEC = ["already_paid", "dispute", "hardship", "refuses", "pays_today", "proposes", "none"]
+        if COMPOUND_SCHEMA == "full":
+            neg_schema.append(ext("prop_amount_2", "float", "A SECOND amount the customer named for a DIFFERENT product in the same message (e.g. 'ninety on the card and three hundred on the loan' -> 300 here and 90 in prop_amount). Empty if none."))
+            neg_schema.append(ext("cust_intent_2", "string", "A SECOND, different statement about ANOTHER product in the same message (e.g. 'the loan is not mine' said next to a payment offer for the card; 'I lost my job, I cannot pay the loans, but I can still pay the card today' -> pays_today for the card): already_paid, dispute, hardship, refuses, pays_today, or proposes (an amount or date for that other product); none when the message is about one thing or one product.", SEC))
+            neg_schema.append(ext("prop_product_2", "string", f"The product the second statement or the second amount is about: {nums_text} as in the list {{{{product_list}}}}; none if there is no second statement.", nums + ["none"]))
+            if ir.multi_product.max_products >= 3:
+                neg_schema.append(ext("cust_intent_3", "string", "A THIRD statement about yet another product in the same message: already_paid, dispute, hardship, refuses, pays_today, proposes; none otherwise.", SEC))
+                neg_schema.append(ext("prop_product_3", "string", f"The product the third statement is about: {nums_text} as in the list {{{{product_list}}}}; none if there is no third statement.", nums + ["none"]))
+        elif COMPOUND_SCHEMA == "compact":
+            neg_schema.append(ext("cust_intent_2", "string", "A second, different statement about another product in the same message; none if there is only one.", SEC))
+            neg_schema.append(ext("prop_product_2", "string", f"The product that second statement is about: {nums_text}; none if there is none.", nums + ["none"]))
+            neg_schema.append(ext("prop_amount_2", "float", "A second amount named for that other product, as a number. Empty if none."))
     neg_transitions = [on_enum("cust_intent", ROUTED_INTENTS, "neg_route")]
     nodes["state_debt"] = conv_node("state_debt", prompts.stages["negotiate"], neg_schema, neg_transitions,
                                     on_enter={"type": "tts", "text": "{{debt_statement}}"}, first_only=True, max_turns=12, max_turn_target="neg_route")
     nodes["negotiate"] = conv_node("negotiate", prompts.stages["negotiate"], neg_schema, neg_transitions, max_turns=40, max_turn_target="neg_route")
     nodes["neg_route"] = cn("neg_route", ["negotiate", "readback", "transfer", "finalize"], default="negotiate")
     rb_schema = [ext("rb_intent", "string",
-                     "The customer's answer to the read-back in the LAST message: confirms (yes, correct, I confirm), changes (they give a different amount or date), declines (no, without a new value), "
+                     "The customer's answer to the read-back in the LAST message: confirms (a clear yes: yes, correct, I confirm; a hedged or conditional reply such as 'I suppose, but do not record it yet' is NOT confirms but question or other), changes (they give a different amount or date, or ask to move a payment to another date), declines (no, without a new value), "
                      "already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), "
                      "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, goodbye (says goodbye or is hanging up), other.",
                      ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "goodbye", "other"]),
                  ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
-                 ext("prop_amount", "float", "A new amount the customer named, as a number. Empty if none.")] + date_ext("prop", "a new payment date the customer named")
+                 ext("prop_amount", "float", "A new amount the customer named, as a number (e.g. 'make it three hundred dollars' -> 300, 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none.")] + (
+                 [ext("prop_minimum", "string", "yes if the customer asked for 'the minimum' or 'the lowest amount' instead of a number; no otherwise.", ["yes", "no"])] if COMPOUND_SCHEMA != "off" else []) + date_ext("prop", "a new payment date the customer named")
     if multi:
-        rb_schema.append(ext("prop_product", "string", f"Which product a change refers to: {nums_text} as in the list {{{{product_list}}}}; all if not specified.", nums + ["all"]))
+        rb_schema.append(ext("prop_product", "string", f"Which product a change refers to: {nums_text} as in the list {{{{product_list}}}}; all if not specified.", nums + ["all", "none"]))
+        if COMPOUND_SCHEMA == "full":
+            rb_schema.append(ext("prop_amount_2", "float", "A SECOND new amount the customer named for a DIFFERENT product in the same message (e.g. 'ninety for the card and three hundred for the loan' -> 300 here and 90 in prop_amount). Empty if none."))
+            rb_schema.append(ext("prop_date_like", "string", f"When the customer asks to move a payment onto ANOTHER product's date ('put the card on the loan's date', 'the same day as the loan', 'on that earlier deadline too'): the product whose date is meant, {nums_text} as in the list {{{{product_list}}}}; none otherwise.", nums + ["none"]))
+            rb_schema.append(ext("prop_product_2", "string", f"The product the second amount belongs to: {nums_text} as in the list {{{{product_list}}}}; none if there is no second amount.", nums + ["none"]))
+        elif COMPOUND_SCHEMA == "compact":
+            rb_schema.append(ext("prop_amount_2", "float", "A second new amount for another product, as a number. Empty if none."))
+            rb_schema.append(ext("prop_product_2", "string", f"The product the second amount is for: {nums_text}; none if there is none.", nums + ["none"]))
     nodes["readback"] = conv_node("readback", prompts.stages["readback"], rb_schema,
                                   [on_enum("rb_intent", ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "goodbye", "other"], "readback_route")],
                                   on_enter={"type": "tts", "text": "{{readback_text}}"}, max_turns=6, max_turn_target="readback_route")
@@ -428,16 +466,18 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["close_retry_same"] = api_node("close_retry_same", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}", reason="{{final_reason}}"),
                                          "end", [{"path": ok_close, "variable": "close_ok"}])
     nodes["close_retry_same"]["transitions"] = [closed, always("close_retry")]
-    nodes["close_retry"] = api_node("close_retry", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}"),
-                                    "end", [{"path": ok_close, "variable": "close_ok"}])
-    nodes["close_noreason"] = api_node("close_noreason", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}"),
-                                       "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)
+    # when the API requires a reason on every close, the "no reason" nodes send the reason too (the runtime always supplies one then)
+    noreason_body = (body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}", reason="{{final_reason}}") if API_FACTS["close_reason_required"]
+                     else body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}"))
+    nodes["close_retry"] = api_node("close_retry", tools["close_call"], dict(noreason_body), "end", [{"path": ok_close, "variable": "close_ok"}])
+    nodes["close_noreason"] = api_node("close_noreason", tools["close_call"], dict(noreason_body), "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)
     nodes["close_noreason"]["transitions"] = [closed, always("close_retry")]   # a transient rejection gets one retry
     nodes["end"] = end_node()
 
     # amount is a number in the schema; the baked default is a string -> the engine sends it as given. Make it numeric via a pre-hook.
+    amount_keys = [R["create_promise"]["amount"]] + AL.get("create_promise", {}).get("amount", [])
     nodes["create_promise"]["pre_actions"][0]["pre_process_code"] = (
-        "try:\n    b = config.get('body') if isinstance(config, dict) else None\n    if isinstance(b, dict) and " + repr(R["create_promise"]["amount"]) + " in b:\n        b[" + repr(R["create_promise"]["amount"]) + "] = float(str(b[" + repr(R["create_promise"]["amount"]) + "]).replace(',', ''))\nexcept Exception:\n    pass\n")
+        "try:\n    b = config.get('body') if isinstance(config, dict) else None\n    for k in " + repr(amount_keys) + ":\n        if isinstance(b, dict) and k in b:\n            b[k] = float(str(b[k]).replace(',', ''))\nexcept Exception:\n    pass\n")
 
     for n in nodes.values():
         if n["node_type"] == "code":
@@ -464,7 +504,7 @@ from compiler_checks import BANK_TOOLS, static_check
 def compile_from_files(policy_path: str, openapi_path: str, prompts_path: str | None = None) -> tuple[dict, list[str]]:
     ir = P.PolicyIR.load_merged(policy_path.split("+"))
     tools = parse_openapi(openapi_path)
-    problems = P.validate(ir, tool_enums(tools))
+    problems = P.validate(ir, tool_enums(tools, ir.api_fields))
     if problems:
         raise SystemExit("policy invalid: " + "; ".join(problems))
     prompts = P.PromptSet.from_dict(json.load(open(prompts_path))) if prompts_path else None

@@ -1,0 +1,218 @@
+{
+ "covered": [
+  {
+   "rule": "Use now for every relative date; address holder as title and surname",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "Say exactly \"This is Selvi Mutual Bank's automated assistant. This conversation is recorded.\"",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\"Am I speaking with {{title}} {{last_name}}?\" ask at most twice",
+   "where": "phrases.holder_question, identity.holder_confirmation_asks"
+  },
+  {
+   "rule": "Still unclear: ulasilmadi/belirsiz",
+   "where": "identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "never say arrears, balance, payment or product before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "Three security questions in order dogum_yili, ilce, guvenlik_sayisi with formats year/text/digits(6)",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "No question has a recoverable format-hint exception",
+   "where": "identity.requirements[*].hint_field (empty)"
+  },
+  {
+   "rule": "TWO wrong answers TOTAL; kalan_deneme authoritative",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "Exhaustion: \"Please verify your identity at a Selvi branch.\" dogrulanmadi/yanlis",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "Explicit refusal explained once; second refusal dogrulanmadi/istemedi; purpose question not a refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "Callback NEXT business day 08:20-12:10, strictly after now, ask once for alternative",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "second invalid slot/refusal ulasilmadi/zaman_yok; booking ulasilmadi/geri_arama",
+   "where": "third_party.callback.no_callback_outcome, scheduled_outcome"
+  },
+  {
+   "rule": "Wrong number ulasilmadi/yanlis_numara",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "\"Please accept our condolences.\" ulasilmadi/vefat",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "one or two products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\"I am calling about the overdue balances.\" then state each product",
+   "where": "phrases.debt_intro, multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "doner_hesap \"revolving account\"; tasit_borcu \"vehicle borrowing\"",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "Business days Sunday-Thursday, NO holidays, next/this weekday, ask missing month/year",
+   "where": "calendar"
+  },
+  {
+   "rule": "Days late 1-16: five calendar days, preceding",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "Days late 17-70: seventeenth of NEXT month, preceding",
+   "where": "bands[1].deadline"
+  },
+  {
+   "rule": "Today allowed if business day",
+   "where": "dates.promise_today_allowed"
+  },
+  {
+   "rule": "Computed deadline already past: no promise, mark reddetti",
+   "where": "dates.past_deadline"
+  },
+  {
+   "rule": "Closed date moves forward only within deadline, otherwise deadline; past deadline gets deadline counteroffer; vague asked once",
+   "where": "dates.weekend_or_holiday_roll_forward, dates.after_deadline_offer_deadline, dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "Shared date capped per product",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "Ask full first; never ask how much",
+   "where": "amounts.full_first, amounts.never_ask_how_much"
+  },
+  {
+   "rule": "Floor 25 percent of full past-due for both types, capped at full",
+   "where": "amounts.floor_rules[*]"
+  },
+  {
+   "rule": "Offer floor once, \"The remainder stays outstanding.\"; accept floor..full",
+   "where": "amounts.floor_offered_once, amounts.floor_wording, amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "\"Can you settle this balance today?\" / \"Can you settle both balances today?\" asked once for batch",
+   "where": "phrases.today_question, phrases.all_today_question, multi_product.ask_all_today_once"
+  },
+  {
+   "rule": "Attempts counted per product; 1-16 ZERO; 17-70 ONE floor on deadline",
+   "where": "multi_product.per_product_attempts, bands[*].attempts"
+  },
+  {
+   "rule": "\"Do you authorize me to save these exact commitments?\"",
+   "where": "promise_write.confirm_phrase, multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "One successful promise per product; ZERO retries; kayit_hatasi",
+   "where": "promise_write.one_promise_per_product, promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "\"A receipt will appear in your secure inbox.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\"Contact a branch to change a saved commitment.\"",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "Dispute: mark itiraz, continue others",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "Illness/bereavement/job loss: offer musteri_destegi, aktarildi/destek, else zorluk",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "Human request: genel_gorusme, aktarildi/insan, no ask first",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "Refusal to talk: one request, second marks remaining reddetti",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "Recent-payment remark: \"I cannot confirm payment receipt from the information available here.\" and continue",
+   "where": "phrases.already_paid_sentence, unresolved[already_paid]"
+  },
+  {
+   "rule": "No restructuring rule; say new terms unavailable, continue",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "Robot question reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "Scam question reply and continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "\"I do not have that information.\"",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "Notes: one per unpromised product, reasons reddetti/itiraz/zorluk/kayit_hatasi, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "Transfer overrides promise outcome; saved promises preserved",
+   "where": "outcomes.transfer_overrides_promise, multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "soz_verildi reason omitted; soz_yok with first unpromised product's reason",
+   "where": "outcomes.promise_outcome, outcomes.no_promise_outcome, outcomes.no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "No all-paid outcome or paid-note precedence",
+   "where": "outcomes.paid_outcome (empty), outcomes.all_paid_closes_as_paid=false"
+  },
+  {
+   "rule": "Goodbye before exactly one close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "Outcome/reason table",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "Queues exactly genel_gorusme and musteri_destegi",
+   "where": "special_cases[human].action.queue, special_cases[hardship].offer_transfer_queue"
+  },
+  {
+   "rule": "Interface guide property meanings",
+   "where": "api_fields"
+  }
+ ],
+ "fixed": [
+  "special_cases[scam].before_persuasion set to true: the scam reply is in section 6 'Special remarks, before persuasion', like the other remarks there.",
+  "api_fields: removed verify_identity.field, verify_identity.answer and get_account.ok because they are not slots the schema's api_fields contract defines. The meanings that matter (soru/cevap) come from the enum and the guide.",
+  "Added the unresolved entry 'failed get_account': the guide forbids claiming there are no debts after a failure but gives no close outcome.",
+  "Widened the source quotes for identity (holder ask count, belirsiz, no format hint), third_party (relative/no disclosure), amounts (below-floor rule) and phrases (prohibited words, today questions).",
+  "Clarified the refuse_to_talk unresolved note: before verification the second refusal uses the same pair as identity.declined_outcome."
+ ],
+ "unresolved": [
+  "No already_paid special case: the documents say there is no already-paid rule or paid outcome, and a continue-only already_paid case would require a paid_outcome. The sentence is kept in phrases.already_paid_sentence.",
+  "Floor rounding is half-up to the nearest cent, but the percent floor rule has no rounding field.",
+  "The hardship sympathy sentence is not dictated; a short sentence was written.",
+  "Refuse_to_talk before verification closes dogrulanmadi/istemedi; the special-case action only covers the reddetti note after verification.",
+  "No close outcome is given for a failed get_account."
+ ]
+}

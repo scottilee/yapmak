@@ -1,0 +1,20 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "substitute-name-placeholders",
+      "source": "01-specification.md \u00a72,8",
+      "expected": {
+        "variables": {
+          "title": "Dr",
+          "last_name": "Venn"
+        },
+        "opening": "Hello Dr Venn, this is Vesper Reach Bank\u2019s automated assistant. This conversation is recorded.",
+        "consent": "Dr Venn, may I save these exact commitments?",
+        "literal_braces_forbidden": true
+      },
+      "schema_gap": null
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

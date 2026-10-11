@@ -1,0 +1,239 @@
+{
+ "covered": [
+  {
+   "rule": "S-72: M-3 withdrawn; contact days today or next business day; hours 09:00-18:00",
+   "where": "third_party.callback.days/start/end"
+  },
+  {
+   "rule": "M-1 identity order konto_code, geburtsdatum, postleitzahl",
+   "where": "identity.requirements[0..2].field"
+  },
+  {
+   "rule": "M-2 ceiling four; remaining-slot governs, no private tally",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "M-3 (hours kept per S-72; days part withdrawn)",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "M-4 late band: 20th of following month, next business day",
+   "where": "bands[2].deadline"
+  },
+  {
+   "rule": "1.3 / 6.1 up to five facilities",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "2.1 opening verbatim",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "2.2 holder question, two asks, HL-MISS/hl-unclear",
+   "where": "phrases.holder_question, identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "2.3 forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "2.4 / 10.7 robot reply",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "2.4 / 10.8 scam reply",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "3.1 third party told nothing; window after now",
+   "where": "third_party.callback.must_be_after_now, phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "3.2 re-ask once; HL-MISS/hl-nocb",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "3.3 HL-MISS/hl-cb",
+   "where": "third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "3.4 wrong number, deceased + condolence sentence",
+   "where": "third_party.wrong_number_outcome, third_party.deceased_outcome, third_party.deceased_sentence"
+  },
+  {
+   "rule": "4.2 formats and request wording; no hint facility",
+   "where": "identity.requirements[*].answer_format/digits/numeric_date_order/ask_text (hint fields empty)"
+  },
+  {
+   "rule": "4.4 ceiling reached: sentence + HL-ID/hl-fail",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "4.5 explain once, HL-ID/hl-decline; asking why is not refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "4.6 account only after all answers pass",
+   "where": "identity (template behaviour)"
+  },
+  {
+   "rule": "4.7 ceiling alone binds",
+   "where": "identity.wrong_answer_limit"
+  },
+  {
+   "rule": "5.1/5.2 Mon-Sat business days, no holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "5.3 next weekday = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "5.4 missing month/year -> next occurrence",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "6.2 floor fields per category",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "6.3 every facility stated before any ask",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "6.4 spoken categories",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "6.5 reason for call introduced exactly",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "7.1(a) earlier of 9th calendar day and last business day of month",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "7.1(b) 15th of following month, next business day",
+   "where": "bands[1].deadline"
+  },
+  {
+   "rule": "7.2(a) one attempt, full on k-date, floor if full refused",
+   "where": "bands[0].attempts, bands[1].attempts"
+  },
+  {
+   "rule": "7.2(b) two attempts for band (c)",
+   "where": "bands[2].attempts"
+  },
+  {
+   "rule": "7.3 refusal to settle today consumes an attempt",
+   "where": "phrases.today_question, unresolved[today_question]"
+  },
+  {
+   "rule": "7.4 period clarified once then k-date",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "7.5 date beyond k-date -> name k-date",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "8.1 full first, never ask what it can pay",
+   "where": "amounts.full_first, amounts.never_ask_how_much"
+  },
+  {
+   "rule": "8.2 floor..full recordable; floor once with sentence",
+   "where": "amounts.accept_between_floor_and_full, amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "8.3 recordable dates; closed day rolls forward",
+   "where": "dates.promise_today_allowed, dates.weekend_or_holiday_roll_forward"
+  },
+  {
+   "rule": "8.4 no discount/schedule",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "9.1 batch read-back, 'May I record these payments?'",
+   "where": "multi_product.one_confirmation_for_batch, promise_write.confirm_phrase"
+  },
+  {
+   "rule": "9.3 one record per facility",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "9.4 whole-batch refusal",
+   "where": "outcomes.refused_reason"
+  },
+  {
+   "rule": "9.5 confirmation sentence; alteration reply",
+   "where": "phrases.after_promise_sentence, phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "10.1 already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "10.2 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "10.3 hardship, no transfer",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "10.4 restructuring -> hl-rework, HL-TR/hl-rework",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "10.5 person -> ask once, hl-desk, HL-TR/hl-person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "10.6 refusal of call",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "10.9 cannot-answer sentence",
+   "where": "phrases.cannot_answer_sentence, special_cases[cannot_answer]"
+  },
+  {
+   "rule": "11.1 notes per unrecorded facility",
+   "where": "notes.reasons, notes.note_each_unpromised_product"
+  },
+  {
+   "rule": "11.2 no notes on transfer",
+   "where": "notes.none_on_transfer"
+  },
+  {
+   "rule": "11.3 outcome rank",
+   "where": "outcomes.transfer_overrides_promise, promise_outcome, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "11.4 farewell before one close call; written ranks keep",
+   "where": "outcomes.goodbye_before_close, multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "11.5 retry once, then hl-R07",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "11.6 value table",
+   "where": "outcomes.table"
+  }
+ ],
+ "fixed": [
+  "No value errors found: all outcomes, reasons, queues, note codes and identity fields exist in openapi.json enums, and memo/mail precedence (M-1, M-2, M-4, S-72 withdrawing M-3 days but keeping 09:00-18:00) was already applied correctly.",
+  "Sharpened source spans: konto_code requirement now cites both M-1 (order) and policy 4.2 (format/wording); identity, calendar, band, amounts, multi_product, phrases and promise_write sources now quote the clauses (2.2, 4.4, 4.5, 5.3, 7.2(b), 8.1, 6.3, 9.3, 11.4) that back their values.",
+  "Added unresolved entry: 10.6 ends 'under 11.3', so the HL-FULL/hl-refuse close applies only when no payment has been written."
+ ],
+ "unresolved": [
+  "Facilities with 0 or more than 60 days past have no band.",
+  "Wording of the first pay-today question is not dictated (written from content).",
+  "Wording of the 10.3 sympathy sentence is not dictated (written from content).",
+  "10.5 'treatment 10.6 otherwise' for a non-insisting request for a person is not spelled out.",
+  "10.6 refusal after a written payment closes per 11.3 (HL-PAY), not HL-FULL/hl-refuse.",
+  "No Sunday shift for the 9th-calendar-day branch of band (a).",
+  "M-77 is in force from 13 Oct 2026 00:00 UTC; rules for an earlier `now` are not stated; S-72 is dated 'Wed 13 Oct' though that date is a Tuesday.",
+  "create_promise schema: property `sum` vs required `amt`."
+ ]
+}

@@ -76,7 +76,21 @@ def test_schema_without_customer_id_omits_it(tmp_path):
     assert not C.static_check(wf, tools)
 
 
-def test_unmappable_required_argument_stops_the_build(tmp_path):
+def test_unrecognised_enum_argument_is_mapped_by_type_and_recorded(tmp_path):
     tools = C.parse_openapi(_mutated_openapi(tmp_path, renames={"close_call": {"outcome": "zz_final"}}))
-    with pytest.raises(SystemExit, match="close_call.outcome"):
+    C.MAPPING_NOTES.clear()
+    assert C.request_slots(tools)["close_call"]["outcome"] == "zz_final"
+    assert any(n.get("slot") == "outcome" and "fallback" in n.get("by", "") for n in C.MAPPING_NOTES)
+
+
+def test_unmappable_required_argument_stops_the_build(tmp_path):
+    import json
+    spec = json.load(open(ROOT / "tools/openapi.json"))
+    body = spec["paths"]["/create_promise"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    body["properties"] = {"customer_id": body["properties"]["customer_id"]}      # nothing left that could carry an amount
+    body["required"] = ["customer_id"]
+    path = tmp_path / "api.json"; path.write_text(json.dumps(spec))
+    tools = C.parse_openapi(str(path))
+    with pytest.raises(SystemExit, match="create_promise.amount"):
         C.request_slots(tools)
+    assert "create_promise.amount" in C.unmapped_request_slots(tools)

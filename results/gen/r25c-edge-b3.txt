@@ -1,0 +1,16 @@
+FAIL PUB-11 hard   Edge           | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'hardship'), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-14')]
+       - notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'hardship'), ('p3', 'hardship')]
+       - conversation: The agent failed to record the promise for the credit card payment, despite the user stating they could pay it in full today in [Message 7]. Consequently, the agent explicitly stated in [Message 10] that no promise would be recorded and used the 
+FAIL PUB-12 hard   Edge           | verify > verify > get_account > promise > add_note > add_note > close_call
+       - promises [('p1', 510.0, '2026-10-23')], expected [('p1', 510.0, '2026-10-16')]
+       - conversation: The conversation failed to meet several success criteria: - The credit card promise was recorded for Friday 23 October 2026 (Message 12, 15 and system event) instead of the required Friday 16 October. - The car loan received a refused note withou
+FAIL PUB-13 hard   Edge           | close_call
+       - outcome ('not_reached', 'no_callback'), expected ('not_reached', 'callback')
+       - callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]
+       - conversation: The call failed several specific success criteria: - The assistant did not call the `schedule_callback` tool for 2026-10-15 at 11:00 as required by the criteria; instead, it explicitly stated it would not schedule a callback in [Message 6]. - The
+
+slowest agent turn per call: median 6 s, worst 7 s. Failed calls where the customer hung up: 0.
+
+0 / 3 passed (bank records and conversation checks). Last simulation 5c5cbe9e-321e-4ef0-a30a-8a48fad2b204, status completed, 65 s.

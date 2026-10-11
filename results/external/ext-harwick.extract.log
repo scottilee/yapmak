@@ -1,0 +1,71 @@
+{
+ "bands": [
+  "a",
+  "b",
+  "c"
+ ],
+ "identity": [
+  "konto_code",
+  "geburtsdatum",
+  "postleitzahl"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "days_past_outside_bands",
+   "text": "Bands cover only 1-60 days past; the documents do not say how to treat a facility with 0 or more than 60 days past.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "today_question",
+   "text": "The documents do not dictate the wording of the first ask to pay today (7.3 and 8.1 only say the full amount is asked first and a refusal to settle today counts as an attempt); the today_question/all_today_question sentences are written from that content.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "hardship_sympathy_wording",
+   "text": "10.3 requires 'one short sentence of sympathy' without dictating the words; the say text is a short sentence written to that content.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "human_request_not_insisting",
+   "text": "10.5 says 'treatment 10.6 otherwise' after the single ask whether the assistant can help; how 10.6 (refusal of the call) applies to a non-insisting request for a person is not spelled out.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "refuse_to_talk_outcome_rank",
+   "text": "10.6 ends a refused call 'under 11.3', so if a payment was already written the close is HL-PAY rather than HL-FULL/hl-refuse; the special-case action records the HL-FULL/hl-refuse default for the no-payment case only.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "band_a_calendar_day_adjustment",
+   "text": "7.1(a) gives no shift for the ninth calendar day when it falls on a Sunday; no adjustment is applied to that branch (8.3 still requires a business-day promise date on or before the k-date).",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "memo_effective_date",
+   "text": "M-77 is in force from Tue 13 Oct 2026, 00:00 UTC; the documents do not say which rules apply to calls whose `now` falls before that time. S-72 is dated 'Wed 13 Oct 2026' although 13 Oct 2026 is a Tuesday.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md"
+  },
+  {
+   "topic": "create_promise_amount_field",
+   "text": "The create_promise request schema defines the amount property as `sum` but lists `amt` as required; the documents do not resolve the discrepancy.",
+   "doc": "openapi.json"
+  }
+ ],
+ "audit_fixed": [
+  "No value errors found: all outcomes, reasons, queues, note codes and identity fields exist in openapi.json enums, and memo/mail precedence (M-1, M-2, M-4, S-72 withdrawing M-3 days but keeping 09:00-18:00) was already applied correctly.",
+  "Sharpened source spans: konto_code requirement now cites both M-1 (order) and policy 4.2 (format/wording); identity, calendar, band, amounts, multi_product, phrases and promise_write sources now quote the clauses (2.2, 4.4, 4.5, 5.3, 7.2(b), 8.1, 6.3, 9.3, 11.4) that back their values.",
+  "Added unresolved entry: 10.6 ends 'under 11.3', so the HL-FULL/hl-refuse close applies only when no payment has been written."
+ ]
+}

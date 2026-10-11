@@ -1,0 +1,18 @@
+FAIL PUB-11 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'hardship'), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16')]
+       - notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'dispute'), ('p3', 'hardship')]
+       - conversation: The call failed to meet several criteria regarding account handling and recording: - B2: Met. The assistant listed all three products (credit card, personal loan, car loan) before asking for payment in Message 6. - B8–9 and A32: Failed. The assis
+FAIL PUB-12 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'dispute'), expected ('no_promise', 'refused')
+       - notes [('p1', 'dispute'), ('p2', 'dispute'), ('p3', 'dispute')], expected [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'paid')]
+       - conversation: - The agent failed to note product p3 (car loan) as paid, instead recording it as a dispute. - The agent failed to note product p1 (credit card) as refused, instead recording it as a dispute. - The agent incorrectly categorized all three products
+FAIL PUB-13 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 90.0, '2026-10-23'), ('p2', 300.0, '2026-10-23')]
+       - notes [('p1', 'refused'), ('p2', 'refused')], expected []
+       - conversation: The assistant failed to meet the success criteria as it did not record any promises. Although the user provided the 'floor' amounts (90 and 300) for the card and loan in message 7, the assistant repeatedly failed to process the user's requested d
+
+slowest agent turn per call: median 9 s, worst 13 s. Failed calls where the customer hung up: 0.
+
+0 / 3 passed (bank records and conversation checks). Last simulation 53e460a4-1729-46b6-aca9-67edce3706ef, status completed, 65 s.

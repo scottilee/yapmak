@@ -1,0 +1,440 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+  "tests/fixtures/external/kurilian-sat-bullets/02-codes.txt",
+  "tests/fixtures/external/kurilian-sat-bullets/03-supervisor-mail.txt"
+ ],
+ "bank_name": "Kurilian Co-operative Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "sec_code",
+    "ask_text": "What are the four digits of your security code?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+     "text": "Ask EXACTLY: \"What are the four digits of your security code?\" - field `sec_code`. Format digits, exactly 4, leading zeros kept. No recoverable-format hint exists, so no hint rule applies."
+    }
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "DEC",
+   "F01"
+  ],
+  "declined_outcome": [
+   "DEC",
+   "F02"
+  ],
+  "unclear_holder_outcome": [
+   "VOID",
+   "JCB-unclear"
+  ],
+  "failed_instruction": "Please use the KCB app.",
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "Maximum wrong answers across the whole check = 2. Use the API's `tries_left`, never a private tally. Exhausted \u2192 EXACTLY \"Please use the KCB app.\" \u2192 close `DEC` / `F01`. A refusal is met by one explanation of why the check protects the account; a second refusal closes `DEC` / `F02`. \"Why do you need it?\" is a question, not a refusal; answer and ask again. 2 asks max, then close `VOID` / `JCB-unclear`."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": false,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "VOID",
+    "JCB-unclear"
+   ],
+   "no_callback_outcome": [
+    "VOID",
+    "JCB-unclear"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/03-supervisor-mail.txt",
+    "text": "no callback booking (confirms call sheet: \"DO NOT book a callback.\" / \"No callback booking. Third parties are sent back to the holder.\"). Codes: \"VOID: RNG | JCB-unclear\" - the holder was not reached/confirmed."
+   }
+  },
+  "wrong_number_outcome": [
+   "VOID",
+   "RNG"
+  ],
+  "deceased_outcome": [
+   "VOID",
+   "JCB-unclear"
+  ],
+  "deceased_sentence": "",
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "DO NOT book a callback. Say EXACTLY: \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" Wrong number \u2192 close `VOID` / `RNG`."
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "A business day is every day of the week. There are no shutdown days and no holidays. \"next <weekday>\" names that weekday in the following calendar week, even when spoken on that weekday itself. A period named without month and year (\"the 15th\") resolves to the next occurrence, on or after today."
+  }
+ },
+ "bands": [
+  {
+   "name": "all",
+   "days_late_min": 1,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 36500,
+    "adjustment": "none"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "There is no k-date and no upper limit. A promise date is recordable when today or any business day after today. Zero persuasion attempts in any band. (Range from openapi.json get_account `dl_days` minimum 1, maximum 90.)"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "loan": {
+    "kind": "field",
+    "field": "amt_due"
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": false,
+  "floor_wording": "",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "Only the full `amt_due` is recordable. There is no floor, no instalment plan, no discount, no waiver. ZERO persuasion. The first \"no\" from the customer ends the call: close `No-PTP` / `R07`. A proposal below the full amount: EXACTLY \"That is below what we can take.\" Then close `No-PTP` / `R07`. No counter-offer."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": false,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "next_business_day",
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "There is no k-date and no upper limit. A promise date is recordable when today or any business day after today. A vague period (\"later\", \"after payday\", \"soon\"): ask once for the exact day. If still vague, close `No-PTP` / `R07`."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never had it, or it was paid off and closed.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "R07"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "\"Not my debt\", \"never had it\" / \"it was paid off and closed\": do not argue, do not take a promise, close `No-PTP` / `R07`."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "R07"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "Refuses to talk: close `No-PTP` / `R07` at once. No second ask."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks for a human / a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "kcb_desk",
+    "outcome": "transferred",
+    "reason": "kcb_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "Asks for a human: transfer queue `kcb_desk`, close `transferred` / `kcb_person`. One transfer per call."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a restructure or an instalment plan.",
+   "action": {
+    "type": "transfer",
+    "queue": "kcb_desk",
+    "outcome": "transferred",
+    "reason": "kcb_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "No restructure or instalment-plan rule. A request for one transfers to `kcb_desk` / `kcb_person`."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Phone the number printed on your statement to verify.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+    "text": "Asked whether this is a scam \u2192 EXACTLY \"Phone the number printed on your statement to verify.\" Continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "PTP",
+    "reasons": [],
+    "when": "A promise for the full amount was recorded."
+   },
+   {
+    "outcome": "No-PTP",
+    "reasons": [
+     "R07"
+    ],
+    "when": "No promise: customer says no, proposes less than full, stays vague, disputes, refuses to talk, or the write fails twice."
+   },
+   {
+    "outcome": "DEC",
+    "reasons": [
+     "F01",
+     "F02"
+    ],
+    "when": "F01: security tries exhausted; F02: second refusal of the security question."
+   },
+   {
+    "outcome": "VOID",
+    "reasons": [
+     "RNG",
+     "JCB-unclear"
+    ],
+    "when": "RNG: wrong number; JCB-unclear: holder not confirmed after 2 asks."
+   },
+   {
+    "outcome": "transferred",
+    "reasons": [
+     "kcb_person"
+    ],
+    "when": "Customer asked for a human (or a restructure/instalment plan); transferred to kcb_desk."
+   }
+  ],
+  "promise_outcome": "PTP",
+  "paid_outcome": "",
+  "transfer_outcome": "transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "No-PTP",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "R07",
+  "refused_reason": "R07",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/02-codes.txt",
+   "text": "PTP: (no reason) No-PTP: R07 DEC: F01 | F02 VOID: RNG | JCB-unclear transferred: kcb_person"
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/03-supervisor-mail.txt",
+   "text": "no notes (confirms call sheet: \"No `add_note` tool. Notes are not used at any outcome.\" and codes: \"add_note is not used by call sheet KCB-1.\")"
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "One product only. prod_kind is always `loan`. The customer has at most one."
+  }
+ },
+ "phrases": {
+  "opening": "KCB automated collections line. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue loan of Kurilian Co-operative Bank.",
+  "today_question": "",
+  "all_today_question": "",
+  "robot_reply": "KCB assistant.",
+  "scam_reply": "Phone the number printed on your statement to verify.",
+  "prohibited_before_verification": [
+   "owe",
+   "overdue",
+   "arrears",
+   "facility",
+   "payment"
+  ],
+  "after_promise_sentence": "KCB will text you to confirm this promise.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "Use the KCB app for details.",
+  "recorded_promise_change_reply": "Use the KCB app to change a recorded promise.",
+  "product_naming": {
+   "loan": "loan"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "Say EXACTLY: \"KCB automated collections line. We record this call.\" Then EXACTLY: \"Am I speaking with {{title}} {{last_name}}?\" ... never say these words: owe, overdue, arrears, facility, payment. State exactly: \"I am calling about the overdue loan of Kurilian Co-operative Bank.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Amount {{amt_due}}, on {{date}}. Save that?",
+  "source": {
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+   "text": "EXACTLY one read-back: \"Amount {{amt_due}}, on {{date}}. Save that?\" ... A write fails \u2192 retry once. A second failure \u2192 close `No-PTP` / `R07` and say the write failed."
+  }
+ },
+ "api_fields": {
+  "get_account.type": "prod_kind",
+  "get_account.past_due": "amt_due",
+  "get_account.days_late": "dl_days",
+  "verify_identity.remaining": "tries_left"
+ },
+ "unresolved": [
+  {
+   "topic": "bands / deadline",
+   "text": "There is no k-date and no upper limit. A promise date is recordable when today or any business day after today. The schema requires a band with a deadline, so one band covers dl_days 1-90 (openapi.json range) and its deadline is a placeholder of 36500 calendar days that stands for 'no upper limit'; the documents give no deadline value.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "persuasion attempts",
+   "text": "Zero persuasion attempts in any band. The first \"no\" from the customer ends the call: close `No-PTP` / `R07`.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "below-full proposal sentence",
+   "text": "A proposal below the full amount: EXACTLY \"That is below what we can take.\" Then close `No-PTP` / `R07`. No phrase field holds this sentence.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "vague date",
+   "text": "A vague period (\"later\", \"after payday\", \"soon\"): ask once for the exact day. If still vague, close `No-PTP` / `R07` (no deadline fallback).",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "third-party sentence and outcome",
+   "text": "Third party: Say EXACTLY: \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" No callback; the documents give no close outcome for a non-wrong-number third party. The schema requires one, so the holder-not-confirmed code VOID / JCB-unclear is used for no_callback_outcome and (unused, callback disabled) scheduled_outcome.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "deceased",
+   "text": "The documents do not address a deceased account holder; no deceased sentence. The schema requires an outcome, so the holder-not-confirmed code VOID / JCB-unclear is used as the closest listed code.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/02-codes.txt"
+  },
+  {
+   "topic": "already_paid",
+   "text": "No \"already paid\" rule. The customer never gets the one-business-day sentence and no paid note. \"it was paid off and closed\" is handled with the dispute case (close `No-PTP` / `R07`).",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "hardship",
+   "text": "No hardship rule. The customer never gets sympathy for illness, bereavement or job loss.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "today question",
+   "text": "The documents do not dictate a question about paying today; after the debt intro they say only: Then state amt_due and dl_days.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "write failure sentence",
+   "text": "A second failure \u2192 close `No-PTP` / `R07` and say the write failed.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "promise then transfer",
+   "text": "The documents do not say which outcome applies when a promise was recorded and the call is then transferred; default kept.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  }
+ ]
+}

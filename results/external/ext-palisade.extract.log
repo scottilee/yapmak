@@ -1,0 +1,52 @@
+{
+ "bands": [
+  "DPD 1-18",
+  "DPD 19-90"
+ ],
+ "identity": [
+  "nacimiento",
+  "zona"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "P-18 defines bands only for DPD 1\u201318 and 19\u201390; no rule for products more than 90 days late.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "refuse_to_talk",
+   "text": "Second refusal marks all remaining products R-1 (notes at finalization, close per finalization rules); before verification a second refusal closes IDStop/I-2.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "amounts.below_floor",
+   "text": "Below-floor offer gets a floor counteroffer; a rejected counteroffer is a flat refusal.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "third_party.relatives",
+   "text": "No relative can verify or pay for the holder; no IR field expresses this beyond the third-party callback flow.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "third_party.callback.missing_time",
+   "text": "Ask for missing clock time when the callback offer has no time; no IR field for this.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[scam].before_persuasion set true: P-18 \u00a75 heading 'Special remarks \u2014 before persuasion' covers the scam remark as well.",
+  "promise_write.source expanded to cite both the 10 Oct reversal and P-18 \u00a76 (retry TWO, confirm phrase).",
+  "identity/third_party sources completed with the omitted clause text (no value changes).",
+  "Added unresolved entries: 'No relative can verify or pay for the holder' and 'Ask for missing clock time' for callbacks (no IR fields)."
+ ]
+}

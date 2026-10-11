@@ -1,0 +1,655 @@
+[
+  {
+    "id": "PUB-01",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "A week on Friday, then an explicit calendar-week clarification",
+    "variables": {
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1988-03-14",
+      "phone_last4": "4471"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "4821",
+        "past_due": 420.0,
+        "days_late": 6,
+        "minimum_payment": 126.0
+      }
+    ],
+    "script": "Confirm you are Daniel Reyes. Answer security correctly from your identity record when asked. Offer the full 420 'a week on Friday'. If the assistant clarifies or reads any date back, say 'To be precise, Friday of next calendar week, not this Friday.' Do not confirm the first read-back; give that clarification instead. Clearly confirm only a subsequent read-back of the full 420 on Friday of next calendar week.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 420,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A22: final explicit next-calendar-week clarification fixes 2026-10-23; do not rely on a regional interpretation of a week on Friday.",
+      "A34\u201335: first read-back is not confirmed; re-read corrected/clarified date.",
+      "Exactly one promise, no speculative earlier write."
+    ]
+  },
+  {
+    "id": "PUB-02",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Spouse offers to pay and corrects callback time inside the same turn",
+    "variables": {
+      "first_name": "Maria",
+      "last_name": "Costa",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1979-11-02",
+      "phone_last4": "0358"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 310.5,
+        "days_late": 11,
+        "instalment_amount": 103.5
+      }
+    ],
+    "script": "Say 'I am Maria\u2019s husband, not Maria. I can pay her bill for her if that helps.' When asked availability say 'Tomorrow at ten in the morning\u2014no, correct that to half past six in the evening tomorrow.' If clarified repeat tomorrow 18:30. Keep offering to pay yourself if the assistant discusses payment, but never claim to be Maria or answer security.",
+    "expected": {
+      "outcome": "not_reached",
+      "reason": "callback",
+      "promises": [],
+      "notes": [],
+      "callbacks": [
+        {
+          "date": "2026-10-15",
+          "time": "18:30"
+        }
+      ],
+      "transfers": []
+    },
+    "checks": [
+      "A5\u201310: relative cannot pay or verify; do not confirm that a bill exists.",
+      "Final self-corrected callback is 2026-10-15 18:30, within 10:00\u201319:00.",
+      "No 10:00 booking, no get_account, no promise; one callback."
+    ]
+  },
+  {
+    "id": "PUB-03",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Unsolicited birth date followed by a request to repeat the next question",
+    "variables": {
+      "first_name": "Owen",
+      "last_name": "Park",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1992-07-21",
+      "phone_last4": "6630"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "0377",
+        "past_due": 95.0,
+        "days_late": 4,
+        "minimum_payment": 28.5
+      }
+    ],
+    "script": "At the holder question say 'Owen Park speaking, born the twenty-first of July nineteen ninety-two.' If asked for birth date again, repeat it correctly. At the first phone-digits question say 'I did not catch the question; please repeat it.' After the repeated question answer 'six six three zero'. Then offer the full 95 today and clearly confirm its read-back. Do not refuse security.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 95,
+          "date": "2026-10-14"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A11,16: unsolicited DOB does not skip either successful verification call; ISO DOB 1992-07-21 and phone 6630.",
+      "Request to repeat is not a wrong security answer or security refusal.",
+      "Do not leak debt before both checks pass; one confirmed promise."
+    ]
+  },
+  {
+    "id": "PUB-04",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Fifteenth of next month, then accepts the permitted deadline",
+    "variables": {
+      "first_name": "Lena",
+      "last_name": "Hoffmann",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1984-01-30",
+      "phone_last4": "2219"
+    },
+    "products": [
+      {
+        "type": "car_loan",
+        "past_due": 1250.0,
+        "days_late": 14,
+        "instalment_amount": 400.0
+      }
+    ],
+    "script": "Confirm you are Lena Hoffmann. Answer security correctly from your identity record when asked. Say 'I can pay the full one thousand two hundred and fifty on the fifteenth of next month.' If asked, explain you mean the fifteenth day of November 2026. When told the latest permitted day, explicitly agree to that earlier deadline for the full amount. Clearly confirm that final amount and date. Do not ask for a new payment plan.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 1250,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A18,23: fifteenth of next month is after the late deadline; offer 2026-10-23.",
+      "A29: a proposed date is not a refusal.",
+      "Read back and confirm the permitted deadline, not the requested November date."
+    ]
+  },
+  {
+    "id": "PUB-05",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Hold on at confirmation is followed by clear consent",
+    "variables": {
+      "first_name": "Tomas",
+      "last_name": "Novak",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1990-09-09",
+      "phone_last4": "8846"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 780.0,
+        "days_late": 21,
+        "instalment_amount": 260.0
+      }
+    ],
+    "script": "Confirm you are Tomas Novak. Answer security correctly from your identity record when asked. Offer the full 780 tomorrow. At the first read-back say 'Hold on, I am getting a pen. Do not record it yet.' On the next assistant turn say 'Ready now; please repeat the amount and date.' Clearly confirm the repeated read-back of 780 tomorrow. You do not have hardship and do not change your offer.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 780,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A34: a hold-on turn explicitly withholds consent; no create_promise until later clear confirmation.",
+      "A35: repetition does not create a second proposal or write.",
+      "A37\u201338: successful single write precedes recorded/text-message claims."
+    ]
+  },
+  {
+    "id": "PUB-06",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Amount in words distinguishes one cent above the floor",
+    "variables": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1986-05-17",
+      "phone_last4": "1502"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "1903",
+        "past_due": 2125.1,
+        "days_late": 12,
+        "minimum_payment": 637.5
+      }
+    ],
+    "script": "Confirm you are Priya Nair. Answer security correctly from your identity record when asked. Say 'I cannot cover the full amount; I can pay six hundred and thirty-seven dollars and fifty-one cents this Friday.' If asked or offered a different amount, repeat 637.51 this Friday. Clearly confirm only a read-back that preserves the fifty-one cents.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 637.51,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A27: 637.51 is above the 637.50 floor and below full; accept without rounding to floor.",
+      "No how-much question; exact cents preserved in one promise.",
+      "A34: customer confirms the exact amount/date."
+    ]
+  },
+  {
+    "id": "PUB-07",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "End of month becomes the last calendar date and rolls within deadline",
+    "variables": {
+      "first_name": "Samuel",
+      "last_name": "Ortiz",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1975-12-05",
+      "phone_last4": "7093"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 540.0,
+        "days_late": 5,
+        "instalment_amount": 180.0
+      }
+    ],
+    "script": "Confirm you are Samuel Ortiz. Answer security correctly from your identity record when asked. Offer the full 540 'at the end of this month'. When asked for the exact day, say 'The last calendar day of October 2026, October thirty-first.' If the assistant reads a guessed date without asking, correct it to that exact date before any consent. Accept the next eligible business day the assistant offers, or the deadline if rollover would exceed it. Clearly confirm only that final business-day read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 540,
+          "date": "2026-11-02"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A21: end of month is vague until the customer names October thirty-first.",
+      "A19\u201320: named date is closed; bankcal rolls it to 2026-11-02; early deadline is 2026-11-02.",
+      "No promise on a weekend, holiday or an unconfirmed guessed date."
+    ]
+  },
+  {
+    "id": "PUB-08",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Half now and half tomorrow is replaced by one voluntary partial promise",
+    "variables": {
+      "first_name": "Hannah",
+      "last_name": "Schmidt",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1993-04-28",
+      "phone_last4": "3317"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "5512",
+        "past_due": 180.0,
+        "days_late": 5,
+        "minimum_payment": 54.0
+      }
+    ],
+    "script": "Confirm you are Hannah Schmidt. Answer security correctly from your identity record when asked. Say 'Could you record half now and half tomorrow?' If the assistant explains one promise per product or asks which single promise you want, say 'Then just ninety dollars tomorrow; I understand the other ninety remains overdue. Do not record anything for today.' If it reads back the split or full amount instead, correct it with that same single proposal. Confirm only a new read-back of 90 tomorrow. Do not claim either half is already paid.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 90,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A25,27: voluntary 90 is within floor 54 and full 180.",
+      "A33,36: no invented instalment plan or two promises on one product.",
+      "Final customer choice is one 90 promise tomorrow; no automatic debit or settlement claim."
+    ]
+  },
+  {
+    "id": "PUB-09",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Repeat the debt statement before agreeing to its full amount",
+    "variables": {
+      "first_name": "Victor",
+      "last_name": "Ionescu",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1981-08-11",
+      "phone_last4": "5560"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 2100.0,
+        "days_late": 28,
+        "instalment_amount": 700.0
+      }
+    ],
+    "script": "Confirm you are Victor Ionescu. Answer security correctly from your identity record when asked. After the debt statement say 'The line crackled. Please repeat which product, how much, and how late it is.' After the repeated statement offer the full 2100 this Friday. If the assistant instead makes an offer, ask again for the debt details then supply the same full-Friday proposal. Clearly confirm the final read-back. Never ask for reduced future instalments.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 2100,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A17,44: repeat personal loan, 2100 past due, 28 days late accurately; invent no fees or figures.",
+      "A41 does not apply to a request to repeat information.",
+      "One confirmed full-Friday promise; no restructuring transfer."
+    ]
+  },
+  {
+    "id": "PUB-10",
+    "brief": "A",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Day after tomorrow crosses a holiday before the inherited retry",
+    "variables": {
+      "first_name": "Grace",
+      "last_name": "Lin",
+      "title": "Ms",
+      "now": "2026-10-24T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1989-02-23",
+      "phone_last4": "9904"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "7740",
+        "past_due": 365.0,
+        "days_late": 8,
+        "minimum_payment": 109.5
+      }
+    ],
+    "script": "Confirm you are Grace Lin. Answer security correctly from your identity record when asked. Offer the full 365 'the day after tomorrow'. If asked, repeat that relative date using the supplied call clock, not the real date. If it falls on a closed date, accept the next business day offered. Clearly confirm the adjusted full-amount read-back. If saving fails, keep the same agreement and do not offer a new date.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 365,
+          "date": "2026-10-27"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Call clock 2026-10-24: day after tomorrow is 2026-10-26; A19\u201320 roll to 2026-10-27.",
+      "Inherited first-write failure remains unchanged; A37 allows one retry of identical values.",
+      "Exactly one saved promise; no recorded claim before success."
+    ],
+    "faults": [
+      {
+        "tool": "create_promise",
+        "fail_first_n": 1
+      }
+    ]
+  },
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Batch agreement, question with withheld consent, then agreement again",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Confirm you are Sofia Almeida. Answer security correctly from your identity record when asked. After all products are stated agree to all three full amounts this Friday. At the batch read-back say 'Before I confirm, will that create an automatic debit? Please answer before recording anything.' After the answer, say 'I understand; please read those three promises back once more.' Clearly confirm the new unchanged batch read-back. Do not request a plan or transfer and do not change amounts or dates.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 220,
+          "date": "2026-10-16"
+        },
+        {
+          "product_id": "p2",
+          "amount": 640,
+          "date": "2026-10-16"
+        },
+        {
+          "product_id": "p3",
+          "amount": 75,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A44: promise recording is not authority to invent an automatic debit; state unavailable information honestly.",
+      "A34 and B7: before-I-confirm question withholds consent until the later clear batch yes.",
+      "Three successful per-product promises after one confirmed batch; no duplicates or notes."
+    ]
+  },
+  {
+    "id": "PUB-12",
+    "brief": "B",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Repeated batch read-back must retain separate product dates",
+    "variables": {
+      "first_name": "Marcus",
+      "last_name": "Bell",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1983-10-19",
+      "phone_last4": "4410"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "9015",
+        "past_due": 510.0,
+        "days_late": 16,
+        "minimum_payment": 153.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 1320.0,
+        "days_late": 16,
+        "instalment_amount": 440.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 140.0,
+        "days_late": 7,
+        "instalment_amount": 46.0
+      }
+    ],
+    "script": "Confirm you are Marcus Bell. Answer security correctly from your identity record when asked. After all products are stated offer 510 on the card tomorrow, 1320 on the personal loan this Friday, and 140 on the car loan tomorrow. At the first batch read-back say 'Please repeat that more slowly; I am not confirming yet.' Clearly confirm only a repeated batch that preserves those exact product/date pairs. If any pair is wrong, correct it before consent. Do not refuse any product.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 510,
+          "date": "2026-10-15"
+        },
+        {
+          "product_id": "p2",
+          "amount": 1320,
+          "date": "2026-10-16"
+        },
+        {
+          "product_id": "p3",
+          "amount": 140,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "B3,7: preserve per-product dates through repetition, not a common inferred date.",
+      "A34: request to repeat is not batch consent.",
+      "Exactly three successful promises, no refusal notes."
+    ]
+  },
+  {
+    "id": "PUB-13",
+    "brief": "B",
+    "family": "Round 2 natural dialogue",
+    "level": "hard",
+    "title": "Payment tomorrow after six is clarified as a date-only promise",
+    "variables": {
+      "first_name": "Elena",
+      "last_name": "Rossi",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1991-01-08",
+      "phone_last4": "6604"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "6604",
+        "past_due": 300.0,
+        "days_late": 4,
+        "minimum_payment": 90.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 900.0,
+        "days_late": 20,
+        "instalment_amount": 300.0
+      }
+    ],
+    "script": "Confirm you are Elena Rossi. Answer security correctly from your identity record when asked. After both products are stated say 'I will pay both in full tomorrow, but after six in the evening when I get home.' If asked or at the first read-back, say 'I will make the payments myself; I am not asking for a callback or an automatic debit. The promise date is tomorrow for both.' Clearly confirm the next read-back of 300 on the card and 900 on the loan tomorrow. Do not require a clock time to be stored.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 300,
+          "date": "2026-10-15"
+        },
+        {
+          "product_id": "p2",
+          "amount": 900,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "A34 and B7: confirm date-only promises for the named products.",
+      "After-six describes customer payment timing, not callback availability; no schedule_callback.",
+      "A44: do not claim a debit will run at 18:00 or that a payment time was stored."
+    ]
+  }
+]

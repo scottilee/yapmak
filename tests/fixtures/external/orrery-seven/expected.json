@@ -1,0 +1,480 @@
+{
+  "fixture": "orrery-seven",
+  "brief": "01-register.txt",
+  "documents": [
+    "01-register.txt",
+    "02-signed-memo.txt",
+    "03-codes.txt"
+  ],
+  "openapi": "openapi.json",
+  "checks": {
+    "outcomes.$table": {
+      "expected": {
+        "PTP": [],
+        "No-PTP": [
+          "R01",
+          "R07",
+          "R99"
+        ],
+        "Xfer": [
+          "H1"
+        ],
+        "ID0": [
+          "F1",
+          "D1"
+        ],
+        "NR0": [
+          "U0",
+          "N0",
+          "W0",
+          "D0"
+        ]
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "PTP",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "No-PTP",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "Xfer",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.refused_reason": {
+      "expected": "R01",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "R99",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "multi_product.max_products": {
+      "expected": 1,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "ask",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "notes.enabled": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "notes.reasons": {
+      "expected": [],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 0,
+      "source": "02-signed-memo.txt (4)"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "dates.past_deadline": {
+      "expected": "no_promise",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "member_pin"
+      ],
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 1,
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.remaining_slot": {
+      "expected": "tries_left",
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 6,
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "01-register.txt \u00a73; 02-signed-memo.txt (1)"
+    },
+    "bank_name": {
+      "expected": "Orrery Community Bank",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "ID0",
+        "F1"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "ID0",
+        "D1"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "NR0",
+        "U0"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please visit our service counter.",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "third_party.callback.enabled": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "NR0",
+        "N0"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "NR0",
+        "W0"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "NR0",
+        "D0"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "I am sorry for your loss.",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.floors": {
+      "expected": {},
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.floor_rules": {
+      "expected": {
+        "*": {
+          "kind": "percent",
+          "percent": 100
+        }
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.floor_offered_once": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.floor_wording": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.opening": {
+      "expected": "This is Orrery Community Bank's digital assistant. This call is recorded.",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "daybook": "daybook account"
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "debt",
+        "overdue",
+        "payment",
+        "account"
+      ],
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Shall I record that exact promise?",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "Your promise is available in online banking.",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 20,
+            "month_offset": 1,
+            "adjustment": "none"
+          },
+          "attempts": []
+        }
+      ],
+      "source": "02-signed-memo.txt (2),(3) supersede 01-register.txt \u00a7\u00a74\u20135"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "01-register.txt \u00a78 explicitly excludes these rules"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "01-register.txt \u00a78 explicitly excludes these rules"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "01-register.txt \u00a78 explicitly excludes these rules"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "No-PTP",
+        "reason": "R07"
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.dispute.ask_once_first": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.dispute.offer_transfer_queue": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "Desk-1",
+        "outcome": "Xfer",
+        "reason": "H1"
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.human.offer_transfer_queue": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "No-PTP",
+        "reason": "R01"
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.offer_transfer_queue": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.takes_promise": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.ask_once_first": {
+      "expected": false,
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.offer_transfer_queue": {
+      "expected": "",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    },
+    "special_cases.scam.say": {
+      "expected": "Please call the number on your statement to verify us.",
+      "source": "01-register.txt, clauses 1\u20139; 03-codes.txt"
+    }
+  },
+  "comparison_notes": [
+    "Absent special-case actions use the existing diff helper missing sentinel {\"missing\":true}; a fabricated default rule must fail comparison.",
+    "No reduced floor is represented by a 100-percent singleton interval, not an empty floor map alone.",
+    "paid_outcome is intentionally empty. Current policy.validate requires a paid outcome even when absent; this is an expected schema limitation, not permission to invent Paid.",
+    "Disabled callbacks have no operative day/window; default dataclass start/end values are not bank rules.",
+    "No extraction or simulation was used to author these expectations."
+  ]
+}

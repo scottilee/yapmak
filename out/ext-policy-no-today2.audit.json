@@ -1,0 +1,222 @@
+{
+ "covered": [
+  {
+   "rule": "\u00a71 one to three products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a71 product_id / type / past_due / days_late / products list",
+   "where": "api_fields"
+  },
+  {
+   "rule": "\u00a71 State every product, amount and days late before asking",
+   "where": "multi_product.state_all_before_asking, phrases.debt_intro"
+  },
+  {
+   "rule": "\u00a71 Spoken product names",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "\u00a72 Say verbatim opening",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\u00a72 Is this {{title}} {{last_name}} speaking?",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "\u00a72 At most three holder asks; NO-CONTACT/NOT-CLEAR",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a72 do not say arrears, balance, commitment or facility",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a72 robot reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "\u00a73 three questions in order, formats, MONTH/DAY/YEAR, seven digits",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "\u00a73 format_hint=month_word_required, 'Please say the month as a word.'",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "\u00a73 checks_remaining global budget, FOUR wrong answers",
+   "where": "identity.remaining_slot, identity.wrong_answer_limit, identity.wrong_count_source, api_fields.verify_identity.remaining"
+  },
+  {
+   "rule": "\u00a73 exhaustion sentence + ID-STOP/BAD-CHECK",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a73 refusal explained once; second refusal ID-STOP/NO-CHECK",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "\u00a73 Asking why security is needed does not count as refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "\u00a74 next business day, 08:10\u201311:40, strictly after now, one alternate",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "\u00a74 NO-CONTACT/NO-SLOT, NO-CONTACT/BOOKED",
+   "where": "third_party.callback.no_callback_outcome / scheduled_outcome"
+  },
+  {
+   "rule": "\u00a74 Wrong number NO-CONTACT/WRONG-LINE",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "\u00a74 Deceased condolences + NO-CONTACT/DEATH",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "\u00a75 Monday through Saturday business days; holiday list",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "\u00a75 Next weekday = following calendar week",
+   "where": "calendar.next_weekday, calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "\u00a75 Ask for missing month or year",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "\u00a75 Today is NEVER an eligible promise date",
+   "where": "dates.promise_today_allowed=false"
+  },
+  {
+   "rule": "\u00a75 closed day rolls forward if eligible, else deadline",
+   "where": "dates.weekend_or_holiday_roll_forward"
+  },
+  {
+   "rule": "\u00a75 date after deadline -> offer deadline",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "\u00a75 vague period clarified once then deadline",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "\u00a75 no eligible date -> DECLINE, no promise",
+   "where": "dates.past_deadline=no_promise, outcomes.refused_reason"
+  },
+  {
+   "rule": "\u00a76 band 1\u20134 ninth business day, zero attempts",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "\u00a76 band 5\u201313 eleven calendar days preceding; full on deadline",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "\u00a76 band 14\u201332 last business day of month; floor next business day",
+   "where": "bands[2]"
+  },
+  {
+   "rule": "\u00a76 band 33\u201380 17th of next month preceding; full NBD then floor deadline",
+   "where": "bands[3]"
+  },
+  {
+   "rule": "\u00a76 single/several product first questions",
+   "where": "phrases.today_question, phrases.all_today_question"
+  },
+  {
+   "rule": "\u00a76 batch ask once, per-product counters, common date capped per product",
+   "where": "multi_product"
+  },
+  {
+   "rule": "\u00a77 full first, never ask how much, floor fields per type",
+   "where": "amounts.full_first, amounts.never_ask_how_much, amounts.floors"
+  },
+  {
+   "rule": "\u00a77 floor once + 'The unpaid portion remains outstanding.'; below-floor counteroffer",
+   "where": "amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "\u00a77 accept floor through full",
+   "where": "amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "\u00a78 'May I save these exact commitments?'",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "\u00a78 one promise per product; change reply",
+   "where": "promise_write.one_promise_per_product, phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "\u00a78 retry TWICE; SAVE-ERROR",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "\u00a78 never claim saved before ok=true; receipt sentence",
+   "where": "api_fields.create_promise.ok, phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\u00a79 already paid sentence, SETTLED, continue others",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "\u00a79 dispute CONTEST, continue others",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "\u00a79 hardship: sympathetic sentence, CareDesk offer, ROUTED/CARE, decline DIFFICULTY, no promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "\u00a79 restructuring PlanDesk ROUTED/REPLAN",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "\u00a79 human MainDesk ROUTED/PERSON",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "\u00a79 transfer preserves saved promises; no notes on transfer",
+   "where": "multi_product.recorded_promises_survive_transfer, notes.none_on_transfer"
+  },
+  {
+   "rule": "\u00a79 scam reply then continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "\u00a79 Unknown information sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "\u00a79 refuse to talk: ask once, then DECLINE; before verification ID-STOP/NO-CHECK",
+   "where": "special_cases[refuse_to_talk], identity.declined_outcome"
+  },
+  {
+   "rule": "\u00a710 notes for unpromised products with listed reasons",
+   "where": "notes"
+  },
+  {
+   "rule": "\u00a710 Transfer overrides saved promise; AGREED; SETTLED; NO-AGREEMENT first non-SETTLED reason",
+   "where": "outcomes.transfer_overrides_promise, promise_outcome, paid_outcome, no_promise_outcome, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "\u00a710 thanks and goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "\u00a711 outcome/reason table, queues, note reasons",
+   "where": "outcomes.table, special_cases[*].action.queue, notes.reasons"
+  }
+ ],
+ "fixed": [
+  "special_cases[hardship].say was empty although \u00a79 requires 'one short sympathetic sentence'; added a short sentence carrying exactly that content.",
+  "api_fields: \u00a71 names get_account's fields itself ('returns the products list; product_id identifies a product, type is its type, past_due is the full amount and days_late determines its band') and \u00a78 names ok=true for create_promise; added get_account.list/id/type/past_due/days_late and create_promise.ok.",
+  "Extended source spans (amounts, outcomes, multi_product, phrases) to quote the supporting sentences for below-floor counteroffer, omitted reasons, per-product counters and the cannot-answer sentence."
+ ],
+ "unresolved": []
+}

@@ -1,0 +1,70 @@
+{
+ "bands": [
+  "all"
+ ],
+ "identity": [
+  "pi_code"
+ ],
+ "special_cases": [
+  "dispute",
+  "hardship",
+  "human",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "today_question",
+   "text": "The documents say only that the full amt_due is asked first; they dictate no wording and do not say the first ask is for payment today. today_question holds a content-only sentence asking for the full amount.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "vague_date",
+   "text": "Vague period: ask once for the exact day. Still vague \u2192 close `CCC-NO` / `F-no` (closes instead of proposing the k-date).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "third_party_message",
+   "text": "Third party: DO NOT book a callback. Say EXACTLY \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" There is no IR field for this sentence, and the documents do not give the close outcome for a third party who is not a wrong number. callback.no_callback_outcome (and the unused scheduled_outcome, callback being disabled) are set to the general no-promise pair CCC-NO / F-no from the codes list because the schema requires a valid outcome; the documents do not name it for this situation.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "below_floor_sentence",
+   "text": "Below floor: \"That is below what we can take.\" \u2192 close `CCC-NO` / `F-no` (no IR phrase field for this sentence).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "already_paid",
+   "text": "No \"already paid\" rule. (\"paid off and closed\" is handled with the dispute case.)",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "restructuring",
+   "text": "No restructure rule. No discount, waiver, or instalment plan is ever offered.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "refuse_to_talk",
+   "text": "The documents do not say what to do when the customer refuses to talk (rule 16 covers only refusing the security question).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "deceased",
+   "text": "The documents do not cover a deceased account holder. deceased_outcome is set to the general no-promise pair CCC-NO / F-no from the codes list only because the schema requires a valid outcome; no deceased sentence is dictated.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "transfer_overrides_promise",
+   "text": "The documents do not say which outcome applies when a promise was recorded and the call is then transferred; default kept.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "effective_date",
+   "text": "Call sheet v1.0 is effective 14 October 2026; the IR has no field for an effective date.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.today_question was empty although rule 24 requires the full amt_due to be asked first; set it to a content-only sentence ('Can you pay the full amount due?') and reworded unresolved[today_question] (no wording and no 'today' in the documents).",
+  "Added unresolved[effective_date] (call sheet effective 14 October 2026, no IR field); clarified the third_party_message and refuse_to_talk unresolved entries; added rule citations to the band and outcomes sources."
+ ]
+}

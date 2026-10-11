@@ -1,0 +1,44 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "amounts.floor_rounding",
+   "text": "The floor is 23 percent of full past_due, rounded UP to the next WHOLE currency unit, then capped at full past_due. A whole-number result remains unchanged. Never round to cents. The floor_rules DSL has no whole-unit rounding option; the percent rule must be rounded up to a whole currency unit (e.g. ceil(0.23 * past_due)), never to cents.",
+   "doc": "tests/fixtures/external/r2-policy-whole-unit-floor/01-specification.md"
+  },
+  {
+   "topic": "special_cases.hardship.say",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence \u2014 the documents do not dictate the exact words; a short sympathetic sentence was written.",
+   "doc": "tests/fixtures/external/r2-policy-whole-unit-floor/01-specification.md"
+  },
+  {
+   "topic": "special_cases.refuse_to_talk.before_verification",
+   "text": "Before verification that second refusal closes ID-STOP/NO-CHECK. After verification it 'stops and marks remaining products DECLINE': the close then follows the section 10 precedence (AGREED if a promise was saved, else NO-AGREEMENT with the first non-SETTLED product's reason), not necessarily NO-AGREEMENT/DECLINE.",
+   "doc": "tests/fixtures/external/r2-policy-whole-unit-floor/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[scam] and [refuse_to_talk]: before_persuasion set to true \u2014 both are listed under \u00a79 'Special cases before persuasion'.",
+  "Expanded source spans (identity, third_party, amounts, dates, multi_product, phrases, promise_write, outcomes) to quote the full constraining sentences (relative non-disclosure, no discount/waiver, do not record above full, per-product counters, consent invalidated by correction, omit reason for AGREED/SETTLED).",
+  "unresolved[refuse_to_talk]: clarified that after verification the close follows \u00a710 precedence rather than always NO-AGREEMENT/DECLINE."
+ ]
+}

@@ -1,0 +1,184 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "53e460a4-1729-46b6-aca9-67edce3706ef",
+ "iteration_id": "999a1cce-3447-4185-95f4-89edcb1be66c",
+ "seconds": 65,
+ "passed": 0,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'hardship'), expected ('promise', None)",
+    "promises [], expected [('p1', 220.0, '2026-10-16')]",
+    "notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'dispute'), ('p3', 'hardship')]",
+    "conversation: The call failed to meet several criteria regarding account handling and recording: - B2: Met. The assistant listed all three products (credit card, personal loan, car loan) before asking for payment in Message 6. - B8\u20139 and A32: Failed. The assistant recorded a 'hardship' note for all three products (System Events). The personal loan (p2) was explicitly disputed ('not mine'), but was tagged as har"
+   ],
+   "call_id": "3327f28f-5d0c-4e32-8a5a-83f4d94ee773",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_66972894-4d4",
+   "slowest_turn_s": 12.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'dispute'), expected ('no_promise', 'refused')",
+    "notes [('p1', 'dispute'), ('p2', 'dispute'), ('p3', 'dispute')], expected [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'paid')]",
+    "conversation: - The agent failed to note product p3 (car loan) as paid, instead recording it as a dispute. - The agent failed to note product p1 (credit card) as refused, instead recording it as a dispute. - The agent incorrectly categorized all three products as disputes in the tool calls, despite the user providing distinct responses for each (p3 paid, p2 dispute, p1 refused). - Consequently, while the close_"
+   ],
+   "call_id": "22b01587-3b68-4cf8-a581-2aa0fb9691a1",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_35c0a5ea-4a9",
+   "slowest_turn_s": 8.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'refused'), expected ('promise', None)",
+    "promises [], expected [('p1', 90.0, '2026-10-23'), ('p2', 300.0, '2026-10-23')]",
+    "notes [('p1', 'refused'), ('p2', 'refused')], expected []",
+    "conversation: The assistant failed to meet the success criteria as it did not record any promises. Although the user provided the 'floor' amounts (90 and 300) for the card and loan in message 7, the assistant repeatedly failed to process the user's requested date changes in messages 11-15. Consequently, the assistant ended the call in message 16 stating 'nothing is recorded today', which is confirmed by the sys"
+   ],
+   "call_id": "406de01d-25b3-411a-9870-8b66a217e45d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_73ea3a0a-8f2",
+   "slowest_turn_s": 3.3,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'hardship'), expected ('promise', None)",
+     "promises [], expected [('p1', 220.0, '2026-10-16')]",
+     "notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'dispute'), ('p3', 'hardship')]",
+     "conversation: The call failed to meet several criteria regarding account handling and recording: - B2: Met. The assistant listed all three products (credit card, personal loan, car loan) before asking for payment in Message 6. - B8\u20139 and A32: Failed. The assistant recorded a 'hardship' note for all three products (System Events). The personal loan (p2) was explicitly disputed ('not mine'), but was tagged as har"
+    ],
+    "call_id": "3327f28f-5d0c-4e32-8a5a-83f4d94ee773",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_66972894-4d4",
+    "slowest_turn_s": 12.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'dispute'), expected ('no_promise', 'refused')",
+     "notes [('p1', 'dispute'), ('p2', 'dispute'), ('p3', 'dispute')], expected [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'paid')]",
+     "conversation: - The agent failed to note product p3 (car loan) as paid, instead recording it as a dispute. - The agent failed to note product p1 (credit card) as refused, instead recording it as a dispute. - The agent incorrectly categorized all three products as disputes in the tool calls, despite the user providing distinct responses for each (p3 paid, p2 dispute, p1 refused). - Consequently, while the close_"
+    ],
+    "call_id": "22b01587-3b68-4cf8-a581-2aa0fb9691a1",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_35c0a5ea-4a9",
+    "slowest_turn_s": 8.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'refused'), expected ('promise', None)",
+     "promises [], expected [('p1', 90.0, '2026-10-23'), ('p2', 300.0, '2026-10-23')]",
+     "notes [('p1', 'refused'), ('p2', 'refused')], expected []",
+     "conversation: The assistant failed to meet the success criteria as it did not record any promises. Although the user provided the 'floor' amounts (90 and 300) for the card and loan in message 7, the assistant repeatedly failed to process the user's requested date changes in messages 11-15. Consequently, the assistant ended the call in message 16 stating 'nothing is recorded today', which is confirmed by the sys"
+    ],
+    "call_id": "406de01d-25b3-411a-9870-8b66a217e45d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_73ea3a0a-8f2",
+    "slowest_turn_s": 3.3,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

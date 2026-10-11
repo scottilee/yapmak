@@ -1,0 +1,45 @@
+{
+  "axis": "missing",
+  "classification": "deliberately_unsatisfiable_contract",
+  "operations": [
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "schedule_callback",
+    "transfer_to_agent",
+    "close_call"
+  ],
+  "source": "openapi.json",
+  "assertions": [
+    {
+      "operation": "schedule_callback",
+      "required_but_undefined": "routing_token",
+      "must_not_guess": true,
+      "expected_behavior": "Reject the contract or explicitly degrade and block callback writes; never claim a callback was booked."
+    }
+  ],
+  "samples": [
+    {
+      "operation": "schedule_callback",
+      "direction": "request",
+      "valid": false,
+      "body": {
+        "customer_id": "synthetic",
+        "date": "2026-10-15",
+        "time": "09:00"
+      }
+    },
+    {
+      "operation": "schedule_callback",
+      "direction": "request",
+      "valid": false,
+      "body": {
+        "customer_id": "synthetic",
+        "date": "2026-10-15",
+        "time": "09:00",
+        "routing_token": "invented"
+      }
+    }
+  ]
+}

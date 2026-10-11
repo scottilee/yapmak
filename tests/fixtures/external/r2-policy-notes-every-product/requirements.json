@@ -1,0 +1,18 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "notes-on-every-product",
+      "source": "01-specification.md \u00a710",
+      "expected": {
+        "notes_per_successful_product": 1,
+        "successful_reason": "COMMITMENT",
+        "notes_per_unpromised_product": 1,
+        "none_on_transfer": true,
+        "ordering": "after successful promise; defer all notes until non-transfer decision"
+      },
+      "schema_gap": "NotesPolicy lacks a note-promised-products flag."
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

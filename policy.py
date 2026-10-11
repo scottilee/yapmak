@@ -96,7 +96,8 @@ class Calendar:
     holidays: list[str] = field(default_factory=list)   # ISO dates
     business_days: list[int] = field(default_factory=lambda: [0, 1, 2, 3, 4])  # Monday=0
     next_weekday_means_following_week: bool = True      # "next Friday" on a Friday = Friday of next week
-    missing_date_parts: str = "unresolved"  # next_occurrence only when explicitly selected
+    missing_date_parts: str = "unresolved"  # "unresolved" (documents silent) and "next_occurrence" resolve a bare day to its next occurrence; "ask" asks for the month
+    next_weekday: str = "coming"            # "next Friday" said while Friday is still ahead this week: "coming" = this week's; "following_week" = next week's
     source: Span = field(default_factory=Span)
 
 
@@ -247,6 +248,9 @@ class PolicyIR:
     multi_product: MultiProductPolicy = field(default_factory=MultiProductPolicy)
     phrases: Phrases = field(default_factory=Phrases)
     promise_write: PromiseWritePolicy = field(default_factory=PromiseWritePolicy)
+    # field names the documents state for the tool API, "<tool>.<slot>": property, e.g. {"get_account.past_due": "outst"};
+    # the compiler honours one only when that property exists in the schema, otherwise it matches names by meaning
+    api_fields: dict[str, str] = field(default_factory=dict)
     unresolved: list[dict[str, str]] = field(default_factory=list)   # {"topic", "text", "doc"}
 
     # -- serialization -------------------------------------------------------------------------
@@ -299,6 +303,14 @@ class PromptSet:
 
 
 # ---------------------------------------------------------------------------------------------
+KNOWN_SPECIAL_CASES = ("already_paid", "dispute", "hardship", "restructuring", "human", "scam", "refuse_to_talk")
+
+
+def unknown_special_cases(ir: PolicyIR) -> list[str]:
+    """Special cases whose name the template cannot route (the extractor is told to map onto the known names); surfaced in the trace."""
+    return [sc.name for sc in ir.special_cases if sc.name not in KNOWN_SPECIAL_CASES]
+
+
 def defaulted_operative_fields(ir: PolicyIR) -> list[str]:
     """Operative values that equal the schema default while their section cites no source text: a possible extraction gap
     (the documents may simply agree with the default, so this is a trace warning, never a validation error)."""
@@ -488,9 +500,17 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
     if "already_paid" in names and not (ir.phrases.already_paid_sentence or next(sc.say for sc in ir.special_cases if sc.name == "already_paid")):
         errs.append("already_paid: neither phrases.already_paid_sentence nor special_cases[already_paid].say says what to tell the customer")
     o = ir.outcomes
-    for name in ("promise_outcome", "paid_outcome", "transfer_outcome", "no_promise_outcome"):
+    for name in ("promise_outcome", "no_promise_outcome"):
         if not getattr(o, name):
             errs.append(f"outcomes.{name} is empty")
+    # a paid / transfer outcome is only required when some path needs it and supplies no outcome of its own:
+    # documents without an already-paid rule or without any transfer have none, and the builder must not invent one
+    needs_paid = any(sc.name == "already_paid" and not (sc.action or {}).get("outcome") for sc in ir.special_cases)
+    if needs_paid and not o.paid_outcome:
+        errs.append("outcomes.paid_outcome is empty although the already_paid case closes without an outcome of its own")
+    needs_transfer = any(((sc.action or {}).get("type") == "transfer" and not (sc.action or {}).get("outcome")) or (sc.offer_transfer_queue and not sc.offer_outcome[0]) for sc in ir.special_cases)
+    if needs_transfer and not o.transfer_outcome:
+        errs.append("outcomes.transfer_outcome is empty although a transfer path supplies no outcome of its own")
     if ir.notes.enabled and not ir.notes.reasons:
         errs.append("notes enabled without reasons")
     # Template-behaviour switches: false means the documents ask for something the fixed template cannot do.
@@ -499,7 +519,6 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
         ("amounts.full_first", ir.amounts.full_first, "the engine always asks for the full amount before any floor"),
         ("amounts.never_ask_how_much", ir.amounts.never_ask_how_much, "the dialogue is instructed never to ask the customer for an amount"),
         ("amounts.accept_between_floor_and_full", ir.amounts.accept_between_floor_and_full, "the proposal validator accepts floor..full by construction"),
-        ("dates.promise_today_allowed", ir.dates.promise_today_allowed, "today is an allowed promise date when it is a business day"),
         ("promise_write.one_promise_per_product", ir.promise_write.one_promise_per_product, "the write loop records at most one promise per product"),
         ("multi_product.state_all_before_asking", ir.multi_product.state_all_before_asking, "the debt statement always lists every product first"),
         ("multi_product.ask_all_today_once", ir.multi_product.ask_all_today_once, "the pay-all-today question is always asked once for the batch"),
@@ -564,8 +583,10 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
         for reason in row.reasons:
             if reason_enum and reason not in reason_enum:
                 errs.append(f"outcome {row.outcome}: reason {reason!r} not in close_call enum")
-    for name in ("promise_outcome", "paid_outcome", "transfer_outcome", "no_promise_outcome"):
+    for name in ("promise_outcome", "no_promise_outcome"):
         check_pair("outcomes." + name, getattr(o, name))
+    for name in ("paid_outcome", "transfer_outcome"):
+        check_pair("outcomes." + name, getattr(o, name), optional=True)
     for name in ("service_error_reason", "refused_reason"):
         check_pair("outcomes." + name, o.no_promise_outcome, getattr(o, name))
     for obj in (ir.identity, ir.third_party, ir.third_party.callback):

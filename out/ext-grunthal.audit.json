@@ -1,0 +1,237 @@
+{
+ "covered": [
+  {
+   "rule": "1.1 'now' is the call variable",
+   "where": "calendar (computations use now; template behaviour)"
+  },
+  {
+   "rule": "1.3 up to five obligations",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "2.1 opening verbatim",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "2.2 holder check form",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "2.3 two asks max, ghb-unreached/ghb-unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "2.4 forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "2.5 robot / scam replies, call continues",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "3.1 contact days/hours 09:00-17:30, after now",
+   "where": "third_party.callback.days/start/end/must_be_after_now"
+  },
+  {
+   "rule": "3.2 re-ask once, ghb-unreached/ghb-no-cb",
+   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "3.3 ghb-unreached/ghb-cb",
+   "where": "third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "3.4 wrong number / deceased + 'Our deepest condolences.'",
+   "where": "third_party.wrong_number_outcome, third_party.deceased_outcome, third_party.deceased_sentence"
+  },
+  {
+   "rule": "4.1 three questions in order with formats; numeric dates mdy",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "4.2 max 3 wrong, use versuche_verbleibend",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot, api_fields.verify_identity.remaining"
+  },
+  {
+   "rule": "4.3 'Please use our service hotline.' + ghb-unverified/ghb-failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "4.4 explain once, ghb-unverified/ghb-declined",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "4.5 account only after all answers pass",
+   "where": "template behaviour (get_account after all_verified)"
+  },
+  {
+   "rule": "5.1 business days and holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "5.2 next <weekday>",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "5.3 bare day -> next occurrence",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "6.1 obligations fields",
+   "where": "api_fields.get_account.*"
+  },
+  {
+   "rule": "6.2 / codes floor fields",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "6.3 state every obligation before asking",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "6.4 spoken categories",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "6.5 debt intro exact",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "7.1 k-date earlier of 10th business day / 20th of next month",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "7.2 one attempt: full on k-date, floor if full refused",
+   "where": "bands[0].attempts"
+  },
+  {
+   "rule": "7.3 today refusal consumes an attempt",
+   "where": "unresolved[today refusal vs single attempt]"
+  },
+  {
+   "rule": "7.4 vague period asked once then k-date",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "7.5 date beyond k-date -> name k-date",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "8.1 full first, never ask what it can pay",
+   "where": "amounts.full_first, amounts.never_ask_how_much"
+  },
+  {
+   "rule": "8.2 floor..full recordable, floor offered once with sentence",
+   "where": "amounts.accept_between_floor_and_full, amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "8.3 date today or later, business day, <= k-date",
+   "where": "dates.promise_today_allowed, dates"
+  },
+  {
+   "rule": "8.4 no discount/waiver/schedule",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "9.1 batch read-back, 'Save this commitment?'",
+   "where": "multi_product.one_confirmation_for_batch, promise_write.confirm_phrase"
+  },
+  {
+   "rule": "9.2 correction restarts read-back",
+   "where": "template behaviour (confirmation loop)"
+  },
+  {
+   "rule": "9.3 one record per obligation",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "9.4 whole-batch refusal closes with 11.1 notes",
+   "where": "notes.note_each_unpromised_product, outcomes.refused_reason"
+  },
+  {
+   "rule": "9.5 after-write sentence and alteration reply",
+   "where": "phrases.after_promise_sentence, phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "10.1 already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "10.2 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "10.3 illness/bereavement/job loss",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "10.4 schedule -> ghb-rework",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "10.5 person -> ghb-desk / ghb-person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "10.6 refusal of the call",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "10.7 robot question",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "10.8 scam question",
+   "where": "special_cases[scam]"
+  },
+  {
+   "rule": "10.9 cannot-answer sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "11.1 notes per unrecorded obligation, reasons",
+   "where": "notes.enabled, notes.reasons, notes.note_each_unpromised_product"
+  },
+  {
+   "rule": "11.2 no notes on transfer",
+   "where": "notes.none_on_transfer"
+  },
+  {
+   "rule": "11.3 outcome rank",
+   "where": "outcomes.transfer_overrides_promise, promise_outcome, paid_outcome, all_paid_closes_as_paid, no_promise_outcome, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "11.4 farewell before one close call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "11.5 retry once, then ghb-R07",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "12 / codes outcome table",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "codes: transfer queues ghb-rework, ghb-desk",
+   "where": "special_cases[restructuring|human].action.queue"
+  }
+ ],
+ "fixed": [
+  "Added unresolved entry: 7.3 (today refusal consumes an attempt) vs 7.2 (exactly one attempt) interaction is not representable/settled.",
+  "Added unresolved entry: 10.6 ends 'under 11.3', so the refuse_to_talk close is ghb-no-deal/ghb-refuse only when nothing was recorded.",
+  "Extended the missing-clause-13 unresolved entry to state that 7.5's 'if refused, 13 governs' is unsettled.",
+  "Replaced the phrases.source clause-number list with quoted source text; completed source quotes for callback (3.3), bands (7.1 'whichever comes first'), outcomes (11.4, 12), multi_product (1.3) and promise_write (11.5, 9.3).",
+  "All other values verified against the regulation, codes document and openapi enums (verify_identity field, categorie, close_call outcome/reason, transfer queue, add_note reason); no value changes needed."
+ ],
+ "unresolved": [
+  "10.2 names note `ghb-disputed`, absent from 11.1, the codes list and the add_note enum; mapped to `ghb-dispute`.",
+  "7.1 'adjusted to a business day' gives no direction; 'preceding' assumed for the 20th-of-next-month candidate.",
+  "No days-late bands defined; single band 1..90 from the API's dl_days range.",
+  "Pay-today question wording not dictated.",
+  "Hardship sympathy sentence wording not dictated.",
+  "Clause 13 / 13.1 referenced by 3.4 and 7.5 does not exist.",
+  "Interaction of 7.3 (today refusal consumes an attempt) with 7.2's single attempt.",
+  "refuse_to_talk final outcome depends on 11.3 rank when a promise is already recorded."
+ ]
+}

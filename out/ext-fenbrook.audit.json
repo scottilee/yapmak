@@ -1,0 +1,225 @@
+{
+ "covered": [
+  {
+   "rule": "1 Say EXACTLY opening",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "2 Am I speaking with {{title}} {{last_name}}?",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "3 Hello/go ahead is not confirmation",
+   "where": "identity.holder_confirmation_asks (template behaviour)"
+  },
+  {
+   "rule": "4 2 asks max \u2192 CCC-NO / F-unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "5 forbidden words before verification / for third parties",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "6 robot \u2192 \"FCCU assistant.\"",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "7 scam \u2192 verify us ...",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "8 third party: no callback, dictated sentence",
+   "where": "third_party.callback.enabled=false, unresolved[third_party_message]"
+  },
+  {
+   "rule": "9 wrong number \u2192 CCC-NO / F-wrong",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "10-11 nothing disclosed to third party; third party never answers security",
+   "where": "phrases.prohibited_before_verification (template behaviour)"
+  },
+  {
+   "rule": "12 one security question, exact wording",
+   "where": "identity.requirements[0].ask_text"
+  },
+  {
+   "rule": "13 pi_code, digits, exactly 4",
+   "where": "identity.requirements[0].field/answer_format/digits"
+  },
+  {
+   "rule": "14 max 2 wrong, use tries_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot, api_fields.verify_identity.remaining"
+  },
+  {
+   "rule": "15 exhausted \u2192 Please use the FCCU app \u2192 CCC-FAIL / F-pin",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "16 refusal: explain once, second refusal CCC-FAIL / F-dec",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "17 'Why do you need it?' is not a refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "18 no hint",
+   "where": "identity.requirements[0].hint_field=\"\""
+  },
+  {
+   "rule": "19 no get_account before pass",
+   "where": "template behaviour (identity gating)"
+  },
+  {
+   "rule": "20 one product, fields kind/amt_due/dl_days/minimum",
+   "where": "multi_product.max_products=1, api_fields"
+  },
+  {
+   "rule": "21 kind always share_loan",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "22 debt intro EXACTLY",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "23 state amt_due and dl_days flat",
+   "where": "api_fields.get_account.past_due/days_late (style not representable)"
+  },
+  {
+   "rule": "24 full asked first, never ask what they can pay",
+   "where": "amounts.full_first, amounts.never_ask_how_much, phrases.today_question"
+  },
+  {
+   "rule": "25 floor = minimum, offered once with exact wording",
+   "where": "amounts.floors.share_loan, amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "26 below floor \u2192 CCC-NO / F-no",
+   "where": "outcomes.refused_reason, unresolved[below_floor_sentence]"
+  },
+  {
+   "rule": "27 vague period ask once then close",
+   "where": "dates.vague_ask_once_then_deadline=false, unresolved[vague_date]"
+  },
+  {
+   "rule": "28 one persuasion attempt: full on k-date, floor if full refused",
+   "where": "bands[0].attempts"
+  },
+  {
+   "rule": "29 no discount/waiver/instalment",
+   "where": "unresolved[restructuring]"
+  },
+  {
+   "rule": "30 every day a business day, no holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "31 k-date = LATER of 5th business day and last business day of month",
+   "where": "bands[0].deadline (latest)"
+  },
+  {
+   "rule": "32 promise today .. k-date",
+   "where": "dates.promise_today_allowed, bands[0].deadline"
+  },
+  {
+   "rule": "33 next <weekday> = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "34 this <weekday> = current week",
+   "where": "template behaviour"
+  },
+  {
+   "rule": "35 bare day \u2192 next occurrence",
+   "where": "calendar.missing_date_parts=next_occurrence"
+  },
+  {
+   "rule": "36 use `now`",
+   "where": "template behaviour"
+  },
+  {
+   "rule": "37 exactly one read-back, dictated",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "38 one create_promise",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "39 correction restarts read-back",
+   "where": "template behaviour"
+  },
+  {
+   "rule": "40 retry once, second failure CCC-NO / F-no",
+   "where": "promise_write.retry_on_failure=1, outcomes.service_error_reason"
+  },
+  {
+   "rule": "41 success acknowledgment EXACTLY",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "42 alter recorded arrangement reply",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "43 not my debt / never had it / paid off and closed \u2192 CCC-NO / F-no",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "44 hardship \u2192 sympathy, close CCC-NO / F-no",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "45 person \u2192 fcc-desk, CCC-TR / F-person",
+   "where": "special_cases[human], outcomes.transfer_outcome"
+  },
+  {
+   "rule": "46 cannot-answer sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "47 no callback, no add_note, no restructure, no already paid",
+   "where": "third_party.callback.enabled, notes.enabled, unresolved[restructuring], unresolved[already_paid]"
+  },
+  {
+   "rule": "48 exactly one close_call last",
+   "where": "template behaviour"
+  },
+  {
+   "rule": "49 thank and say goodbye before close",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "codes: outcome/reason table",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "codes: CCC-OK no reason",
+   "where": "outcomes.promise_outcome, outcomes.table[0].reasons=[]"
+  },
+  {
+   "rule": "codes: queue fcc-desk",
+   "where": "special_cases[human].action.queue"
+  },
+  {
+   "rule": "codes: vocabulary cust_ref/pi_code/payment/amt_due/dl_days/minimum",
+   "where": "api_fields, identity.requirements[0].field, amounts.floors"
+  }
+ ],
+ "fixed": [
+  "phrases.today_question was empty although rule 24 requires the full amt_due to be asked first; set it to a content-only sentence ('Can you pay the full amount due?') and reworded unresolved[today_question] (no wording and no 'today' in the documents).",
+  "Added unresolved[effective_date] (call sheet effective 14 October 2026, no IR field); clarified the third_party_message and refuse_to_talk unresolved entries; added rule citations to the band and outcomes sources."
+ ],
+ "unresolved": [
+  "No dictated wording for the first ask, and no statement that the first ask is for payment today.",
+  "A vague date after one re-ask closes CCC-NO / F-no instead of offering the k-date.",
+  "The third-party sentence has no IR field; the close outcome for a third party who is not a wrong number is not stated.",
+  "The below-floor sentence 'That is below what we can take.' has no IR field.",
+  "No already_paid, restructuring, refuse_to_talk or deceased rule.",
+  "Promise followed by transfer: precedence not stated (default kept).",
+  "Effective date 14 October 2026 is not representable."
+ ]
+}

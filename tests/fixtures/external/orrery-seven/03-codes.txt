@@ -1,0 +1,10 @@
+C-2 / Orrery / authoritative transport vocabulary
+PTP: omit reason — saved promise
+No-PTP: R01 refusal or no eligible commitment; R07 dispute; R99 save failure
+Xfer: H1 human transfer
+ID0: F1 failed security; D1 declined security
+NR0: U0 unclear holder; N0 relative/no contact; W0 wrong number; D0 deceased
+Queue: Desk-1 only.
+add_note transport enum: R01, R07, R99. The campaign never uses this endpoint and has no active note reasons.
+Callback endpoint retained, not enabled; no callback outcome or window.
+All codes are case-sensitive strings; digits in codes are not numeric values.

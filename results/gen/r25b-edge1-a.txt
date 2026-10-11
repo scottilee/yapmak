@@ -1,0 +1,19 @@
+PASS PUB-01 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-02 hard   Unlike round: conversation boundaries | close_call
+PASS PUB-03 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-04 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+FAIL PUB-05 hard   Unlike round: conversation boundaries | verify > verify > get_account > transfer_to_agent > close_call
+       - outcome ('transferred', 'human'), expected ('transferred', 'support')
+       - transfers [{'queue': 'general'}], expected [{'queue': 'support'}]
+FAIL PUB-06 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed multiple success criteria. Regarding A26, the agent did not answer the user's question in [Message 9] ('is the rest still overdue?') and failed to explain that the unpaid remainder would stay overdue. Regarding A34, the user expl
+PASS PUB-07 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-08 hard   Unlike round: conversation boundaries | verify > verify > get_account > close_call
+FAIL PUB-09 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+       - promises [('p1', 2100.0, '2026-10-14')], expected [('p1', 2100.0, '2026-10-23')]
+       - conversation: The agent failed to meet criterion A18,34 because the promise was recorded for 2026-10-14 instead of the required date of 2026-10-23. While the agent correctly handled the mortgage inquiry (A44) by stating the information was unavailable and focu
+PASS PUB-10 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 7 s. Failed calls where the customer hung up: 0.
+
+7 / 10 passed (bank records and conversation checks). Last simulation 161af215-ae4b-4e22-9598-58da3a4533d3, status completed, 107 s.

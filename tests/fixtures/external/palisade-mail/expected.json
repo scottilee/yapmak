@@ -1,0 +1,601 @@
+{
+  "fixture": "palisade-mail",
+  "brief": "01-mail-thread.txt",
+  "documents": [
+    "01-mail-thread.txt",
+    "02-policy.txt",
+    "03-codes.txt"
+  ],
+  "openapi": "openapi.json",
+  "checks": {
+    "outcomes.$table": {
+      "expected": {
+        "PTP": [],
+        "Settled": [],
+        "ToDesk": [
+          "H-1"
+        ],
+        "No-PTP": [
+          "R-1",
+          "R-7",
+          "E-9"
+        ],
+        "IDStop": [
+          "I-1",
+          "I-2"
+        ],
+        "NotHere": [
+          "U-0",
+          "C-0",
+          "C-1",
+          "W-0",
+          "D-0"
+        ]
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "PTP",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "No-PTP",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "ToDesk",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "Settled",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.refused_reason": {
+      "expected": "R-1",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "E-9",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.max_products": {
+      "expected": 5,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "calendar.holidays": {
+      "expected": [
+        "2026-10-31",
+        "2026-11-02"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "ask",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "notes.reasons": {
+      "expected": [
+        "R-1",
+        "R-7",
+        "S-1",
+        "E-9"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 2,
+      "source": "01-mail-thread.txt, 10 October 09:10 approval reverses quoted 8 October zero-retry instruction"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "dates.past_deadline": {
+      "expected": "no_promise",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "nacimiento",
+        "zona"
+      ],
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 4,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.remaining_slot": {
+      "expected": "tries_left",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "date",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 0,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.0.numeric_date_order": {
+      "expected": "mdy",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "text",
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "02-policy.txt \u00a71"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "02-policy.txt \u00a71"
+    },
+    "bank_name": {
+      "expected": "Palisade Market Bank",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "IDStop",
+        "I-1"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "IDStop",
+        "I-2"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "NotHere",
+        "U-0"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "identity.failed_instruction": {
+      "expected": "Use a branch for identification.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.days": {
+      "expected": "today",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.start": {
+      "expected": "07:15",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.end": {
+      "expected": "12:45",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "NotHere",
+        "C-1"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "NotHere",
+        "C-0"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "NotHere",
+        "W-0"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "NotHere",
+        "D-0"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Our condolences to your family.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.floors": {
+      "expected": {},
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.floor_rules": {
+      "expected": {
+        "*": {
+          "kind": "max_of",
+          "field": "cuota_min",
+          "percent": 15,
+          "round": "up_cent"
+        }
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder remains overdue.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 18,
+          "deadline": {
+            "kind": "earliest",
+            "rules": [
+              {
+                "kind": "nth_business_day",
+                "n": 10
+              },
+              {
+                "kind": "end_of_month",
+                "basis": "business",
+                "adjustment": "preceding"
+              }
+            ]
+          },
+          "attempts": []
+        },
+        {
+          "days_late_min": 19,
+          "days_late_max": 90,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 20,
+            "month_offset": 1,
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": false
+            }
+          ]
+        }
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I save this whole list?",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.opening": {
+      "expected": "Palisade Market Bank's automated assistant speaking. This call is recorded.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "balance",
+        "overdue",
+        "payment",
+        "product"
+      ],
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "linea": "market line",
+        "equipo": "equipment credit",
+        "anticipo": "sales advance"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Allow three business days for payments to appear.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "The agreement will appear in your secure messages.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "02-policy.txt \u00a75 explicitly excludes these rules"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "02-policy.txt \u00a75 explicitly excludes these rules"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "S-1"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.offer_transfer_queue": {
+      "expected": "",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.already_paid.say": {
+      "expected": "Allow three business days for payments to appear.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "R-7"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.dispute.offer_transfer_queue": {
+      "expected": "",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "PM-Desk",
+        "outcome": "ToDesk",
+        "reason": "H-1"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.human.offer_transfer_queue": {
+      "expected": "",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "No-PTP",
+        "reason": "R-1"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.refuse_to_talk.offer_transfer_queue": {
+      "expected": "",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.takes_promise": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.offer_transfer_queue": {
+      "expected": "",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    },
+    "special_cases.scam.say": {
+      "expected": "Call the number on your market statement to verify us.",
+      "source": "02-policy.txt \u00a7\u00a71\u20136; 03-codes.txt"
+    }
+  },
+  "comparison_notes": [
+    "Latest dated approval controls regardless of file order or quoted text: TWO retries, not zero.",
+    "Absent special-case action paths use {\"missing\":true}; no hardship or restructuring default should be synthesized.",
+    "Equivalent per-type expansion of the wildcard max_of floor may be reviewed semantically; the mechanical oracle uses the compact supported wildcard representation.",
+    "S-1 belongs only to add_note; it must not leak into close_call reasons."
+  ]
+}

@@ -1,0 +1,581 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+ ],
+ "bank_name": "Vesper Reach Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "registered_birth_date",
+    "ask_text": "What is your registered date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "format_hint",
+    "hint_reply": "Please say the month as a word.",
+    "source": {
+     "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+     "text": "1. registered_birth_date: \"What is your registered date of birth?\" Format date; submit ISO YYYY-MM-DD. Purely numeric spoken dates are MONTH/DAY/YEAR. ... An ambiguous birth date may return format_hint=month_word_required: say \"Please say the month as a word.\" and retry that question; this format-hint retry does NOT consume a wrong answer."
+    }
+   },
+   {
+    "field": "access_code",
+    "ask_text": "What is your seven-digit access code?",
+    "answer_format": "digits",
+    "digits": 7,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+     "text": "2. access_code: \"What is your seven-digit access code?\" Format digits; exactly seven, preserving leading zeros."
+    }
+   },
+   {
+    "field": "district",
+    "ask_text": "What is your registered district name?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+     "text": "3. district: \"What is your registered district name?\" Format text; trim leading and trailing whitespace without changing internal spaces."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "checks_remaining",
+  "holder_confirmation_asks": 3,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "ID-STOP",
+   "BAD-CHECK"
+  ],
+  "declined_outcome": [
+   "ID-STOP",
+   "NO-CHECK"
+  ],
+  "unclear_holder_outcome": [
+   "NO-CONTACT",
+   "NOT-CLEAR"
+  ],
+  "failed_instruction": "Please complete verification at a Vesper service desk.",
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Use API checks_remaining as the global budget. FOUR wrong answers total across all questions exhaust it. ... On exhaustion say \"Please complete verification at a Vesper service desk.\" then close ID-STOP/BAD-CHECK. On refusal explain protection once; second refusal closes ID-STOP/NO-CHECK. Asking why security is needed does not count as refusal. At most three holder asks ... Still unclear: NO-CONTACT/NOT-CLEAR."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "08:10",
+   "end": "11:40",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "NO-CONTACT",
+    "BOOKED"
+   ],
+   "no_callback_outcome": [
+    "NO-CONTACT",
+    "NO-SLOT"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Only the next business day is eligible. Hours are 08:10\u201311:40 inclusive. All slots must be strictly after now. Missing clock time: ask, never guess. One alternate proposal after an invalid slot; a second invalid slot or refusal closes NO-CONTACT/NO-SLOT with no booking. Successfully booked callback: NO-CONTACT/BOOKED."
+   }
+  },
+  "wrong_number_outcome": [
+   "NO-CONTACT",
+   "WRONG-LINE"
+  ],
+  "deceased_outcome": [
+   "NO-CONTACT",
+   "DEATH"
+  ],
+  "deceased_sentence": "Please accept our sincere condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Wrong number: NO-CONTACT/WRONG-LINE. Deceased: say \"Please accept our sincere condolences.\" and close NO-CONTACT/DEATH without another question."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-14",
+   "2026-10-23",
+   "2026-10-30",
+   "2026-12-24",
+   "2027-01-04"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "ask",
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Business days: Monday through Saturday; Sunday is closed. The complete holiday list is 2026-10-14, 2026-10-23, 2026-10-30, 2026-12-24, 2027-01-04; no other holidays apply. Next weekday means the weekday in the FOLLOWING calendar week; this weekday means the current calendar week. Ask for missing month or year."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-4",
+   "days_late_min": 1,
+   "days_late_max": 4,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 9
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "| 1\u20134 | Ninth business day after today | None; zero attempts |"
+   }
+  },
+  {
+   "name": "5-13",
+   "days_late_min": 5,
+   "days_late_max": 13,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 11,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "| 5\u201313 | Eleven calendar days after today, adjusted preceding | Full on deadline, substitute floor only if full was already too much |"
+   }
+  },
+  {
+   "name": "14-32",
+   "days_late_min": 14,
+   "days_late_max": 32,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "preceding",
+    "month_offset": 0
+   },
+   "attempts": [
+    {
+     "amount": "floor",
+     "date": "next_business_day",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "| 14\u201332 | Last business day of current month, never next month | Floor on next business day strictly after today |"
+   }
+  },
+  {
+   "name": "33-80",
+   "days_late_min": 33,
+   "days_late_max": 80,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 17,
+    "month_offset": 1,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "next_business_day",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "| 33\u201380 | Seventeenth of next month, adjusted preceding | First full on next business day (substitute floor if full too much), then floor on deadline |"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "reserve_line": "reserve_minimum",
+   "travel_credit": "travel_minimum",
+   "home_bridge": "bridge_minimum"
+  },
+  "floor_rules": {},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid portion remains outstanding.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Ask full first, never ask how much they can pay. The floor is supplied separately per type: {\"reserve_line\": \"reserve_minimum\", \"travel_credit\": \"travel_minimum\", \"home_bridge\": \"bridge_minimum\"}. ... If full is too much, offer the floor once and say \"The unpaid portion remains outstanding.\" A below-floor proposal gets the floor counteroffer; rejection is a flat refusal. Accept any customer amount from floor through full inclusive. Do not record above full."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Today is an eligible promise date if it is a business day. ... A closed named day rolls forward only if the resulting date remains eligible, otherwise offer the deadline. If the customer proposes a date after the deadline, offer that deadline. ... Clarify a vague period once, then propose the deadline. If no eligible date remains, mark DECLINE and take no promise; never extend the deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this past-due balance.",
+   "action": {
+    "type": "note",
+    "reason": "SETTLED"
+   },
+   "say": "Payments may take three business days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Already paid this past-due balance: say \"Payments may take three business days to appear.\" No new promise on that product; mark SETTLED and continue others."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the product is not theirs, was never held, or was previously closed / is a historic paid-off product.",
+   "action": {
+    "type": "note",
+    "reason": "CONTEST"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "A historic closed or paid-off product is instead a dispute. Dispute (not theirs, never held, previously closed): do not argue or promise; mark CONTEST and continue others."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or unemployment.",
+   "action": {
+    "type": "note",
+    "reason": "DIFFICULTY"
+   },
+   "say": "I am sorry to hear about your situation.",
+   "offer_transfer_queue": "CareDesk",
+   "offer_outcome": [
+    "ROUTED",
+    "CARE"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Illness, bereavement or unemployment: one short sympathetic sentence, no persuasion; offer CareDesk once. Acceptance transfers and closes ROUTED/CARE. Decline marks DIFFICULTY for affected products and continues others. Do not take a hardship promise even if volunteered."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for restructuring or lower future instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "PlanDesk",
+    "outcome": "ROUTED",
+    "reason": "REPLAN"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Restructuring/lower future instalments: immediately transfer PlanDesk and close ROUTED/REPLAN, without describing a plan."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human.",
+   "action": {
+    "type": "transfer",
+    "queue": "MainDesk",
+    "outcome": "ROUTED",
+    "reason": "PERSON"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Human request: immediately transfer MainDesk and close ROUTED/PERSON, no attempt to retain the call."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam or genuinely from the bank.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify us using the number on your Vesper statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "Scam question: \"You can verify us using the number on your Vesper statement.\" then continue."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer says they do not want to talk.",
+   "action": {
+    "type": "note",
+    "reason": "DECLINE"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+    "text": "If the customer refuses to talk, ask once whether to continue; second refusal stops and marks remaining products DECLINE. Before verification that second refusal closes ID-STOP/NO-CHECK."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "AGREED",
+    "reasons": [
+     "SAVED"
+    ],
+    "when": "at least one saved promise and no transfer"
+   },
+   {
+    "outcome": "SETTLED",
+    "reasons": [
+     "PAYMENT-REPORTED"
+    ],
+    "when": "no promise saved and every product is SETTLED"
+   },
+   {
+    "outcome": "ROUTED",
+    "reasons": [
+     "REPLAN",
+     "PERSON",
+     "CARE"
+    ],
+    "when": "call transferred"
+   },
+   {
+    "outcome": "NO-AGREEMENT",
+    "reasons": [
+     "DECLINE",
+     "DIFFICULTY",
+     "CONTEST",
+     "SAVE-ERROR"
+    ],
+    "when": "no promise saved; first non-SETTLED product's reason in API order"
+   },
+   {
+    "outcome": "ID-STOP",
+    "reasons": [
+     "BAD-CHECK",
+     "NO-CHECK"
+    ],
+    "when": "verification exhausted or refused"
+   },
+   {
+    "outcome": "NO-CONTACT",
+    "reasons": [
+     "BOOKED",
+     "NO-SLOT",
+     "WRONG-LINE",
+     "DEATH",
+     "NOT-CLEAR"
+    ],
+    "when": "holder not reached"
+   }
+  ],
+  "promise_outcome": "AGREED",
+  "paid_outcome": "SETTLED",
+  "transfer_outcome": "ROUTED",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "NO-AGREEMENT",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "SAVE-ERROR",
+  "refused_reason": "DECLINE",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Transfer overrides any saved promise. Otherwise at least one saved promise closes AGREED. If none saved and every product is SETTLED, close SETTLED. Otherwise close NO-AGREEMENT with the first non-SETTLED product's reason in API order. Exactly one close_call, last bank action. Say thanks and goodbye before it. ... A reason is REQUIRED on EVERY close, including AGREED/SAVED and SETTLED/PAYMENT-REPORTED."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "DECLINE",
+   "DIFFICULTY",
+   "CONTEST",
+   "SETTLED",
+   "SAVE-ERROR"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "On each non-transfer call, add exactly one note for every unpromised product using DECLINE, DIFFICULTY, CONTEST, SETTLED or SAVE-ERROR. Do not note promised products. Defer notes until the call is known not to transfer: no notes at all before or after a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Calls cover 1\u201380 days late and one to three products. ... State every product, amount and days late before asking for anything. ... Bands and counters are per product. ... Ask once for the whole batch; after a batch no, process in API order without repeating the initial question for each product. A common date after one product's deadline is capped for that product only and explained before confirmation. ... Transfer discards unsaved proposals and preserves saved promises."
+  }
+ },
+ "phrases": {
+  "opening": "You are speaking with Vesper Reach Bank\u2019s automated assistant. This conversation is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Is this {{title}} {{last_name}} speaking?",
+  "debt_intro": "I am calling about your overdue products; here is each product with its overdue amount and how many days late it is.",
+  "today_question": "Can you settle this balance today?",
+  "all_today_question": "Can you settle every listed balance today?",
+  "robot_reply": "I am Vesper Reach Bank\u2019s automated assistant.",
+  "scam_reply": "You can verify us using the number on your Vesper statement.",
+  "prohibited_before_verification": [
+   "arrears",
+   "balance",
+   "commitment",
+   "facility"
+  ],
+  "after_promise_sentence": "A receipt will appear in your secure message centre.",
+  "already_paid_sentence": "Payments may take three business days to appear.",
+  "cannot_answer_sentence": "I do not have that information in this call.",
+  "recorded_promise_change_reply": "Use your service desk to request changes to a saved commitment.",
+  "product_naming": {
+   "reserve_line": "reserve line",
+   "travel_credit": "travel credit",
+   "home_bridge": "home bridge"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Say verbatim: \"You are speaking with Vesper Reach Bank\u2019s automated assistant. This conversation is recorded.\" Then ask \"Is this {{title}} {{last_name}} speaking?\" ... Before ALL security checks pass, do not say arrears, balance, commitment or facility ... State every product, amount and days late before asking for anything. Spoken product names: {\"reserve_line\": \"reserve line\", \"travel_credit\": \"travel credit\", \"home_bridge\": \"home bridge\"}."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 2,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save these exact commitments?",
+  "source": {
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md",
+   "text": "Read all proposed product/amount/date triples together and ask exactly \"May I save these exact commitments?\" ... Exactly one successful promise per product ... If create_promise fails, retry TWICE, for at most three total calls."
+  }
+ },
+ "api_fields": {
+  "verify_identity.remaining": "checks_remaining",
+  "get_account.list": "products",
+  "get_account.id": "product_id",
+  "get_account.type": "type",
+  "get_account.past_due": "past_due",
+  "get_account.days_late": "days_late",
+  "create_promise.ok": "ok"
+ },
+ "unresolved": [
+  {
+   "topic": "close reasons for AGREED and SETTLED",
+   "text": "A reason is REQUIRED on EVERY close, including AGREED/SAVED and SETTLED/PAYMENT-REPORTED. The IR has no dedicated reason field for promise_outcome/paid_outcome; the reasons are carried only in outcomes.table (AGREED -> SAVED, SETTLED -> PAYMENT-REPORTED).",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence \u2014 the exact words are not dictated; the hardship `say` is a written sentence matching that content.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "debt introduction wording",
+   "text": "State every product, amount and days late before asking for anything. No introductory sentence is dictated; phrases.debt_intro is a written sentence matching that content.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "callback missing clock time",
+   "text": "Missing clock time: ask, never guess. The IR has no dedicated field; behaviour must be enforced by the dialogue.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "date before earliest eligible date",
+   "text": "If it precedes the earliest eligible date, offer the earliest eligible date, provided it is within deadline. The IR has no dedicated flag for this rule.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  },
+  {
+   "topic": "no discounts or plans; consent invalidated by corrections",
+   "text": "Never offer a discount, waiver or a new payment plan. A correction invalidates consent and requires revalidation and a fresh combined read-back. No dedicated IR fields; enforced by the template.",
+   "doc": "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+  }
+ ]
+}

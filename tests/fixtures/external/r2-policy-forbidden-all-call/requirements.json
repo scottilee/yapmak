@@ -1,0 +1,19 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "all-call-prohibited-words",
+      "source": "01-specification.md \u00a72",
+      "expected": {
+        "words": [
+          "guaranteed",
+          "penalty",
+          "lawsuit"
+        ],
+        "scope": "entire_call_including_after_verification_and_quotations"
+      },
+      "schema_gap": "Phrases only has prohibited_before_verification; limiting these words to that stage changes the source rule."
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

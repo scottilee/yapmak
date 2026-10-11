@@ -1,0 +1,19 @@
+PASS PUB-01 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-02 hard   Edge           | schedule_callback > close_call
+PASS PUB-03 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+FAIL PUB-05 hard   Edge           | verify > verify > get_account > promise > close_call
+       - outcome ('promise', None), expected ('no_promise', 'hardship')
+       - conversation: - The agent expressed sympathy in Message 8: "I am very sorry to hear about your job loss." - The agent accepted the customer's date (Friday 16 October) and amount (260.00) in Message 10 and 13, and the system event confirms `create_promise` was 
+FAIL PUB-06 hard   Edge           | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The conversation failed on several criteria: 1. No promise was recorded, as the assistant explicitly stated in message 14 that it would not record one, failing the requirement for a promise of 637.50 on 2026-10-16. 2. The floor (637.50) was offer
+FAIL PUB-07 hard   Edge           | verify > verify > get_account > promise > close_call
+       - conversation: The assistant failed to meet the success criteria because it performed a second read-back of the promise date. While the assistant correctly acknowledged the user's unrelated question in Message 10 ('I do not have that information') and recorded 
+PASS PUB-09 hard   Edge           | verify > verify > get_account > transfer_to_agent > close_call
+
+slowest agent turn per call: median 13 s, worst 17 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+5 / 8 passed (bank records and conversation checks). Last simulation 6276dac8-2716-4ade-bb21-9f8047a3e006, status completed, 129 s.

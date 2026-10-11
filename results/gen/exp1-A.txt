@@ -1,0 +1,16 @@
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The assistant failed to meet the specified number of payment attempts for the personal loan. While the success criteria required exactly two attempts for the personal loan, the assistant made three distinct offers in Messages 10, 12, and 14. All 
+
+slowest agent turn per call: median 5 s, worst 5 s. Failed calls where the customer hung up: 0.
+-- run 1 of 2: 0 / 1 passed, 78 s
+
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The assistant failed the criterion regarding the number of attempts for the personal loan. While the requirement was for two attempts, the assistant made three specific negotiation attempts in Messages 10, 12, and 14 (following the initial bulk r
+
+slowest agent turn per call: median 34 s, worst 34 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 2: 0 / 1 passed, 185 s
+
+FAIL PUB-12 0/2
+
+0 / 1 passed (bank records and conversation checks), a customer counts with 2 of 2 runs. Last simulation 27965038-edc0-4bc2-aa25-92e9d9eddb09, status completed, 263 s.

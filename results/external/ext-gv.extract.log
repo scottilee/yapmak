@@ -1,0 +1,80 @@
+{
+ "bands": [
+  "all"
+ ],
+ "identity": [
+  "sec_code"
+ ],
+ "special_cases": [
+  "dispute",
+  "refuse_to_talk",
+  "human",
+  "hardship",
+  "restructuring",
+  "robot",
+  "scam",
+  "holder_not_confirmed_yet",
+  "change_recorded_promise",
+  "cannot_answer"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "The documents define no days-late bands; a single band covering every days-late value is used with the k-date (20th of the month after the call). The upper bound 100000 is a technical catch-all, not a document value.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "attempts",
+   "text": "ZERO persuasion: no attempts after the today question; one no ends the call (No-PTP / No-PTP). Customer may still name an amount in bottom_line..amt_due and a valid date. floor_offered_once is left at its default although the floor is never offered (no counter offers).",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "floor rounding",
+   "text": "bottom_line = greater(min_pmt, 15% of amt_due); the documents do not say how 15% is rounded.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "paid_outcome",
+   "text": "No paid outcome exists in the v-codes sheet; 'it was paid off and closed' is grouped with the dispute lines and closes No-PTP / No-PTP, so paid_outcome is set to No-PTP and no separate already_paid case is created. No already-paid sentence is dictated.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/02-codes.txt"
+  },
+  {
+   "topic": "third party message",
+   "text": "Third parties are told the customer is to call GRIMSBY VALE FINANCE on the number printed on the statement; there is no phrase field for this sentence. Third parties get no purpose, no account detail, cannot pay for the customer, no exception for family; no schema field expresses these.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "callback scheduled_outcome",
+   "text": "Callbacks are disabled ('NO callback booking'), so the documents give no scheduled-callback outcome. Every third-party call closes NOANS / CNA, so third_party.callback.scheduled_outcome repeats that pair; it is never used because no callback is ever booked.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "Sunday vs business days",
+   "text": "The sheet defines 'business day = every day of the week. no shutdown days.' but also says 'sun day named ... -> not recordable'. The explicit business-day definition (all seven days) is kept; whether a Sunday promise date must be refused is not settled.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "write failure sentence",
+   "text": "After the 2nd failed write the agent must 'say it failed'; no phrase field exists for this and no words are dictated.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "create_promise field names",
+   "text": "The API lists the amount property as 'sum' but requires 'amt'; the call sheet says item_id is what create_promise wants as product_id while the API property is item_id.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "transfer vs promise precedence",
+   "text": "The documents do not say whether a transfer outcome overrides a recorded promise; default kept.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added special case holder_not_confirmed_yet: the call sheet's rule that hello / 'go ahead' / a question does not confirm the holder (answer the question, then ask again) was not represented anywhere.",
+  "Added unresolved entry for the internal conflict between 'business day = every day of the week' and 'sun day named -> not recordable'; kept all seven days as business days.",
+  "Added unresolved entry for third_party.callback.scheduled_outcome, which stays empty because callbacks are disabled and the documents give no outcome for them.",
+  "Added unresolved entry for the 'say it failed' sentence after the second failed write, which has no phrase field and no dictated words.",
+  "Expanded the third-party unresolved entry to include the restrictions (no purpose, no account detail, no paying for the customer, no exception for family).",
+  "Widened source spans for third_party, amounts, phrases and promise_write so they quote the sentences behind their values (prohibited words, today question, the floor stated in line 40, one per item)."
+ ]
+}

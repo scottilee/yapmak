@@ -1,194 +1,190 @@
 [
- {
-  "id": "PUB-11",
-  "brief": "B",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Mix of dispute, hardship and promise",
-  "variables": {
-   "first_name": "Sofia",
-   "last_name": "Almeida",
-   "title": "Ms",
-   "now": "2026-10-14T11:00"
-  },
-  "identity": {
-   "date_of_birth": "1987-06-03",
-   "phone_last4": "2288"
-  },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "2288",
-    "past_due": 220.0,
-    "days_late": 9,
-    "minimum_payment": 66.0
-   },
-   {
-    "type": "personal_loan",
-    "past_due": 640.0,
-    "days_late": 9,
-    "instalment_amount": 213.0
-   },
-   {
-    "type": "car_loan",
-    "past_due": 75.0,
-    "days_late": 3,
-    "instalment_amount": 25.0
-   }
-  ],
-  "script": "Confirm you are Sofia Almeida and give the correct security answers. When the products are stated, say the credit card is not yours and you dispute it, your husband just died so the personal loan is impossible, and you will pay the car loan in full today. Decline the support transfer for the personal loan. Confirm the read-back for the car loan only.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p3",
-     "amount": 75,
-     "date": "2026-10-14"
-    }
-   ],
-   "notes": [
-    {
-     "product_id": "p1",
-     "reason": "dispute"
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Hardship on two products and a promise on the third in one opening",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
     },
-    {
-     "product_id": "p2",
-     "reason": "hardship"
-    }
-   ],
-   "callbacks": [],
-   "transfers": []
-  },
-  "checks": [
-   "Credit card noted disputed, no promise",
-   "Personal loan noted hardship after support declined, no persuasion",
-   "Car loan promised today",
-   "Outcome is promise because one product was recorded"
-  ]
- },
- {
-  "id": "PUB-12",
-  "brief": "B",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Multi-product amount in words",
-  "variables": {
-   "first_name": "Marcus",
-   "last_name": "Bell",
-   "title": "Mr",
-   "now": "2026-10-14T11:00"
-  },
-  "identity": {
-   "date_of_birth": "1983-10-19",
-   "phone_last4": "4410"
-  },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "9015",
-    "past_due": 510.0,
-    "days_late": 16,
-    "minimum_payment": 153.0
-   },
-   {
-    "type": "personal_loan",
-    "past_due": 1320.0,
-    "days_late": 16,
-    "instalment_amount": 440.0
-   },
-   {
-    "type": "car_loan",
-    "past_due": 140.0,
-    "days_late": 7,
-    "instalment_amount": 46.0
-   }
-  ],
-  "script": "Confirm you are Marcus Bell and give the correct security answers. When the products are stated, say the credit card is already paid, you will pay one thousand three hundred and twenty dollars on the personal loan this Friday, and you refuse to pay anything on the car loan. Refuse every proposal about the car loan. Confirm the read-back.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p2",
-     "amount": 1320,
-     "date": "2026-10-16"
-    }
-   ],
-   "notes": [
-    {
-     "product_id": "p1",
-     "reason": "paid"
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
     },
-    {
-     "product_id": "p3",
-     "reason": "refused"
-    }
-   ],
-   "callbacks": [],
-   "transfers": []
-  },
-  "checks": [
-   "Amount in words one thousand three hundred and twenty is parsed",
-   "Personal loan promised for 1320 on Friday",
-   "Credit card noted paid, car loan noted refused"
-  ]
- },
- {
-  "id": "PUB-13",
-  "brief": "B",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Common date after one deadline with amount in words",
-  "variables": {
-   "first_name": "Elena",
-   "last_name": "Rossi",
-   "title": "Ms",
-   "now": "2026-10-14T11:00"
-  },
-  "identity": {
-   "date_of_birth": "1991-01-08",
-   "phone_last4": "6604"
-  },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "6604",
-    "past_due": 300.0,
-    "days_late": 4,
-    "minimum_payment": 90.0
-   },
-   {
-    "type": "personal_loan",
-    "past_due": 900.0,
-    "days_late": 20,
-    "instalment_amount": 300.0
-   }
-  ],
-  "script": "Confirm you are Elena Rossi and give the correct security answers. When asked about payment, say you will pay three hundred dollars on the credit card and nine hundred dollars on the loan, both on the thirtieth of October. Accept when the assistant explains the loan must be on an earlier date. Confirm the read-back naming both dates.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p1",
-     "amount": 300,
-     "date": "2026-10-30"
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Confirm you are Sofia Almeida and give the correct security answers. When all three products are stated, say: I lost my job last month, I cannot deal with the loan or the car loan. I can still pay the credit card in full today. When asked about the support team, decline and say the credit card is fine. Refuse every proposal about the personal loan and the car loan. Confirm the credit card read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 220,
+          "date": "2026-10-14"
+        }
+      ],
+      "notes": [
+        {
+          "product_id": "p2",
+          "reason": "hardship"
+        },
+        {
+          "product_id": "p3",
+          "reason": "hardship"
+        }
+      ],
+      "callbacks": [],
+      "transfers": []
     },
-    {
-     "product_id": "p2",
-     "amount": 900,
-     "date": "2026-10-23"
-    }
-   ],
-   "notes": [],
-   "callbacks": [],
-   "transfers": []
+    "checks": [
+      "Credit card promise for 220 on 2026-10-14",
+      "Personal loan and car loan each get a hardship note with no promise",
+      "Hardship sympathy sentence is spoken once",
+      "Outcome promise (one promise recorded, per brief B closing)"
+    ]
   },
-  "checks": [
-   "Amounts in words parsed for both products",
-   "Credit card recorded on 30 October",
-   "Loan clamped to its own deadline 23 October and explained"
-  ]
- }
+  {
+    "id": "PUB-12",
+    "brief": "B",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Pays one product and disputes another in the same opening",
+    "variables": {
+      "first_name": "Marcus",
+      "last_name": "Bell",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1983-10-19",
+      "phone_last4": "4410"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "9015",
+        "past_due": 510.0,
+        "days_late": 16,
+        "minimum_payment": 153.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 1320.0,
+        "days_late": 16,
+        "instalment_amount": 440.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 140.0,
+        "days_late": 7,
+        "instalment_amount": 46.0
+      }
+    ],
+    "script": "Confirm you are Marcus Bell and give the correct security answers. When all three products are stated, say in order: I'll pay the credit card in full next Friday. The personal loan isn't mine, I never had it. Refuse every proposal about the car loan. Confirm the credit card read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 510,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [
+        {
+          "product_id": "p2",
+          "reason": "dispute"
+        },
+        {
+          "product_id": "p3",
+          "reason": "refused"
+        }
+      ],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The credit card gets a single promise for 510 on Friday 16 October",
+      "The personal loan gets a dispute note with no promise and no persuasion attempt",
+      "The car loan gets a refused note after the persuasion attempts",
+      "Outcome is promise (one promise was recorded)"
+    ]
+  },
+  {
+    "id": "PUB-13",
+    "brief": "B",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Relative rambles, gives the day and time only after several turns",
+    "variables": {
+      "first_name": "Elena",
+      "last_name": "Rossi",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1991-01-08",
+      "phone_last4": "6604"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "6604",
+        "past_due": 300.0,
+        "days_late": 4,
+        "minimum_payment": 90.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 900.0,
+        "days_late": 20,
+        "instalment_amount": 300.0
+      }
+    ],
+    "script": "This is Elena's husband. She's been at her sister's for a few days helping with a family matter, very stressful time. When asked when she can be reached, ramble for a while: I really have no idea, could be a week, could be two, I'm sorry, who is this again, oh the bank, well she's been very busy, you know how it is. After several turns, finally give a day and a time: tomorrow morning, around eleven.",
+    "expected": {
+      "outcome": "not_reached",
+      "reason": "callback",
+      "promises": [],
+      "notes": [],
+      "callbacks": [
+        {
+          "date": "2026-10-15",
+          "time": "11:00"
+        }
+      ],
+      "transfers": []
+    },
+    "checks": [
+      "No purpose or account detail is disclosed at any point",
+      "verify_identity and get_account are never called",
+      "schedule_callback fires once, for 2026-10-15 at 11:00, after the rambling finishes",
+      "Outcome is not_reached/callback, no transfer, no note"
+    ]
+  }
 ]

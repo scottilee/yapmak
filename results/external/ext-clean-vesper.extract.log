@@ -1,0 +1,49 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "callback weekday restriction",
+   "text": "Only the next business day is eligible AND that date must be Tuesday or Thursday. If the next business day is neither, there is no eligible callback date; do not skip forward to a later Tuesday or Thursday.",
+   "doc": "tests/fixtures/external/r2-clean-vesper/01-specification.md"
+  },
+  {
+   "topic": "debt_intro wording",
+   "text": "No sentence is dictated for introducing the debt; the specification only requires stating every product, amount and days late before asking for anything.",
+   "doc": "tests/fixtures/external/r2-clean-vesper/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence \u2014 the words are not dictated.",
+   "doc": "tests/fixtures/external/r2-clean-vesper/01-specification.md"
+  },
+  {
+   "topic": "refuse_to_talk before verification",
+   "text": "Before verification that second refusal closes ID-STOP/NO-CHECK (after verification it marks remaining products DECLINE).",
+   "doc": "tests/fixtures/external/r2-clean-vesper/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[hardship].say: the spec requires 'one short sympathetic sentence' but the extraction left it empty; added a short neutral sentence and recorded in unresolved that the wording is not dictated.",
+  "api_fields: \u00a71 names get_account fields explicitly (products list, product_id, type, past_due, days_late) and \u00a78 names ok=true for create_promise; added these mappings alongside verify_identity.remaining.",
+  "Expanded source spans (identity hint, multi_product per-product counters, phrases today questions, promise_write ok=true, third_party relatives rule) so each value cites its sentence; no value changes otherwise \u2014 all other values (bands, outcomes, enums, phrases, holidays, retry count) checked against the specification and openapi.json and found correct."
+ ]
+}

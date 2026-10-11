@@ -1,0 +1,458 @@
+{
+  "fixture": "fenbrook-table-sheet",
+  "brief": "01-call-sheet.md + 02-codes.md",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Fenbrook Community Credit Union",
+      "source": "call sheet header"
+    },
+    "identity.requirements.$fields": {
+      "expected": ["pi_code"],
+      "source": "call sheet row 12: ONE question only"
+    },
+    "identity.requirements.0.field": {
+      "expected": "pi_code",
+      "source": "call sheet row 12 + 13"
+    },
+    "identity.requirements.0.ask_text": {
+      "expected": "What are the four digits of your security pin?",
+      "source": "call sheet row 12"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "call sheet row 13"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 4,
+      "source": "call sheet row 13: exactly 4 digits"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "call sheet row 18: no recoverable-format hint exists"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 2,
+      "source": "call sheet row 14: maximum wrong answers = 2"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "call sheet row 14: use the API's tries_left"
+    },
+    "identity.remaining_slot": {
+      "expected": "tries_left",
+      "source": "call sheet row 14"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "call sheet row 4: 2 asks max"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "call sheet row 16: one explanation of why the check protects"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "call sheet row 17: a question is a question, not a refusal"
+    },
+    "identity.failed_outcome": {
+      "expected": ["CCC-FAIL", "F-pin"],
+      "source": "call sheet row 15 + codes list"
+    },
+    "identity.declined_outcome": {
+      "expected": ["CCC-FAIL", "F-dec"],
+      "source": "call sheet row 16 + codes list"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": ["CCC-NO", "F-unclear"],
+      "source": "call sheet row 4 + codes list"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please use the FCCU app.",
+      "source": "call sheet row 15"
+    },
+    "third_party.callback.enabled": {
+      "expected": false,
+      "source": "call sheet row 8: DO NOT book a callback"
+    },
+    "third_party.callback.days": {
+      "expected": "today",
+      "source": "default; callback.enabled=false"
+    },
+    "third_party.callback.start": {
+      "expected": "10:00",
+      "source": "default; callback.enabled=false"
+    },
+    "third_party.callback.end": {
+      "expected": "19:00",
+      "source": "default; callback.enabled=false"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "default; callback.enabled=false"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "default; callback.enabled=false"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": ["CCC-NO", "F-unclear"],
+      "source": "fallback; callback.enabled=false"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": ["CCC-NO", "F-unclear"],
+      "source": "fallback; callback.enabled=false"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": ["CCC-NO", "F-wrong"],
+      "source": "call sheet row 9 + codes list"
+    },
+    "third_party.deceased_outcome": {
+      "expected": ["CCC-NO", "F-unclear"],
+      "source": "fallback; deceased not addressed by the sheet"
+    },
+    "calendar.business_days": {
+      "expected": [0, 1, 2, 3, 4, 5, 6],
+      "source": "call sheet row 30: every day of the week is a business day"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "call sheet row 30: no shutdown days and no holidays"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "call sheet row 33"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "call sheet row 35"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 90,
+          "deadline": {
+            "kind": "latest",
+            "rules": [
+              {"kind": "nth_business_day", "n": 5},
+              {"kind": "end_of_month", "basis": "business", "adjustment": "preceding"}
+            ]
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "call sheet rows 28 and 31: LATER of (a) 5 business days after the call, (b) last business day of current month; one attempt full on the k-date, floor on the k-date if full already refused"
+    },
+    "amounts.floors": {
+      "expected": {"share_loan": "minimum"},
+      "source": "call sheet row 25"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "call sheet row 24"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "call sheet row 24"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "call sheet row 25"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder falls due again.",
+      "source": "call sheet row 25"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "call sheet row 25: floor and full inclusive"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "call sheet row 32: today or any business day"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": false,
+      "source": "call sheet row 30: every day is a business day"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "call sheet row 27"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": false,
+      "source": "call sheet row 28: k-date IS the deadline"
+    },
+    "dates.past_deadline": {
+      "expected": "no_promise",
+      "source": "default; not addressed by the sheet"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "call sheet row 40: write fails -> retry once"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "call sheet row 38: one call only"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Save this arrangement?",
+      "source": "call sheet row 37"
+    },
+    "notes.enabled": {
+      "expected": false,
+      "source": "call sheet row 47: no add_note tool"
+    },
+    "notes.reasons": {
+      "expected": [],
+      "source": "notes.enabled=false"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": false,
+      "source": "notes.enabled=false"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.max_products": {
+      "expected": 1,
+      "source": "call sheet row 20: one product only"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "default (single product)"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "default"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "CCC-OK": [],
+        "CCC-NO": ["F-no", "F-wrong", "F-unclear"],
+        "CCC-FAIL": ["F-pin", "F-dec"],
+        "CCC-TR": ["F-person"]
+      },
+      "source": "codes list"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "CCC-OK",
+      "source": "codes list"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "",
+      "source": "no already_paid rule, no paid outcome"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "CCC-TR",
+      "source": "codes list"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "CCC-NO",
+      "source": "codes list"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "default"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": false,
+      "source": "no paid outcome defined"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": false,
+      "source": "no notes; reasons come from refusal paths"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "F-no",
+      "source": "call sheet row 40: 2nd failure closes CCC-NO/F-no"
+    },
+    "outcomes.refused_reason": {
+      "expected": "F-no",
+      "source": "call sheet row 27, 43, 44: all refusals close CCC-NO/F-no"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "call sheet row 49"
+    },
+    "phrases.opening": {
+      "expected": "FCCU automated collections line. This call is recorded.",
+      "source": "call sheet row 1"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "call sheet row 1: EXACTLY"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "call sheet row 2"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue share loan of Fenbrook Community Credit Union.",
+      "source": "call sheet row 22"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle this today?",
+      "source": "default (single product today? wording)"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle this today?",
+      "source": "single product"
+    },
+    "phrases.robot_reply": {
+      "expected": "FCCU assistant.",
+      "source": "call sheet row 6"
+    },
+    "phrases.scam_reply": {
+      "expected": "Verify us on the number printed on your statement.",
+      "source": "call sheet row 7"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": ["owe", "overdue", "arrears", "facility", "payment"],
+      "source": "call sheet row 5"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "FCCU will text you to confirm this arrangement.",
+      "source": "call sheet row 41"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "",
+      "source": "no already_paid rule"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "FCCU staff on the main line can answer that.",
+      "source": "call sheet row 46"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Use the FCCU app to change a recorded arrangement.",
+      "source": "call sheet row 42"
+    },
+    "phrases.product_naming": {
+      "expected": {"share_loan": "share loan"},
+      "source": "call sheet row 21 + row 22: kind is always share_loan"
+    },
+    "special_cases.already_paid": {
+      "expected": "absent",
+      "source": "call sheet row 47: no already_paid rule"
+    },
+    "special_cases.dispute.action": {
+      "expected": {"type": "close", "outcome": "CCC-NO", "reason": "F-no"},
+      "source": "call sheet row 43"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "call sheet row 43"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": true,
+      "source": "single product"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "default"
+    },
+    "special_cases.hardship.action": {
+      "expected": {"type": "close", "outcome": "CCC-NO", "reason": "F-no"},
+      "source": "call sheet row 44"
+    },
+    "special_cases.hardship.say": {
+      "expected": "I am sorry to hear that.",
+      "source": "call sheet row 44: one short sentence of sympathy (brief does not dictate the words)"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "call sheet row 44"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": true,
+      "source": "call sheet row 44: close CCC-NO/F-no"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "",
+      "source": "no support queue; there is no offer to transfer on hardship"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "call sheet row 44: before any ask"
+    },
+    "special_cases.restructuring": {
+      "expected": "absent",
+      "source": "call sheet row 47: no restructure rule"
+    },
+    "special_cases.human.action": {
+      "expected": {"type": "transfer", "queue": "fcc-desk", "outcome": "CCC-TR", "reason": "F-person"},
+      "source": "call sheet row 45"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": true,
+      "source": "call sheet row 45: implied; the call sheet does not say 'without asking once', default behaviour is to ask once"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "transfer, no promise"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "call sheet row 45"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "default"
+    },
+    "special_cases.refuse_to_talk": {
+      "expected": "absent",
+      "source": "the call sheet handles plain refusals as CCC-NO/F-no (the no-opinion second-refusal path is the standard intent=refuses branch)"
+    },
+    "special_cases.scam.action": {
+      "expected": {"type": "continue"},
+      "source": "call sheet row 7"
+    },
+    "special_cases.scam.say": {
+      "expected": "Verify us on the number printed on your statement.",
+      "source": "call sheet row 7"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "scam continues"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": false,
+      "source": "scam is a side question"
+    }
+  },
+  "comparison_notes": [
+    "Expected values authored before extraction; source spans and trigger prose are evidence, not exact-match keys.",
+    "Band deadline is the IR-level encoding of 'the LATER of 5 business days and the last business day of the current month' as the policy.py `latest` kind. For the practice clock 2026-10-14, the k-date resolves to 2026-10-30.",
+    "The brief's k-date for the supplied clock (2026-10-14) is 2026-10-30; if `now` falls earlier in the month or on a holiday, the other candidate can win.",
+    "Field names are abbreviated (cust_ref, payment, amt_due, dl_days, minimum, pi_code); the compiler maps them onto the IR's semantic slots via the existing needles.",
+    "`kind` in the get_account response maps to `account.type` via the existing needles (the `kind` needle appears in the response slot picker for account.type).",
+    "Outcome table comparison is order-insensitive; identity and attempt order are significant.",
+    "`hardship.offer_transfer_queue` is empty: the call sheet does not offer a transfer on hardship. The runtime's `_special(hardship)` enters the support-awaiting state when the intent fires; with no transfer queue configured, the next turn's `accepts`/`pays_today` response runs `_transfer('hardship')` which uses the action's outcome ('CCC-NO') because the close action is what the brief asks for. The expected outcome is CCC-NO/F-no either way; the brief path is documented in the README.",
+    "The `refuse_to_talk` special case is absent: the brief treats plain refusals and the second-refusal path identically as CCC-NO/F-no, with no separate close-with-refuse outcome.",
+    "Absence is noted as \"absent\" for the no-rule special cases (already_paid, restructuring, refuse_to_talk); the diff treats absent as the expected state, not as a default."
+  ]
+}

@@ -25,6 +25,7 @@ import policy as P
 
 ROOT = pathlib.Path(__file__).resolve().parent
 MODEL = os.environ.get("BUILDER_MODEL", "claude-opus-5-5")
+DEGRADED: list = []   # fallbacks taken during this extraction (build.py reports them in run_end as `degraded`)
 
 SCHEMA_GUIDE = """
 The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for every field and its meaning). Rules:
@@ -40,6 +41,22 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
   | {"kind":"day_of_month","day":15,"month_offset":1,"adjustment":...} ("the 15th of next month" = day 15, month_offset 1; "end of next month" = end_of_month with month_offset 1;
   "within N business days" = nth_business_day) | {"kind":"earliest","rules":[<two or more simple rules>]} for "whichever comes first" ("latest" for the later one).
   `dates.past_deadline`: "no_promise" when the documents say that a deadline already behind us means no promise can be taken; otherwise leave the default.
+  `dates.weekend_or_holiday_roll_forward`: false when a weekend/holiday date must be sent back to the customer for another day instead of offering the next
+  business day; `dates.after_deadline_offer_deadline`: false when a date after the deadline is refused without offering the deadline; `outcomes.transfer_overrides_promise`:
+  false when a recorded promise still closes as the promise outcome even if the call is then transferred; `calendar.missing_date_parts`: "ask" when a day without a
+  month must be asked about rather than taken as the next occurrence.
+- `api_fields`: when the documents name the tool API's fields themselves (e.g. "`outst` is the outstanding amount", "`cat` the category") or a
+  property name is an abbreviation whose meaning only the documents give, record {"<tool>.<slot>": "<property>"} for the slots
+  get_account.list / id / type / past_due / days_late / card_last4, verify_identity.verified / ok / all_verified / remaining, <write tool>.ok,
+  and request fields create_promise.product_id / amount / date, add_note.product_id / reason / text, schedule_callback.date / time, transfer_to_agent.queue,
+  close_call.outcome / reason, <tool>.customer_id. Leave it empty when the names are self-explanatory.
+- `dates.promise_today_allowed`: false when the documents say no promise may be taken for today / the earliest promise date is the next business day.
+  `calendar.next_weekday`: "following_week" when the documents define "next <weekday>" as the weekday of the following calendar week; otherwise leave the default.
+- `promise_write.confirm_phrase`: the documents' confirmation question verbatim. When they dictate the whole read-back sentence, keep its placeholders
+  as {{amount}} and {{date}} (and {{product}}); the agent fills them in.
+- `amounts.floor_offered_once`: false when the documents forbid counter-offers ("zero persuasion", "no counter offer", "one no and the call is over").
+- Special cases must use the known names (already_paid, dispute, hardship, restructuring, human, scam, refuse_to_talk): map the documents' cases onto them
+  (e.g. "bereavement" is hardship, "payment arrangement" is restructuring); a case with another name cannot be routed and is only recorded as unresolved.
   `attempts`: the persuasion attempts in order, each {"amount":"full|floor","date":"last_business_day_this_week_or_next|deadline|today|next_business_day","floor_if_full_refused":bool}.
 - `amounts.floors`: product type (a value of the product `type` enum in get_account) -> the response property that holds the lowest acceptable amount.
   When the floor is NOT a bank field, use `amounts.floor_rules` instead (product type or "*" for all types): {"kind":"percent","percent":20,"min_amount":0}
@@ -222,7 +239,13 @@ def _extract(brief_paths, openapi_path, slot, trace, workspace):
         ir_path.unlink()
     import compile as C
     tools = C.parse_openapi(str(workspace / openapi_path))
-    enums = C.tool_enums(tools)
+    enums = C.tool_enums(tools, strict=False)          # before the documents are read: unmapped arguments are left out
+    unmapped = C.unmapped_request_slots(tools)
+    if unmapped and trace:
+        trace.event("api_mapping_incomplete", unmapped=unmapped)
+    unmapped_text = ("\nThe compiler could NOT recognise these request fields of the tool API by name: " + ", ".join(unmapped)
+                     + ". Read the API's property names and descriptions and the documents, and state each one in `api_fields` "
+                       "({\"<tool>.<argument>\": \"<property name>\"}); the build cannot send those arguments otherwise.\n") if unmapped else ""
     access = dict(cwd=workspace,
                   readable=[workspace / p for p in brief_paths] + [workspace / "policy.py", workspace / openapi_path, ir_path, audit_path],
                   writable=[ir_path, audit_path])
@@ -232,7 +255,7 @@ Read ALL of these source documents completely, in order:
 {_sources_text(brief_paths)}
 Then read the tool API file {openapi_path} (the enums there are the only allowed values for outcomes, reasons, queues, note reasons,
 identity fields and product types). Then read policy.py for the exact JSON schema.
-{SCHEMA_GUIDE}
+{SCHEMA_GUIDE}{unmapped_text}
 Write the JSON to {ir_path.relative_to(workspace)} with the Write tool. Write nothing else. Do not run code."""
     asyncio.run(_query(prompt1, "policy_extraction", trace, **access))
     if not ir_path.exists():
@@ -241,7 +264,8 @@ Write the JSON to {ir_path.relative_to(workspace)} with the Write tool. Write no
     pass1_text = ir_path.read_text()
     try:
         check_artifact(pass1_text)
-        pass1_ok = not P.validate(P.PolicyIR.load(str(ir_path)), enums)
+        _p1 = P.PolicyIR.load(str(ir_path))
+        pass1_ok = not P.validate(_p1, C.tool_enums(tools, _p1.api_fields, strict=False))
     except Exception:
         pass1_ok = False
 
@@ -266,6 +290,7 @@ Do not run code."""
             raise
         ir_path.write_text(pass1_text)
         audit_path.write_text(json.dumps({"covered": [], "fixed": [], "unresolved": [f"audit pass failed ({audit_failed}); the first-pass policy was used unaudited"]}))
+        DEGRADED.append("audit pass failed; first-pass policy used unaudited")
         if trace:
             trace.event("policy_audit_fallback", error=audit_failed, used="pass1")
 
@@ -274,7 +299,7 @@ Do not run code."""
         check_artifact(ir_path.read_text())
         try:
             candidate = P.PolicyIR.load(str(ir_path))
-            return candidate, P.validate(candidate, enums)
+            return candidate, P.validate(candidate, C.tool_enums(tools, candidate.api_fields, strict=False))
         except (ValueError, TypeError, KeyError) as e:
             return None, [str(e)]
     ir, problems = load_candidate()
@@ -299,6 +324,7 @@ Problems:
             audit_path.write_text(json.dumps({"covered": [], "fixed": [],
                                               "unresolved": list(old_audit.get("unresolved") or []) + [f"the audited policy failed validation ({'; '.join(rejected)[:300]}); the first-pass policy was used, so the audit's 'fixed' claims below were NOT applied"],
                                               "rejected_audit": old_audit}))
+            DEGRADED.append("audited policy failed validation; first-pass policy used")
             if trace:
                 trace.event("policy_repair_fallback", used="pass1", rejected_problems=rejected, problems_after_fallback=problems)
         if problems:
@@ -312,7 +338,8 @@ Problems:
     if trace:
         trace.event("policy_compiled", artifact=str(ir_path.relative_to(workspace)), bands=len(ir.bands), identity_fields=[r.field for r in ir.identity.requirements],
                     special_cases=[s.name for s in ir.special_cases], unresolved=ir.unresolved, audit_fixed=audit.get("fixed", []), audit_unresolved=audit.get("unresolved", []),
-                    defaulted_without_source=P.defaulted_operative_fields(ir))
+                    defaulted_without_source=P.defaulted_operative_fields(ir), unknown_special_cases=P.unknown_special_cases(ir),
+                    api_mapping_notes=list(getattr(C, "MAPPING_NOTES", [])))
     return ir, audit
 
 

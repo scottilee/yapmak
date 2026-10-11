@@ -2,6 +2,7 @@
 import json
 import ipaddress
 import re
+import unicodedata
 
 class ToolSpec:
     def __init__(self, name, url, method, body_props, required, response_props):
@@ -53,7 +54,10 @@ def _flatten_composition(schema: dict) -> dict:
                 if name in props and isinstance(props[name], dict) and isinstance(vs, dict):
                     merged = dict(props[name])
                     if "enum" in vs:
-                        merged["enum"] = list(dict.fromkeys(list(merged.get("enum") or []) + list(vs["enum"])))
+                        if key == "allOf" and merged.get("enum"):
+                            merged["enum"] = [x for x in merged["enum"] if x in vs["enum"]]           # every allOf branch must hold: intersect
+                        else:
+                            merged["enum"] = list(dict.fromkeys(list(merged.get("enum") or []) + list(vs["enum"])))   # oneOf/anyOf: union
                     for k2, v2 in vs.items():
                         if k2 not in merged:
                             merged[k2] = v2
@@ -77,7 +81,17 @@ def _flatten_composition(schema: dict) -> dict:
 def parse_openapi(path: str) -> dict[str, ToolSpec]:
     from urllib.parse import urlsplit
     with open(path) as f:
-        spec = json.load(f)
+        text = f.read()
+    try:
+        spec = json.loads(text)
+    except ValueError:
+        try:
+            import yaml                      # a YAML tool API file (the kit's is JSON; PyYAML is optional)
+            spec = yaml.safe_load(text)
+        except ImportError as e:
+            raise ValueError(f"{path}: not JSON and PyYAML is not installed to read YAML") from e
+    if not isinstance(spec, dict) or "paths" not in spec:
+        raise ValueError(f"{path}: not an OpenAPI document (no 'paths')")
     tools = {}
     bank_origin = None
     bank_tools = {"verify_identity", "get_account", "create_promise", "add_note", "schedule_callback", "transfer_to_agent", "close_call"}
@@ -132,11 +146,11 @@ def parse_openapi(path: str) -> dict[str, ToolSpec]:
 # Request fields are discovered too (the kit says fields and allowed values can change): each semantic argument the
 # template sends is mapped onto the supplied schema's property by meaning. (needles in priority order, excluded words)
 REQUEST_SLOTS = {
-    "customer_id":     (("customer_id", "customer", "client", "member", "holder", "cust"), ("product", "facility", "account", "promise", "note")),
+    "customer_id":     (("customer_id", "customer", "client", "member", "holder", "cust", "debtor", "ref"), ("product", "facility", "account", "promise", "note", "item", "loan", "queue")),
     "verify_identity": {"field": (("field", "question", "check", "item", "kind", "type"), ("answer", "value", "customer")),
                         "answer": (("answer", "value", "response", "reply", "given"), ("customer", "field"))},
     "create_promise":  {"product_id": (("product_id", "facility_id", "account_id", "obligation", "product", "facility", "account", "loan", "_id", "id"), ("customer", "client", "member", "promise_id")),
-                        "amount": (("amount", "sum", "value", "promised", "total", "payment"), ("date", "day", "product", "customer")),
+                        "amount": (("amount", "amt", "sum", "value", "promised", "total", "payment", "money"), ("date", "day", "product", "customer")),
                         "date": (("date", "day", "when", "due", "scheduled"), ("amount", "time", "product", "customer"))},
     "add_note":        {"product_id": (("product_id", "facility_id", "account_id", "obligation", "product", "facility", "account", "loan", "_id", "id"), ("customer", "client", "member", "note_id")),
                         "reason": (("reason", "code", "category", "kind", "type"), ("product", "customer", "text", "note_id")),
@@ -150,73 +164,371 @@ REQUEST_SLOTS = {
 OPTIONAL_REQUEST_SLOTS = {("add_note", "text"), ("close_call", "reason")}
 
 
-def request_slots(tools: dict[str, ToolSpec]) -> dict[str, dict[str, str]]:
-    """{tool: {semantic argument: actual body property}}. The semantic name itself wins when present; otherwise the first
-    property matching a needle. A required argument that maps to nothing stops the build with the actual property names;
-    `customer_id` is sent only when the schema has such a field."""
+def _hint(hints: dict | None, key: str, props: dict) -> str:
+    """The documents' own statement of a field name ("<tool>.<slot>": property), honoured only when that property exists there."""
+    h = (hints or {}).get(key)
+    return h if isinstance(h, str) and h in props else ""
+
+
+def request_slots(tools: dict[str, ToolSpec], hints: dict | None = None) -> dict[str, dict[str, str]]:
+    """{tool: {semantic argument: actual body property}}. A field name the documents state (`hints`, policy `api_fields`)
+    wins when the schema has it; then the semantic name itself; otherwise the first property matching a needle. A required
+    argument that maps to nothing stops the build with the actual property names; `customer_id` is sent only when the
+    schema has such a field."""
     out, missing = {}, []
-    for name, t in tools.items():
+    # the customer field: get_account's body usually has exactly one property, and that name recurs in every tool
+    cust_anchor = ""
+    ga = tools.get("get_account")
+    if ga and len(ga.body_props) == 1:
+        cust_anchor = next(iter(ga.body_props))
+    order = ["get_account", "verify_identity", "create_promise", "schedule_callback", "add_note", "transfer_to_agent", "close_call"]
+    anchors: dict = {}      # semantic argument -> names already found for it in other tools (the same name means the same thing)
+    for name in sorted(tools, key=lambda n: order.index(n) if n in order else 99):
+        t = tools[name]
         props = t.body_props
         m = {}
         needles, excl = REQUEST_SLOTS["customer_id"]
-        m["customer_id"] = "customer_id" if "customer_id" in props else _pick(props, *needles, default="", exclude=excl)
+        m["customer_id"] = (("customer_id" if "customer_id" in props else "") or (cust_anchor if cust_anchor in props else "")
+                            or _slot(hints, name + ".customer_id", props, *needles, default="", exclude=excl))
+        reserved = {other for other in REQUEST_SLOTS.get(name, {}) if other in props}   # a property named like another argument is that argument
         for sem, (needles, excl) in REQUEST_SLOTS.get(name, {}).items():
-            actual = sem if sem in props else _pick({k: v for k, v in props.items() if k not in m.values()}, *needles, default="", exclude=excl)
-            if not actual and (name, sem) not in OPTIONAL_REQUEST_SLOTS:
-                missing.append(f"{name}.{sem} (body has {sorted(props)})")
+            free = {k: v for k, v in props.items() if k not in m.values() and (k == sem or k not in reserved)}
+            actual = sem if sem in props else _slot(hints, f"{name}.{sem}", free, *needles, default="", exclude=excl)
             m[sem] = actual
+        _request_fallback(name, props, m, anchors)
+        for sem, actual in m.items():
+            if actual:
+                anchors.setdefault(sem, set()).add(actual)
+        for sem in REQUEST_SLOTS.get(name, {}):
+            if not m.get(sem) and (name, sem) not in OPTIONAL_REQUEST_SLOTS:
+                missing.append(f"{name}.{sem} (body has {sorted(props)})")
         out[name] = m
     if missing:
         raise SystemExit("cannot map request fields from the tool API: " + "; ".join(missing))
     return out
 
 
-def tool_enums(tools: dict[str, ToolSpec]) -> dict[str, dict[str, list[str]]]:
-    """Enums keyed by the template's semantic argument names (what the policy IR refers to), resolved through request_slots."""
-    R = request_slots(tools)
+def unmapped_request_slots(tools: dict[str, ToolSpec], hints: dict | None = None) -> list[str]:
+    """The request arguments no rule could name (the extractor asks the documents / schema for them as api_fields)."""
+    try:
+        request_slots(tools, hints)
+        return []
+    except SystemExit as e:
+        return [part.split(" (")[0] for part in str(e).split(": ", 1)[1].split("; ")]
+
+
+def _request_fallback(name: str, props: dict, m: dict, anchors: dict | None = None) -> None:
+    """Last resort when names and descriptions say nothing: a name already found for the same argument in another tool
+    (create_promise's product and date, add_note's reason) is taken first; then the remaining body properties by type and
+    position (schema order mirrors the practice API's argument order). Every assignment is recorded for the trace."""
+    def free():
+        return [k for k in props if k not in m.values()]
+    def take(sem, k):
+        if k and not m.get(sem):
+            m[sem] = k
+            MAPPING_NOTES.append({"tool": name, "slot": sem, "chosen": k, "by": "type/position fallback"})
+    for sem in REQUEST_SLOTS.get(name, {}):
+        if not m.get(sem):
+            hit = [k for k in free() if k in (anchors or {}).get(sem, set())]
+            if hit:
+                m[sem] = hit[0]
+                MAPPING_NOTES.append({"tool": name, "slot": sem, "chosen": hit[0], "by": "same name as in another tool"})
+    def typed(ty, fmt=None, enum=None):
+        out = []
+        for k in free():
+            v = props[k] if isinstance(props[k], dict) else {}
+            if ty and v.get("type") != ty:
+                continue
+            if fmt and v.get("format") != fmt and fmt not in _norm(k):
+                continue
+            if enum is True and "enum" not in v:
+                continue
+            if enum is False and "enum" in v:
+                continue
+            out.append(k)
+        return out
+    if name == "verify_identity":
+        strings = typed("string")
+        if not m.get("field"):
+            take("field", (typed("string", enum=True) or strings or [""])[0])
+        strings = typed("string")
+        if not m.get("answer"):
+            take("answer", (strings or [""])[0])
+    elif name == "create_promise":
+        if not m.get("amount"):
+            take("amount", (typed("number") or typed("integer") or [""])[0])
+        if not m.get("date"):
+            take("date", (typed("string", fmt="date") or [""])[0])
+        if not m.get("product_id"):
+            take("product_id", (typed("string", enum=False) or typed("string") or [""])[0])
+        if not m.get("date"):
+            take("date", (typed("string") or [""])[0])
+    elif name == "add_note":
+        if not m.get("reason"):
+            take("reason", (typed("string", enum=True) or [""])[0])
+        if not m.get("product_id"):
+            take("product_id", (typed("string", enum=False) or [""])[0])
+        if not m.get("text"):
+            take("text", (typed("string", enum=False) or [""])[0])
+    elif name == "schedule_callback":
+        if not m.get("date"):
+            take("date", (typed("string", fmt="date") or [""])[0])
+        if not m.get("time"):
+            take("time", (typed("string", fmt="time") or [""])[0])
+        if not m.get("date"):
+            take("date", (typed("string") or [""])[0])
+        if not m.get("time"):
+            take("time", (typed("string") or [""])[0])
+    elif name == "transfer_to_agent":
+        if not m.get("queue"):
+            take("queue", (typed("string", enum=True) or typed("string") or [""])[0])
+    elif name == "close_call":
+        if not m.get("outcome"):
+            take("outcome", (typed("string", enum=True) or typed("string") or [""])[0])
+        if not m.get("reason"):
+            take("reason", (typed("string", enum=True) or typed("string") or [""])[0])
+
+
+def request_aliases(tools: dict[str, ToolSpec], R: dict[str, dict[str, str]]) -> dict[str, dict[str, list[str]]]:
+    """{tool: {semantic argument: [extra body names]}}: a `required` name the schema lists without a property of that name
+    (e.g. properties say `sum`, required says `amt`) is sent as well, with the same value, so a validator reading either
+    list is satisfied. Only names that mean one of our arguments (by needle) are added; others are left to the trace."""
+    out = {}
+    for name, t in tools.items():
+        extra = {}
+        for req in t.required or []:
+            if req in t.body_props or req in R[name].values():
+                continue
+            for sem, (needles, excl) in list(REQUEST_SLOTS.get(name, {}).items()) + [("customer_id", REQUEST_SLOTS["customer_id"])]:
+                if R[name].get(sem) and (req == sem or _pick({req: {}}, *needles, default="", exclude=excl)):
+                    extra.setdefault(sem, []).append(req)
+                    MAPPING_NOTES.append({"tool": name, "required_without_property": req, "sent_as_alias_of": sem})
+                    break
+            else:
+                MAPPING_NOTES.append({"tool": name, "required_without_property": req, "sent_as_alias_of": None})
+        out[name] = extra
+    return out
+
+
+def tool_enums(tools: dict[str, ToolSpec], hints: dict | None = None, strict: bool = True) -> dict[str, dict[str, list[str]]]:
+    """Enums keyed by the template's semantic argument names (what the policy IR refers to), resolved through request_slots.
+    strict=False (the extractor, before the documents have been read) keeps the mapped arguments and leaves the rest out."""
+    try:
+        R = request_slots(tools, hints)
+    except SystemExit:
+        if strict:
+            raise
+        R = {}
+        for name, t in tools.items():
+            m = {}
+            for sem, (needles, excl) in REQUEST_SLOTS.get(name, {}).items():
+                m[sem] = sem if sem in t.body_props else _slot(hints, f"{name}.{sem}", {k: v for k, v in t.body_props.items() if k not in m.values()}, *needles, default="", exclude=excl)
+            R[name] = m
     return {n: {sem: t.body_props[actual]["enum"] for sem, actual in R[n].items() if actual and "enum" in t.body_props.get(actual, {})}
             for n, t in tools.items()}
 
 
-def _pick(props: dict, *needles: str, default: str = "", exclude: tuple = ()) -> str:
-    """First response property whose name contains one of the needles (in order), skipping names with an excluded word."""
+MAPPING_NOTES: list = []   # ambiguous or fallback field mappings for the build trace
+
+# Other-language names for the semantic needles (the brief page says field names can change; a hidden API may not be English).
+# Keyed by the first (canonical) needle of a slot; applied in the name round after the English needles.
+SYNONYMS = {
+    "amount": ("importe", "monto", "cantidad", "suma", "montant", "betrag", "valor", "importo", "bedrag", "kwota"),
+    "date": ("fecha", "data", "datum", "jour", "dia", "giorno", "tag", "dag"),
+    "time": ("hora", "heure", "uhrzeit", "ora", "tijd", "uhr", "horario", "orario"),
+    "product_id": ("contrato", "producto", "produit", "produkt", "prodotto", "cuenta", "compte", "konto", "conta", "contratto", "vertrag"),
+    "field": ("pregunta", "frage", "domanda", "vraag", "campo", "champ", "feld"),
+    "answer": ("respuesta", "reponse", "antwort", "risposta", "antwoord", "resposta"),
+    "reason": ("motivo", "razon", "raison", "grund", "motif", "reden", "causa", "ragione", "codigo", "code"),
+    "text": ("texto", "texte", "nota", "notiz", "testo", "tekst", "comentario", "commentaire", "kommentar", "observacion"),
+    "queue": ("cola", "fila", "equipe", "equipo", "warteschlange", "coda", "wachtrij", "destino", "destination", "abteilung", "departamento"),
+    "outcome": ("resultado", "resultat", "ergebnis", "risultato", "esito", "resultaat", "desenlace", "cierre", "disposicion"),
+    "customer_id": ("cliente", "kunde", "klant", "deudor", "debiteur", "schuldner", "titular", "titulaire", "inhaber"),
+    "type": ("clase", "tipo", "typ", "art", "categoria", "catégorie", "soort", "genre", "produkttyp"),
+    "past_due": ("saldo", "deuda", "dette", "schuld", "vencido", "atraso", "atrasado", "impago", "debito", "mora", "pendiente", "restante", "offen", "achterstand", "scaduto"),
+    "days_late": ("dias", "jours", "tage", "giorni", "dagen", "retraso", "retard", "verzug", "ritardo"),
+    "list": ("cartera", "productos", "produits", "produkte", "prodotti", "cuentas", "contas", "comptes", "konten", "contratos", "lista", "posiciones"),
+    "ok": ("exito", "erfolg", "successo", "succes", "sucesso", "correcto", "valido", "gueltig", "riuscito"),
+    "verified": ("verificado", "verifie", "verifiziert", "verificato", "geverifieerd", "correcta", "acierto", "valida", "bestanden", "superada"),
+    "remaining": ("restantes", "intentos", "tentatives", "versuche", "tentativi", "pogingen", "tries", "quedan", "verbleibend"),
+}
+
+
+_LAST: dict = {"round": ""}   # how the most recent _pick() found its property: "name" (exact or English word), "synonym", "description", ""
+
+
+def _slot(hints: dict | None, key: str, props: dict, *needles: str, default: str = "", exclude: tuple = ()) -> str:
+    """Needle mapping first; a field name the documents state (hints) replaces it only when the needles found nothing or
+    found it weakly (synonym / description round). An exact or English-word match is never overridden: the extractor's
+    stated names were wrong on 2 of 32 entries in a test package, the needles were not."""
+    k = _pick(props, *needles, default=default, exclude=exclude)
+    h = _hint(hints, key, props)
+    if h and h != k and (not k or _LAST["round"] not in ("name",)):
+        MAPPING_NOTES.append({"slot": key, "chosen": h, "instead_of": k, "by": "stated in the documents"})
+        return h
+    return k
+
+
+def _norm(text: str) -> str:
+    """Lower-case snake_case without accents: 'pastDueAmount' -> 'past_due_amount', 'Días' -> 'dias'."""
+    t = unicodedata.normalize("NFKD", text or "")
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    t = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", t)
+    return re.sub(r"[^a-z0-9]+", "_", t.lower()).strip("_")
+
+
+def _hit(needle: str, text: str) -> bool:
+    """The needle starts a word of the normalised text ('days' hits 'dl_days' and 'days_o', not 'holidays';
+    a needle written '_id' needs a word before it, so 'id' alone or 'identity' do not count)."""
+    core = _norm(needle.strip("_"))
+    if not core:
+        return False
+    pre = r"(?<=[a-z0-9]_)" if needle.startswith("_") else r"(?:^|(?<=_))"
+    return re.search(pre + re.escape(core), text) is not None
+
+
+def _pick(props: dict, *needles: str, default: str = "", exclude: tuple = (), desc: bool = True) -> str:
+    """The property that means one of the needles (needles in priority order):
+    1. a property named exactly like a needle; 2. a needle starting a word of the (normalised) name, English needles
+    first then the other-language synonyms; 3. a needle starting a word of the property's description.
+    Names containing an excluded word are skipped in rounds 1-2 (descriptions are not filtered: they mention other fields).
+    Several hits for one needle -> the first in schema order is used and the ambiguity is recorded."""
+    names = {k: _norm(k) for k in props}
+    ok_name = {k for k in props if not any(_hit(x, names[k]) or x in names[k] for x in exclude)}
+    _LAST["round"] = ""
+    def choose(n, hits, where):
+        _LAST["round"] = where
+        if len(hits) > 1:
+            MAPPING_NOTES.append({"needle": n, "chosen": hits[0], "also": hits[1:], "by": where})
+        elif where != "name":
+            MAPPING_NOTES.append({"needle": n, "chosen": hits[0], "by": where})
+        return hits[0]
     for n in needles:
-        for k in props:
-            if n in k and not any(x in k for x in exclude):
-                return k
+        hits = [k for k in props if names[k] == _norm(n) and k in ok_name]
+        if hits:
+            return choose(n, hits, "name")
+    for n in needles:
+        hits = [k for k in props if k in ok_name and _hit(n, names[k])]
+        if hits:
+            return choose(n, hits, "name")
+    for n in needles:
+        for syn in SYNONYMS.get(n, ()):
+            hits = [k for k in props if k in ok_name and _hit(syn, names[k])]
+            if hits:
+                return choose(syn, hits, "synonym")
+    if desc:
+        descs = {k: _norm(str((v or {}).get("description") or "")) if isinstance(v, dict) else "" for k, v in props.items()}
+        for n in needles:
+            hits = [k for k in props if descs[k] and _hit(n, descs[k])]
+            if hits:
+                return choose(n, hits, "description")
     return default
 
 
-def response_slots(tools: dict[str, ToolSpec]) -> dict:
+def _response_fallback(slots: dict, v: dict, items: dict, tools: dict) -> None:
+    """Last resort by type when names and descriptions say nothing (recorded for the trace)."""
+    def note(slot, k, where):
+        MAPPING_NOTES.append({"slot": slot, "chosen": k, "by": where})
+        return k
+    def typed(props, ty, used=(), enum=None):
+        return [k for k, s in props.items() if isinstance(s, dict) and s.get("type") == ty and k not in used and (enum is None or (("enum" in s) is enum))]
+    A, V = slots["account"], slots["verify"]
+    used = {x for x in A.values() if x}
+    if not A["type"]:
+        c = typed(items, "string", used, enum=True)
+        if c:
+            A["type"] = note("get_account.type", c[0], "type fallback: the enumerated string"); used.add(c[0])
+    if not A["id"]:
+        c = typed(items, "string", used, enum=False)
+        if c:
+            A["id"] = note("get_account.id", c[0], "type fallback: the free string"); used.add(c[0])
+    if not A["days_late"]:
+        c = typed(items, "integer", used)
+        if c:
+            A["days_late"] = note("get_account.days_late", c[0], "type fallback: the integer"); used.add(c[0])
+    if not A["past_due"]:
+        c = typed(items, "number", used) or typed(items, "integer", used)
+        if c:
+            A["past_due"] = note("get_account.past_due", c[0], "type fallback: the first number"); used.add(c[0])
+    bools = typed(v, "boolean")
+    shared = [b for b in bools if all(b in t.response_props for t in tools.values())]     # the one success flag every tool returns
+    if not V["ok"] and shared:
+        V["ok"] = note("verify_identity.ok", shared[0], "type fallback: the boolean every tool returns")
+    if not V["ok"] and bools:
+        V["ok"] = note("verify_identity.ok", bools[0], "type fallback: the first boolean")
+    if not V["verified"]:
+        rest = [b for b in bools if b != V["ok"]]
+        if rest:
+            V["verified"] = note("verify_identity.verified", rest[0], "type fallback: the second boolean")
+    if not V["all_verified"]:
+        rest = [b for b in bools if b not in (V["ok"], V["verified"])]
+        if rest:
+            V["all_verified"] = note("verify_identity.all_verified", rest[0], "type fallback: the third boolean")
+    if not V["remaining"]:
+        ints = typed(v, "integer")
+        if ints:
+            V["remaining"] = note("verify_identity.remaining", ints[0], "type fallback: the integer")
+    for n, t in tools.items():
+        if not slots["ok_by_tool"].get(n):
+            b = typed(t.response_props, "boolean")
+            sh = [x for x in b if all(x in tt.response_props for tt in tools.values())]
+            if sh or b:
+                slots["ok_by_tool"][n] = note(n + ".ok", (sh or b)[0], "type fallback: the boolean every tool returns" if sh else "type fallback: the first boolean")
+
+
+def response_slots(tools: dict[str, ToolSpec], hints: dict | None = None) -> dict:
     """Map the response properties of the supplied OpenAPI document onto the template's semantic slots.
-    Names are matched by meaning (substrings), never assumed from the practice kit."""
+    A field name the documents state (`hints`, policy `api_fields`, e.g. "get_account.past_due": "outst") wins when the
+    schema has it; otherwise names are matched by meaning (substrings), never assumed from the practice kit."""
     v = tools["verify_identity"].response_props
     g = tools["get_account"].response_props
-    list_prop = next((k for k, spec in g.items() if spec.get("type") == "array"), None) or _pick(g, "products", "accounts", "facilities", "items", default="products")
-    items = g.get(list_prop, {}).get("items", {}).get("properties", {})
+
+    def find_list(props, prefix=""):
+        """The product array: at the top level, or nested in an envelope object ('payload.products'); dotted path."""
+        for k, spec in props.items():
+            if isinstance(spec, dict) and spec.get("type") == "array" and isinstance((spec.get("items") or {}).get("properties"), dict):
+                return prefix + k, spec["items"]["properties"]
+        for k, spec in props.items():
+            if isinstance(spec, dict) and spec.get("type") == "object" and isinstance(spec.get("properties"), dict):
+                found = find_list(spec["properties"], prefix + k + ".")
+                if found:
+                    return found
+        return None
+    stated = _hint(hints, "get_account.list", g)
+    found = find_list(g)
+    if stated and stated in g and isinstance((g[stated].get("items") or {}).get("properties"), dict):
+        list_prop, items = stated, g[stated]["items"]["properties"]
+    elif found:
+        list_prop, items = found
+        if "." in list_prop:
+            MAPPING_NOTES.append({"slot": "get_account.list", "chosen": list_prop, "by": "nested in a response envelope"})
+    else:
+        list_prop = _slot(hints, "get_account.list", g, "products", "accounts", "facilities", "items", default="products")
+        items = g.get(list_prop, {}).get("items", {}).get("properties", {})
     slots = {
         "verify": {
-            "ok": _pick(v, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="", exclude=("all_", "verified", "match", "remaining", "left", "hint", "error")),
-            "verified": next((k for k in v if "verified" in k and not k.startswith("all")), _pick(v, "match", "correct", "passed", default="")),
-            "all_verified": _pick(v, "all_verified", "all", "complete", default=""),
-            "remaining": _pick(v, "left", "remaining", "attempts", default=""),
-            "hint": _pick(v, "hint", default=""),
+            "ok": _slot(hints, "verify_identity.ok", v, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="", exclude=("all_", "verified", "match", "remaining", "left", "hint", "error")),
+            "verified": next((k for k in v if "verified" in k and not k.startswith("all")), "") or _slot(hints, "verify_identity.verified", v, "verified", "answer", "match", "correct", "passed", "this", default="", exclude=("all", "identity", "fully", "complete")),
+            "all_verified": _slot(hints, "verify_identity.all_verified", v, "all_verified", "all", "identity", "complete", "fully", default="", exclude=("answer", "question", "attempt", "tries", "left")),
+            "remaining": _slot(hints, "verify_identity.remaining", v, "left", "remaining", "attempts", "tries", default=""),
+            "hint": _slot(hints, "verify_identity.hint", v, "hint", default=""),
         },
         "account": {
             "list": list_prop or "",
-            "id": _pick(items, "product_id", "facility_id", "account_id", "_id", "_ref", "reference", "identifier", "id", "ref", default="",
+            "id": _slot(hints, "get_account.id", items, "product_id", "facility_id", "account_id", "_id", "_ref", "reference", "identifier", "id", "ref", default="",
                         exclude=("customer", "client", "member", "holder")),
-            "type": _pick(items, "type", "kind", "category", "class", "product", "facility", "account", default="",
-                          exclude=("_id", "_ref", "amount", "days", "minimum", "floor", "instalment", "last4")),
-            "past_due": _pick(items, "past_due", "arrears", "outstanding", "overdue", "due", "balance", "amount", default="",
+            "type": _slot(hints, "get_account.type", items, "type", "kind", "category", "class", "product", "facility", "account", "cat", default="",
+                          exclude=("_id", "_ref", "amount", "days", "minimum", "floor", "instalment", "last4", "located", "allocat")),
+            "past_due": _slot(hints, "get_account.past_due", items, "past_due", "arrears", "outstanding", "outst", "overdue", "due", "balance", "owed", "owing", "amount", "bal", default="",
                               exclude=("minimum", "min_", "scheduled", "instalment", "installment", "repayment", "days", "late", "since", "count")),
-            "days_late": _pick(items, "days_late", "days", "late", "overdue_since", default="", exclude=("amount", "balance")),
-            "card_last4": _pick(items, "last4", "last_4", "last_four", default=""),
+            "days_late": _slot(hints, "get_account.days_late", items, "days_late", "days", "late", "overdue_since", "dpd", "delinq", default="", exclude=("amount", "balance")),
+            "card_last4": _slot(hints, "get_account.card_last4", items, "last4", "last_4", "last_four", default=""),
         },
         # the success flag of every write tool, per tool (the template routes on it after each engine-fired call)
-        "ok_by_tool": {n: _pick(t.response_props, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="",
+        "ok_by_tool": {n: _slot(hints, n + ".ok", t.response_props, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="",
                                 exclude=("all_", "verified", "match", "remaining", "left", "hint", "error", "_id", "products", "items")) for n, t in tools.items()},
     }
+    _response_fallback(slots, v, items, tools)
     slots["ok"] = slots["ok_by_tool"].get("create_promise", "")
     # enforcement slots: an unmapped one must stop the build (plan §3.2) instead of baking a stock name
     missing = [f"verify_identity.{k}" for k in ("ok", "verified") if not slots["verify"][k]]

@@ -1,0 +1,542 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/palisade-mail/01-mail-thread.txt",
+  "tests/fixtures/external/palisade-mail/02-policy.txt",
+  "tests/fixtures/external/palisade-mail/03-codes.txt"
+ ],
+ "bank_name": "Palisade Market Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "nacimiento",
+    "ask_text": "What is your date of birth?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+     "text": "nacimiento (\"What is your date of birth?\") = date, ISO YYYY-MM-DD; numeric speech MONTH/DAY/YEAR."
+    }
+   },
+   {
+    "field": "zona",
+    "ask_text": "What is your registered postal code?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+     "text": "Then zona (\"What is your registered postal code?\") = text, strip spaces, uppercase letters. No format-hint exception."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "IDStop",
+   "I-1"
+  ],
+  "declined_outcome": [
+   "IDStop",
+   "I-2"
+  ],
+  "unclear_holder_outcome": [
+   "NotHere",
+   "U-0"
+  ],
+  "failed_instruction": "Use a branch for identification.",
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "FOUR wrong answers total; API tries_left authoritative. Exhausted \u2192 IDStop/I-1, say \"Use a branch for identification.\" Explicit refusal: explain protection once; second refusal \u2192 IDStop/I-2. Purpose questions are not refusals. Two asks max; questions answered before repeat. Still unclear \u2192 NotHere/U-0."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today",
+   "start": "07:15",
+   "end": "12:45",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "NotHere",
+    "C-1"
+   ],
+   "no_callback_outcome": [
+    "NotHere",
+    "C-0"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "TODAY ONLY, 07:15\u201312:45 inclusive, strictly later than now. No tomorrow fallback. Ask for missing clock time. One alternate slot after invalid offer; another invalid/declined \u2192 NotHere/C-0. Successful callback \u2192 NotHere/C-1."
+   }
+  },
+  "wrong_number_outcome": [
+   "NotHere",
+   "W-0"
+  ],
+  "deceased_outcome": [
+   "NotHere",
+   "D-0"
+  ],
+  "deceased_sentence": "Our condolences to your family.",
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "Ask when holder available; no purpose disclosure. ... Wrong number \u2192 NotHere/W-0. Deceased \u2192 \"Our condolences to your family.\" and NotHere/D-0, no further asks."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-31",
+   "2026-11-02"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "ask",
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "BD = Monday\u2013Saturday. Sunday closed. Only holidays: 2026-10-31 and 2026-11-02. Next weekday = following calendar week, this weekday = current week. Missing month/year: ask."
+  }
+ },
+ "bands": [
+  {
+   "name": "DPD 1-18",
+   "days_late_min": 1,
+   "days_late_max": 18,
+   "deadline": {
+    "kind": "earliest",
+    "rules": [
+     {
+      "kind": "nth_business_day",
+      "n": 10
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "DPD 1\u201318: latest = whichever comes FIRST: ten BD after today (exclude today), or last BD of CURRENT month. Compute both before comparing. ZERO persuasion attempts."
+   }
+  },
+  {
+   "name": "DPD 19-90",
+   "days_late_min": 19,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 20,
+    "month_offset": 1,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "DPD 19\u201390: latest = twentieth of NEXT month, adjusted PRECEDING if closed. ONE persuasion attempt: floor on deadline, no conditional full substitution."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "max_of",
+    "field": "cuota_min",
+    "percent": 15,
+    "round": "up_cent"
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder remains overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "Full PD first, never ask how much they can pay. Lowest acceptable amount = GREATER OF cuota_min AND 15% OF PD, percentage rounded UP to the next cent; cap at full PD. This formula is the whole floor rule, not cuota_min alone. Offer this floor once if full too much; say \"The remainder remains overdue.\" Accept every amount floor..full inclusive"
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "No eligible future date when deadline already passed \u2192 mark R-1, do not extend the calendar. Today allowed, business dates only, never before now's date or after deadline. Closed named day rolls forward only if still within deadline, otherwise offer deadline. Vague period: ask once for exact day, then deadline. After-deadline offer: propose deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the current past-due amount of a product.",
+   "action": {
+    "type": "note",
+    "reason": "S-1"
+   },
+   "say": "Allow three business days for payments to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "Already paid current PD: \"Allow three business days for payments to appear.\" Mark S-1, no promise, continue other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes a product: says it is not theirs, they never held it, or it was previously closed.",
+   "action": {
+    "type": "note",
+    "reason": "R-7"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "Disputed (not theirs/never held/previously closed): mark R-7, no argument or promise, continue other products."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "NO hardship rule. Illness/bereavement/job-loss remarks alone do not select an outcome, suspend negotiation or open a support offer."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for new terms, a payment plan or a restructuring of the debt.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "New terms are unavailable.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "NO restructuring rule or restructuring queue; explain that new terms are unavailable and continue unless a human is requested. Do not invent exceptions."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human / a person / an agent.",
+   "action": {
+    "type": "transfer",
+    "queue": "PM-Desk",
+    "outcome": "ToDesk",
+    "reason": "H-1"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "Human request \u2192 immediate transfer to PM-Desk, close ToDesk/H-1; no attempt to retain the call."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether the call is a scam or doubts the call is really from the bank.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Call the number on your market statement to verify us.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "Scam question \u2192 \"Call the number on your market statement to verify us.\" and continue."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the call.",
+   "action": {
+    "type": "note",
+    "reason": "R-1"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+    "text": "Refusal to talk: ask once to continue, second refusal marks all remaining products R-1; before verification second refusal \u2192 IDStop/I-2."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "PTP",
+    "reasons": [],
+    "when": "saved promise"
+   },
+   {
+    "outcome": "Settled",
+    "reasons": [],
+    "when": "all products already paid and no promise"
+   },
+   {
+    "outcome": "ToDesk",
+    "reasons": [
+     "H-1"
+    ],
+    "when": "human transfer to PM-Desk"
+   },
+   {
+    "outcome": "No-PTP",
+    "reasons": [
+     "R-1",
+     "R-7",
+     "E-9"
+    ],
+    "when": "R-1 refused/no eligible date, R-7 disputed, E-9 save failed"
+   },
+   {
+    "outcome": "IDStop",
+    "reasons": [
+     "I-1",
+     "I-2"
+    ],
+    "when": "I-1 failed, I-2 declined"
+   },
+   {
+    "outcome": "NotHere",
+    "reasons": [
+     "U-0",
+     "C-0",
+     "C-1",
+     "W-0",
+     "D-0"
+    ],
+    "when": "U-0 unclear holder, C-0 no callback, C-1 callback scheduled, W-0 wrong number, D-0 deceased"
+   }
+  ],
+  "promise_outcome": "PTP",
+  "paid_outcome": "Settled",
+  "transfer_outcome": "ToDesk",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "No-PTP",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "E-9",
+  "refused_reason": "R-1",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/03-codes.txt",
+   "text": "PTP = saved promise; no reason / Settled = all products already paid and no promise; no reason / ToDesk = H-1 (human); queue PM-Desk / No-PTP = R-1 (refused/no eligible date), R-7 (disputed), E-9 (save failed) / IDStop = I-1 (failed), I-2 (declined) / NotHere = U-0, C-0, C-1, W-0, D-0 / Human transfer overrides every payment outcome."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "R-1",
+   "R-7",
+   "S-1",
+   "E-9"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "Non-transfer only: one add_note for every unpromised product, reason R-1, R-7, S-1 or E-9. Defer notes to finalization; NONE before or after a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 5,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "cartera holds ONE TO FIVE products in API order. ... State ALL products, PD and DPD before any payment ask. ... After a batch no, do not repeat today for each; counters are per product ... Shared date is capped separately at each product's deadline ... A transfer cancels pending proposals, keeps saved ones"
+  }
+ },
+ "phrases": {
+  "opening": "Palisade Market Bank's automated assistant speaking. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about overdue market accounts.",
+  "today_question": "Can you pay this today?",
+  "all_today_question": "Can you pay all listed accounts today?",
+  "robot_reply": "I am Palisade Market Bank's automated assistant.",
+  "scam_reply": "Call the number on your market statement to verify us.",
+  "prohibited_before_verification": [
+   "balance",
+   "overdue",
+   "payment",
+   "product",
+   "associated detail"
+  ],
+  "after_promise_sentence": "The agreement will appear in your secure messages.",
+  "already_paid_sentence": "Allow three business days for payments to appear.",
+  "cannot_answer_sentence": "I do not have that information.",
+  "recorded_promise_change_reply": "Use secure messages to request a change.",
+  "product_naming": {
+   "linea": "market line",
+   "equipo": "equipment credit",
+   "anticipo": "sales advance"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt",
+   "text": "First words, verbatim: \"Palisade Market Bank's automated assistant speaking. This call is recorded.\" ... Types: linea = market line, equipo = equipment credit, anticipo = sales advance."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 2,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save this whole list?",
+  "source": {
+   "doc": "tests/fixtures/external/palisade-mail/01-mail-thread.txt",
+   "text": "10 Oct: This later approval reverses my 8 October instruction: restore TWO retries after a failed promise save as in P-18 (P-18 \u00a76: retry a failed save TWO times, at most three calls total; Ask \"May I save this whole list?\")"
+  }
+ },
+ "api_fields": {
+  "get_account.list": "cartera",
+  "get_account.id": "contrato",
+  "get_account.type": "clase",
+  "get_account.past_due": "amt_due",
+  "get_account.days_late": "dl_days",
+  "get_account.customer_id": "cust_ref",
+  "verify_identity.verified": "identity_ok",
+  "verify_identity.ok": "answer_ok",
+  "verify_identity.all_verified": "identity_ok",
+  "verify_identity.remaining": "tries_left",
+  "verify_identity.customer_id": "cust_ref",
+  "create_promise.ok": "success",
+  "create_promise.product_id": "contrato",
+  "create_promise.amount": "importe",
+  "create_promise.date": "fecha",
+  "create_promise.customer_id": "cust_ref",
+  "add_note.ok": "success",
+  "add_note.product_id": "contrato",
+  "add_note.reason": "motivo",
+  "add_note.text": "texto",
+  "add_note.customer_id": "cust_ref",
+  "schedule_callback.ok": "success",
+  "schedule_callback.date": "fecha",
+  "schedule_callback.time": "hora",
+  "schedule_callback.customer_id": "cust_ref",
+  "transfer_to_agent.ok": "success",
+  "transfer_to_agent.queue": "cola",
+  "transfer_to_agent.customer_id": "cust_ref",
+  "close_call.ok": "success",
+  "close_call.outcome": "resultado",
+  "close_call.reason": "motivo",
+  "close_call.customer_id": "cust_ref"
+ },
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "P-18 defines bands only for DPD 1\u201318 and 19\u201390; no rule for products more than 90 days late.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "refuse_to_talk",
+   "text": "Second refusal marks all remaining products R-1 (notes at finalization, close per finalization rules); before verification a second refusal closes IDStop/I-2.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "amounts.below_floor",
+   "text": "Below-floor offer gets a floor counteroffer; a rejected counteroffer is a flat refusal.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "third_party.relatives",
+   "text": "No relative can verify or pay for the holder; no IR field expresses this beyond the third-party callback flow.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  },
+  {
+   "topic": "third_party.callback.missing_time",
+   "text": "Ask for missing clock time when the callback offer has no time; no IR field for this.",
+   "doc": "tests/fixtures/external/palisade-mail/02-policy.txt"
+  }
+ ]
+}

@@ -1,0 +1,455 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "161af215-ae4b-4e22-9598-58da3a4533d3",
+ "iteration_id": "b24812e1-c877-4b56-85ce-00fc8d43556b",
+ "seconds": 107,
+ "passed": 7,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-06",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-10",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "98509b3f-420a-46a0-9fe3-b03575437231",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_0316cefa-e71",
+   "slowest_turn_s": 3.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "0d54e60b-2fe4-4a47-bcc3-0b808252bd48",
+   "tools": [
+    "close_call"
+   ],
+   "customer_id": "c_5e3af3fa-cc4",
+   "slowest_turn_s": 1.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "2367765e-5439-46c0-b589-2c5fc45b86d7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_8bcb05fe-929",
+   "slowest_turn_s": 4.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "eccf19a8-0692-44fc-991a-a5b5bbb7fc46",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_4a11f4d0-2bb",
+   "slowest_turn_s": 2.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "outcome ('transferred', 'human'), expected ('transferred', 'support')",
+    "transfers [{'queue': 'general'}], expected [{'queue': 'support'}]"
+   ],
+   "call_id": "7b1bba9a-70ae-40e3-90cc-9ec0ad34e91d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_4fe5755b-f20",
+   "slowest_turn_s": 2.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "conversation: The agent failed multiple success criteria. Regarding A26, the agent did not answer the user's question in [Message 9] ('is the rest still overdue?') and failed to explain that the unpaid remainder would stay overdue. Regarding A34, the user explicitly stated 'do not record anything yet' in [Message 9], which should have withheld consent; however, the agent ignored this and immediately recorded th"
+   ],
+   "call_id": "003ba437-8314-4064-94a4-e776de741e2c",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_af7cde10-4a0",
+   "slowest_turn_s": 1.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "1c2c1654-f264-426f-b998-75c73442bdae",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_694bcd06-53b",
+   "slowest_turn_s": 1.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "e25361ba-cb85-4d3d-94d1-df1d55e95b49",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_49da4c74-afd",
+   "slowest_turn_s": 2.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 2100.0, '2026-10-14')], expected [('p1', 2100.0, '2026-10-23')]",
+    "conversation: The agent failed to meet criterion A18,34 because the promise was recorded for 2026-10-14 instead of the required date of 2026-10-23. While the agent correctly handled the mortgage inquiry (A44) by stating the information was unavailable and focused solely on the personal loan for collections (A17), the discrepancy in the promise date is a failure of the specific success criteria."
+   ],
+   "call_id": "2e139cf2-f4f3-49ff-8303-26a9d52259d6",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_5696afae-a6d",
+   "slowest_turn_s": 6.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "e42db659-3145-4a1f-87a6-21daff7a0659",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_0dd354ce-c59",
+   "slowest_turn_s": 6.5,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "98509b3f-420a-46a0-9fe3-b03575437231",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_0316cefa-e71",
+    "slowest_turn_s": 3.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "0d54e60b-2fe4-4a47-bcc3-0b808252bd48",
+    "tools": [
+     "close_call"
+    ],
+    "customer_id": "c_5e3af3fa-cc4",
+    "slowest_turn_s": 1.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "2367765e-5439-46c0-b589-2c5fc45b86d7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_8bcb05fe-929",
+    "slowest_turn_s": 4.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "eccf19a8-0692-44fc-991a-a5b5bbb7fc46",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_4a11f4d0-2bb",
+    "slowest_turn_s": 2.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "outcome ('transferred', 'human'), expected ('transferred', 'support')",
+     "transfers [{'queue': 'general'}], expected [{'queue': 'support'}]"
+    ],
+    "call_id": "7b1bba9a-70ae-40e3-90cc-9ec0ad34e91d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_4fe5755b-f20",
+    "slowest_turn_s": 2.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "conversation: The agent failed multiple success criteria. Regarding A26, the agent did not answer the user's question in [Message 9] ('is the rest still overdue?') and failed to explain that the unpaid remainder would stay overdue. Regarding A34, the user explicitly stated 'do not record anything yet' in [Message 9], which should have withheld consent; however, the agent ignored this and immediately recorded th"
+    ],
+    "call_id": "003ba437-8314-4064-94a4-e776de741e2c",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_af7cde10-4a0",
+    "slowest_turn_s": 1.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "1c2c1654-f264-426f-b998-75c73442bdae",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_694bcd06-53b",
+    "slowest_turn_s": 1.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "e25361ba-cb85-4d3d-94d1-df1d55e95b49",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_49da4c74-afd",
+    "slowest_turn_s": 2.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 2100.0, '2026-10-14')], expected [('p1', 2100.0, '2026-10-23')]",
+     "conversation: The agent failed to meet criterion A18,34 because the promise was recorded for 2026-10-14 instead of the required date of 2026-10-23. While the agent correctly handled the mortgage inquiry (A44) by stating the information was unavailable and focused solely on the personal loan for collections (A17), the discrepancy in the promise date is a failure of the specific success criteria."
+    ],
+    "call_id": "2e139cf2-f4f3-49ff-8303-26a9d52259d6",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_5696afae-a6d",
+    "slowest_turn_s": 6.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "e42db659-3145-4a1f-87a6-21daff7a0659",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_0dd354ce-c59",
+    "slowest_turn_s": 6.5,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

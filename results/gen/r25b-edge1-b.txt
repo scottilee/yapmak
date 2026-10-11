@@ -1,0 +1,18 @@
+FAIL PUB-11 hard   Unlike round: conversation boundaries | verify > verify > get_account > transfer_to_agent > close_call
+       - outcome ('transferred', 'support'), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16')]
+       - notes [], expected [('p2', 'dispute'), ('p3', 'hardship')]
+       - transfers [{'queue': 'support'}], expected []
+       - conversation: The assistant correctly stated all three products before asking for payment (B2). However, it failed multiple other criteria. It did not use any API calls to record the promise for the credit card or the notes for the personal and car loans (B7-8
+FAIL PUB-12 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'dispute'), expected ('no_promise', 'refused')
+       - notes [('p1', 'dispute'), ('p2', 'dispute'), ('p3', 'dispute')], expected [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'paid')]
+       - conversation: The conversation failed several success criteria related to product noting and closing logic. 1) The agent noted the car loan (p3) as a dispute in the API call, whereas the user stated it was paid in [Message 7]. 2) The agent noted the credit car
+FAIL PUB-13 hard   Unlike round: conversation boundaries | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 90.0, '2026-10-23'), ('p2', 300.0, '2026-10-23')]
+       - conversation: The agent failed to meet the success criteria because it did not record any promises (system event close_call shows outcome 'no_promise'). Additionally, the agent entered an repetitive loop from Message 10 to Message 68, failing to process the cu
+
+slowest agent turn per call: median 5 s, worst 6 s. Failed calls where the customer hung up: 0.
+
+0 / 3 passed (bank records and conversation checks). Last simulation a9ab333a-70c2-46b1-8060-7bd85a1f47c8, status completed, 163 s.

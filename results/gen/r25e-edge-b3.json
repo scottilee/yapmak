@@ -1,0 +1,158 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "54285baa-8384-4164-a7d7-1f26808efa23",
+ "iteration_id": "2f26d892-7a38-4fc2-bd0a-0cf0adc5fe9b",
+ "seconds": 159,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "7f68a210-8fc5-4a3c-b7b8-d010fab55dd7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_9003f23c-b3f",
+   "slowest_turn_s": 3.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'refused'), expected ('promise', None)",
+    "promises [], expected [('p1', 510.0, '2026-10-16')]",
+    "notes [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'refused')]",
+    "conversation: The call failed to meet several success criteria: - The credit card did not receive a promise for 510; system events show product p1 was assigned a 'refused' note. - The outcome was recorded as 'no_promise' instead of 'promise'. - The assistant hallucinated in Message 14, claiming the user said '1.00' and attempted to push for a minimum payment of 153.00 despite the user having already offered the"
+   ],
+   "call_id": "73764619-6d13-4c28-9fb2-243b35db0952",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_531a064b-6cf",
+   "slowest_turn_s": 16.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "5b2a4a1f-1f9e-4b0b-8bec-d34d42e65fa3",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_48827c25-5ac",
+   "slowest_turn_s": 2.9,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "7f68a210-8fc5-4a3c-b7b8-d010fab55dd7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_9003f23c-b3f",
+    "slowest_turn_s": 3.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'refused'), expected ('promise', None)",
+     "promises [], expected [('p1', 510.0, '2026-10-16')]",
+     "notes [('p1', 'refused'), ('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'refused')]",
+     "conversation: The call failed to meet several success criteria: - The credit card did not receive a promise for 510; system events show product p1 was assigned a 'refused' note. - The outcome was recorded as 'no_promise' instead of 'promise'. - The assistant hallucinated in Message 14, claiming the user said '1.00' and attempted to push for a minimum payment of 153.00 despite the user having already offered the"
+    ],
+    "call_id": "73764619-6d13-4c28-9fb2-243b35db0952",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_531a064b-6cf",
+    "slowest_turn_s": 16.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "5b2a4a1f-1f9e-4b0b-8bec-d34d42e65fa3",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_48827c25-5ac",
+    "slowest_turn_s": 2.9,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

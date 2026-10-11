@@ -1,0 +1,93 @@
+{
+ "bands": [
+  "a",
+  "b",
+  "c"
+ ],
+ "identity": [
+  "konto_code",
+  "geburtsdatum",
+  "postleitzahl"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "band a calendar-day branch adjustment",
+   "text": "Clause 7.1(a) does not say whether the ninth calendar day after the call is shifted when it falls on a Sunday; taken unadjusted.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "today question wording",
+   "text": "The documents imply a first ask to settle today (7.3 'A first plain refusal to settle today') but dictate no wording; a minimal sentence was written.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "10.3 requires 'one short sentence of sympathy' without dictating the words; a minimal sentence was written.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "create_promise amount field",
+   "text": "The tool API defines the amount property as `sum` but lists `amt` as required; the documents do not name the field.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "days past outside bands",
+   "text": "Clause 7.1 defines bands only for 1-60 days past; facilities at 0 or more than 60 days past are not covered.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "robot question",
+   "text": "10.7 robot question has no known special-case name; handled only through phrases.robot_reply (the call continues).",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "card last digits",
+   "text": "No card last-digits field exists and the documents name the card category only as \"store card\".",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "already paid vs. paying this overdue amount",
+   "text": "10.2 ends 'A payment of this very overdue amount is NOT what 10.1 covers', which seems to contradict 10.1 'Already paid'; the extraction keeps 10.1 for a customer saying the facility is already paid and 10.2 for not my debt / never held / settled and closed.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "human request declined help",
+   "text": "10.5 'ask once whether this assistant can help; treatment 10.6 otherwise' does not make clear when the 10.6 refusal treatment applies instead of the hl-desk transfer on insistence.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "whole-batch refusal notes",
+   "text": "9.4 'A whole-batch refusal closes with no notes taken contrary to clause 11.2' is garbled; taken to mean notes per 11.1 (no transfer), but the note code for a refused read-back is not named.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "write failure statement",
+   "text": "11.5 'the failure is stated' dictates no wording.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "band c first attempt floor",
+   "text": "7.2(b) does not say whether the first band-(c) attempt names the floor when the full amount was already refused; taken as no (the floor is the second attempt).",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "mail date",
+   "text": "Mail S-72 is headed 'Wed 13 Oct 2026', but 13 Oct 2026 is a Tuesday; no value depends on it.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[refuse_to_talk].action changed from close HL-FULL/hl-refuse to note hl-refuse (ends_call true): 10.6 sets hl-refuse on every remaining facility and ends under the 11.3 rank, so an earlier recorded payment still gives HL-PAY and the reason is the first non-cleared facility's note, not always hl-refuse.",
+  "Sources made more precise: konto_code requirement now cites M-1 for order and 4.2 for format/wording; bands a/b cite 7.2 attempt schedule; amounts cite 6.2 and 8.1; scam case cites clause 2.4; phrases/multi_product/promise_write sources extended.",
+  "Added unresolved entries: contradictory last sentence of 10.2, ambiguous 10.5 'treatment 10.6 otherwise', garbled 9.4, undictated wording for 11.5 failure statement, band c first-attempt floor not stated, mail weekday mismatch."
+ ]
+}

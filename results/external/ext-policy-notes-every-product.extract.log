@@ -1,0 +1,39 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "debt_intro wording",
+   "text": "The specification requires stating every product, amount and days late before asking for anything, but dictates no exact sentence; debt_intro is a short paraphrase of that content.",
+   "doc": "tests/fixtures/external/r2-policy-notes-every-product/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathetic sentence wording",
+   "text": "Section 9 requires 'one short sympathetic sentence' for illness, bereavement or unemployment but dictates no words; special_cases[hardship].say is a short sentence written to that content.",
+   "doc": "tests/fixtures/external/r2-policy-notes-every-product/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[hardship].say was empty although \u00a79 requires 'one short sympathetic sentence'; added a short sentence to that content and logged it as unresolved wording.",
+  "api_fields was empty although \u00a71 explicitly names product_id, type, past_due, days_late, \u00a73 names checks_remaining and \u00a78 names ok=true; recorded those slots.",
+  "Extended source spans (third-party disclosure rule, amounts counteroffer/no-discount, product naming, transfer preserving promises, SAVE-ERROR handling) so every rule has a quoted origin."
+ ]
+}

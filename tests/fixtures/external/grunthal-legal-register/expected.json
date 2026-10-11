@@ -1,0 +1,537 @@
+{
+  "fixture": "grunthal-legal-register",
+  "brief": "01-regulation.md + 02-codes.md",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Grunthal Handelsbank AG",
+      "source": "regulation header"
+    },
+    "identity.requirements.$fields": {
+      "expected": ["kontonummer", "gruendungsdatum", "plz"],
+      "source": "regulation clause 4.1"
+    },
+    "identity.requirements.0.field": {
+      "expected": "kontonummer",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 6,
+      "source": "clause 4.1: six digits with leading zeros"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "no recoverable-format hint mentioned"
+    },
+    "identity.requirements.1.field": {
+      "expected": "gruendungsdatum",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "date",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "format date, not digits"
+    },
+    "identity.requirements.1.numeric_date_order": {
+      "expected": "mdy",
+      "source": "clause 4.1: purely numeric dates use month-day-year"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "no recoverable-format hint"
+    },
+    "identity.requirements.2.field": {
+      "expected": "plz",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "text",
+      "source": "clause 4.1"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 0,
+      "source": "format text, not digits"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "no recoverable-format hint"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 3,
+      "source": "clause 4.2: maximum wrong answers = 3"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "clause 4.2: use the API's versuche_verbleibend"
+    },
+    "identity.remaining_slot": {
+      "expected": "versuche_verbleibend",
+      "source": "clause 4.2"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "clause 2.3: two asks are the maximum"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "clause 4.4: refusal met by one explanation, second refusal closes"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "default; not described in the regulation"
+    },
+    "identity.failed_outcome": {
+      "expected": ["ghb-unverified", "ghb-failed"],
+      "source": "clause 4.3 + outcome table (12)"
+    },
+    "identity.declined_outcome": {
+      "expected": ["ghb-unverified", "ghb-declined"],
+      "source": "clause 4.4 + outcome table (12)"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": ["ghb-unreached", "ghb-unclear"],
+      "source": "clause 2.3 + outcome table (12)"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please use our service hotline.",
+      "source": "clause 4.3"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "clause 3: third parties are booked a callback"
+    },
+    "third_party.callback.days": {
+      "expected": "today_or_next_business_day",
+      "source": "clause 3.1: contact days are today or the next business day"
+    },
+    "third_party.callback.start": {
+      "expected": "09:00",
+      "source": "clause 3.1"
+    },
+    "third_party.callback.end": {
+      "expected": "17:30",
+      "source": "clause 3.1"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "clause 3.1: start time must lie later than now"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "clause 3.2: unusable window is re-asked once"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": ["ghb-unreached", "ghb-cb"],
+      "source": "clause 3.3 + outcome table (12)"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": ["ghb-unreached", "ghb-no-cb"],
+      "source": "clause 3.2 + outcome table (12)"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": ["ghb-unreached", "ghb-wrong"],
+      "source": "clause 3.4 + outcome table (12)"
+    },
+    "third_party.deceased_outcome": {
+      "expected": ["ghb-unreached", "ghb-deceased"],
+      "source": "clause 3.4 + outcome table (12)"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Our deepest condolences.",
+      "source": "clause 3.4"
+    },
+    "calendar.holidays": {
+      "expected": ["2026-12-25", "2027-01-01"],
+      "source": "clause 5.1: closed on 2026-12-25 and 2027-01-01"
+    },
+    "calendar.business_days": {
+      "expected": [0, 1, 2, 3, 4],
+      "source": "clause 5.1: Monday through Friday"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "clause 5.2"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "clause 5.3"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 90,
+          "deadline": {
+            "kind": "earliest",
+            "rules": [
+              {"kind": "nth_business_day", "n": 10},
+              {"kind": "day_of_month", "day": 20, "month_offset": 1, "adjustment": "none"}
+            ]
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "clauses 7.1 and 7.2: k-date is whichever comes first of 10 business days and 20th of next month; one attempt full on the deadline (floor if full already refused)"
+    },
+    "amounts.floors": {
+      "expected": {
+        "darlehen": "tilgung_min",
+        "kontokorrent": "kk_min",
+        "leasing": "l_min",
+        "kreditkarte": "kk_min",
+        "hypothek": "h_min"
+      },
+      "source": "clause 6.2"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "clause 8.1: full amt_due first"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "clause 8.1: debtor is never asked what it can pay"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "clause 8.2: floor is offered once"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder falls due again.",
+      "source": "clause 8.2"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "clause 8.2: between floor and full inclusive"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "clause 8.3: today or later"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "clause 8.3: a business day"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "clause 7.4"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "clause 7.5"
+    },
+    "dates.past_deadline": {
+      "expected": "next_business_day",
+      "source": "default"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "clause 11.5: failure retried once"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "clause 9.3: one record per obligation"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Save this commitment?",
+      "source": "clause 9.1"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "clauses 10.1-10.3 and 11.1: notes are set for unrecorded obligations"
+    },
+    "notes.reasons": {
+      "expected": ["ghb-refuse", "ghb-distress", "ghb-dispute", "ghb-cleared", "ghb-R07"],
+      "source": "clause 11.1 + codes sheet"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "clause 11.1: one note per unrecorded obligation"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "clause 11.2"
+    },
+    "multi_product.max_products": {
+      "expected": 5,
+      "source": "clauses 1.3 and 6.1: up to five obligations"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "clause 6.3: every obligation is stated before any ask"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "default (single today? question implied)"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "default (per-obligation persuasion implied)"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "clause 9.1: every proposed payment is read back in one batch"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "default"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "ghb-arranged": [],
+        "ghb-settled": [],
+        "ghb-transferred": ["ghb-rework", "ghb-person"],
+        "ghb-no-deal": ["ghb-refuse", "ghb-distress", "ghb-dispute", "ghb-R07"],
+        "ghb-unverified": ["ghb-failed", "ghb-declined"],
+        "ghb-unreached": ["ghb-cb", "ghb-no-cb", "ghb-wrong", "ghb-deceased", "ghb-unclear"]
+      },
+      "source": "clause 12"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "ghb-arranged",
+      "source": "clause 11.3"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "ghb-settled",
+      "source": "clause 11.3"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "ghb-transferred",
+      "source": "clause 11.3"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "ghb-no-deal",
+      "source": "clause 11.3"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "clause 11.3"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "clause 11.3: every obligation noted ghb-cleared gives ghb-settled"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "clause 11.3"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "ghb-R07",
+      "source": "clause 11.5: second failure sets ghb-R07 on that obligation"
+    },
+    "outcomes.refused_reason": {
+      "expected": "ghb-refuse",
+      "source": "clause 10.6: a second refusal sets ghb-refuse on remaining obligations"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "clause 11.4: thanked and farewelled before the close call"
+    },
+    "phrases.opening": {
+      "expected": "This is Grunthal Handelsbank AG's automated collections assistant. We record this call.",
+      "source": "clause 2.1"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "clause 2.1: said verbatim"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "clause 2.2"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue obligations of Grunthal Handelsbank.",
+      "source": "clause 6.5"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle this commitment today?",
+      "source": "default (single obligation today? wording)"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle every listed commitment today?",
+      "source": "default (multi-obligation today? wording)"
+    },
+    "phrases.robot_reply": {
+      "expected": "This is Grunthal Handelsbank AG's automated collections assistant.",
+      "source": "clause 2.5"
+    },
+    "phrases.scam_reply": {
+      "expected": "Please verify us on the number printed on your statement.",
+      "source": "clause 2.5"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": ["overdue", "arrears", "facility", "payment", "balance"],
+      "source": "clause 2.4"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "A confirmation will be sent by registered post.",
+      "source": "clause 9.5"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Payments take two business days to appear.",
+      "source": "clause 10.1"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our service desk will advise that.",
+      "source": "clause 10.9"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Alterations of kept records are made by written request.",
+      "source": "clause 9.5"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "darlehen": "term loan",
+        "kontokorrent": "current account overdraft",
+        "leasing": "leasing line",
+        "kreditkarte": "credit card",
+        "hypothek": "mortgage loan"
+      },
+      "source": "clause 6.4"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {"type": "note", "reason": "ghb-cleared"},
+      "source": "clause 10.1"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "clause 10.1"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "clause 10.1: remaining obligations continue"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "clause 10: all special cases before persuasion"
+    },
+    "special_cases.dispute.action": {
+      "expected": {"type": "note", "reason": "ghb-dispute"},
+      "source": "clause 10.2"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "clause 10.2"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "clause 10.2: remaining obligations continue"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "clause 10"
+    },
+    "special_cases.hardship.action": {
+      "expected": {"type": "note", "reason": "ghb-distress"},
+      "source": "clause 10.3"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "clause 10.3: no record for that obligation"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "clause 10.3: remaining obligations continue"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "clause 10"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {"type": "transfer", "queue": "ghb-rework", "outcome": "ghb-transferred", "reason": "ghb-rework"},
+      "source": "clause 10.4"
+    },
+    "special_cases.restructuring.takes_promise": {
+      "expected": false,
+      "source": "clause 10.4"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "clause 10.4: closes at once"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "clause 10"
+    },
+    "special_cases.human.action": {
+      "expected": {"type": "transfer", "queue": "ghb-desk", "outcome": "ghb-transferred", "reason": "ghb-person"},
+      "source": "clause 10.5"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": true,
+      "source": "clause 10.5: ask once whether the assistant can help"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "clause 10.5"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "clause 10.5"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "clause 10"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {"type": "close", "outcome": "ghb-no-deal", "reason": "ghb-refuse"},
+      "source": "clause 10.6: second refusal closes with ghb-refuse"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "clause 10.6: ask once whether one may continue"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "clause 10.6"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "clause 10.6"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "clause 10"
+    },
+    "special_cases.scam.action": {
+      "expected": {"type": "continue"},
+      "source": "clause 10.8"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "clause 10.8"
+    },
+    "special_cases.scam.say": {
+      "expected": "Please verify us on the number printed on your statement.",
+      "source": "clause 10.8"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": false,
+      "source": "scam is a side question"
+    }
+  },
+  "comparison_notes": [
+    "Expected values authored before extraction; source spans and trigger prose are evidence, not exact-match keys.",
+    "Band deadline is the IR-level encoding of 'whichever comes first' (10 business days, 20th of next month) as the policy.py `earliest` kind.",
+    "Field names in the supplied OpenAPI are abbreviated (cust_ref, item_id, sum, amt_due, dl_days, tilgung_min, kk_min, l_min, h_min); the compiler maps them onto the IR's semantic slots via the existing needles.",
+    "Identity field names (kontonummer, gruendungsdatum, plz) are German abbreviations; the verify_identity `field` enum lists them verbatim.",
+    "Outcome table comparison is order-insensitive; identity and attempt order are significant.",
+    "Calendar holidays are deliberately short (two year-end dates); any hidden brief with no holidays should set calendar.holidays = []."
+  ]
+}

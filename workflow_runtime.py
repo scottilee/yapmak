@@ -128,6 +128,10 @@ def _resolve_date(prefix, today, offer_date=None):
             cand = resolve_date_expr(today, expr, _calendar_dict())
             if cand and cand != 'vague' and cand < today:
                 expr = dict(weekday=wd, relative='next')   # "this Tuesday" said on a Wednesday is the coming Tuesday, never last week's
+        if not day and rel == 'next' and POLICY['calendar'].get('next_weekday', 'coming') != 'following_week':
+            cand = resolve_date_expr(today, dict(weekday=wd, relative='this'), _calendar_dict())
+            if cand and cand != 'vague' and cand > today:
+                expr = dict(weekday=wd, relative='this')   # "next Friday" said on a Wednesday is this coming Friday; said on a Friday it is the one after
         if day:
             # a day number next to a weekday is kept only when it names that weekday ("Tuesday the 27th", "Friday the 23rd");
             # a stray number from another sentence ("my wedding is on the 30th ... I can pay this Friday") is ignored
@@ -161,6 +165,8 @@ def _resolve_date(prefix, today, offer_date=None):
             return 'unreadable', ''
         expr = dict(day=day)
         m = _int(_get(prefix + '_month'))
+        if not m and POLICY['calendar'].get('missing_date_parts') == 'ask':
+            return 'vague', ''                 # the documents say: never assume the month, ask for it (handled like a vague date)
         y = _int(_get(prefix + '_year'))
         if m:
             expr['month'] = m
@@ -408,8 +414,8 @@ def st_cb_route():
         _save(S)
         return _set_next('third_party')
     S['cb_date'] = None
-    if not S.get('cb_asked') and bool(CB.get('retry_once', True)) and intent != 'refuses':
-        S['cb_asked'] = True
+    if int(S.get('cb_asked') or 0) < 2 and bool(CB.get('retry_once', True)) and intent != 'refuses':
+        S['cb_asked'] = int(S.get('cb_asked') or 0) + 1          # a talkative relative gets two more asks before the call is given up
         days = CB.get('days') or 'today_or_next_business_day'
         if days == 'today':
             window = 'today between ' + CB['start'] + ' and ' + CB['end']
@@ -716,6 +722,7 @@ def _start_attempt(S, p, k):
     return True
 
 def _enter_product(S, k):
+    prev = S['products'][S['pi']] if S.get('phase') == 'product' and S.get('pi') is not None and 0 <= int(S.get('pi') or 0) < len(S['products']) and int(S.get('pi') or 0) != k else None
     S['phase'] = 'product'
     S['pi'] = k
     S['vague_asked'] = False
@@ -723,6 +730,9 @@ def _enter_product(S, k):
     if not _start_attempt(S, p, 1):
         p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
         return _advance(S)
+    if prev is not None and prev.get('disposition') and not prev.get('proposed'):
+        # hand-over after a refusal: name the finished product so the model does not continue its ladder (live: a third, invented offer)
+        vars['neg_instruction'] = 'The ' + prev['name'] + ' is finished: do not propose anything more for it. Now the ' + p['name'] + '. ' + _get('neg_instruction')
     if any(q['proposed'] and not q['recorded'] for q in S['products']):
         # earlier products have proposals waiting for the common read-back: nothing is noted or recorded yet
         vars['neg_instruction'] = _get('neg_instruction') + ' Do not say that any earlier payment is noted or recorded; everything is confirmed together at the end.'
@@ -742,25 +752,91 @@ def _advance(S):
     _save(S)
     _set_next('finalize')
 
+BR = '{' + '{'   # the template delimiter, spelled so that this source never contains it literally (the engine would substitute it)
+
+def _confirm_phrase(proposed):
+    """The documents' confirmation sentence. When it carries placeholders ("Amount <<payment_amount>>, on <<date>>. Save this?")
+    it IS the read-back: filled in for a single proposal; with several proposals only its placeholder-free sentences are kept
+    (the list of proposals is spoken before it). Returns (phrase, is_full_readback)."""
+    phrase = POLICY['promise_write'].get('confirm_phrase') or 'Do you confirm?'
+    if BR not in phrase and '<<' not in phrase:      # the compiler embeds policy text with << >> in place of the template braces
+        return phrase, False
+    import re
+    if len(proposed) == 1:
+        p = proposed[0]
+        def sub(m):
+            key = m.group(1).lower()
+            if 'amount' in key or 'amt' in key or 'sum' in key or 'payment' in key or 'money' in key:
+                return _money(p['proposed_amount'])
+            if 'date' in key or 'day' in key or 'when' in key:
+                return _fmt(p['proposed_date'])
+            if 'product' in key or 'name' in key or 'item' in key or 'facility' in key:
+                return p['name']
+            return ''
+        return re.sub(r'(?:[{]{2}|<<)\s*([^}>]+?)\s*(?:[}]{2}|>>)', sub, phrase).replace('  ', ' ').strip(), True
+    sentences = [x.strip() for x in re.split(r'(?<=[.?!])\s+', phrase) if x.strip() and BR not in x and '<<' not in x]
+    return (' '.join(sentences) or 'Do you confirm?'), False
+
 def _readback(S):
     parts = []
-    for p in S['products']:
-        if p['proposed']:
-            s = _money(p['proposed_amount']) + ' for the ' + p['name'] + ' on ' + _fmt(p['proposed_date'])
-            if p.get('clamped'):
-                s += ' (the latest date I can record for the ' + p['name'] + ' is ' + _fmt(p['deadline']) + ', so that one is on ' + _fmt(p['proposed_date']) + ')'
-            parts.append(s)
-    txt = 'To confirm: you will pay ' + ('; and '.join(parts) if len(parts) > 1 else parts[0]) + '. ' + POLICY['promise_write'].get('confirm_phrase', 'Do you confirm?')
+    proposed = [p for p in S['products'] if p['proposed']]
+    for p in proposed:
+        s = _money(p['proposed_amount']) + ' for the ' + p['name'] + ' on ' + _fmt(p['proposed_date'])
+        if p.get('clamped'):
+            s += ' (the latest date I can record for the ' + p['name'] + ' is ' + _fmt(p['deadline']) + ', so that one is on ' + _fmt(p['proposed_date']) + ')'
+        parts.append(s)
+    phrase, full = _confirm_phrase(proposed)
+    rest = ''
+    fw = POLICY['amounts'].get('floor_wording') or 'the rest stays overdue'
+    if any(float(p['proposed_amount']) < float(p.get('full') or 0) and not p.get('floor_note_said') for p in proposed):
+        rest = ' ' + fw[:1].upper() + fw[1:] + ('' if fw.endswith('.') else '.')     # a partial amount: the remainder is still owed
+        for p in proposed:
+            if float(p['proposed_amount']) < float(p.get('full') or 0):
+                p['floor_note_said'] = True
+    if full and not any(p.get('clamped') for p in proposed):
+        txt = phrase if not rest else phrase.rstrip() + rest
+    else:
+        txt = 'To confirm: you will pay ' + ('; and '.join(parts) if len(parts) > 1 else parts[0]) + '.' + rest + ' ' + phrase
     vars['readback_text'] = txt
     S['awaiting'] = 'confirm'
     _save(S)
     _set_next('readback')
+
+def _readback_after_change(S, before):
+    """A change that changed nothing, twice in a row, gets one clarifying question instead of the same read-back again;
+    four times in a row counts as not confirmed (the proposals are abandoned, nothing is written)."""
+    after = [(p['proposed_amount'], p['proposed_date']) for p in S['products'] if p['proposed']]
+    S['rb_same'] = S.get('rb_same', 0) + 1 if after == before else 0
+    if S['rb_same'] >= 4:
+        S['rb_same'] = 0
+        for p in S['products']:
+            if p['proposed'] and not p['recorded']:
+                p['proposed'] = False
+                p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
+        vars['goodbye_text'] = 'I am sorry, I could not apply that change, so nothing is recorded today. Thank you for your time, goodbye.'
+        _save(S)
+        return _advance(S)
+    _readback(S)
+    if S['rb_same'] >= 2:
+        vars['readback_text'] = ('I may have misunderstood the change. Please tell me one change at a time: which product, and the new amount or the new date. '
+                                 'Currently: ' + vars['readback_text'][len('To confirm: '):] if vars['readback_text'].startswith('To confirm: ') else vars['readback_text'])
 
 def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
     """Validate a customer proposal for one product. Returns 'done' or an instruction string (and sets S['offer'])."""
     h, b = _cal()
     if p.get('no_window'):
         return 'refusal'                      # no eligible promise date for this product: nothing can be recorded
+    if amount is None and S.get('want_floor'):
+        amount = p['floor']
+    if date_status == 'ok' and date == S['today'] and not bool(POLICY['dates'].get('promise_today_allowed', True)):
+        nxt = _today_bd(S)                                 # the documents take no promise for today: offer the next business day
+        amt = amount if amount is not None else (S.get('offer') or dict()).get('amount', p['full'])
+        if nxt > p['deadline']:
+            p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
+            return 'refusal'
+        S['offer'] = dict(amount=float(amt), date=nxt)
+        S['awaiting'] = 'offer'
+        return 'Say that a payment cannot be recorded for today and offer ' + _money(amt) + ' on ' + _fmt(nxt) + '; ask whether that works.'
     v = validate_proposal(S['today'], p['deadline'], date, date_status, amount, p['floor'], p['full'], h, b)
     verdict = v.get('verdict')
     D = POLICY['dates']
@@ -777,10 +853,18 @@ def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
         p['clamped'] = True
         return 'done'
     if verdict == 'after_deadline':
+        if not bool(D.get('after_deadline_offer_deadline', True)):
+            S['offer'] = None
+            S['awaiting'] = 'exact_day'
+            return 'Say that the latest date you can record for the ' + p['name'] + ' is ' + _fmt(p['deadline']) + ' and ask for a day on or before it; do not propose one.'
         S['offer'] = dict(amount=float(v['amount']), date=p['deadline'])
         S['awaiting'] = 'offer'
         return 'Say that the latest date you can record for the ' + p['name'] + ' is ' + _fmt(p['deadline']) + ' and offer ' + _money(v['amount']) + ' on that day.'
     if verdict == 'roll_forward':
+        if not bool(D.get('weekend_or_holiday_roll_forward', True)):
+            S['offer'] = None
+            S['awaiting'] = 'exact_day'
+            return 'Say that ' + _fmt(date) + ' is not a business day and ask for another day; do not propose one.'
         S['offer'] = dict(amount=float(v['amount']), date=v['offer_date'])
         S['awaiting'] = 'offer'
         if date == S['today']:
@@ -789,6 +873,13 @@ def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
         return 'Say that ' + _fmt(date) + ' is not a business day and offer the next business day, ' + _fmt(v['offer_date']) + ', for ' + _money(v['amount']) + '.'
     if verdict == 'below_floor':
         if p.get('floor_offered'):
+            if not p.get('floor_reoffered'):
+                p['floor_reoffered'] = True
+                d2 = v.get('date') or date or (S.get('offer') or dict()).get('date') or _today_bd(S)
+                S['offer'] = dict(amount=p['floor'], date=d2)
+                S['awaiting'] = 'offer'
+                return ('Say that ' + _money(amount) + ' is below the lowest amount this call can take. Ask whether they can make the amount '
+                        'already proposed on ' + _fmt(d2) + '; refer to it as the amount already proposed and do not say the number again.')
             return 'refusal'
         p['floor_offered'] = True
         S['offer'] = dict(amount=p['floor'], date=date)
@@ -821,15 +912,20 @@ def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
     S['awaiting'] = 'exact_day'
     return 'Ask for the exact day of the month they want to pay.'
 
-def _targets(S):
-    """Which products a customer statement refers to, from prop_product (multi-product only)."""
+def _targets(S, single=False):
+    """Which products a customer statement refers to, from prop_product (multi-product only). 'none' = no product named;
+    single=True (paid / dispute claims) then applies to the first undecided product only, never to all of them: a claim about
+    one product that the extractor could not place must not close the others."""
     sel = _get('prop_product')
     _clear('prop_product')
+    if sel == 'none':
+        sel = ''
     n = len(S['products'])
     if S.get('phase') == 'all':
         if sel and sel != 'all' and _int(sel) and 1 <= _int(sel) <= n:
             return [_int(sel) - 1]
-        return [k for k in range(n) if not S['products'][k]['proposed'] and not S['products'][k]['disposition']]
+        open_ = [k for k in range(n) if not S['products'][k]['proposed'] and not S['products'][k]['disposition']]
+        return open_[:1] if (single and not sel and n > 1) else open_
     if sel and sel != 'all' and _int(sel) and 1 <= _int(sel) <= n:
         return [_int(sel) - 1]
     if sel == 'all' and n > 1:
@@ -884,7 +980,7 @@ def _special(S, intent):
         return True
     if intent in ('already_paid', 'dispute'):
         reason = a.get('reason') or ('paid' if intent == 'already_paid' else 'dispute')
-        targets = _targets(S)
+        targets = _targets(S, single=True)
         for k in targets:
             p = S['products'][k]
             p['disposition'] = reason
@@ -921,6 +1017,60 @@ def _advance_with_prefix(S, prefix):
     _advance(S)
     return True
 
+def _secondary(S, intent, amount, date, date_status):
+    """Several statements in one sentence ("the card gets 220 on Friday, the loan is not mine, the car loan I cannot pay: I lost
+    my job"): the extractor reports the extra statements as cust_intent_2/3 with their products. Paid / dispute claims are
+    marked on their product at once; a proposal for another product is applied as that product's proposal; a hardship statement
+    becomes the main intent (its treatment, the support offer, must happen) and the original main statement is kept as a
+    proposal. 'refuses' is left to the normal flow (that product is asked in its turn). Returns the possibly re-ordered
+    main intent and the amount/date still unclaimed."""
+    n = len(S['products'])
+    if n < 2:
+        return intent, amount, date, date_status
+    extras = []
+    for k in (2, 3):
+        it = _get('cust_intent_' + str(k))
+        sel = _get('prop_product_' + str(k))
+        _clear('cust_intent_' + str(k))
+        if it in ('', 'none') or not sel or sel == 'none' or not _int(sel) or not (1 <= _int(sel) <= n):
+            continue
+        extras.append((it, _int(sel) - 1))
+    if not extras:
+        return intent, amount, date, date_status
+    prim_sel = _get('prop_product')
+    prim_k = _int(prim_sel) - 1 if prim_sel and prim_sel not in ('all', 'none') and _int(prim_sel) and 1 <= _int(prim_sel) <= n else None
+    said = []
+    for it, k in extras:
+        if k == prim_k:
+            continue
+        p = S['products'][k]
+        if p['disposition'] or p.get('recorded'):
+            continue
+        if it in ('already_paid', 'dispute'):
+            sc = _sc('already_paid' if it == 'already_paid' else 'dispute') or dict()
+            reason = (sc.get('action') or dict()).get('reason') or ('paid' if it == 'already_paid' else 'dispute')
+            p['disposition'] = reason
+            p['paid'] = it == 'already_paid'
+            p['proposed'] = False
+            said.append('I will not ask about the ' + p['name'] + '.')
+        elif it in ('proposes', 'pays_today') and intent not in ('proposes', 'pays_today', 'accepts') and (it == 'pays_today' or amount is not None or date_status in ('ok',)):
+            ds, d = (date_status, date) if date_status == 'ok' else ('ok', _today_bd(S))
+            if _apply_proposal(S, p, amount, d, ds, True) == 'done':
+                amount, date, date_status = None, '', 'none'       # claimed by that product
+        elif it == 'hardship' and intent != 'hardship' and _sc('hardship'):
+            # hardship wins: it becomes the main statement; the original main statement, if a proposal for a named product, is kept
+            if intent in ('proposes', 'pays_today') and prim_k is not None and not S['products'][prim_k]['disposition']:
+                ds, d = (date_status, date) if date_status == 'ok' else ('ok', _today_bd(S))
+                if _apply_proposal(S, S['products'][prim_k], amount, d, ds, True) == 'done':
+                    amount, date, date_status = None, '', 'none'
+            intent = 'hardship'
+            vars['prop_product'] = str(k + 1)
+            prim_k = k
+    if said:
+        vars['aside_carry'] = ' '.join(said)
+    _save(S)
+    return intent, amount, date, date_status
+
 def st_neg_route():
     S = _S()
     intent = _get('cust_intent')
@@ -929,7 +1079,15 @@ def st_neg_route():
     _clear('prop_amount')
     date_status, date = _resolve_date('prop', S['today'], (S.get('offer') or dict()).get('date'))
     _clear_date('prop')
+    intent, amount, date, date_status = _secondary(S, intent, amount, date, date_status)
+    if intent == 'accepts' and amount is not None and S.get('offer') and amount < float(S['offer'].get('amount') or 0):
+        amount = None        # "yes, I accept the minimum payment of six[ hundred thirty-seven fifty]": a cut-off number next to a yes is not a counter-offer
+    S['want_floor'] = _get('prop_minimum') == 'yes' and amount is None     # "I can pay the minimum": the floor is the amount
+    _clear('prop_minimum')
     aw = S.get('awaiting', '')
+    if intent == 'hardship' and not S.get('hardship_offered') and (amount is not None or date_status == 'ok' or S.get('want_floor')):
+        # "I lost my job, but I can pay the minimum on Friday": the hardship treatment comes first; the proposal is kept for after the offer
+        S['hardship_pending'] = dict(amount=amount, date=date, date_status=date_status, sel=_get('prop_product'), want_floor=bool(S.get('want_floor')))
     if intent in ('other', 'scam', 'none', '', 'goodbye'):
         S['idle'] = S.get('idle', 0) + 1
         if intent == 'goodbye' or S['idle'] >= 8:
@@ -955,7 +1113,7 @@ def st_neg_route():
         if S.get('awaiting') == 'support':
             # hardship: the support team is offered exactly once and there is no persuasion. A question instead of a yes
             # ("can I get a discount?") is a decline: answer it in the goodbye and close with the hardship outcome.
-            hr = ((_sc('hardship') or dict()).get('action') or dict()).get('reason') or 'hardship'
+            hr = ((_sc('hardship') or dict()).get('action') or dict()).get('reason') or POLICY['outcomes'].get('refused_reason') or 'refused'
             for p in S['products']:
                 if not p['proposed'] and not p['disposition']:
                     p['disposition'] = hr
@@ -980,7 +1138,7 @@ def st_neg_route():
         vars['neg_instruction'] = 'The customer seems to be in the middle of a sentence. Say only "Yes?" or "Go on" and wait.'
         _save(S)
         return _set_next('negotiate')
-    if aw == 'support' and intent in ('human', 'restructuring') and amount is None and date_status == 'none':
+    if (aw == 'support' and intent in ('human', 'restructuring') or intent == 'human' and S.get('hardship_offered')) and amount is None and date_status == 'none':
         return _transfer(S, 'hardship')    # "yes, please connect me to the support team" reads as a request for a person: it accepts the offer
     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
         if _special(S, intent):
@@ -989,9 +1147,18 @@ def st_neg_route():
     if aw == 'support':
         if intent in ('accepts', 'pays_today') and amount is None and date_status in ('none',):
             return _transfer(S, 'hardship')
+        if intent in ('refuses', 'too_much') and amount is None and date_status == 'none' and S.get('hardship_pending'):
+            pend = S.pop('hardship_pending')                     # the offer was declined: the proposal made alongside the hardship is applied
+            if pend.get('sel'):
+                vars['prop_product'] = pend['sel']
+            S['want_floor'] = bool(pend.get('want_floor'))
+            S['awaiting'] = 'offer'
+            _save(S)
+            return _proposal(S, pend['amount'], pend['date'], pend['date_status'])
         if intent in ('refuses', 'too_much') and amount is None and date_status == 'none':
+            S.pop('hardship_pending', None)
             hsc = _sc('hardship') or dict()
-            hr = (hsc.get('action') or dict()).get('reason') or 'hardship'
+            hr = (hsc.get('action') or dict()).get('reason') or POLICY['outcomes'].get('refused_reason') or 'refused'
             if hsc.get('ends_call', True) is False and len(S['products']) > 1:
                 for k in _targets(S):
                     if not S['products'][k]['proposed'] and not S['products'][k]['disposition']:
@@ -1036,8 +1203,8 @@ def st_neg_route():
     if aw == 'today':
         if intent in ('pays_today', 'accepts') and not has_prop:
             h, b = _cal()
-            if not is_business_day(S['today'], h, b):
-                return _proposal(S, None, S['today'], 'ok')      # "today" on a weekend/holiday: offer the next business day
+            if not is_business_day(S['today'], h, b) or not bool(POLICY['dates'].get('promise_today_allowed', True)):
+                return _proposal(S, None, S['today'], 'ok')      # "today" on a weekend/holiday, or no promise for today: offer the next business day
             for k in _targets(S):
                 p = S['products'][k]
                 r = _apply_proposal(S, p, None, S['today'], 'ok', True)
@@ -1097,8 +1264,11 @@ def st_neg_route():
     _set_next('negotiate')
 
 def _today_bd(S):
-    """Today when it is a business day, otherwise the next business day: the earliest date the agent may offer."""
+    """Today when it is a business day, otherwise the next business day: the earliest date the agent may offer.
+    When the documents take no promise for today, the earliest date is the next business day after today."""
     h, b = _cal()
+    if not bool(POLICY['dates'].get('promise_today_allowed', True)):
+        return next_business_day(S['today'], h, b, inclusive=False) or S['today']
     return next_business_day(S['today'], h, b) or S['today']
 
 def _too_much(S):
@@ -1141,10 +1311,32 @@ def _too_much(S):
     _save(S)
     _set_next('negotiate')
 
+def _second_amount(S):
+    """'ninety on the card and three hundred on the loan': the second amount and its product (0-based), or None."""
+    amt = _float(_get('prop_amount_2'))
+    sel = _get('prop_product_2')
+    _clear('prop_amount_2', 'prop_product_2')
+    n = len(S['products'])
+    if amt is not None and amt > 0 and sel and sel != 'none' and _int(sel) and 1 <= _int(sel) <= n:
+        return _int(sel) - 1, amt
+    return None
+
 def _proposal(S, amount, date, date_status):
     targets = _targets(S)
     if not targets:
         return _advance(S)
+    amounts = dict()
+    second = _second_amount(S)
+    if second is not None and amount is not None and len(targets) == 1 and second[0] != targets[0]:
+        amounts[targets[0]] = amount
+        amounts[second[0]] = second[1]
+        if not S['products'][second[0]]['disposition']:
+            targets = targets + [second[0]]
+    elif second is not None and amount is not None and len(targets) > 1 and second[0] in targets:
+        others = [k for k in targets if k != second[0]]
+        if len(others) == 1:
+            amounts[others[0]] = amount
+        amounts[second[0]] = second[1]
     multi_all = len(targets) > 1
     if date_status == 'none':
         date_status, date = 'ok', (S.get('offer') or dict()).get('date') or _today_bd(S)
@@ -1156,7 +1348,7 @@ def _proposal(S, amount, date, date_status):
         first = None
         for k in targets:
             p = S['products'][k]
-            r = _apply_proposal(S, p, amount if len(targets) == 1 else None, date, date_status, bool(POLICY['multi_product'].get('common_date_clamped_per_product', True)))
+            r = _apply_proposal(S, p, amounts.get(k, amount if len(targets) == 1 else None), date, date_status, bool(POLICY['multi_product'].get('common_date_clamped_per_product', True)))
             if r != 'done' and first is None:
                 first = (k, r, S.get('offer'))
             elif r != 'done':
@@ -1207,6 +1399,10 @@ def st_readback_route():
     _clear_date('prop')
     if intent == 'hardship' and S.get('hardship_offered'):
         intent = 'declines'
+    if intent == 'confirms' and amount is not None:
+        proposed_amounts = [float(p['proposed_amount']) for p in S['products'] if p['proposed']]
+        if proposed_amounts and amount < min(proposed_amounts):
+            amount = None    # "yes, I confirm, the six[ hundred]": a cut-off number next to a confirmation is not a change
     if intent in ('other', 'none', '', 'goodbye'):
         S['rb_idle'] = S.get('rb_idle', 0) + 1
         if intent != 'goodbye' and S['rb_idle'] < 6:
@@ -1217,6 +1413,8 @@ def st_readback_route():
         intent = 'declines'                    # -> unsaved proposals abandoned, notes written, one close
     else:
         S['rb_idle'] = 0
+    if intent == 'human' and S.get('hardship_offered') and amount is None and date_status == 'none':
+        return _transfer(S, 'hardship')        # "connect me to the support team you mentioned": the earlier offer is accepted
     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
         if _special(S, intent):
             return
@@ -1225,30 +1423,50 @@ def st_readback_route():
         S['w_pending'] = False
         _save(S)
         return _set_next('write_step')
+    S['want_floor'] = _get('prop_minimum') == 'yes' and amount is None
+    _clear('prop_minimum')
+    like = _get('prop_date_like')
+    _clear('prop_date_like')
+    if date_status == 'none' and like and like != 'none' and _int(like) and 1 <= _int(like) <= len(S['products']):
+        q = S['products'][_int(like) - 1]
+        if q['proposed']:
+            date_status, date = 'ok', q['proposed_date']        # "put the card on the loan's date": that product's date
+            if intent not in ('changes',):
+                intent = 'changes'
     if intent == 'changes' or amount is not None or date_status in ('ok', 'vague'):
         targets = _targets(S)
+        second = _second_amount(S)
         proposed = [k for k in range(len(S['products'])) if S['products'][k]['proposed']]
+        amounts = dict()
+        if second is not None and second[0] in proposed:
+            if amount is not None and len(targets) == 1 and targets[0] != second[0]:
+                amounts[targets[0]] = amount
+            amounts[second[0]] = second[1]
+            if second[0] not in targets:
+                targets = targets + [second[0]]
         targets = [k for k in targets if k in proposed] or proposed[:1]
         if not targets:
             return _readback(S)
-        if len(targets) > 1 and date_status == 'ok':
+        before = [(p['proposed_amount'], p['proposed_date']) for p in S['products'] if p['proposed']]
+        if len(targets) > 1 and (date_status == 'ok' or amounts):
             for k in targets:
                 p = S['products'][k]
                 p['proposed'] = False
-                _apply_proposal(S, p, amount if amount is not None else p['proposed_amount'], date, date_status, True)
+                _apply_proposal(S, p, amounts.get(k, amount if amount is not None and not amounts else p['proposed_amount']),
+                                date if date_status == 'ok' else p['proposed_date'], 'ok', True)
             if all(S['products'][k]['proposed'] for k in targets):
-                return _readback(S)
+                return _readback_after_change(S, before)
         k = targets[0]
         p = S['products'][k]
         S['phase'] = 'product'
         S['pi'] = k
         if date_status == 'none':
             date_status, date = 'ok', p['proposed_date']
-        amt = amount if amount is not None else p['proposed_amount']
+        amt = amounts.get(k, amount if amount is not None else p['proposed_amount'])
         p['proposed'] = False
         r = _apply_proposal(S, p, amt, date, date_status, False)
         if r == 'done':
-            return _readback(S)
+            return _readback_after_change(S, before)
         if r == 'refusal':
             p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
             return _advance(S)
@@ -1277,8 +1495,9 @@ def st_write_step():
     if S.get('w_pending') and 0 <= k < len(S['products']):
         p = S['products'][k]
         raw_ok = _get('w_ok').lower()
-        if raw_ok == 'false' and 'already' in _get('w_error').lower():
-            raw_ok = 'true'                   # "this product already has a promise": the promise exists, the goal is met (duplicate write race)
+        werr = _get('w_error').lower()
+        if raw_ok == 'false' and ('already has a promise' in werr or 'promise already' in werr or 'already recorded' in werr or 'duplicate promise' in werr):
+            raw_ok = 'true'                   # the bank says this exact promise already exists (duplicate write race): the goal is met
         _clear('w_error')
         status = _get('w_status')
         ok = raw_ok == 'true'
@@ -1320,13 +1539,15 @@ def st_finalize():
     N = POLICY['notes']
     outcome, reason = '', ''
     recorded = [p for p in S['products'] if p.get('recorded')]
-    if S.get('transfer'):
+    if S.get('transfer') and recorded and not bool(O.get('transfer_overrides_promise', True)):
+        outcome, reason = O['promise_outcome'], ''
+    elif S.get('transfer'):
         outcome, reason = S['transfer'].get('outcome') or O['transfer_outcome'], S['transfer'].get('reason') or ''
     elif S.get('close'):
         outcome, reason = S['close'][0], S['close'][1]
     elif recorded:
         outcome, reason = O['promise_outcome'], ''
-    elif S['products'] and all(p.get('paid') for p in S['products']) and bool(O.get('all_paid_closes_as_paid', True)):
+    elif S['products'] and all(p.get('paid') for p in S['products']) and bool(O.get('all_paid_closes_as_paid', True)) and O.get('paid_outcome'):
         outcome, reason = O['paid_outcome'], ''
     else:
         outcome = O['no_promise_outcome']
@@ -1336,6 +1557,14 @@ def st_finalize():
             if d and not p.get('paid'):
                 reason = d
                 break
+        else:
+            if S['products'] and all(p.get('paid') for p in S['products']):
+                reason = next((p.get('disposition') for p in S['products'] if p.get('disposition')), '') or reason   # no paid outcome in the policy: the paid claim's reason
+    if not reason:
+        row = next((r for r in (O.get('table') or []) if r.get('outcome') == outcome), None)
+        rs = (row or dict()).get('reasons') or []
+        if rs and (bool((POLICY.get('_api') or dict()).get('close_reason_required')) or len(rs) == 1):
+            reason = rs[0]                 # the API requires a reason (or the table allows exactly one) for this outcome
     vars['final_outcome'] = outcome
     vars['final_reason'] = reason
     # goodbye text for the promise / service-error paths

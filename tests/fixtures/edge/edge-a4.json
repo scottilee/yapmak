@@ -1,185 +1,366 @@
 [
- {
-  "id": "PUB-01",
-  "brief": "A",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Amount in words then change of mind",
-  "variables": {
-   "first_name": "Daniel",
-   "last_name": "Reyes",
-   "title": "Mr",
-   "now": "2026-10-14T11:00"
+  {
+    "id": "PUB-01",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Amount stated in words rather than digits",
+    "variables": {
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1988-03-14",
+      "phone_last4": "4471"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "4821",
+        "past_due": 420.0,
+        "days_late": 6,
+        "minimum_payment": 126.0
+      }
+    ],
+    "script": "Confirm you are Daniel Reyes and give the correct security answers. When asked to pay today, say you cannot pay today but you can pay four hundred and twenty dollars this Friday. Confirm the read-back only if it says 420 on Friday.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 420,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Spoken amount 'four hundred and twenty' parses to 420, not 0 or the floor 126",
+      "Single promise for the full amount on the named Friday",
+      "Floor sentence never used (full was accepted on the first proposal)"
+    ]
   },
-  "identity": {
-   "date_of_birth": "1988-03-14",
-   "phone_last4": "4471"
+  {
+    "id": "PUB-02",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Third party rambles, gives the day and time only after several turns",
+    "variables": {
+      "first_name": "Maria",
+      "last_name": "Costa",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1979-11-02",
+      "phone_last4": "0358"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 310.5,
+        "days_late": 11,
+        "instalment_amount": 103.5
+      }
+    ],
+    "script": "You are Maria's husband. She's at her sister's, family emergency. When asked when she can be reached, ramble: I really don't know, could be a week, could be two weeks, she's been very tired. Who is this? Oh the bank. Sorry. Look, she's been busy, you know how it is. After several turns of that, finally give a day and a time: tomorrow morning, around eleven.",
+    "expected": {
+      "outcome": "not_reached",
+      "reason": "callback",
+      "promises": [],
+      "notes": [],
+      "callbacks": [
+        {
+          "date": "2026-10-15",
+          "time": "11:00"
+        }
+      ],
+      "transfers": []
+    },
+    "checks": [
+      "No purpose or account detail is disclosed at any point",
+      "verify_identity and get_account are never called",
+      "schedule_callback fires once, for 2026-10-15 at 11:00, after the rambling finishes",
+      "Outcome is not_reached/callback, no transfer, no note"
+    ]
   },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "4821",
-    "past_due": 420.0,
-    "days_late": 6,
-    "minimum_payment": 126.0
-   }
-  ],
-  "script": "Confirm you are Daniel Reyes and give the correct security answers. When asked to pay today, say you can pay three hundred dollars this Friday. At the read-back say: actually, make it four hundred and twenty dollars today. Confirm the second read-back.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p1",
-     "amount": 420,
-     "date": "2026-10-14"
-    }
-   ],
-   "notes": [],
-   "callbacks": [],
-   "transfers": []
+  {
+    "id": "PUB-03",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Identity info in the opening monologue",
+    "variables": {
+      "first_name": "Owen",
+      "last_name": "Park",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1992-07-21",
+      "phone_last4": "6630"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "0377",
+        "past_due": 95.0,
+        "days_late": 4,
+        "minimum_payment": 28.5
+      }
+    ],
+    "script": "Open with: hi, yes this is Owen Park born twenty first July nineteen ninety-two, last four digits six six three zero, I can pay the full amount today, confirm. The agent still has to ask the security questions; answer each one cleanly (the year again if asked), then confirm the read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 95,
+          "date": "2026-10-14"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Identity is verified by the API, not skipped because the customer volunteered the answers up front",
+      "Two verify_identity calls succeed before get_account",
+      "Single promise for 95 today"
+    ]
   },
-  "checks": [
-   "300 is understood from words",
-   "No promise written before the second confirmation",
-   "Final promise is for 420 today after the change of mind"
-  ]
- },
- {
-  "id": "PUB-03",
-  "brief": "A",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Identity answers volunteered before being asked",
-  "variables": {
-   "first_name": "Owen",
-   "last_name": "Park",
-   "title": "Mr",
-   "now": "2026-10-14T11:00"
+  {
+    "id": "PUB-04",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Names the deadline date in a single sentence",
+    "variables": {
+      "first_name": "Lena",
+      "last_name": "Hoffmann",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1984-01-30",
+      "phone_last4": "2219"
+    },
+    "products": [
+      {
+        "type": "car_loan",
+        "past_due": 1250.0,
+        "days_late": 14,
+        "instalment_amount": 400.0
+      }
+    ],
+    "script": "Confirm you are Lena Hoffmann and give the correct security answers. When asked to pay today, say in one sentence: I'll pay the full amount on Friday the twenty-third of October. Confirm the read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 1250,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Friday the twenty-third of October resolves to 2026-10-23 (the late-band deadline, 7 business days from today)",
+      "A single promise for the full amount on the deadline",
+      "No 'after-deadline' counter-offer is needed (the named day is exactly the deadline)"
+    ]
   },
-  "identity": {
-   "date_of_birth": "1992-07-21",
-   "phone_last4": "6630"
+  {
+    "id": "PUB-05",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Mixed hardship with a self-named date, declines the support transfer",
+    "variables": {
+      "first_name": "Tomas",
+      "last_name": "Novak",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1990-09-09",
+      "phone_last4": "8846"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 780.0,
+        "days_late": 21,
+        "instalment_amount": 260.0
+      }
+    ],
+    "script": "Confirm you are Tomas Novak and give the correct security answers. When the debt is stated, say in one sentence: I lost my job last month, but I can pay the minimum on Friday. When offered the support team, decline. Confirm the read-back.",
+    "expected": {
+      "outcome": "no_promise",
+      "reason": "hardship",
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 260,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "One short sentence of sympathy is spoken for the hardship",
+      "The customer's own date (Friday 16 October) and amount (floor 260) are accepted and a promise is recorded",
+      "Outcome closes as no_promise/hardship (per brief A rule 32: decline support + self-named date closes as hardship; the promise is still recorded)",
+      "No transfer happens"
+    ]
   },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "0377",
-    "past_due": 95.0,
-    "days_late": 4,
-    "minimum_payment": 28.5
-   }
-  ],
-  "script": "Confirm you are Owen Park. Before the assistant asks, say: my date of birth is 21 July 1992 and the last four digits are 6630. Answer each question again correctly when asked. Then pay the full amount today and confirm the read-back.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p1",
-     "amount": 95,
-     "date": "2026-10-14"
-    }
-   ],
-   "notes": [],
-   "callbacks": [],
-   "transfers": []
+  {
+    "id": "PUB-06",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Self-corrects the amount mid-sentence",
+    "variables": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1986-05-17",
+      "phone_last4": "1502"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "1903",
+        "past_due": 2125.1,
+        "days_late": 12,
+        "minimum_payment": 637.5
+      }
+    ],
+    "script": "Confirm you are Priya Nair and give the correct security answers. Say the full amount is too much. When the assistant asks how much, say: two hundred dollars this Friday. Then correct yourself out loud: sorry, three hundred fifty, three hundred and fifty this Friday. Accept the minimum payment of six hundred thirty-seven fifty when the assistant offers it. Confirm the read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 637.5,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The corrected 350 wins over the initial 200",
+      "350 is below the floor (637.50); the floor is offered exactly once",
+      "Promise is for the floor 637.50 on 2026-10-16, not for 350",
+      "Rest-stays-overdue sentence is said at most once"
+    ]
   },
-  "checks": [
-   "Agent still asks both security questions in order",
-   "No account information disclosed before verification",
-   "Promise for 95 today"
-  ]
- },
- {
-  "id": "PUB-04",
-  "brief": "A",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Amount and date in one sentence",
-  "variables": {
-   "first_name": "Lena",
-   "last_name": "Hoffmann",
-   "title": "Ms",
-   "now": "2026-10-14T11:00"
+  {
+    "id": "PUB-07",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Accepts the proposal, then asks a non-payment question",
+    "variables": {
+      "first_name": "Samuel",
+      "last_name": "Ortiz",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1975-12-05",
+      "phone_last4": "7093"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 540.0,
+        "days_late": 5,
+        "instalment_amount": 180.0
+      }
+    ],
+    "script": "Confirm you are Samuel Ortiz and give the correct security answers. Say you will pay five hundred forty dollars next Friday. Before the read-back, ask: by the way, what is the customer-service number on my statement, so I can call back if anything changes? Confirm the original read-back.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 540,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The unrelated question asked is acknowledged in the same call (cannot-answer sentence or equivalent)",
+      "Exactly one promise for 540 on 2026-10-16",
+      "No second read-back or re-ask for the promise date"
+    ]
   },
-  "identity": {
-   "date_of_birth": "1984-01-30",
-   "phone_last4": "2219"
-  },
-  "products": [
-   {
-    "type": "car_loan",
-    "past_due": 1250.0,
-    "days_late": 14,
-    "instalment_amount": 400.0
-   }
-  ],
-  "script": "Confirm you are Lena Hoffmann and give the correct security answers. When asked to pay today, say in one sentence: I can pay the full amount next Friday. Confirm the read-back.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p1",
-     "amount": 1250,
-     "date": "2026-10-23"
-    }
-   ],
-   "notes": [],
-   "callbacks": [],
-   "transfers": []
-  },
-  "checks": [
-   "Amount and date are extracted from a single sentence",
-   "Next Friday from 14 October resolves to 23 October",
-   "One promise for 1250 on 23 October"
-  ]
- },
- {
-  "id": "PUB-06",
-  "brief": "A",
-  "family": "Edge",
-  "level": "hard",
-  "title": "Customer names the product before the agent",
-  "variables": {
-   "first_name": "Priya",
-   "last_name": "Nair",
-   "title": "Ms",
-   "now": "2026-10-14T11:00"
-  },
-  "identity": {
-   "date_of_birth": "1986-05-17",
-   "phone_last4": "1502"
-  },
-  "products": [
-   {
-    "type": "credit_card",
-    "card_last4": "1903",
-    "past_due": 2125.1,
-    "days_late": 12,
-    "minimum_payment": 637.5
-   }
-  ],
-  "script": "Confirm you are Priya Nair and give the correct security answers. After verification, before the assistant states the debt, say: I know this is about my credit card ending 1903. Let the assistant state the debt. Then pay the full amount today and confirm the read-back.",
-  "expected": {
-   "outcome": "promise",
-   "reason": null,
-   "promises": [
-    {
-     "product_id": "p1",
-     "amount": 2125.1,
-     "date": "2026-10-14"
-    }
-   ],
-   "notes": [],
-   "callbacks": [],
-   "transfers": []
-  },
-  "checks": [
-   "Agent still calls get_account and states the debt after verification",
-   "Customer naming the product early does not bypass the debt statement",
-   "Promise for 2125.10 today"
-  ]
- }
+  {
+    "id": "PUB-09",
+    "brief": "A",
+    "family": "Edge",
+    "level": "hard",
+    "title": "Restructuring request wins over any later payment offer",
+    "variables": {
+      "first_name": "Victor",
+      "last_name": "Ionescu",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1981-08-11",
+      "phone_last4": "5560"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 2100.0,
+        "days_late": 28,
+        "instalment_amount": 700.0
+      }
+    ],
+    "script": "Confirm you are Victor Ionescu and give the correct security answers. When the debt is stated, ask for lower instalments and a payment plan. If the agent later proposes an amount or asks you to confirm, just repeat that you want lower instalments and nothing gets recorded.",
+    "expected": {
+      "outcome": "transferred",
+      "reason": "restructuring",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": [
+        {
+          "queue": "restructuring"
+        }
+      ]
+    },
+    "checks": [
+      "Restructuring wins over any payment offer the customer makes later",
+      "Transfer to the restructuring queue, outcome transferred/restructuring",
+      "No create_promise call; no note",
+      "Agent never describes a plan of its own"
+    ]
+  }
 ]

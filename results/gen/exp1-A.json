@@ -1,0 +1,95 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "27965038-edc0-4bc2-aa25-92e9d9eddb09",
+ "iteration_id": "91b1f30d-9e6e-483c-b1d3-862a6f1ff52c",
+ "seconds": 263,
+ "passed": 0,
+ "total": 1,
+ "runs": 2,
+ "final": [
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 2,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed the criterion regarding the number of attempts for the personal loan. While the requirement was for two attempts, the assistant made three specific negotiation attempts in Messages 10, 12, and 14 (following the initial bulk request in Message 8). All other criteria were met: the phone question was correctly repeated once (Message 6), the date of birth was not repeated, exactly"
+   ],
+   "call_id": "31727ef1-b01f-4e5b-8aba-43807a197db7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_ab59ec3d-255",
+   "slowest_turn_s": 34.5,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed to meet the specified number of payment attempts for the personal loan. While the success criteria required exactly two attempts for the personal loan, the assistant made three distinct offers in Messages 10, 12, and 14. All other criteria were satisfied: the phone security question was repeated once following an incorrect answer (Message 6), the date of birth was requested on"
+    ],
+    "call_id": "2baea178-6044-4b00-abae-f8f624fdf24a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_9b8f8fb3-ee5",
+    "slowest_turn_s": 5.3,
+    "ended": "assistant-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed the criterion regarding the number of attempts for the personal loan. While the requirement was for two attempts, the assistant made three specific negotiation attempts in Messages 10, 12, and 14 (following the initial bulk request in Message 8). All other criteria were met: the phone question was correctly repeated once (Message 6), the date of birth was not repeated, exactly"
+    ],
+    "call_id": "31727ef1-b01f-4e5b-8aba-43807a197db7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_ab59ec3d-255",
+    "slowest_turn_s": 34.5,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

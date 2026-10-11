@@ -89,7 +89,7 @@ def build(a):
             tr.event("policy_loaded", path=a.policy)
         else:
             ir, audit = X.extract(briefs, a.openapi, a.slot, tr)
-        problems = P.validate(ir, C.tool_enums(tools))
+        problems = P.validate(ir, C.tool_enums(tools, ir.api_fields))
         if problems:
             raise SystemExit("policy invalid: " + "; ".join(problems))
         X.check_artifact(ir.to_json())
@@ -168,8 +168,9 @@ def build(a):
         # 6. final export (the published version is unchanged by the test) ----------------------------
         retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export", tr)
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
-        tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), elapsed_s=round(time.monotonic() - t_start, 1))
-        print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "elapsed_s": round(time.monotonic() - t_start)}))
+        degraded = list(X.DEGRADED) + ([] if all(v is True for v in checks.values()) else [f"check failed: {k}" for k, v in checks.items() if v is not True])
+        tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1))
+        print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "degraded": degraded, "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:
         tr.event("run_end", success=False, error=repr(e)[:500], elapsed_s=round(time.monotonic() - t_start, 1), exported=checkpoint_exported)
         if ids is not None:

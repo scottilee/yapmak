@@ -1,0 +1,65 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "words forbidden for the whole call",
+   "text": "The words \"guaranteed\", \"penalty\" and \"lawsuit\" must NEVER be spoken by the assistant, even after verification, in quotations, or when responding to a customer who used them. Paraphrase truthfully without those words. The IR only has prohibited_before_verification; these words are listed there but must also be blocked after verification.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "debt introduction sentence",
+   "text": "State every product, amount and days late before asking for anything. No sentence is dictated; debt_intro is a written sentence carrying only that content.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence. Wording not dictated; a short sentence was written.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "refusal to talk",
+   "text": "Before verification that second refusal closes ID-STOP/NO-CHECK; after verification it marks remaining products DECLINE and the close follows section 10 precedence (AGREED if a promise was already saved), not necessarily NO-AGREEMENT/DECLINE.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "below-floor proposal",
+   "text": "A below-floor proposal gets the floor counteroffer; rejection is a flat refusal.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "no discounts",
+   "text": "Never offer a discount, waiver or a new payment plan.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  },
+  {
+   "topic": "date earlier than earliest eligible date",
+   "text": "If it precedes the earliest eligible date, offer the earliest eligible date, provided it is within deadline. No IR field expresses this.",
+   "doc": "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late; wrote a short sentence carrying only that content.",
+  "api_fields: added get_account.list/id/type/past_due/days_late and create_promise.ok because \u00a71 and \u00a78 name these API properties.",
+  "Added 'A historic closed or paid-off product is instead a dispute' to the dispute source span, and \u00a76/\u00a79 sentences to the multi_product, amounts and promise_write source spans.",
+  "unresolved: reworded the refuse_to_talk entry (after verification the close follows \u00a710 precedence) and added the 'offer earliest eligible date' rule, which has no IR field."
+ ]
+}

@@ -178,7 +178,9 @@ def _floor_value(ir: P.PolicyIR, p):
     return min(float(rule["amount"]), full)
 
 
-def _products_for(ir: P.PolicyIR, n):
+def _products_for(ir: P.PolicyIR, n, past_due_name=""):
+    """Mock products; a floor rule's field gets its own synthetic value unless that field IS the API's past-due field
+    (then the floor is the full amount and no second value exists)."""
     out = []
     types = [t for t in list(ir.amounts.floors) + list(ir.amounts.floor_rules or {}) if t != "*"] or ["credit_card"]
     bands = ir.bands
@@ -187,7 +189,7 @@ def _products_for(ir: P.PolicyIR, n):
         t = types[k % len(types)]
         p = {"type": t, "past_due": 420.0 + 100 * k, "days_late": band.days_late_min}
         rule = _floor_rule(ir, t)
-        if rule and rule["kind"] in ("field", "max_of"):
+        if rule and rule["kind"] in ("field", "max_of") and rule["field"] not in ("past_due", past_due_name):
             p[rule["field"]] = 126.0 + 10 * k
         if "card" in t:
             p["card_last4"] = "4821"
@@ -198,7 +200,10 @@ def _products_for(ir: P.PolicyIR, n):
 def _expect_full_today(ir, products, now=NOW):
     h, b = ir.calendar.holidays, ir.calendar.business_days
     today = now[:10]
-    day = today if bc.is_business_day(today, h, b) else bc.next_business_day(today, h, b)
+    if not ir.dates.promise_today_allowed:
+        day = bc.next_business_day(today, h, b, inclusive=False)       # no promise for today: the next business day is offered
+    else:
+        day = today if bc.is_business_day(today, h, b) else bc.next_business_day(today, h, b)
     return [{"product_id": f"p{i + 1}", "amount": p["past_due"], "date": day} for i, p in enumerate(products)]
 
 
@@ -214,6 +219,8 @@ def validate_bodies(calls, tools):
                 problems.append(f"{name}: required {k} missing")
         for k, v in body.items():
             spec = t.body_props.get(k)
+            if spec is None and k in (t.required or []):
+                continue                      # a required name the schema lists without a property: sent as an alias, nothing to type-check
             if spec is None:
                 problems.append(f"{name}: unknown field {k}"); continue
             if "enum" in spec and v not in spec["enum"]:
@@ -228,11 +235,12 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
     reqs = ir.identity.requirements
     multi = ir.multi_product.max_products > 1 and (len(ir.amounts.floors) > 0 or len(ir.amounts.floor_rules or {}) > 0)
     n_products = 2 if (name == "dispute_one" and multi) else 1
-    products = _products_for(ir, n_products)
+    import compiler_openapi as CO
+    past_due_name = CO.response_slots(tools, ir.api_fields)["account"]["past_due"] if tools else ""
+    products = _products_for(ir, n_products, past_due_name)
     verified = [{"_node": "opening", "holder": "confirmed"}] + [_id_turn(i, r) for i, r in enumerate(reqs)]
     O = ir.outcomes
-    import compiler_openapi as CO
-    bank = IRBank(ir, products, fail_writes=2 if name == "write_fail" else 0, slots=CO.request_slots(tools) if tools else None, rslots=CO.response_slots(tools) if tools else None)
+    bank = IRBank(ir, products, fail_writes=2 if name == "write_fail" else 0, slots=CO.request_slots(tools, ir.api_fields) if tools else None, rslots=CO.response_slots(tools, ir.api_fields) if tools else None)
     problems = []
     h, b = ir.calendar.holidays, ir.calendar.business_days
     if ir.dates.past_deadline == "no_promise":
@@ -241,7 +249,7 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
             dl = bc.deadline(now[:10], band.deadline, h, b) if band else None
             if dl and dl < now[:10]:
                 return [f"n/a: deadline {dl} already passed on {now[:10]} and the policy takes no promise then"], bank
-    today_ok = bc.is_business_day(now[:10], h, b)
+    today_ok = bc.is_business_day(now[:10], h, b) and ir.dates.promise_today_allowed
     # "today" on a weekend/holiday: the agent offers the next business day and the customer accepts it
     pays_today = [{"_node": "state_debt", "cust_intent": "pays_today"}] + ([] if today_ok else [{"_node": "negotiate", "cust_intent": "accepts"}])
     if name == "happy":
@@ -259,6 +267,8 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
         want_outcome, want_promises = (sc.action.get("outcome") or O.no_promise_outcome, sc.action.get("reason") or ""), []
         if sc.action.get("type") == "note":
             want_outcome = (O.no_promise_outcome, sc.action.get("reason") or "")
+        if sc.action.get("type") == "continue" and not sc.action.get("reason"):
+            want_outcome = (O.no_promise_outcome, O.refused_reason or "refused")   # no hardship treatment: "still cannot pay" is a refusal
     elif name == "hardship_accept":
         sc = next((s for s in ir.special_cases if s.name == "hardship"), None)
         if not sc or not sc.offer_transfer_queue:
@@ -325,13 +335,20 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
         def dmy(iso):
             return {"prop_kind": "date", "prop_day": int(iso[8:10]), "prop_month": int(iso[5:7]), "prop_year": int(iso[:4])}
         today_bd = bc.next_business_day(now[:10], h, b)                      # today, or the first business day after a weekend/holiday
+        if not ir.dates.promise_today_allowed:
+            today_bd = bc.next_business_day(now[:10], h, b, inclusive=False)   # no promise for today
         if name == "too_much_floor":           # full too much -> the floor is offered once -> accepted
             script = verified + [{"_node": "state_debt", "cust_intent": "too_much"}, {"_node": "negotiate", "cust_intent": "accepts"}, {"_node": "readback", "rb_intent": "confirms"}]
             want_outcome, want_promises = (O.promise_outcome, None), "floor"
+            if not ir.amounts.floor_offered_once:   # no counter-offer policy: "too much" is a refusal, the call closes without a promise
+                script = verified + [{"_node": "state_debt", "cust_intent": "too_much"}] + [{"_node": "negotiate", "cust_intent": "refuses"}] * 3
+                want_outcome, want_promises = (O.no_promise_outcome, O.refused_reason or "refused"), []
         elif name == "below_floor_twice":      # half the floor -> floor offered -> refuses everything -> no promise
             script = verified + [{"_node": "state_debt", "cust_intent": "proposes", "prop_amount": round(floor / 2, 2), **dmy(today_bd)}] + [{"_node": "negotiate", "cust_intent": "refuses"}] * 8
             want_outcome, want_promises = (O.no_promise_outcome, O.refused_reason or "refused"), []
         elif name == "after_deadline":         # a date 10 days after the deadline -> the deadline is offered -> accepted
+            if not ir.dates.after_deadline_offer_deadline:
+                return ["n/a: the policy names the deadline but offers nothing (after_deadline_offer_deadline false)"], bank
             late = (datetime.date.fromisoformat(dl) + datetime.timedelta(days=10)).isoformat()
             script = verified + [{"_node": "state_debt", "cust_intent": "proposes", **dmy(late)}, {"_node": "negotiate", "cust_intent": "accepts"}, {"_node": "readback", "rb_intent": "confirms"}]
             want_outcome, want_promises = (O.promise_outcome, None), [{"product_id": "p1", "amount": full, "date": dl}]
@@ -342,6 +359,8 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
             script = verified + pays_today + [{"_node": "readback", "rb_intent": "changes", **dmy(nb)}, {"_node": "readback", "rb_intent": "confirms"}]
             want_outcome, want_promises = (O.promise_outcome, None), [{"product_id": "p1", "amount": full, "date": nb}]
         elif name == "weekend_named":          # names the first non-business day ahead -> rolled to the next business day -> accepted
+            if not ir.dates.weekend_or_holiday_roll_forward:
+                return ["n/a: the policy asks for another day instead of rolling forward (weekend_or_holiday_roll_forward false)"], bank
             d0 = datetime.date.fromisoformat(now[:10])
             off = next((d0 + datetime.timedelta(days=i) for i in range(1, 10) if not bc.is_business_day((d0 + datetime.timedelta(days=i)).isoformat(), h, b)), None)
             if off is None or off.isoformat() > dl:
@@ -370,6 +389,12 @@ def run_scenario(ir: P.PolicyIR, wf, name, tools=None, now=NOW):
         problems.append("get_account before all identity questions passed")
     if "create_promise" in calls and not any(t.get("rb_intent") == "confirms" for t in script):
         problems.append("create_promise without a confirmation")
+    if want_outcome is not None and not want_outcome[1] and tools and "close_call" in tools:
+        # the API requires a reason on every close (or the table allows exactly one): the agent sends the outcome's table reason
+        req = CO.request_slots(tools, ir.api_fields)["close_call"].get("reason") in (tools["close_call"].required or [])
+        row = next((r for r in ir.outcomes.table if r.outcome == want_outcome[0]), None)
+        if row and row.reasons and (req or len(row.reasons) == 1):
+            want_outcome = (want_outcome[0], row.reasons[0])
     if want_outcome is not None and bank.outcome != tuple(want_outcome):
         problems.append(f"outcome {bank.outcome} != {tuple(want_outcome)}")
     if want_promises == "floor":

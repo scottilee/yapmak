@@ -1,0 +1,18 @@
+PASS PUB-01 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-02 hard   Edge           | schedule_callback > close_call
+PASS PUB-03 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+FAIL PUB-05 hard   Edge           | verify > verify > get_account > promise > close_call
+       - outcome ('promise', None), expected ('no_promise', 'hardship')
+       - conversation: The assistant failed to meet the closing outcome requirement. According to the success criteria (following Rule 32), because the customer mentioned a hardship (job loss), declined the support team offer, and named their own payment date, the call
+FAIL PUB-06 hard   Edge           | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-23')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The call failed to meet several success criteria. Specifically, the floor (637.50) was offered three times (Messages 8, 10, and 12) instead of exactly once. Additionally, the promise was recorded for 2026-10-23 (as seen in Message 14, Message 17,
+FAIL PUB-07 hard   Edge           | verify > verify > get_account > promise > close_call
+       - conversation: The call failed one of the success criteria: 'No second read-back or re-ask for the promise date'. Although the assistant successfully acknowledged the unrelated question in message 10 and created exactly one promise for the correct date and amou
+PASS PUB-09 hard   Edge           | verify > verify > get_account > transfer_to_agent > close_call
+
+slowest agent turn per call: median 14 s, worst 23 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+5 / 8 passed (bank records and conversation checks). Last simulation 24265fb0-3828-454e-ab73-8d939b6214be, status completed, 138 s.

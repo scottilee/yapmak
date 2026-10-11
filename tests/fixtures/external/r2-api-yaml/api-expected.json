@@ -1,0 +1,21 @@
+{
+  "axis": "yaml",
+  "classification": "valid_contract",
+  "operations": [
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "schedule_callback",
+    "transfer_to_agent",
+    "close_call"
+  ],
+  "source": "openapi.yaml",
+  "assertions": [
+    {
+      "safe_loaded_document_equals_control": true,
+      "native_yaml_not_json_text": true
+    }
+  ],
+  "samples": []
+}

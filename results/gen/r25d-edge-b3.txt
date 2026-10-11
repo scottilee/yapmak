@@ -1,0 +1,13 @@
+FAIL PUB-11 hard   Edge           | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'hardship'), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-14')]
+       - notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'hardship'), ('p3', 'hardship')]
+       - conversation: The assistant failed to meet several criteria related to the promise for the credit card. 1. No promise was recorded for the credit card (amount 220) in the system events or the transcript, despite the user offering to pay in full in [Message 7].
+FAIL PUB-12 hard   Edge           | verify > verify > get_account > promise > add_note > add_note > close_call
+       - promises [('p1', 510.0, '2026-10-14')], expected [('p1', 510.0, '2026-10-16')]
+       - conversation: - The credit card promise was recorded for Wednesday 14 October 2026, failing the requirement for Friday 16 October. - No persuasion attempts were made for the car loan after the customer refused payment in message 13; the agent proceeded directl
+PASS PUB-13 hard   Edge           | schedule_callback > close_call
+
+slowest agent turn per call: median 8 s, worst 8 s. Failed calls where the customer hung up: 0.
+
+1 / 3 passed (bank records and conversation checks). Last simulation 4c26f9a5-d80b-495e-a6da-44dca80b6139, status completed, 87 s.

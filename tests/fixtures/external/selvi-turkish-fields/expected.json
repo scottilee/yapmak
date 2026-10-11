@@ -1,0 +1,638 @@
+{
+  "fixture": "selvi-turkish-fields",
+  "brief": "01-policy.md",
+  "documents": [
+    "01-policy.md",
+    "02-interface-guide.md"
+  ],
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Selvi Mutual Bank",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "dogum_yili",
+        "ilce",
+        "guvenlik_sayisi"
+      ],
+      "source": "01-policy.md §1"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 2,
+      "source": "01-policy.md §1"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "01-policy.md §1"
+    },
+    "identity.remaining_slot": {
+      "expected": "kalan_deneme",
+      "source": "01-policy.md §1"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "01-policy.md §1"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "01-policy.md §1"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "01-policy.md §1"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "dogrulanmadi",
+        "yanlis"
+      ],
+      "source": "01-policy.md §1"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "dogrulanmadi",
+        "istemedi"
+      ],
+      "source": "01-policy.md §1"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "ulasilmadi",
+        "belirsiz"
+      ],
+      "source": "01-policy.md §1"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please verify your identity at a Selvi branch.",
+      "source": "01-policy.md §1"
+    },
+    "phrases.opening": {
+      "expected": "This is Selvi Mutual Bank's automated assistant. This conversation is recorded.",
+      "source": "01-policy.md §1"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "01-policy.md §1"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "01-policy.md §1"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "arrears",
+        "balance",
+        "payment",
+        "product"
+      ],
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "year",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 0,
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "text",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "digits",
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 6,
+      "source": "01-policy.md §1"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "01-policy.md §1"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.days": {
+      "expected": "next_business_day",
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.start": {
+      "expected": "08:20",
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.end": {
+      "expected": "12:10",
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "ulasilmadi",
+        "geri_arama"
+      ],
+      "source": "01-policy.md §2"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "ulasilmadi",
+        "zaman_yok"
+      ],
+      "source": "01-policy.md §2"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "ulasilmadi",
+        "yanlis_numara"
+      ],
+      "source": "01-policy.md §2"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "ulasilmadi",
+        "vefat"
+      ],
+      "source": "01-policy.md §2"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Please accept our condolences.",
+      "source": "01-policy.md §2"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      "source": "01-policy.md §3"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "01-policy.md §3"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "ask",
+      "source": "01-policy.md §3"
+    },
+    "multi_product.max_products": {
+      "expected": 2,
+      "source": "01-policy.md §3"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "doner_hesap": "revolving account",
+        "tasit_borcu": "vehicle borrowing"
+      },
+      "source": "01-policy.md §3"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "01-policy.md §3"
+    },
+    "dates.past_deadline": {
+      "expected": "no_promise",
+      "source": "01-policy.md §3"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 16,
+          "deadline": {
+            "kind": "calendar_days",
+            "n": 5,
+            "adjustment": "preceding"
+          },
+          "attempts": []
+        },
+        {
+          "days_late_min": 17,
+          "days_late_max": 70,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 17,
+            "month_offset": 1,
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": false
+            }
+          ]
+        }
+      ],
+      "source": "01-policy.md §3–4"
+    },
+    "amounts.floors": {
+      "expected": {},
+      "source": "01-policy.md §4"
+    },
+    "amounts.floor_rules": {
+      "expected": {
+        "*": {
+          "kind": "percent",
+          "percent": 25
+        }
+      },
+      "source": "01-policy.md §4"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder stays outstanding.",
+      "source": "01-policy.md §4"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "01-policy.md §4"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle this balance today?",
+      "source": "01-policy.md §4"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle both balances today?",
+      "source": "01-policy.md §4"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 0,
+      "source": "01-policy.md §5"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "01-policy.md §5"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Do you authorize me to save these exact commitments?",
+      "source": "01-policy.md §5"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "01-policy.md §5"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "A receipt will appear in your secure inbox.",
+      "source": "01-policy.md §5"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Contact a branch to change a saved commitment.",
+      "source": "01-policy.md §5"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "missing": true
+      },
+      "source": "01-policy.md §6"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "",
+      "source": "01-policy.md §6"
+    },
+    "phrases.robot_reply": {
+      "expected": "I am Selvi Mutual Bank's automated assistant.",
+      "source": "01-policy.md §6"
+    },
+    "phrases.scam_reply": {
+      "expected": "You can verify us using the number on your Selvi statement.",
+      "source": "01-policy.md §6"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "I do not have that information.",
+      "source": "01-policy.md §6"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "itiraz"
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "zorluk"
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "musteri_destegi",
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.offer_outcome": {
+      "expected": [
+        "aktarildi",
+        "destek"
+      ],
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "genel_gorusme",
+        "outcome": "aktarildi",
+        "reason": "insan"
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "soz_yok",
+        "reason": "reddetti"
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "01-policy.md §6"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.scam.say": {
+      "expected": "You can verify us using the number on your Selvi statement.",
+      "source": "01-policy.md §6"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "01-policy.md §6"
+    },
+    "special_cases.scam.takes_promise": {
+      "expected": false,
+      "source": "01-policy.md §6"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "notes.reasons": {
+      "expected": [
+        "reddetti",
+        "itiraz",
+        "zorluk",
+        "kayit_hatasi"
+      ],
+      "source": "01-policy.md §7"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "soz_verildi": [],
+        "soz_yok": [
+          "reddetti",
+          "itiraz",
+          "zorluk",
+          "kayit_hatasi"
+        ],
+        "aktarildi": [
+          "insan",
+          "destek"
+        ],
+        "dogrulanmadi": [
+          "yanlis",
+          "istemedi"
+        ],
+        "ulasilmadi": [
+          "belirsiz",
+          "geri_arama",
+          "zaman_yok",
+          "yanlis_numara",
+          "vefat"
+        ]
+      },
+      "source": "01-policy.md §7"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "soz_verildi",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "soz_yok",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "aktarildi",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": false,
+      "source": "01-policy.md §7"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": false,
+      "source": "01-policy.md §7"
+    },
+    "outcomes.refused_reason": {
+      "expected": "reddetti",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "kayit_hatasi",
+      "source": "01-policy.md §7"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "01-policy.md §7"
+    },
+    "api_fields": {
+      "expected": {
+        "verify_identity.customer_id": "musteri_no",
+        "verify_identity.field": "soru",
+        "verify_identity.answer": "cevap",
+        "get_account.customer_id": "musteri_no",
+        "create_promise.customer_id": "musteri_no",
+        "create_promise.product_id": "sozlesme",
+        "create_promise.amount": "tutar",
+        "create_promise.date": "tarih",
+        "add_note.customer_id": "musteri_no",
+        "add_note.product_id": "sozlesme",
+        "add_note.reason": "neden",
+        "add_note.text": "metin",
+        "schedule_callback.customer_id": "musteri_no",
+        "schedule_callback.date": "tarih",
+        "schedule_callback.time": "saat",
+        "transfer_to_agent.customer_id": "musteri_no",
+        "transfer_to_agent.queue": "kuyruk",
+        "close_call.customer_id": "musteri_no",
+        "close_call.outcome": "sonuc",
+        "close_call.reason": "neden",
+        "verify_identity.ok": "basarili",
+        "verify_identity.verified": "cevap_dogrulandi",
+        "verify_identity.all_verified": "tum_sorular_dogrulandi",
+        "verify_identity.remaining": "kalan_deneme",
+        "get_account.ok": "basarili",
+        "get_account.list": "urunler",
+        "get_account.id": "sozlesme",
+        "get_account.type": "tur",
+        "get_account.past_due": "geciken_tutar",
+        "get_account.days_late": "gecikme_gunu",
+        "create_promise.ok": "basarili",
+        "add_note.ok": "basarili",
+        "schedule_callback.ok": "basarili",
+        "transfer_to_agent.ok": "basarili",
+        "close_call.ok": "basarili"
+      },
+      "source": "02-interface-guide.md §1–2"
+    }
+  },
+  "comparison_notes": [
+    "The api_fields object includes every request argument and every response slot, including product members. It comes from the English interface guide, not property descriptions.",
+    "Only literal document rules are asserted; no unspecified numeric-date order, hint reply or callback defaults are guessed.",
+    "Absent already-paid and restructuring special-case actions use the existing comparator missing-path sentinel. A paid route must not be invented.",
+    "Nearest-cent half-up rounding is explicitly required. The percent IR expresses the percentage but cannot by itself certify tie rounding; inspect the semantic requirement in README. Equivalent per-type expansion of the wildcard floor requires semantic review.",
+    "No concrete calendar date occurs in this oracle: holidays are explicitly empty and deadlines are relative rule objects. Therefore there are no expected dates to compute with bankcal. No existing repository file was read, run or imported."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "The documents require one short sympathetic sentence for illness, bereavement or unemployment but do not dictate its words; a generic sentence was written.",
+   "doc": "tests/fixtures/external/r2-policy-name-placeholders/01-specification.md"
+  },
+  {
+   "topic": "debt introduction sentence",
+   "text": "The documents require stating every product, amount and days late after verification but dictate no introduction wording; a short content-only sentence was written for debt_intro.",
+   "doc": "tests/fixtures/external/r2-policy-name-placeholders/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late after verification; wrote a short content-only sentence and updated the unresolved entry accordingly.",
+  "api_fields: added create_promise.ok = ok because \u00a78 names ok=true as the success signal.",
+  "Expanded source spans (identity hint, third_party relatives rule, amounts, multi_product, phrases, promise_write, outcomes) to cite the full supporting text."
+ ]
+}

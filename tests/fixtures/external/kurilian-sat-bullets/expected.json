@@ -1,0 +1,421 @@
+{
+  "fixture": "kurilian-sat-bullets",
+  "brief": "01-call-sheet.md + 02-codes.txt (newest first) + 03-supervisor-mail.txt",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Kurilian Co-operative Bank",
+      "source": "call sheet header"
+    },
+    "identity.requirements.$fields": {
+      "expected": ["sec_code"],
+      "source": "SECURITY: ONE QUESTION ONLY"
+    },
+    "identity.requirements.0.field": {
+      "expected": "sec_code",
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 4,
+      "source": "call sheet SECURITY: exactly 4 digits"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "call sheet: no recoverable-format hint exists"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 2,
+      "source": "call sheet SECURITY: maximum wrong answers = 2"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "call sheet: use the API's tries_left"
+    },
+    "identity.remaining_slot": {
+      "expected": "tries_left",
+      "source": "call sheet SECURITY"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "OPEN: 2 asks max"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "call sheet SECURITY: refusal -> explain once -> second refusal closes"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "call sheet SECURITY: a question is a question, not a refusal"
+    },
+    "identity.failed_outcome": {
+      "expected": ["DEC", "F01"],
+      "source": "call sheet SECURITY + codes sheet"
+    },
+    "identity.declined_outcome": {
+      "expected": ["DEC", "F02"],
+      "source": "call sheet SECURITY + codes sheet"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": ["VOID", "JCB-unclear"],
+      "source": "OPEN + codes sheet"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please use the KCB app.",
+      "source": "call sheet SECURITY"
+    },
+    "third_party.callback.enabled": {
+      "expected": false,
+      "source": "call sheet THIRD PARTIES: DO NOT book a callback"
+    },
+    "third_party.callback.days": {
+      "expected": "today",
+      "source": "default; the callback field is unused because enabled=false"
+    },
+    "third_party.callback.start": {
+      "expected": "10:00",
+      "source": "default; the callback field is unused"
+    },
+    "third_party.callback.end": {
+      "expected": "19:00",
+      "source": "default; the callback field is unused"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "default; the callback field is unused"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "default; the callback field is unused"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": ["VOID", "JCB-unclear"],
+      "source": "fallback to unclear-holder outcome; callback is not used"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": ["VOID", "JCB-unclear"],
+      "source": "fallback to unclear-holder outcome; callback is not used"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": ["VOID", "RNG"],
+      "source": "call sheet THIRD PARTIES + codes sheet"
+    },
+    "third_party.deceased_outcome": {
+      "expected": ["VOID", "deceased"],
+      "source": "third parties closing with deceased language (default path; not addressed by the sheet)"
+    },
+    "calendar.business_days": {
+      "expected": [0, 1, 2, 3, 4, 5, 6],
+      "source": "call sheet DATES: every day of the week is a business day"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "call sheet DATES: there are no shutdown days and no holidays"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "call sheet DATES: next <weekday> = following week"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "call sheet DATES: a period without month/year resolves to next occurrence"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 90,
+          "deadline": {
+            "kind": "fixed_date",
+            "date": "2099-12-31",
+            "adjustment": "none"
+          },
+          "attempts": []
+        }
+      ],
+      "source": "call sheet AMOUNTS: ZERO persuasion; DATES: no k-date, recordable when today or any business day after today (the deadline is set far in the future so it never governs)"
+    },
+    "amounts.floors": {
+      "expected": {"loan": "amt_due"},
+      "source": "call sheet AMOUNTS: only the full amt_due is recordable; floor = amt_due is how the IR expresses 'no floor below full'"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "call sheet AMOUNTS"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "call sheet AMOUNTS"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "call sheet AMOUNTS: below full rejected outright, no counter-offer"
+    },
+    "amounts.floor_wording": {
+      "expected": "",
+      "source": "call sheet AMOUNTS: no floor wording (floor = full)"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "call sheet AMOUNTS: full is the only acceptable amount; floor_offered_once=truedoes not apply because floor == full"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "call sheet DATES: a promise date is recordable when today or any business day after today"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": false,
+      "source": "call sheet DATES: every day is a business day"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "call sheet AMOUNTS: ask once for the exact day, then No-PTP/R07"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": false,
+      "source": "call sheet AMOUNTS: no k-date; no upper limit"
+    },
+    "dates.past_deadline": {
+      "expected": "no_promise",
+      "source": "default; the deadline is far in the future so this branch never fires"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "call sheet READ-BACK AND WRITE: retry once; 2nd failure No-PTP/R07"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "call sheet READ-BACK AND WRITE: one call only (one product)"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Save that?",
+      "source": "call sheet READ-BACK AND WRITE"
+    },
+    "notes.enabled": {
+      "expected": false,
+      "source": "call sheet: No `add_note` tool. Notes are not used at any outcome."
+    },
+    "notes.reasons": {
+      "expected": [],
+      "source": "notes.enabled=false"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": false,
+      "source": "notes.enabled=false"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.max_products": {
+      "expected": 1,
+      "source": "call sheet ACCOUNT: One product only"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "default (single product)"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "default"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "default"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "PTP": [],
+        "No-PTP": ["R07"],
+        "DEC": ["F01", "F02"],
+        "VOID": ["RNG", "JCB-unclear"],
+        "transferred": ["kcb_person"]
+      },
+      "source": "02-codes.txt"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "PTP",
+      "source": "02-codes.txt"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "",
+      "source": "no already_paid rule, no paid outcome"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "transferred",
+      "source": "codes sheet"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "No-PTP",
+      "source": "codes sheet"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "default"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": false,
+      "source": "no paid outcome defined; all_paid_closes_as_paid must be false (otherwise finalize could close with paid_outcome='' and an empty ledger)"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": false,
+      "source": "no notes; the no_promise reason comes from refusal/service_error paths, not from notes"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "R07",
+      "source": "codes sheet (write failure closes No-PTP/R07)"
+    },
+    "outcomes.refused_reason": {
+      "expected": "R07",
+      "source": "codes sheet (all refusals close No-PTP/R07)"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "call sheet FINALIZATION: thank the customer and say goodbye before the close call"
+    },
+    "phrases.opening": {
+      "expected": "KCB automated collections line. We record this call.",
+      "source": "call sheet OPEN"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "call sheet OPEN: say EXACTLY"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "call sheet OPEN"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue loan of Kurilian Co-operative Bank.",
+      "source": "call sheet ACCOUNT"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle the full amount today?",
+      "source": "call sheet AMOUNTS (the only ask)"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle the full amount today?",
+      "source": "single product"
+    },
+    "phrases.robot_reply": {
+      "expected": "KCB assistant.",
+      "source": "call sheet ROBOT / SCAM"
+    },
+    "phrases.scam_reply": {
+      "expected": "Phone the number printed on your statement to verify.",
+      "source": "call sheet ROBOT / SCAM"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": ["owe", "overdue", "arrears", "facility", "payment"],
+      "source": "call sheet OPEN"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "KCB will text you to confirm this promise.",
+      "source": "call sheet READ-BACK AND WRITE"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "",
+      "source": "no already_paid rule"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Use the KCB app for details.",
+      "source": "call sheet CUSTOMER SAYS"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Use the KCB app to change a recorded promise.",
+      "source": "call sheet READ-BACK AND WRITE"
+    },
+    "phrases.product_naming": {
+      "expected": {"loan": "loan"},
+      "source": "call sheet ACCOUNT: prod_kind is always loan"
+    },
+    "special_cases.already_paid": {
+      "expected": "absent",
+      "source": "call sheet: no already_paid rule (the customer's payment of this past-due amount is NOT what the rule covers)"
+    },
+    "special_cases.dispute.action": {
+      "expected": {"type": "close", "outcome": "No-PTP", "reason": "R07"},
+      "source": "call sheet CUSTOMER SAYS: dispute -> do not argue, close No-PTP/R07"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "call sheet CUSTOMER SAYS: dispute does not take a promise"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": true,
+      "source": "single product"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "default"
+    },
+    "special_cases.hardship": {
+      "expected": "absent",
+      "source": "call sheet: no hardship rule"
+    },
+    "special_cases.restructuring": {
+      "expected": "absent",
+      "source": "call sheet: no restructure or instalment-plan rule"
+    },
+    "special_cases.human.action": {
+      "expected": {"type": "transfer", "queue": "kcb_desk", "outcome": "transferred", "reason": "kcb_person"},
+      "source": "call sheet CUSTOMER SAYS: transfer queue kcb_desk"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "transfer, no promise"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "transfer, ends the call"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "default"
+    },
+    "special_cases.refuse_to_talk": {
+      "expected": "absent",
+      "source": "call sheet CUSTOMER SAYS: refused to talk closes No-PTP/R07 immediately (no ask_once_first)"
+    },
+    "special_cases.scam.action": {
+      "expected": {"type": "continue"},
+      "source": "call sheet ROBOT / SCAM"
+    },
+    "special_cases.scam.say": {
+      "expected": "Phone the number printed on your statement to verify.",
+      "source": "call sheet ROBOT / SCAM"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "scam continues"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": false,
+      "source": "scam is a side question, not a special case before persuasion"
+    }
+  },
+  "comparison_notes": [
+    "Expected values authored before extraction; source spans and trigger prose are evidence for a reviewer, not exact-match keys.",
+    "Floor = amt_due is the IR-level expression of 'no floor below the full amount' (the sheet says only the full is recordable).",
+    "Band attempts=[] is the IR-level expression of 'zero persuasion attempts'; the deadline is set far in the future so it never governs.",
+    "callback.enabled=false (with the same parent fields defaulted) is how the IR expresses 'no callback booking'.",
+    "notes.enabled=false and special_cases.hardship absent are both required by 'no hardship rule' and 'no notes'.",
+    "Absence is noted as \"absent\" for the no-rule special cases (already_paid, hardship, restructuring, refuse_to_talk); the diff treats absent as the expected state, not as a default.",
+    "Outcome table comparison is order-insensitive (as elsewhere). Identity and attempt order are significant."
+  ]
+}

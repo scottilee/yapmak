@@ -1,0 +1,16 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "whole-unit-floor",
+      "source": "01-specification.md \u00a77",
+      "expected": {
+        "percent": 23,
+        "rounding": "ceiling_whole_currency_unit",
+        "cap_at_full": true
+      },
+      "schema_gap": "Percent runtime rounds to two decimal places; there is no supported whole-unit rounding selector. Do not silently round to cents."
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

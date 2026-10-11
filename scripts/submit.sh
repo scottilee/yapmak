@@ -48,9 +48,17 @@ inputs() {   # <dir> -> "briefs,comma,separated<TAB>openapi"
 import json, pathlib, sys
 d = pathlib.Path(sys.argv[1])
 files = sorted(p for p in d.iterdir() if p.is_file() and not p.name.startswith("."))
-api = [p for p in files if p.suffix == ".json" and isinstance(json.load(open(p)), dict) and "paths" in json.load(open(p))]
+def is_api(p):
+    if p.suffix not in (".json", ".yaml", ".yml"):
+        return False
+    try:
+        doc = json.loads(p.read_text()) if p.suffix == ".json" else __import__("yaml").safe_load(p.read_text())
+    except Exception:
+        return False
+    return isinstance(doc, dict) and "paths" in doc
+api = [p for p in files if is_api(p)]
 if len(api) != 1:
-    sys.exit(f"{d}: expected exactly one OpenAPI JSON (top-level 'paths'), found {[p.name for p in api]}")
+    sys.exit(f"{d}: expected exactly one OpenAPI file (JSON or YAML with top-level 'paths'), found {[p.name for p in api]}")
 briefs = [p for p in files if p not in api]
 if not briefs:
     sys.exit(f"{d}: no brief documents")

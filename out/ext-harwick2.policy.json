@@ -1,0 +1,611 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt",
+  "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+  "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+ ],
+ "bank_name": "Harwick & Lowe Commercial Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "konto_code",
+    "ask_text": "What are the six digits of your account code?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+     "text": "M-1: the identity scheme shall be conducted in this order: first `konto_code`, then `geburtsdatum`, then `postleitzahl`. (Policy 4.2: `konto_code` digits, six (6) digits with leading zeros preserved; \"What are the six digits of your account code?\")"
+    }
+   },
+   {
+    "field": "geburtsdatum",
+    "ask_text": "What is your date of birth, as registered?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+     "text": "4.2 `geburtsdatum` a date, numerals only read day-month-year (dmy); for `geburtsdatum`, \"What is your date of birth, as registered?\""
+    }
+   },
+   {
+    "field": "postleitzahl",
+    "ask_text": "What is your postcode, as registered?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+     "text": "4.2 `postleitzahl` text, letters and digits, spacing removed. No format-hint facility is provided. for `postleitzahl`, \"What is your postcode, as registered?\""
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "attempts_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "HL-ID",
+   "hl-fail"
+  ],
+  "declined_outcome": [
+   "HL-ID",
+   "hl-decline"
+  ],
+  "unclear_holder_outcome": [
+   "HL-MISS",
+   "hl-unclear"
+  ],
+  "failed_instruction": "Our service desk will verify you instead.",
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+   "text": "M-2: The global ceiling of unsuccessful answers is lowered to four (4), in place of three (3). The remaining-slot field returned by the identity facility continues to govern the count; the Operations Division shall make no private tally."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "09:00",
+   "end": "18:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "HL-MISS",
+    "hl-cb"
+   ],
+   "no_callback_outcome": [
+    "HL-MISS",
+    "hl-nocb"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt",
+    "text": "Telephone contact days are today or the next business day, exactly as clause 3.1 of the O&M Policy says. The contact hours stated in M-3 remain: 09:00 to 18:00 inclusive."
+   }
+  },
+  "wrong_number_outcome": [
+   "HL-MISS",
+   "hl-wrong"
+  ],
+  "deceased_outcome": [
+   "HL-MISS",
+   "hl-deceased"
+  ],
+  "deceased_sentence": "Our condolences on your loss.",
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "3.4 A wrong number closes HL-MISS/hl-wrong. The passing of the holder closes the call with HL-MISS/hl-deceased after the exact sentence: \"Our condolences on your loss.\""
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "5.1 Business days are Monday through Saturday. Sunday alone is closed. No other closure day is observed during these operations. 5.3 \"Next <weekday>\" names that weekday in the following calendar week, even when spoken on that weekday itself. 5.4 A period named without month and year (\"the 15th\") resolves to the next occurrence, on or after today, of the named day."
+  }
+ },
+ "bands": [
+  {
+   "name": "a",
+   "days_late_min": 1,
+   "days_late_max": 9,
+   "deadline": {
+    "kind": "earliest",
+    "rules": [
+     {
+      "kind": "calendar_days",
+      "n": 9,
+      "adjustment": "none"
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "7.1(a) 1-9 days past: the earlier of the ninth calendar day after the call and of the last business day of the current calendar month; 7.2(a) exactly one attempt, the full `outst` on the k-date; where the full amount has already been refused, the floor is named instead"
+   }
+  },
+  {
+   "name": "b",
+   "days_late_min": 10,
+   "days_late_max": 29,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 15,
+    "month_offset": 1,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "7.1(b) 10-29 days past: the fifteenth (15th) day of the calendar month following the call, shifted to the next business day wherever needed; 7.2(a) exactly one attempt"
+   }
+  },
+  {
+   "name": "c",
+   "days_late_min": 30,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 20,
+    "month_offset": 1,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": false
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+    "text": "M-4: For the late band (30-60 days past) the ultimate date shall be the twentieth (20th) day of the calendar month following the call, shifted to the next business day wherever needed. The band's two-attempt schedule in clause 7.2 is unchanged."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "od": "od_min",
+   "term": "tl_min",
+   "equip": "eq_min",
+   "card": "cl_min",
+   "invoice": "inv_min"
+  },
+  "floor_rules": {},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder falls due again.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "6.2 The floor field per category is: od -> `od_min`; term -> `tl_min`; equip -> `eq_min`; card -> `cl_min`; invoice -> `inv_min`. 8.1 The full amount is asked first; the debtor is never asked what it can pay. 8.2 An amount of floor to full, both included, is recordable; the floor offered once with the sentence \"The remainder falls due again.\""
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "next_business_day",
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "8.3 A date is recordable when today or later, a business day (5.1), and no later than the facility's k-date; a date on a closed day within the k-date moves to the next business day. 7.4 ... if none is given still, the k-date is proposed. 7.5 A date beyond the k-date is met by naming the k-date as the latest recordable date"
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this facility.",
+   "action": {
+    "type": "note",
+    "reason": "hl-cleared"
+   },
+   "say": "Payments appear within two working days.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.1 \"Already paid\": the exact reply \"Payments appear within two working days.\"; no record is taken for that facility, the note hl-cleared is set (11.1), and the remaining facilities continue."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never held the facility, or it was settled and closed.",
+   "action": {
+    "type": "note",
+    "reason": "hl-dispute"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.2 \"Not my debt\", \"never held it\", or \"it was settled and closed\": no argument, no record; the note hl-dispute is set for that facility and the remaining ones continue."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement, or loss of work.",
+   "action": {
+    "type": "note",
+    "reason": "hl-distress"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.3 Illness, bereavement, or loss of work: one short sentence of sympathy; no persuasion and no record for that facility; the note hl-distress is set; NO transfer is offered and the remaining facilities continue."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a payment schedule or lighter instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "hl-rework",
+    "outcome": "HL-TR",
+    "reason": "hl-rework"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.4 A schedule or lighter instalments: clause 8.4 forbids any; the call moves at once to the remediation desk, queue `hl-rework`, and closes HL-TR/hl-rework."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "hl-desk",
+    "outcome": "HL-TR",
+    "reason": "hl-person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.5 A person: ask once whether this assistant can help; treatment 10.6 otherwise. On insistence, queue `hl-desk`, close HL-TR/hl-person."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses the call as a whole and does not want to continue talking.",
+   "action": {
+    "type": "note",
+    "reason": "hl-refuse"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "10.6 A refusal of the call as a whole: ask once whether one may continue; a second refusal sets hl-refuse on every remaining facility (11.1) and ends under 11.3."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam or doubts that the call is really from the bank.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You may verify us on the number printed on your contract letter.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+    "text": "2.4 A scam question is answered exactly: \"You may verify us on the number printed on your contract letter.\" The call continues (q.v. 10.7, 10.8)."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "HL-PAY",
+    "reasons": [],
+    "when": "any recorded payment (no transfer)"
+   },
+   {
+    "outcome": "HL-CLR",
+    "reasons": [],
+    "when": "every facility noted hl-cleared"
+   },
+   {
+    "outcome": "HL-TR",
+    "reasons": [
+     "hl-rework",
+     "hl-person"
+    ],
+    "when": "transfer to a desk; overrides every other rank"
+   },
+   {
+    "outcome": "HL-FULL",
+    "reasons": [
+     "hl-refuse",
+     "hl-distress",
+     "hl-dispute",
+     "hl-R07"
+    ],
+    "when": "no payment recorded; reason is the note of the first non-cleared facility"
+   },
+   {
+    "outcome": "HL-ID",
+    "reasons": [
+     "hl-fail",
+     "hl-decline"
+    ],
+    "when": "identity check failed or declined"
+   },
+   {
+    "outcome": "HL-MISS",
+    "reasons": [
+     "hl-cb",
+     "hl-nocb",
+     "hl-wrong",
+     "hl-deceased",
+     "hl-unclear"
+    ],
+    "when": "holder not reached / third party / unclear holder"
+   }
+  ],
+  "promise_outcome": "HL-PAY",
+  "paid_outcome": "HL-CLR",
+  "transfer_outcome": "HL-TR",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "HL-FULL",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "hl-R07",
+  "refused_reason": "hl-refuse",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "11.3 Outcome rank: a transfer rank overrides every other; else any recorded payment gives HL-PAY; else, every facility noted hl-cleared gives HL-CLR; else HL-FULL with the note of the first non-cleared facility, in account-facility order. 11.4 The call is thanked and farewelled before exactly one close call."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "hl-refuse",
+   "hl-distress",
+   "hl-dispute",
+   "hl-cleared",
+   "hl-R07"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "11.1 ... one note is set per unrecorded facility among: hl-refuse, hl-distress, hl-dispute, hl-cleared, hl-R07. 11.2 On any transfer-class closure ... NO note is set, at any time."
+  }
+ },
+ "multi_product": {
+  "max_products": 5,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "1.3 This Policy governs up to five facilities per debtor; 6.1 ... at most five (5) entries; 6.3 Every facility ... is stated before any ask; 9.1 Every proposed payment is read back in one batch"
+  }
+ },
+ "phrases": {
+  "opening": "This is the Harwick & Lowe automated collections assistant. We record calls for your protection.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue facilities of Harwick & Lowe.",
+  "today_question": "Can you pay this amount today?",
+  "all_today_question": "Can you pay all of these amounts today?",
+  "robot_reply": "This is the Harwick & Lowe automated collections assistant.",
+  "scam_reply": "You may verify us on the number printed on your contract letter.",
+  "prohibited_before_verification": [
+   "overdue",
+   "dues",
+   "arrears",
+   "recover",
+   "payment",
+   "facility"
+  ],
+  "after_promise_sentence": "A confirmation will set by secure post.",
+  "already_paid_sentence": "Payments appear within two working days.",
+  "cannot_answer_sentence": "Our service desk will advise that.",
+  "recorded_promise_change_reply": "Alterations of kept records are made by secure post.",
+  "product_naming": {
+   "od": "overdraft",
+   "term": "term loan",
+   "equip": "equipment loan",
+   "card": "store card",
+   "invoice": "invoice finance"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "2.1 The first sentence shall be said verbatim ... 2.2 \"Am I speaking with {title} {last_name}?\" 2.3 forbidden words ... 2.4 robot/scam replies ... 6.4 Spoken categories ... 6.5 The reason for the call is introduced exactly ... 9.5 A written record is acknowledged exactly ... 10.9 ... exactly \"Our service desk will advise that.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I record these payments?",
+  "source": {
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md",
+   "text": "11.5 A failure of the writing facility is retried once; a second failure sets hl-R07 on that facility alone (11.1), the failure is stated, and the remaining facilities continue. 9.1 ... confirmed exactly: \"May I record these payments?\" 9.3 One record per facility"
+  }
+ },
+ "api_fields": {
+  "get_account.list": "facilities",
+  "get_account.id": "facility_id",
+  "get_account.type": "cat",
+  "get_account.past_due": "outst",
+  "get_account.days_late": "days_o",
+  "verify_identity.remaining": "attempts_left",
+  "create_promise.product_id": "facility_id",
+  "add_note.product_id": "facility_id"
+ },
+ "unresolved": [
+  {
+   "topic": "band a calendar-day branch adjustment",
+   "text": "Clause 7.1(a) does not say whether the ninth calendar day after the call is shifted when it falls on a Sunday; taken unadjusted.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "today question wording",
+   "text": "The documents imply a first ask to settle today (7.3 'A first plain refusal to settle today') but dictate no wording; a minimal sentence was written.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "hardship sympathy wording",
+   "text": "10.3 requires 'one short sentence of sympathy' without dictating the words; a minimal sentence was written.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "create_promise amount field",
+   "text": "The tool API defines the amount property as `sum` but lists `amt` as required; the documents do not name the field.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "days past outside bands",
+   "text": "Clause 7.1 defines bands only for 1-60 days past; facilities at 0 or more than 60 days past are not covered.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "robot question",
+   "text": "10.7 robot question has no known special-case name; handled only through phrases.robot_reply (the call continues).",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "card last digits",
+   "text": "No card last-digits field exists and the documents name the card category only as \"store card\".",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "already paid vs. paying this overdue amount",
+   "text": "10.2 ends 'A payment of this very overdue amount is NOT what 10.1 covers', which seems to contradict 10.1 'Already paid'; the extraction keeps 10.1 for a customer saying the facility is already paid and 10.2 for not my debt / never held / settled and closed.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "human request declined help",
+   "text": "10.5 'ask once whether this assistant can help; treatment 10.6 otherwise' does not make clear when the 10.6 refusal treatment applies instead of the hl-desk transfer on insistence.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "whole-batch refusal notes",
+   "text": "9.4 'A whole-batch refusal closes with no notes taken contrary to clause 11.2' is garbled; taken to mean notes per 11.1 (no transfer), but the note code for a refused read-back is not named.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "write failure statement",
+   "text": "11.5 'the failure is stated' dictates no wording.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "band c first attempt floor",
+   "text": "7.2(b) does not say whether the first band-(c) attempt names the floor when the full amount was already refused; taken as no (the floor is the second attempt).",
+   "doc": "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+  },
+  {
+   "topic": "mail date",
+   "text": "Mail S-72 is headed 'Wed 13 Oct 2026', but 13 Oct 2026 is a Tuesday; no value depends on it.",
+   "doc": "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt"
+  }
+ ]
+}

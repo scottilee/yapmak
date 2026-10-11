@@ -1,0 +1,182 @@
+{
+ "covered": [
+  {
+   "rule": "\u00a71 one to three products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a71 State every product, amount and days late before asking",
+   "where": "multi_product.state_all_before_asking; phrases.debt_intro"
+  },
+  {
+   "rule": "\u00a71 Spoken product names",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "\u00a72 Say verbatim opening",
+   "where": "phrases.opening; phrases.opening_verbatim"
+  },
+  {
+   "rule": "\u00a72 Is this {{title}} {{last_name}} speaking?",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "\u00a72 At most three holder asks; NO-CONTACT/NOT-CLEAR",
+   "where": "identity.holder_confirmation_asks; identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a72 do not say arrears, balance, commitment or facility",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a72 robot reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "\u00a73 three questions in order, formats, MDY",
+   "where": "identity.requirements[0..2]"
+  },
+  {
+   "rule": "\u00a73 format_hint month_word_required, does not consume a wrong answer",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "\u00a73 FOUR wrong answers, checks_remaining",
+   "where": "identity.wrong_answer_limit; identity.remaining_slot; api_fields"
+  },
+  {
+   "rule": "\u00a73 exhaustion sentence + ID-STOP/BAD-CHECK",
+   "where": "identity.failed_instruction; identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a73 refusal explained once; ID-STOP/NO-CHECK; why-question is not refusal",
+   "where": "identity.decline_explain_once; identity.declined_outcome; identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "\u00a74 relatives: no disclosure",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "\u00a74 callback next business day 08:10\u201311:40, after now, one alternate",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "\u00a74 BOOKED / NO-SLOT / WRONG-LINE / DEATH + condolences",
+   "where": "third_party.callback.scheduled_outcome/no_callback_outcome; third_party.wrong_number_outcome; third_party.deceased_outcome; third_party.deceased_sentence"
+  },
+  {
+   "rule": "\u00a75 Mon\u2013Sat business days, holiday list",
+   "where": "calendar.business_days; calendar.holidays"
+  },
+  {
+   "rule": "\u00a75 next weekday = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "\u00a75 Ask for missing month or year",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "\u00a75 today eligible, roll forward, after-deadline offer deadline, vague once, no eligible date -> DECLINE",
+   "where": "dates.*"
+  },
+  {
+   "rule": "\u00a76 band table rows 1\u20134, 5\u201313, 14\u201332, 33\u201380",
+   "where": "bands[0..3]"
+  },
+  {
+   "rule": "\u00a76 today questions",
+   "where": "phrases.today_question; phrases.all_today_question; multi_product.ask_all_today_once"
+  },
+  {
+   "rule": "\u00a76 common date capped per product",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "\u00a77 floor 23% rounded up to whole unit, capped",
+   "where": "amounts.floor_rules['*']; unresolved[amounts.floor_rounding]"
+  },
+  {
+   "rule": "\u00a77 No per-type minimum field governs",
+   "where": "amounts.floors (empty)"
+  },
+  {
+   "rule": "\u00a77 full first, floor once, wording, accept floor..full",
+   "where": "amounts.full_first/floor_offered_once/floor_wording/accept_between_floor_and_full"
+  },
+  {
+   "rule": "\u00a78 May I save these exact commitments?",
+   "where": "promise_write.confirm_phrase; multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "\u00a78 one promise per product; change reply",
+   "where": "promise_write.one_promise_per_product; phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "\u00a78 retry TWICE",
+   "where": "promise_write.retry_on_failure"
+  },
+  {
+   "rule": "\u00a78 receipt sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\u00a79 already paid",
+   "where": "special_cases[already_paid]; phrases.already_paid_sentence"
+  },
+  {
+   "rule": "\u00a79 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "\u00a79 illness/bereavement/unemployment, CareDesk",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "\u00a79 restructuring PlanDesk ROUTED/REPLAN",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "\u00a79 human MainDesk ROUTED/PERSON",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "\u00a79 transfer preserves saved promises, no notes",
+   "where": "multi_product.recorded_promises_survive_transfer; notes.none_on_transfer"
+  },
+  {
+   "rule": "\u00a79 scam reply",
+   "where": "special_cases[scam]; phrases.scam_reply"
+  },
+  {
+   "rule": "\u00a79 unknown information sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "\u00a79 refuse to talk",
+   "where": "special_cases[refuse_to_talk]; unresolved"
+  },
+  {
+   "rule": "\u00a710 notes for unpromised products",
+   "where": "notes"
+  },
+  {
+   "rule": "\u00a710 precedence AGREED/SETTLED/NO-AGREEMENT, transfer overrides",
+   "where": "outcomes.*"
+  },
+  {
+   "rule": "\u00a711 outcome/reason table, queues, note reasons",
+   "where": "outcomes.table; notes.reasons; special_cases[*].action.queue"
+  }
+ ],
+ "fixed": [
+  "special_cases[scam] and [refuse_to_talk]: before_persuasion set to true \u2014 both are listed under \u00a79 'Special cases before persuasion'.",
+  "Expanded source spans (identity, third_party, amounts, dates, multi_product, phrases, promise_write, outcomes) to quote the full constraining sentences (relative non-disclosure, no discount/waiver, do not record above full, per-product counters, consent invalidated by correction, omit reason for AGREED/SETTLED).",
+  "unresolved[refuse_to_talk]: clarified that after verification the close follows \u00a710 precedence rather than always NO-AGREEMENT/DECLINE."
+ ],
+ "unresolved": [
+  "The floor-rule DSL cannot express rounding UP to a whole currency unit (ceil(0.23*past_due), never cents); recorded as a percent rule plus an unresolved entry.",
+  "Hardship sympathetic sentence is not dictated; a short sentence was written.",
+  "Refuse-to-talk: ID-STOP/NO-CHECK before verification; after verification remaining products are marked DECLINE and the close follows \u00a710 precedence."
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "bands": [
+  "1-16",
+  "17-70"
+ ],
+ "identity": [
+  "dogum_yili",
+  "ilce",
+  "guvenlik_sayisi"
+ ],
+ "special_cases": [
+  "dispute",
+  "hardship",
+  "human",
+  "refuse_to_talk",
+  "restructuring",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule or paid outcome exists. A recent-payment remark alone selects no special action: say \"I cannot confirm payment receipt from the information available here.\" and continue ordinary discussion; do not invent a posting-delay claim. (No already_paid special case is routed because there is no paid outcome; the sentence is kept in phrases.already_paid_sentence.)",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "floor rounding",
+   "text": "The floor for BOTH types is 25 percent of the full past-due amount, rounded to the nearest cent (a half cent rounds upward), capped at full. The percent floor rule has no rounding field; rounding must be half-up to the nearest cent.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "Illness, bereavement or job loss: one short sympathetic sentence. The documents do not dictate the words; a short sentence was written.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "refuse_to_talk before verification",
+   "text": "Before verification that second refusal closes dogrulanmadi/istemedi. (Same pair as identity.declined_outcome; the refuse_to_talk case itself notes reddetti after verification.)",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "failed get_account",
+   "text": "On failed get_account, basarili is false and urunler may be an empty array; the agent must not claim there are no debts from that failure. The documents give no close outcome/reason for this situation.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/02-interface-guide.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[scam].before_persuasion set to true: the scam reply is in section 6 'Special remarks, before persuasion', like the other remarks there.",
+  "api_fields: removed verify_identity.field, verify_identity.answer and get_account.ok because they are not slots the schema's api_fields contract defines. The meanings that matter (soru/cevap) come from the enum and the guide.",
+  "Added the unresolved entry 'failed get_account': the guide forbids claiming there are no debts after a failure but gives no close outcome.",
+  "Widened the source quotes for identity (holder ask count, belirsiz, no format hint), third_party (relative/no disclosure), amounts (below-floor rule) and phrases (prohibited words, today questions).",
+  "Clarified the refuse_to_talk unresolved note: before verification the second refusal uses the same pair as identity.declined_outcome."
+ ]
+}

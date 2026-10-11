@@ -1,0 +1,56 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "promise_today_not_allowed",
+   "text": "Today is NEVER an eligible promise date, even when open. Earliest eligible date is the next business day strictly after today. Do not ask for payment today. If it precedes the earliest eligible date, offer the earliest eligible date, provided it is within deadline. The template allows today when it is a business day (dates.promise_today_allowed must stay true); the compiler must block today as a promise date.",
+   "doc": "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+  },
+  {
+   "topic": "debt_intro_not_dictated",
+   "text": "State every product, amount and days late before asking for anything. The documents dictate the content but no fixed sentence; a short introductory sentence was written and the agent must then list each product, its past_due amount and days_late.",
+   "doc": "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+  },
+  {
+   "topic": "hardship_sympathy_sentence",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence. The words are not dictated; a short sentence was written.",
+   "doc": "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+  },
+  {
+   "topic": "refuse_to_talk_before_verification",
+   "text": "Before verification that second refusal closes ID-STOP/NO-CHECK (after verification it marks remaining products DECLINE and the call closes NO-AGREEMENT/DECLINE unless another rule applies).",
+   "doc": "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+  },
+  {
+   "topic": "callback_missing_clock_time",
+   "text": "Missing clock time: ask, never guess. No IR field expresses this; the callback dialogue must ask for the time instead of defaulting one.",
+   "doc": "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late; wrote a short sentence carrying that content (unresolved entry kept and updated).",
+  "api_fields: added get_account.list/id/type/past_due/days_late/customer_id and create_promise.ok because \u00a71 and \u00a78 name these API fields explicitly.",
+  "special_cases[scam].before_persuasion set to true: it is listed under '\u00a79 Special cases before persuasion' (action stays continue).",
+  "Added unresolved entry for 'Missing clock time: ask, never guess' (\u00a74), which has no IR field.",
+  "Extended source spans (hint text on birth date, below-floor counteroffer, per-product counters, transfer preserves saved promises, reason omission for AGREED/SETTLED)."
+ ]
+}

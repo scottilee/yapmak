@@ -1,0 +1,485 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/tessel-register/01-register.md",
+  "tests/fixtures/external/tessel-register/02-codes.md"
+ ],
+ "bank_name": "Tessel Savings Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "district",
+    "ask_text": "What is your registered district?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/tessel-register/01-register.md",
+     "text": "FIRST district: \"What is your registered district?\" Format text; trim spaces."
+    }
+   },
+   {
+    "field": "opening_year",
+    "ask_text": "In which year did you open your account?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/tessel-register/01-register.md",
+     "text": "SECOND opening_year: \"In which year did you open your account?\" Format year, exactly four digits."
+    }
+   },
+   {
+    "field": "token",
+    "ask_text": "What is your five-digit service token?",
+    "answer_format": "digits",
+    "digits": 5,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/tessel-register/01-register.md",
+     "text": "THIRD token: \"What is your five-digit service token?\" Format digits, exactly five, retain leading zeros. Ask separately; verify each complete answer. No date question; no hint exception."
+    }
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "40",
+   "R40"
+  ],
+  "declined_outcome": [
+   "40",
+   "R41"
+  ],
+  "unclear_holder_outcome": [
+   "50",
+   "R50"
+  ],
+  "failed_instruction": "Please contact a Tessel branch.",
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Two wrong answers TOTAL across all three questions. API tries_left authoritative. Exhaustion: \"Please contact a Tessel branch.\" then 40/R40. Explicit refusal: explain account protection once, second refusal 40/R41. Questions about purpose are not refusals. get_account only after all three pass. | Two asks maximum; answer questions before repeat; then 50/R50 if unclear."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "16:05",
+   "end": "18:35",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "50",
+    "R51"
+   ],
+   "no_callback_outcome": [
+    "50",
+    "R52"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Callback ONLY next business day, 16:05 to 18:35 inclusive, strictly after now. Ask for missing time; one alternate after invalid offer. Scheduled: 50/R51; twice invalid or declined: 50/R52."
+   }
+  },
+  "wrong_number_outcome": [
+   "50",
+   "R53"
+  ],
+  "deceased_outcome": [
+   "50",
+   "R54"
+  ],
+  "deceased_sentence": "Please accept our sympathy.",
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "No account detail or security questions to relatives. Ask availability. ... Wrong number: 50/R53. Deceased: \"Please accept our sympathy.\" then 50/R54; no further questions."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-12-24"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "ask",
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Monday through Saturday open; Sunday closed. Only holiday 2026-12-24. Next weekday means following calendar week; this weekday means current week. Missing month or year: ask."
+  }
+ },
+ "bands": [
+  {
+   "name": "Band I",
+   "days_late_min": 1,
+   "days_late_max": 5,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 3,
+    "adjustment": "preceding"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Band I / days 1\u20135 | Deadline = today plus THREE CALENDAR days, adjusted preceding. ZERO persuasion attempts."
+   }
+  },
+  {
+   "name": "Band II",
+   "days_late_min": 6,
+   "days_late_max": 25,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 20,
+    "month_offset": 1,
+    "adjustment": "preceding"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Band II / days 6\u201325 | Deadline = TWENTIETH of NEXT month, adjusted preceding. ZERO persuasion attempts."
+   }
+  },
+  {
+   "name": "Band III",
+   "days_late_min": 26,
+   "days_late_max": 75,
+   "deadline": {
+    "kind": "earliest",
+    "rules": [
+     {
+      "kind": "calendar_days",
+      "n": 10,
+      "adjustment": "preceding"
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Band III / days 26\u201375 | Deadline = whichever comes FIRST: today plus TEN CALENDAR days adjusted preceding; or LAST BUSINESS DAY of current month. ZERO persuasion attempts."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "fixed",
+    "amount": 25
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The rest remains overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Ask full amt_due first. Floor is fixed 25 currency units for either type, capped at amt_due if smaller. No API floor field. Offer floor once if full too much; say \"The rest remains overdue.\" Accept floor through full inclusive, never ask how much they can pay. Below floor: explain and offer floor; rejecting that is flat refusal. Never record above full. No discounts, waivers or plans."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "If the computed deadline is already before today, no promise; 20/R10. Never extend the computed deadline. | Today permitted; business date on/after today and not after deadline. Closed date: offer next business day only if within deadline, otherwise deadline. After-deadline proposal: offer deadline. Vague period: clarify once, then propose deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never held the product, or the product was previously closed.",
+   "action": {
+    "type": "close",
+    "outcome": "20",
+    "reason": "R17"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Not their debt, never held or previously closed product: no argument or promise; immediately 20/R17. Ends the call, not a note."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "close",
+    "outcome": "20",
+    "reason": "R10"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "Care-4",
+   "offer_outcome": [
+    "30",
+    "R31"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Illness, bereavement or job loss: one short sympathetic sentence; no persuasion and NO promise, even if volunteered. Offer Care-4 once. If accepted transfer and close 30/R31. If declined close 20/R10. Hardship ends the call; it does not become a note. This outranks an ordinary payment proposal."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "Desk-4",
+    "outcome": "30",
+    "reason": "R30"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Request a person: ask once whether the assistant can help first; if insisted, transfer Desk-4 and close 30/R30. No promise while transferring."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether the call is a scam or doubts that the bank is really calling.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Verify us with the number printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Scam question: \"Verify us with the number printed on your statement.\" then continue."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk.",
+   "action": {
+    "type": "close",
+    "outcome": "20",
+    "reason": "R10"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/tessel-register/01-register.md",
+    "text": "Refusal to talk: immediate 20/R10 after verification, 40/R41 before it."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "10",
+    "reasons": [],
+    "when": "Saved promise; omit reason."
+   },
+   {
+    "outcome": "20",
+    "reasons": [
+     "R10",
+     "R17",
+     "R99"
+    ],
+    "when": "R10 = refusal, declined hardship support or expired limit; R17 = dispute; R99 = failed save."
+   },
+   {
+    "outcome": "30",
+    "reasons": [
+     "R30",
+     "R31"
+    ],
+    "when": "R30 = human transfer; R31 = hardship support transfer."
+   },
+   {
+    "outcome": "40",
+    "reasons": [
+     "R40",
+     "R41"
+    ],
+    "when": "R40 = failed identity; R41 = declined identity."
+   },
+   {
+    "outcome": "50",
+    "reasons": [
+     "R50",
+     "R51",
+     "R52",
+     "R53",
+     "R54"
+    ],
+    "when": "R50 = unclear holder; R51 = scheduled callback; R52 = no callback; R53 = wrong number; R54 = deceased."
+   }
+  ],
+  "promise_outcome": "10",
+  "paid_outcome": "20",
+  "transfer_outcome": "30",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "20",
+  "all_paid_closes_as_paid": false,
+  "no_promise_reason_from_first_non_paid_note": false,
+  "service_error_reason": "R99",
+  "refused_reason": "R10",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Transfer overrides any saved promise, preserving it but discarding pending proposals. Otherwise saved promise \u2192 10 with no reason; otherwise applicable 20 reason. No paid outcome or all-paid/notes precedence. Say thanks and goodbye before exactly one close_call, last bank action. | Absent routes: NO already-paid rule ... Such remarks alone do not change the ordinary discussion."
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": false,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/02-codes.md",
+   "text": "Retained transport reason enum R10, R17, R99; campaign never calls add_note. No active note reasons."
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Exactly ONE product in cartera."
+  }
+ },
+ "phrases": {
+  "opening": "This is Tessel Savings Bank\u2019s automated assistant. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue account.",
+  "today_question": "Can you pay this today?",
+  "all_today_question": "",
+  "robot_reply": "I am Tessel Savings Bank\u2019s automated assistant.",
+  "scam_reply": "Verify us with the number printed on your statement.",
+  "prohibited_before_verification": [
+   "debt",
+   "arrears",
+   "payment",
+   "product"
+  ],
+  "after_promise_sentence": "We will send a confirmation letter.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "I do not have that information.",
+  "recorded_promise_change_reply": "Ask a branch to change a recorded promise.",
+  "product_naming": {
+   "giro": "revolving account",
+   "plazo": "term loan"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Say verbatim: \"This is Tessel Savings Bank\u2019s automated assistant. We record this call.\" ... No debt, arrears, payment, product or associated details before all checks pass. | Types: giro (spoken revolving account), plazo (spoken term loan). | Intro: \"I am calling about the overdue account.\" Ask once: \"Can you pay this today?\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you authorize this record?",
+  "source": {
+   "doc": "tests/fixtures/external/tessel-register/01-register.md",
+   "text": "Read product, amount, date; ask \"Do you authorize this record?\" ... One successful promise/product. ZERO retries after failed create_promise; first failure 20/R99."
+  }
+ },
+ "api_fields": {
+  "get_account.list": "cartera",
+  "get_account.id": "contrato",
+  "get_account.type": "clase",
+  "get_account.past_due": "amt_due",
+  "get_account.days_late": "dl_days",
+  "verify_identity.remaining": "tries_left"
+ },
+ "unresolved": [
+  {
+   "topic": "paid_outcome",
+   "text": "Paid route absent: no paid outcome, reason or note. paid_outcome is set to the ordinary no-promise outcome 20 only to satisfy the schema; already-paid remarks do not change the ordinary discussion and never close as a separate paid outcome.",
+   "doc": "tests/fixtures/external/tessel-register/02-codes.md"
+  },
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule; no paid outcome, paid note or payment-posting sentence. Such remarks do not change the ordinary discussion.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "restructuring",
+   "text": "NO restructuring rule; do not synthesize a restructure transfer. Unavailable terms are acknowledged honestly. No discounts, waivers or plans.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "days_late_above_75",
+   "text": "Bands cover days 1\u201375 only; the documents do not say what to do for more than 75 days late.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "hardship_sentence",
+   "text": "Hardship requires 'one short sympathetic sentence' without dictating its words; 'I am sorry to hear that.' is a written placeholder.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  }
+ ]
+}

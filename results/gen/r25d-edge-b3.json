@@ -1,0 +1,164 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "4c26f9a5-d80b-495e-a6da-44dca80b6139",
+ "iteration_id": "98de3fc8-5963-4934-89ef-666d1ffa9282",
+ "seconds": 87,
+ "passed": 1,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'hardship'), expected ('promise', None)",
+    "promises [], expected [('p1', 220.0, '2026-10-14')]",
+    "notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'hardship'), ('p3', 'hardship')]",
+    "conversation: The assistant failed to meet several criteria related to the promise for the credit card. 1. No promise was recorded for the credit card (amount 220) in the system events or the transcript, despite the user offering to pay in full in [Message 7]. 2. The outcome was recorded as 'no_promise' in the close_call system event, whereas the criteria required 'outcome promise'. 3. In [Message 10], the assi"
+   ],
+   "call_id": "646a221f-8be2-47b4-94cd-092e87bb9e24",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_14a3aab4-5f1",
+   "slowest_turn_s": 8.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 510.0, '2026-10-14')], expected [('p1', 510.0, '2026-10-16')]",
+    "conversation: - The credit card promise was recorded for Wednesday 14 October 2026, failing the requirement for Friday 16 October. - No persuasion attempts were made for the car loan after the customer refused payment in message 13; the agent proceeded directly to confirming the credit card promise."
+   ],
+   "call_id": "3632e52d-2571-40a4-b3b2-6fd4bb5e95e6",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_fc63a421-0d5",
+   "slowest_turn_s": 7.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "057269e8-1d78-4877-8bfe-dd20198a0262",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_71dfe1cc-329",
+   "slowest_turn_s": 3.5,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'hardship'), expected ('promise', None)",
+     "promises [], expected [('p1', 220.0, '2026-10-14')]",
+     "notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected [('p2', 'hardship'), ('p3', 'hardship')]",
+     "conversation: The assistant failed to meet several criteria related to the promise for the credit card. 1. No promise was recorded for the credit card (amount 220) in the system events or the transcript, despite the user offering to pay in full in [Message 7]. 2. The outcome was recorded as 'no_promise' in the close_call system event, whereas the criteria required 'outcome promise'. 3. In [Message 10], the assi"
+    ],
+    "call_id": "646a221f-8be2-47b4-94cd-092e87bb9e24",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_14a3aab4-5f1",
+    "slowest_turn_s": 8.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 510.0, '2026-10-14')], expected [('p1', 510.0, '2026-10-16')]",
+     "conversation: - The credit card promise was recorded for Wednesday 14 October 2026, failing the requirement for Friday 16 October. - No persuasion attempts were made for the car loan after the customer refused payment in message 13; the agent proceeded directly to confirming the credit card promise."
+    ],
+    "call_id": "3632e52d-2571-40a4-b3b2-6fd4bb5e95e6",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_fc63a421-0d5",
+    "slowest_turn_s": 7.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "057269e8-1d78-4877-8bfe-dd20198a0262",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_71dfe1cc-329",
+    "slowest_turn_s": 3.5,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

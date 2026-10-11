@@ -1,0 +1,22 @@
+PASS PUB-01 hard   Edge           | verify > verify > get_account > promise > close_call
+FAIL PUB-02 hard   Edge           | close_call
+       - outcome ('not_reached', 'no_callback'), expected ('not_reached', 'callback')
+       - callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]
+       - conversation: The agent failed to meet the specific callback requirements. Specifically: - The `schedule_callback` function was never called, despite the success criteria requiring it to fire for 2026-10-15 at 11:00. - The call outcome was recorded as `not_rea
+PASS PUB-03 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+FAIL PUB-05 hard   Edge           | verify > verify > get_account > close_call
+       - promises [], expected [('p1', 260.0, '2026-10-16')]
+       - conversation: The assistant failed to record the promise as required by the success criteria. While the assistant did offer sympathy (Message 8) and correctly closed the call with the 'no_promise/hardship' outcome according to system events, it explicitly stat
+FAIL PUB-06 hard   Edge           | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to secure a promise for the floor amount on the required date (2026-10-16). Although the agent offered the floor on that date in [Message 8], it pivoted to a different date (October 23) in [Message 10] after the user mentioned a 
+FAIL PUB-07 hard   Edge           | verify > verify > get_account > promise > close_call
+       - promises [('p1', 540.0, '2026-10-23')], expected [('p1', 540.0, '2026-10-16')]
+       - conversation: - The promise was recorded for 2026-10-23 instead of the required 2026-10-16. - The assistant performed a second read-back of the promise details in [Message 10] after the user asked an unrelated question, which violated the requirement of no sec
+PASS PUB-09 hard   Edge           | verify > verify > get_account > transfer_to_agent > close_call
+
+slowest agent turn per call: median 6 s, worst 17 s. Failed calls where the customer hung up: 0.
+
+4 / 8 passed (bank records and conversation checks). Last simulation eb4334c3-4477-4510-b5d3-90f97d131499, status completed, 119 s.

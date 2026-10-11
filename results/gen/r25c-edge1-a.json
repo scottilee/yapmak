@@ -1,0 +1,443 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "64b3c8b2-3e8e-4feb-b926-4b4af33ecdcd",
+ "iteration_id": "76473efb-3122-4a35-8fbc-feff47c705a7",
+ "seconds": 118,
+ "passed": 9,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "5d77ecce-4427-4d63-858b-dc1be4c86283",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_6da0c91b-e7c",
+   "slowest_turn_s": 2.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "ae6d6376-1282-422b-9268-b15115cd956c",
+   "tools": [
+    "close_call"
+   ],
+   "customer_id": "c_b4b8ccce-c7f",
+   "slowest_turn_s": 0.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "1fe025bc-e1ab-441e-9621-d70e65666cf7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_0bfcd149-a2f",
+   "slowest_turn_s": 1.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "4f2ac497-e25a-4736-86eb-a438fea215ee",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_1b57222f-968",
+   "slowest_turn_s": 9.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "678022eb-1914-47a7-a93f-1634ea2a9c79",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_88023383-d5c",
+   "slowest_turn_s": 2.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed criterion A26 because it did not explain that the unpaid remainder stays overdue; when the user asked about the rest of the balance in message 9, the assistant claimed in message 10 not to have that information. The assistant correctly handled criterion A34 by waiting for the clear confirmation in message 11 before recording the promise. Only one promise for $637.50 on 2026-10"
+   ],
+   "call_id": "55513fc8-e09e-472e-ae9b-81bb7d5e9f90",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_95e67ae7-af0",
+   "slowest_turn_s": 1.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "776e3c2a-353c-4d70-83af-6a1504f74d3c",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a8ac0e7f-25a",
+   "slowest_turn_s": 1.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "13a54dd3-bf18-4954-9481-1d3e0e38cae2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_e6995ab9-854",
+   "slowest_turn_s": 1.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "4543d8a5-fad9-4cab-8fe6-f88552507d7a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_40cc6a99-ceb",
+   "slowest_turn_s": 5.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "c2bc5e0e-5748-4853-9b38-12954d7077e7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_872f3a7b-979",
+   "slowest_turn_s": 2.2,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "5d77ecce-4427-4d63-858b-dc1be4c86283",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_6da0c91b-e7c",
+    "slowest_turn_s": 2.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "ae6d6376-1282-422b-9268-b15115cd956c",
+    "tools": [
+     "close_call"
+    ],
+    "customer_id": "c_b4b8ccce-c7f",
+    "slowest_turn_s": 0.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "1fe025bc-e1ab-441e-9621-d70e65666cf7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_0bfcd149-a2f",
+    "slowest_turn_s": 1.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "4f2ac497-e25a-4736-86eb-a438fea215ee",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_1b57222f-968",
+    "slowest_turn_s": 9.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "678022eb-1914-47a7-a93f-1634ea2a9c79",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_88023383-d5c",
+    "slowest_turn_s": 2.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed criterion A26 because it did not explain that the unpaid remainder stays overdue; when the user asked about the rest of the balance in message 9, the assistant claimed in message 10 not to have that information. The assistant correctly handled criterion A34 by waiting for the clear confirmation in message 11 before recording the promise. Only one promise for $637.50 on 2026-10"
+    ],
+    "call_id": "55513fc8-e09e-472e-ae9b-81bb7d5e9f90",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_95e67ae7-af0",
+    "slowest_turn_s": 1.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "776e3c2a-353c-4d70-83af-6a1504f74d3c",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a8ac0e7f-25a",
+    "slowest_turn_s": 1.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "13a54dd3-bf18-4954-9481-1d3e0e38cae2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_e6995ab9-854",
+    "slowest_turn_s": 1.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "4543d8a5-fad9-4cab-8fe6-f88552507d7a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_40cc6a99-ceb",
+    "slowest_turn_s": 5.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "c2bc5e0e-5748-4853-9b38-12954d7077e7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_872f3a7b-979",
+    "slowest_turn_s": 2.2,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

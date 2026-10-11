@@ -1,0 +1,203 @@
+{
+ "covered": [
+  {
+   "rule": "every code is in fv v-codes sheet 02",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "say once, exactly: \"GRIMSBY VALE FINANCE automated collections line. We record this call.\"",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\"Am I through to {{name_title}} {{last}}?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "2 asks max, then close NOANS / D60",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "hello / \"go ahead\" / a question \u2260 yes it's me",
+   "where": "special_cases[holder_not_confirmed_yet]"
+  },
+  {
+   "rule": "never say: owe, overdue, arrears, deadline, amount, payment",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "ROBOT Q -> exactly \"GVF assistant.\"",
+   "where": "phrases.robot_reply, special_cases[robot]"
+  },
+  {
+   "rule": "SCAM Q -> exactly \"Call the number printed on your statement to check us.\"",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "3RD PARTY: no purpose, no acct detail, no paying for the customer",
+   "where": "unresolved[third party message]"
+  },
+  {
+   "rule": "NO callback booking ... close NOANS / CNA",
+   "where": "third_party.callback.enabled, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "wrong number -> close NOANS / NR",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "deceased -> exactly \"We extend our condolences.\" -> close NOANS / DECD",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "ask exactly: \"What are the four digits of your security code?\" digits, exactly 4",
+   "where": "identity.requirements[0]"
+  },
+  {
+   "rule": "wrong cap = 3 ... follow tries_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "cap burnt -> exactly \"Please use the GVF app.\" -> close ID-F / G01",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "refusing -> explain once -> refuse again -> close ID-F / G02",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "\"why do you need it?\" is a question, not a refusal",
+   "where": "identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "at most 1 (items)",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "hp = hire purchase, spark = Sparq credit line, cc_rev = GVF revolving card",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "state amt_due + dl_days flat",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "\"Can you settle the amount today?\"",
+   "where": "phrases.today_question"
+  },
+  {
+   "rule": "bottom_line = greater(min_pmt, 15% of amt_due). never above amt_due",
+   "where": "amounts.floor_rules[*]"
+  },
+  {
+   "rule": "ZERO persuasion. one no ... close No-PTP / No-PTP",
+   "where": "bands[0].attempts, outcomes.refused_reason"
+  },
+  {
+   "rule": "no counter offers, no \"what can you do\" questions",
+   "where": "amounts.never_ask_how_much, bands[0].attempts"
+  },
+  {
+   "rule": "under bottom_line -> can't record it",
+   "where": "amounts.floor_rules, amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "amt_due too big -> no ability to split here",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "promise date ok when: today or later, a business day, no later than the k-date",
+   "where": "dates.promise_today_allowed, bands[0].deadline"
+  },
+  {
+   "rule": "business day = every day of the week. no shutdown days",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "k-date = the 20th of the month after the call",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "no nudging to the next business day",
+   "where": "dates.weekend_or_holiday_roll_forward, dates.after_deadline_offer_deadline, bands[0].deadline.adjustment"
+  },
+  {
+   "rule": "\"next fri\" = fri of the following week; missing bits: fold to the next occurrence",
+   "where": "calendar.next_weekday_means_following_week, calendar.missing_date_parts"
+  },
+  {
+   "rule": "vague -> get the exact day once. still vague -> No-PTP / No-PTP",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "no discounts, no waivers, no plans, no promises about terms",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "read back ... exactly: \"Record that now?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "create_promise, one per item",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "write fails -> retry once. 2nd failure -> close No-PTP / R07",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "recorded -> say exactly: \"A text from GV Fin will confirm this arrangement.\" then thank + goodbye",
+   "where": "phrases.after_promise_sentence, outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "change requests -> say to use the GVF app",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_recorded_promise]"
+  },
+  {
+   "rule": "\"not my debt\", \"never had it\", \"it was paid off and closed\" -> No-PTP / No-PTP",
+   "where": "special_cases[dispute], outcomes.paid_outcome"
+  },
+  {
+   "rule": "will not talk -> close No-PTP / No-PTP at once",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "wants a person -> transfer GVF-THREAD, \"Connecting you to a person.\" close TR-H / HUM",
+   "where": "special_cases[human], outcomes.transfer_outcome"
+  },
+  {
+   "rule": "anything else -> exactly \"GVF staff on the main line can answer that.\"",
+   "where": "phrases.cannot_answer_sentence, special_cases[cannot_answer]"
+  },
+  {
+   "rule": "codes sheet: PTP, No-PTP, ID-F, NOANS, TR-H, S8 with reasons",
+   "where": "outcomes.table, outcomes.promise_outcome, outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "queues: GVF-THREAD",
+   "where": "special_cases[human].action.queue"
+  },
+  {
+   "rule": "add_note: Call sheet 4 directs no add_note call",
+   "where": "notes.enabled"
+  }
+ ],
+ "fixed": [
+  "Added special case holder_not_confirmed_yet: the call sheet's rule that hello / 'go ahead' / a question does not confirm the holder (answer the question, then ask again) was not represented anywhere.",
+  "Added unresolved entry for the internal conflict between 'business day = every day of the week' and 'sun day named -> not recordable'; kept all seven days as business days.",
+  "Added unresolved entry for third_party.callback.scheduled_outcome, which stays empty because callbacks are disabled and the documents give no outcome for them.",
+  "Added unresolved entry for the 'say it failed' sentence after the second failed write, which has no phrase field and no dictated words.",
+  "Expanded the third-party unresolved entry to include the restrictions (no purpose, no account detail, no paying for the customer, no exception for family).",
+  "Widened source spans for third_party, amounts, phrases and promise_write so they quote the sentences behind their values (prohibited words, today question, the floor stated in line 40, one per item)."
+ ],
+ "unresolved": [
+  "No days-late bands are defined; one catch-all band with the k-date is used.",
+  "Rounding of 15% of amt_due in bottom_line is not stated.",
+  "No paid outcome code exists; 'paid off and closed' closes No-PTP / No-PTP, so paid_outcome is No-PTP and no already-paid sentence is dictated.",
+  "The sentence telling third parties to have the customer call the bank, and the third-party restrictions, have no schema field.",
+  "Callback scheduled_outcome is undefined because callbacks are disabled.",
+  "Conflict: every day is a business day vs 'sun day named -> not recordable'.",
+  "No words are dictated for 'say it failed' after the second write failure.",
+  "create_promise API mismatch: property 'sum' vs required 'amt'.",
+  "Whether a transfer overrides a recorded promise is not stated."
+ ]
+}

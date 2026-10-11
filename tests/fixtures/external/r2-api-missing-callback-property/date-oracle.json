@@ -1,0 +1,100 @@
+{
+  "method": "Every result is computed by bankcal.deadline / next_business_day / is_business_day. Named-weekday callback eligibility intersects the computed next day with Tuesday/Thursday. Null means no allowed callback on that call clock.",
+  "calendar": {
+    "business_days": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "holidays": [
+      "2026-10-14",
+      "2026-10-23",
+      "2026-10-30",
+      "2026-12-24",
+      "2027-01-04"
+    ]
+  },
+  "rows": [
+    {
+      "now": "2026-10-14T09:00",
+      "is_business_day": false,
+      "deadlines": [
+        "2026-10-26",
+        "2026-10-24",
+        "2026-10-31",
+        "2026-11-17"
+      ],
+      "earliest_promise": "2026-10-15",
+      "next_business_day": "2026-10-15",
+      "callback_date_at_09_00": "2026-10-15"
+    },
+    {
+      "now": "2026-10-23T09:00",
+      "is_business_day": false,
+      "deadlines": [
+        "2026-11-04",
+        "2026-11-03",
+        "2026-10-31",
+        "2026-11-17"
+      ],
+      "earliest_promise": "2026-10-24",
+      "next_business_day": "2026-10-24",
+      "callback_date_at_09_00": "2026-10-24"
+    },
+    {
+      "now": "2026-10-24T09:00",
+      "is_business_day": true,
+      "deadlines": [
+        "2026-11-05",
+        "2026-11-04",
+        "2026-10-31",
+        "2026-11-17"
+      ],
+      "earliest_promise": "2026-10-24",
+      "next_business_day": "2026-10-26",
+      "callback_date_at_09_00": "2026-10-26"
+    },
+    {
+      "now": "2026-10-30T09:00",
+      "is_business_day": false,
+      "deadlines": [
+        "2026-11-10",
+        "2026-11-10",
+        "2026-10-31",
+        "2026-11-17"
+      ],
+      "earliest_promise": "2026-10-31",
+      "next_business_day": "2026-10-31",
+      "callback_date_at_09_00": "2026-10-31"
+    },
+    {
+      "now": "2026-12-24T09:00",
+      "is_business_day": false,
+      "deadlines": [
+        "2027-01-05",
+        "2027-01-02",
+        "2026-12-31",
+        "2027-01-16"
+      ],
+      "earliest_promise": "2026-12-25",
+      "next_business_day": "2026-12-25",
+      "callback_date_at_09_00": "2026-12-25"
+    },
+    {
+      "now": "2026-12-31T09:00",
+      "is_business_day": true,
+      "deadlines": [
+        "2027-01-12",
+        "2027-01-11",
+        "2026-12-31",
+        "2027-01-16"
+      ],
+      "earliest_promise": "2026-12-31",
+      "next_business_day": "2027-01-01",
+      "callback_date_at_09_00": "2027-01-01"
+    }
+  ]
+}

@@ -1,0 +1,192 @@
+{
+ "covered": [
+  {
+   "rule": "\u00a71 one to three products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a71 products list, product_id, type, past_due, days_late",
+   "where": "api_fields"
+  },
+  {
+   "rule": "\u00a71 State every product, amount and days late before asking",
+   "where": "multi_product.state_all_before_asking, phrases.debt_intro"
+  },
+  {
+   "rule": "\u00a71 Spoken product names",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "\u00a72 opening verbatim",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\u00a72 \"Is this {{title}} {{last_name}} speaking?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "\u00a72 At most three holder asks; NO-CONTACT/NOT-CLEAR",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a72 do not say arrears, balance, commitment or facility",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a72 robot reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "\u00a73 three questions in order, formats, MONTH/DAY/YEAR",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "\u00a73 format_hint month_word_required reply",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "\u00a73 checks_remaining, FOUR wrong answers",
+   "where": "identity.remaining_slot, identity.wrong_answer_limit"
+  },
+  {
+   "rule": "\u00a73 exhaustion sentence, ID-STOP/BAD-CHECK",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a73 refusal explained once, ID-STOP/NO-CHECK; asking why is not refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "\u00a74 next business day only, 08:10\u201311:40, after now, one alternate",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "\u00a74 Tuesday/Thursday restriction",
+   "where": "unresolved[0]"
+  },
+  {
+   "rule": "\u00a74 BOOKED / NO-SLOT / WRONG-LINE / DEATH + condolence sentence",
+   "where": "third_party.*_outcome, third_party.deceased_sentence"
+  },
+  {
+   "rule": "\u00a75 Monday\u2013Saturday, holiday list",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "\u00a75 next weekday = following week; ask missing month/year",
+   "where": "calendar.next_weekday_means_following_week, calendar.missing_date_parts"
+  },
+  {
+   "rule": "\u00a75 today allowed, roll forward, after-deadline offer deadline, vague once, no eligible date -> DECLINE",
+   "where": "dates"
+  },
+  {
+   "rule": "\u00a75 date before earliest eligible",
+   "where": "unresolved[4]"
+  },
+  {
+   "rule": "\u00a76 band 1\u20134",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "\u00a76 band 5\u201313",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "\u00a76 band 14\u201332",
+   "where": "bands[2]"
+  },
+  {
+   "rule": "\u00a76 band 33\u201380",
+   "where": "bands[3]"
+  },
+  {
+   "rule": "\u00a76 today questions single/several",
+   "where": "phrases.today_question, phrases.all_today_question"
+  },
+  {
+   "rule": "\u00a76 batch question once, per-product counters, common date capped",
+   "where": "multi_product"
+  },
+  {
+   "rule": "\u00a77 floors per type, floor once, floor wording, accept floor..full",
+   "where": "amounts"
+  },
+  {
+   "rule": "\u00a78 \"May I save these exact commitments?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "\u00a78 retry TWICE",
+   "where": "promise_write.retry_on_failure"
+  },
+  {
+   "rule": "\u00a78 change reply / receipt sentence",
+   "where": "phrases.recorded_promise_change_reply, phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\u00a79 already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "\u00a79 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "\u00a79 illness/bereavement/unemployment -> CareDesk",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "\u00a79 restructuring -> PlanDesk ROUTED/REPLAN",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "\u00a79 human -> MainDesk ROUTED/PERSON",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "\u00a79 scam reply",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "\u00a79 unknown information sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "\u00a79 refuse to talk",
+   "where": "special_cases[refuse_to_talk], identity.declined_outcome"
+  },
+  {
+   "rule": "\u00a79 transfer preserves saved promises",
+   "where": "multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "\u00a710 notes for unpromised products, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "\u00a710 precedence",
+   "where": "outcomes.transfer_overrides_promise, outcomes.promise_outcome, outcomes.all_paid_closes_as_paid, outcomes.no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "\u00a710 goodbye before close",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "\u00a711 outcome/reason table",
+   "where": "outcomes.table"
+  }
+ ],
+ "fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late; added a short sentence carrying that content.",
+  "special_cases[refuse_to_talk].action changed from close NO-AGREEMENT/DECLINE to note DECLINE (ends_call true): \u00a79 says the second refusal 'marks remaining products DECLINE', and \u00a710 precedence then decides the close (a saved promise still closes AGREED, an earlier CONTEST product determines the reason).",
+  "Added unresolved entry for 'date precedes the earliest eligible date -> offer the earliest eligible date', which has no IR field; updated the debt-intro and refuse-to-talk unresolved texts."
+ ],
+ "unresolved": [
+  "Callback must be on the next business day AND that day must be Tuesday or Thursday; otherwise no callback date (IR cannot express the weekday filter).",
+  "Hardship sympathetic sentence wording is not dictated.",
+  "Refuse-to-talk close after verification follows \u00a710 precedence; before verification ID-STOP/NO-CHECK.",
+  "debt_intro wording is not dictated.",
+  "Customer date before the earliest eligible date -> offer the earliest eligible date (no IR field)."
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "bands": [
+  "Band I",
+  "Band II",
+  "Band III"
+ ],
+ "identity": [
+  "district",
+  "opening_year",
+  "token"
+ ],
+ "special_cases": [
+  "dispute",
+  "hardship",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "paid_outcome",
+   "text": "Paid route absent: no paid outcome, reason or note. paid_outcome is set to the ordinary no-promise outcome 20 only to satisfy the schema; already-paid remarks do not change the ordinary discussion and never close as a separate paid outcome.",
+   "doc": "tests/fixtures/external/tessel-register/02-codes.md"
+  },
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule; no paid outcome, paid note or payment-posting sentence. Such remarks do not change the ordinary discussion.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "restructuring",
+   "text": "NO restructuring rule; do not synthesize a restructure transfer. Unavailable terms are acknowledged honestly. No discounts, waivers or plans.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "days_late_above_75",
+   "text": "Bands cover days 1\u201375 only; the documents do not say what to do for more than 75 days late.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  },
+  {
+   "topic": "hardship_sentence",
+   "text": "Hardship requires 'one short sympathetic sentence' without dictating its words; 'I am sorry to hear that.' is a written placeholder.",
+   "doc": "tests/fixtures/external/tessel-register/01-register.md"
+  }
+ ],
+ "audit_fixed": [
+  "No substantive value errors found: all values, enum codes (outcomes 10-50, reasons R10-R54, queues Desk-4/Care-4, fields district/opening_year/token, types giro/plazo) match the documents and openapi.json.",
+  "Extended source spans: identity source now cites 'get_account only after all three pass'; amounts source cites the below-floor, never-above-full and no-discounts sentences; phrases source cites the dictated intro and today question.",
+  "Clarified the hardship_sentence unresolved entry to say the sympathetic sentence is a written placeholder, and added 'No discounts, waivers or plans' to the restructuring unresolved entry."
+ ]
+}

@@ -1,0 +1,377 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "eb4334c3-4477-4510-b5d3-90f97d131499",
+ "iteration_id": "d9a208cf-a298-4c83-9d34-20c77b921758",
+ "seconds": 119,
+ "passed": 4,
+ "total": 8,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-03",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-06",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-09",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "b8034603-6aa4-4879-8fa9-2fee93bd1482",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_4b6c425c-2db",
+   "slowest_turn_s": 17.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "outcome ('not_reached', 'no_callback'), expected ('not_reached', 'callback')",
+    "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+    "conversation: The agent failed to meet the specific callback requirements. Specifically: - The `schedule_callback` function was never called, despite the success criteria requiring it to fire for 2026-10-15 at 11:00. - The call outcome was recorded as `not_reached` with a reason of `no_callback` instead of the required `not_reached/callback` outcome. - Message 6 confirms the agent's intent to not schedule a cal"
+   ],
+   "call_id": "b8866bc2-ab81-4c5a-ae8f-8535cdd0a16e",
+   "tools": [
+    "close_call"
+   ],
+   "customer_id": "c_b1113319-b38",
+   "slowest_turn_s": 2.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "bfbcea68-7c93-4bc8-82fa-d133591d6427",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_c5b42a64-d3c",
+   "slowest_turn_s": 2.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "a503f884-a9b1-4930-9553-a63c06f502cb",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_b85ec26c-194",
+   "slowest_turn_s": 15.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "promises [], expected [('p1', 260.0, '2026-10-16')]",
+    "conversation: The assistant failed to record the promise as required by the success criteria. While the assistant did offer sympathy (Message 8) and correctly closed the call with the 'no_promise/hardship' outcome according to system events, it explicitly stated in Message 10 that it would not record a promise. Furthermore, there are no system events indicating that a promise was created or recorded in the data"
+   ],
+   "call_id": "d8b864b7-7d28-46a9-88f5-e0939043b51f",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_cadb426c-19a",
+   "slowest_turn_s": 2.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "outcome ('no_promise', 'refused'), expected ('promise', None)",
+    "promises [], expected [('p1', 637.5, '2026-10-16')]",
+    "conversation: The agent failed to secure a promise for the floor amount on the required date (2026-10-16). Although the agent offered the floor on that date in [Message 8], it pivoted to a different date (October 23) in [Message 10] after the user mentioned a lower amount. Furthermore, while the user was in the middle of agreeing to pay the floor amount in [Message 11], the agent abruptly terminated the interac"
+   ],
+   "call_id": "0822f219-b921-4d14-b310-7039945b91cf",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_ee151912-665",
+   "slowest_turn_s": 14.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 540.0, '2026-10-23')], expected [('p1', 540.0, '2026-10-16')]",
+    "conversation: - The promise was recorded for 2026-10-23 instead of the required 2026-10-16. - The assistant performed a second read-back of the promise details in [Message 10] after the user asked an unrelated question, which violated the requirement of no second read-back or re-ask."
+   ],
+   "call_id": "a7190113-0828-4dee-a8d1-64d902b22484",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_95bc0106-bee",
+   "slowest_turn_s": 6.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "b34e6aed-04a7-4810-a314-2eff6430b1fc",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_7de7a35e-7d2",
+   "slowest_turn_s": 2.6,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "b8034603-6aa4-4879-8fa9-2fee93bd1482",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_4b6c425c-2db",
+    "slowest_turn_s": 17.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "outcome ('not_reached', 'no_callback'), expected ('not_reached', 'callback')",
+     "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+     "conversation: The agent failed to meet the specific callback requirements. Specifically: - The `schedule_callback` function was never called, despite the success criteria requiring it to fire for 2026-10-15 at 11:00. - The call outcome was recorded as `not_reached` with a reason of `no_callback` instead of the required `not_reached/callback` outcome. - Message 6 confirms the agent's intent to not schedule a cal"
+    ],
+    "call_id": "b8866bc2-ab81-4c5a-ae8f-8535cdd0a16e",
+    "tools": [
+     "close_call"
+    ],
+    "customer_id": "c_b1113319-b38",
+    "slowest_turn_s": 2.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "bfbcea68-7c93-4bc8-82fa-d133591d6427",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_c5b42a64-d3c",
+    "slowest_turn_s": 2.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "a503f884-a9b1-4930-9553-a63c06f502cb",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_b85ec26c-194",
+    "slowest_turn_s": 15.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "promises [], expected [('p1', 260.0, '2026-10-16')]",
+     "conversation: The assistant failed to record the promise as required by the success criteria. While the assistant did offer sympathy (Message 8) and correctly closed the call with the 'no_promise/hardship' outcome according to system events, it explicitly stated in Message 10 that it would not record a promise. Furthermore, there are no system events indicating that a promise was created or recorded in the data"
+    ],
+    "call_id": "d8b864b7-7d28-46a9-88f5-e0939043b51f",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_cadb426c-19a",
+    "slowest_turn_s": 2.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "outcome ('no_promise', 'refused'), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "conversation: The agent failed to secure a promise for the floor amount on the required date (2026-10-16). Although the agent offered the floor on that date in [Message 8], it pivoted to a different date (October 23) in [Message 10] after the user mentioned a lower amount. Furthermore, while the user was in the middle of agreeing to pay the floor amount in [Message 11], the agent abruptly terminated the interac"
+    ],
+    "call_id": "0822f219-b921-4d14-b310-7039945b91cf",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_ee151912-665",
+    "slowest_turn_s": 14.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 540.0, '2026-10-23')], expected [('p1', 540.0, '2026-10-16')]",
+     "conversation: - The promise was recorded for 2026-10-23 instead of the required 2026-10-16. - The assistant performed a second read-back of the promise details in [Message 10] after the user asked an unrelated question, which violated the requirement of no second read-back or re-ask."
+    ],
+    "call_id": "a7190113-0828-4dee-a8d1-64d902b22484",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_95bc0106-bee",
+    "slowest_turn_s": 6.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "b34e6aed-04a7-4810-a314-2eff6430b1fc",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_7de7a35e-7d2",
+    "slowest_turn_s": 2.6,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

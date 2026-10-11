@@ -1,0 +1,136 @@
+{
+ "covered": [
+  {
+   "rule": "\u00a71 one to three products",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a71 product_id / type / past_due / days_late named",
+   "where": "api_fields"
+  },
+  {
+   "rule": "\u00a71 State every product, amount and days late before asking",
+   "where": "multi_product.state_all_before_asking, phrases.debt_intro"
+  },
+  {
+   "rule": "\u00a71 Spoken product names",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "\u00a72 Say verbatim opening",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\u00a72 Is this {{title}} {{last_name}} speaking?",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "\u00a72 At most three holder asks; NO-CONTACT/NOT-CLEAR",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a72 do not say arrears, balance, commitment or facility",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a72 guaranteed/penalty/lawsuit never spoken",
+   "where": "phrases.prohibited_before_verification + unresolved"
+  },
+  {
+   "rule": "\u00a72 robot reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "\u00a73 three questions in order, formats, MONTH/DAY/YEAR",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "\u00a73 format_hint month_word_required",
+   "where": "identity.requirements[0].hint_field/hint_reply"
+  },
+  {
+   "rule": "\u00a73 checks_remaining, FOUR wrong answers",
+   "where": "identity.remaining_slot, identity.wrong_answer_limit, identity.wrong_count_source"
+  },
+  {
+   "rule": "\u00a73 exhaustion sentence, ID-STOP/BAD-CHECK",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a73 refusal explained once, ID-STOP/NO-CHECK; asking why is not refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "\u00a74 callback next business day 08:10\u201311:40, after now, one alternate",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "\u00a74 BOOKED / NO-SLOT / WRONG-LINE / DEATH + condolences",
+   "where": "third_party"
+  },
+  {
+   "rule": "\u00a75 Mon\u2013Sat business days, holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "\u00a75 next weekday = following week; ask for missing month/year",
+   "where": "calendar.next_weekday_means_following_week, calendar.missing_date_parts"
+  },
+  {
+   "rule": "\u00a75 today eligible, roll forward if eligible, after deadline offer deadline, vague once, no eligible date -> DECLINE",
+   "where": "dates"
+  },
+  {
+   "rule": "\u00a76 four bands with deadlines and attempts",
+   "where": "bands"
+  },
+  {
+   "rule": "\u00a76 today questions single/batch",
+   "where": "phrases.today_question, phrases.all_today_question, multi_product.ask_all_today_once"
+  },
+  {
+   "rule": "\u00a76 common date capped per product",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "\u00a77 floors per type, floor once, floor wording, floor..full",
+   "where": "amounts"
+  },
+  {
+   "rule": "\u00a78 confirm phrase, retry TWICE, one promise per product, receipt sentence, change reply",
+   "where": "promise_write, phrases.after_promise_sentence, phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "\u00a79 already paid / dispute / hardship / restructuring / human / scam / refuse",
+   "where": "special_cases"
+  },
+  {
+   "rule": "\u00a79 unknown information sentence",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "\u00a710 notes on non-transfer calls, reasons, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "\u00a710 precedence and goodbye",
+   "where": "outcomes"
+  },
+  {
+   "rule": "\u00a711 outcome/reason table, queues",
+   "where": "outcomes.table, special_cases[*].action.queue"
+  }
+ ],
+ "fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late; wrote a short sentence carrying only that content.",
+  "api_fields: added get_account.list/id/type/past_due/days_late and create_promise.ok because \u00a71 and \u00a78 name these API properties.",
+  "Added 'A historic closed or paid-off product is instead a dispute' to the dispute source span, and \u00a76/\u00a79 sentences to the multi_product, amounts and promise_write source spans.",
+  "unresolved: reworded the refuse_to_talk entry (after verification the close follows \u00a710 precedence) and added the 'offer earliest eligible date' rule, which has no IR field."
+ ],
+ "unresolved": [
+  "guaranteed/penalty/lawsuit are forbidden for the whole call, but the IR only has a list of words forbidden before verification.",
+  "The hardship sympathetic sentence and the debt introduction wording are not dictated.",
+  "After verification, a second refusal to talk marks the remaining products DECLINE and closes under \u00a710 precedence; the close action NO-AGREEMENT/DECLINE only applies when no promise was saved.",
+  "Below-floor counteroffer, the ban on discounts/waivers/plans, and offering the earliest eligible date for an early date have no IR fields."
+ ]
+}

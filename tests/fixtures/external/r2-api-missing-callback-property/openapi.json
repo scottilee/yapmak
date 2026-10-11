@@ -1,0 +1,566 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vesper Reach Bank collections API",
+    "version": "r2-1"
+  },
+  "servers": [
+    {
+      "url": "https://vesper-r2.example.invalid/v1"
+    }
+  ],
+  "paths": {
+    "/verify_identity": {
+      "post": {
+        "operationId": "verify_identity",
+        "summary": "verify_identity under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "registered_birth_date",
+                      "access_code",
+                      "district"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "Normalized complete answer to exactly one security question."
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "field",
+                  "answer"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "verified": {
+                      "type": "boolean"
+                    },
+                    "all_verified": {
+                      "type": "boolean"
+                    },
+                    "checks_remaining": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "format_hint": {
+                      "type": "string",
+                      "enum": [
+                        "month_word_required"
+                      ],
+                      "description": "Recoverable birth-date ambiguity; this response does not decrement checks_remaining."
+                    }
+                  },
+                  "required": [
+                    "ok",
+                    "verified",
+                    "all_verified",
+                    "checks_remaining"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/get_account": {
+      "post": {
+        "operationId": "get_account",
+        "summary": "get_account under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  }
+                },
+                "required": [
+                  "customer_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "products": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 3,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": {
+                            "type": "string",
+                            "description": "Unique product identifier for write operations."
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "reserve_line",
+                              "travel_credit",
+                              "home_bridge"
+                            ]
+                          },
+                          "past_due": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Full overdue amount."
+                          },
+                          "days_late": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 80
+                          },
+                          "reserve_minimum": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable amount for its corresponding product type, as specified in the policy."
+                          },
+                          "travel_minimum": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable amount for its corresponding product type, as specified in the policy."
+                          },
+                          "bridge_minimum": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable amount for its corresponding product type, as specified in the policy."
+                          }
+                        },
+                        "required": [
+                          "product_id",
+                          "type",
+                          "past_due",
+                          "days_late"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/create_promise": {
+      "post": {
+        "operationId": "create_promise",
+        "summary": "create_promise under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0.01
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "product_id",
+                  "amount",
+                  "date"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/add_note": {
+      "post": {
+        "operationId": "add_note",
+        "summary": "add_note under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "product_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "DECLINE",
+                      "DIFFICULTY",
+                      "CONTEST",
+                      "SETTLED",
+                      "SAVE-ERROR"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "product_id",
+                  "reason"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/schedule_callback": {
+      "post": {
+        "operationId": "schedule_callback",
+        "summary": "schedule_callback under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "date",
+                  "time",
+                  "routing_token"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/transfer_to_agent": {
+      "post": {
+        "operationId": "transfer_to_agent",
+        "summary": "transfer_to_agent under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "CareDesk",
+                      "PlanDesk",
+                      "MainDesk"
+                    ]
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "queue"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    },
+    "/close_call": {
+      "post": {
+        "operationId": "close_call",
+        "summary": "close_call under the supplied bank policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string",
+                    "description": "Customer identifier from call variable customer_id."
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "AGREED",
+                      "SETTLED",
+                      "ROUTED",
+                      "NO-AGREEMENT",
+                      "ID-STOP",
+                      "NO-CONTACT"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "REPLAN",
+                      "PERSON",
+                      "CARE",
+                      "DECLINE",
+                      "DIFFICULTY",
+                      "CONTEST",
+                      "SAVE-ERROR",
+                      "BAD-CHECK",
+                      "NO-CHECK",
+                      "BOOKED",
+                      "NO-SLOT",
+                      "WRONG-LINE",
+                      "DEATH",
+                      "NOT-CLEAR"
+                    ]
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "outcome"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspect ok; false means the requested action was not completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "description": "True only when the bank action completed. HTTP status alone is insufficient."
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "No action completed; follow the policy retry limit."
+          }
+        }
+      }
+    }
+  }
+}

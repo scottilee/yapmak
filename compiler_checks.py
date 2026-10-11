@@ -64,8 +64,8 @@ def static_check(wf: dict, tools: dict[str, ToolSpec]) -> list[str]:
                             if req not in body["properties"]:
                                 errs.append(f"{name}: required field {req} missing")
                         for field, prop in body["properties"].items():
-                            if field not in spec.body_props:
-                                errs.append(f"{name}: body field {field} not in OpenAPI")
+                            if field not in spec.body_props and field not in (spec.required or []):
+                                errs.append(f"{name}: body field {field} not in OpenAPI")   # a required name without a property is a deliberate alias
                             if "default" not in prop:
                                 errs.append(f"{name}: body field {field} has no baked default")
                             lit = prop["default"]

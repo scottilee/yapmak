@@ -1,0 +1,70 @@
+{
+  "axis": "oneof",
+  "classification": "valid_contract",
+  "operations": [
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "schedule_callback",
+    "transfer_to_agent",
+    "close_call"
+  ],
+  "source": "openapi.json",
+  "assertions": [
+    {
+      "branch_specific_required_and_enums_preserved": true,
+      "every_valid_body_matches_exactly_one_branch": true
+    }
+  ],
+  "samples": [
+    {
+      "operation": "close_call",
+      "direction": "request",
+      "valid": true,
+      "body": {
+        "customer_id": "synthetic",
+        "outcome": "AGREED"
+      }
+    },
+    {
+      "operation": "close_call",
+      "direction": "request",
+      "valid": true,
+      "body": {
+        "customer_id": "synthetic",
+        "outcome": "ROUTED",
+        "reason": "CARE"
+      }
+    },
+    {
+      "operation": "close_call",
+      "direction": "request",
+      "valid": false,
+      "body": {
+        "customer_id": "synthetic",
+        "outcome": "ROUTED"
+      }
+    },
+    {
+      "operation": "close_call",
+      "direction": "request",
+      "valid": false,
+      "body": {
+        "customer_id": "synthetic",
+        "outcome": "AGREED",
+        "reason": "CARE"
+      }
+    },
+    {
+      "operation": "close_call",
+      "direction": "request",
+      "valid": false,
+      "body": {
+        "customer_id": "synthetic",
+        "outcome": "NO-AGREEMENT",
+        "reason": "CARE"
+      }
+    }
+  ]
+}

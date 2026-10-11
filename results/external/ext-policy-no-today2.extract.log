@@ -1,0 +1,28 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [],
+ "audit_fixed": [
+  "special_cases[hardship].say was empty although \u00a79 requires 'one short sympathetic sentence'; added a short sentence carrying exactly that content.",
+  "api_fields: \u00a71 names get_account's fields itself ('returns the products list; product_id identifies a product, type is its type, past_due is the full amount and days_late determines its band') and \u00a78 names ok=true for create_promise; added get_account.list/id/type/past_due/days_late and create_promise.ok.",
+  "Extended source spans (amounts, outcomes, multi_product, phrases) to quote the supporting sentences for below-floor counteroffer, omitted reasons, per-product counters and the cannot-answer sentence."
+ ]
+}

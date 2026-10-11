@@ -1,0 +1,15 @@
+PASS PUB-01 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-02 hard   Unlike round: conversation boundaries | close_call
+PASS PUB-03 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-04 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-05 hard   Unlike round: conversation boundaries | verify > verify > get_account > transfer_to_agent > close_call
+FAIL PUB-06 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+       - conversation: The assistant failed criterion A26 because it did not explain that the unpaid remainder stays overdue; when the user asked about the rest of the balance in message 9, the assistant claimed in message 10 not to have that information. The assistant
+PASS PUB-07 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-08 hard   Unlike round: conversation boundaries | verify > verify > get_account > close_call
+PASS PUB-09 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > close_call
+PASS PUB-10 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 10 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation 64b3c8b2-3e8e-4feb-b926-4b4af33ecdcd, status completed, 118 s.

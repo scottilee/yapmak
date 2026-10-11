@@ -1,0 +1,545 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+  "tests/fixtures/external/gv-finance-sheet/02-codes.txt"
+ ],
+ "bank_name": "GRIMSBY VALE FINANCE",
+ "identity": {
+  "requirements": [
+   {
+    "field": "sec_code",
+    "ask_text": "What are the four digits of your security code?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+     "text": "ask exactly: \"What are the four digits of your security code?\" - push to verify_identity. digits, exactly 4 digits, leading zeros kept."
+    }
+   }
+  ],
+  "wrong_answer_limit": 3,
+  "wrong_count_source": "api",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "ID-F",
+   "G01"
+  ],
+  "declined_outcome": [
+   "ID-F",
+   "G02"
+  ],
+  "unclear_holder_outcome": [
+   "NOANS",
+   "D60"
+  ],
+  "failed_instruction": "Please use the GVF app.",
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "wrong cap = 3 for the whole check (follow tries_left from the API, not your own tally). cap burnt -> exactly \"Please use the GVF app.\" -> close ID-F / G01. refusing -> explain once (why the check protects the acct) -> refuse again -> close ID-F / G02. \"why do you need it?\" is a question, not a refusal. 2 asks max, then close NOANS / D60."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": false,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": false,
+   "scheduled_outcome": [
+    "NOANS",
+    "CNA"
+   ],
+   "no_callback_outcome": [
+    "NOANS",
+    "CNA"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "NO callback booking. say: the customer is to call GRIMSBY VALE FINANCE on the number printed on the statement. close NOANS / CNA."
+   }
+  },
+  "wrong_number_outcome": [
+   "NOANS",
+   "NR"
+  ],
+  "deceased_outcome": [
+   "NOANS",
+   "DECD"
+  ],
+  "deceased_sentence": "We extend our condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "no purpose, no acct detail, no paying for the customer, no exception for family. wrong number -> close NOANS / NR. deceased -> exactly \"We extend our condolences.\" -> close NOANS / DECD."
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "business day = every day of the week. no shutdown days. \"next fri\" = fri of the following week even when said on a fri. missing bits: fold to the next occurrence."
+  }
+ },
+ "bands": [
+  {
+   "name": "all",
+   "days_late_min": 0,
+   "days_late_max": 100000,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 20,
+    "month_offset": 1,
+    "adjustment": "none"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "k-date = the 20th of the month after the call. only that. ZERO persuasion. one no and the call is over"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "max_of",
+    "field": "min_pmt",
+    "percent": 15
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "accepts: wide range bottom_line..full. bottom_line = greater(min_pmt, 15% of amt_due). never above amt_due. no counter offers, no \"what can you do\" questions, ever. under bottom_line -> can't record it. if it stays there, that no stands."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": false,
+  "vague_ask_once_then_deadline": false,
+  "after_deadline_offer_deadline": false,
+  "past_deadline": "next_business_day",
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "promise date ok when: today or later, a business day, no later than the k-date. sun day named, past date named, or date past the k-date -> not recordable. no nudging to the next business day. vague -> get the exact day once. still vague -> the call ends there (No-PTP / No-PTP)."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "Customer says it is not their debt, they never had it, or it was paid off and closed.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "No-PTP"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "\"not my debt\", \"never had it\", \"it was paid off and closed\": don't argue, don't take a promise, close No-PTP / No-PTP."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "Customer will not talk.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "No-PTP"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "will not talk -> close No-PTP / No-PTP at once."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "Customer wants a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "GVF-THREAD",
+    "outcome": "TR-H",
+    "reason": "HUM"
+   },
+   "say": "Connecting you to a person.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "wants a person -> transfer GVF-THREAD, say exactly \"Connecting you to a person.\" close TR-H / HUM."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "Customer says the amount due is too big to pay.",
+   "action": {
+    "type": "close",
+    "outcome": "No-PTP",
+    "reason": "No-PTP"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "amt_due too big -> no ability to split here. if they name nothing in range -> the call ends there."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "Customer asks for a discount, a waiver, a payment plan or a change of terms.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "no discounts, no waivers, no plans, no promises about terms. none."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "Customer asks whether they are talking to a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "GVF assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "ROBOT Q  -> exactly \"GVF assistant.\" -> carry on."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "Customer asks whether the call is a scam or genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Call the number printed on your statement to check us.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "SCAM Q   -> exactly \"Call the number printed on your statement to check us.\" -> carry on."
+   }
+  },
+  {
+   "name": "holder_not_confirmed_yet",
+   "trigger": "When asked whether they are the customer, the person only says hello or \"go ahead\", or asks a question, instead of confirming.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "hello / \"go ahead\" / a question \u2260 yes it's me. answer the question first, then ask again."
+   }
+  },
+  {
+   "name": "change_recorded_promise",
+   "trigger": "Customer wants to change a promise that was already recorded.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please use the GVF app to change it.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "recorded promise stays as-is; change requests -> say to use the GVF app."
+   }
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "Customer asks anything else the agent cannot answer.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "GVF staff on the main line can answer that.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+    "text": "anything else you can't answer -> exactly \"GVF staff on the main line can answer that.\" invent nothing."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "PTP",
+    "reasons": [],
+    "when": "a promise was recorded"
+   },
+   {
+    "outcome": "No-PTP",
+    "reasons": [
+     "No-PTP",
+     "R07"
+    ],
+    "when": "no promise; R07 after the second failed promise write"
+   },
+   {
+    "outcome": "ID-F",
+    "reasons": [
+     "G01",
+     "G02"
+    ],
+    "when": "G01 security cap burnt; G02 refused security check twice"
+   },
+   {
+    "outcome": "NOANS",
+    "reasons": [
+     "D60",
+     "NR",
+     "DECD",
+     "CNA"
+    ],
+    "when": "D60 holder not confirmed after 2 asks; NR wrong number; DECD deceased; CNA third party"
+   },
+   {
+    "outcome": "TR-H",
+    "reasons": [
+     "HUM"
+    ],
+    "when": "customer wants a person"
+   },
+   {
+    "outcome": "S8",
+    "reasons": [],
+    "when": "reserved, not used by call sheet 4"
+   }
+  ],
+  "promise_outcome": "PTP",
+  "paid_outcome": "No-PTP",
+  "transfer_outcome": "TR-H",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "No-PTP",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "R07",
+  "refused_reason": "No-PTP",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/02-codes.txt",
+   "text": "PTP: (no reason) No-PTP: No-PTP | R07 ID-F: G01 | G02 NOANS: D60 | NR | DECD | CNA TR-H: HUM S8: (no reason) \u2014 reserved, not used by call sheet 4"
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "openapi.json",
+   "text": "add_note: Recorded for completeness only. Call sheet 4 directs no add_note call."
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "array: items. at most 1. (one product: no group question)."
+  }
+ },
+ "phrases": {
+  "opening": "GRIMSBY VALE FINANCE automated collections line. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I through to {{title}} {{last_name}}?",
+  "debt_intro": "Your {{product}} has {{amount}} due and is {{days_late}} days late.",
+  "today_question": "Can you settle the amount today?",
+  "all_today_question": "",
+  "robot_reply": "GVF assistant.",
+  "scam_reply": "Call the number printed on your statement to check us.",
+  "prohibited_before_verification": [
+   "owe",
+   "overdue",
+   "arrears",
+   "deadline",
+   "amount",
+   "payment"
+  ],
+  "after_promise_sentence": "A text from GV Fin will confirm this arrangement.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "GVF staff on the main line can answer that.",
+  "recorded_promise_change_reply": "Please use the GVF app to change it.",
+  "product_naming": {
+   "hp": "hire purchase",
+   "spark": "Sparq credit line",
+   "cc_rev": "GVF revolving card"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "say once, exactly: \"GRIMSBY VALE FINANCE automated collections line. We record this call.\" then: \"Am I through to {{name_title}} {{last}}?\" until every security answer passes, never say: owe, overdue, arrears, deadline, amount, payment. state amt_due + dl_days flat, no dressing up. ask full amt_due: \"Can you settle the amount today?\" hp = hire purchase, spark = Sparq credit line, cc_rev = GVF revolving card."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Record that now?",
+  "source": {
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+   "text": "read back: item, amount, date, then exactly: \"Record that now?\" clean yes to the unchanged figures -> create_promise, one per item. write fails -> retry once. 2nd failure -> say it failed, close No-PTP / R07."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "bands",
+   "text": "The documents define no days-late bands; a single band covering every days-late value is used with the k-date (20th of the month after the call). The upper bound 100000 is a technical catch-all, not a document value.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "attempts",
+   "text": "ZERO persuasion: no attempts after the today question; one no ends the call (No-PTP / No-PTP). Customer may still name an amount in bottom_line..amt_due and a valid date. floor_offered_once is left at its default although the floor is never offered (no counter offers).",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "floor rounding",
+   "text": "bottom_line = greater(min_pmt, 15% of amt_due); the documents do not say how 15% is rounded.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "paid_outcome",
+   "text": "No paid outcome exists in the v-codes sheet; 'it was paid off and closed' is grouped with the dispute lines and closes No-PTP / No-PTP, so paid_outcome is set to No-PTP and no separate already_paid case is created. No already-paid sentence is dictated.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/02-codes.txt"
+  },
+  {
+   "topic": "third party message",
+   "text": "Third parties are told the customer is to call GRIMSBY VALE FINANCE on the number printed on the statement; there is no phrase field for this sentence. Third parties get no purpose, no account detail, cannot pay for the customer, no exception for family; no schema field expresses these.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "callback scheduled_outcome",
+   "text": "Callbacks are disabled ('NO callback booking'), so the documents give no scheduled-callback outcome. Every third-party call closes NOANS / CNA, so third_party.callback.scheduled_outcome repeats that pair; it is never used because no callback is ever booked.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "Sunday vs business days",
+   "text": "The sheet defines 'business day = every day of the week. no shutdown days.' but also says 'sun day named ... -> not recordable'. The explicit business-day definition (all seven days) is kept; whether a Sunday promise date must be refused is not settled.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "write failure sentence",
+   "text": "After the 2nd failed write the agent must 'say it failed'; no phrase field exists for this and no words are dictated.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "create_promise field names",
+   "text": "The API lists the amount property as 'sum' but requires 'amt'; the call sheet says item_id is what create_promise wants as product_id while the API property is item_id.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "transfer vs promise precedence",
+   "text": "The documents do not say whether a transfer outcome overrides a recorded promise; default kept.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  }
+ ]
+}

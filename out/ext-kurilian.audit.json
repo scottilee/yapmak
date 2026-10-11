@@ -1,0 +1,187 @@
+{
+ "covered": [
+  {
+   "rule": "OPEN: Say EXACTLY \"KCB automated collections line. We record this call.\"",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "OPEN: EXACTLY \"Am I speaking with {{title}} {{last_name}}?\" / address as {{title}} {{last_name}}",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "OPEN: 2 asks max, then close VOID / JCB-unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "OPEN: hello / go ahead / a question is not confirmation",
+   "where": "identity.holder_confirmation_asks (template behaviour)"
+  },
+  {
+   "rule": "OPEN: forbidden words owe, overdue, arrears, facility, payment before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "ROBOT: EXACTLY \"KCB assistant.\" Continue",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "SCAM: EXACTLY \"Phone the number printed on your statement to verify.\" Continue",
+   "where": "phrases.scam_reply, special_cases[scam]"
+  },
+  {
+   "rule": "THIRD PARTIES: do not book a callback",
+   "where": "third_party.callback.enabled"
+  },
+  {
+   "rule": "THIRD PARTIES: \"Please ask {{title}} {{last_name}} to call us...\"",
+   "where": "unresolved[third-party sentence and outcome]"
+  },
+  {
+   "rule": "THIRD PARTIES: wrong number -> VOID / RNG",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "SECURITY: one question, sec_code, digits exactly 4, leading zeros kept",
+   "where": "identity.requirements[0]"
+  },
+  {
+   "rule": "SECURITY: no recoverable-format hint",
+   "where": "identity.requirements[0].hint_field (empty)"
+  },
+  {
+   "rule": "SECURITY: max wrong answers = 2, use tries_left",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot, api_fields.verify_identity.remaining"
+  },
+  {
+   "rule": "SECURITY: exhausted -> \"Please use the KCB app.\" -> DEC / F01",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "SECURITY: one explanation, second refusal -> DEC / F02",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "SECURITY: \"Why do you need it?\" is not a refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "ACCOUNT: one product only, prod_kind always loan; fields prod_kind, amt_due, dl_days",
+   "where": "multi_product.max_products, phrases.product_naming, api_fields"
+  },
+  {
+   "rule": "ACCOUNT: State exactly \"I am calling about the overdue loan of Kurilian Co-operative Bank.\"",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "ACCOUNT: then state amt_due and dl_days; no today question dictated",
+   "where": "unresolved[today question]"
+  },
+  {
+   "rule": "DATES: every day is a business day, no holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "DATES: next <weekday> = following calendar week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "DATES: \"the 15th\" -> next occurrence on or after today",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "DATES: no k-date, no upper limit; today or any later day",
+   "where": "dates.promise_today_allowed, bands (empty), unresolved[bands / deadline]"
+  },
+  {
+   "rule": "AMOUNTS: only full amt_due, no floor",
+   "where": "amounts.floor_rules.loan (field amt_due = full amount)"
+  },
+  {
+   "rule": "AMOUNTS: ZERO persuasion, first no -> No-PTP / R07",
+   "where": "amounts.floor_offered_once=false, outcomes.refused_reason, unresolved[persuasion attempts]"
+  },
+  {
+   "rule": "AMOUNTS: below-full -> \"That is below what we can take.\" -> No-PTP / R07",
+   "where": "unresolved[below-full proposal sentence]"
+  },
+  {
+   "rule": "AMOUNTS: vague period -> ask once, then No-PTP / R07",
+   "where": "dates.vague_ask_once_then_deadline=false, unresolved[vague date]"
+  },
+  {
+   "rule": "READ-BACK: \"Amount {{amt_due}}, on {{date}}. Save that?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "WRITE: retry once; second failure -> No-PTP / R07, say the write failed",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason, unresolved[write failure sentence]"
+  },
+  {
+   "rule": "After promise: \"KCB will text you to confirm this promise.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "Alter recorded promise: \"Use the KCB app to change a recorded promise.\"",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "Not my debt / never had it / paid off and closed -> No-PTP / R07",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "Refuses to talk -> No-PTP / R07 at once",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "Asks for a human -> kcb_desk, transferred / kcb_person",
+   "where": "special_cases[human], outcomes.transfer_outcome"
+  },
+  {
+   "rule": "Restructure / instalment request -> kcb_desk / kcb_person",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "Cannot answer -> \"Use the KCB app for details.\"",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "No hardship rule",
+   "where": "unresolved[hardship]"
+  },
+  {
+   "rule": "No already-paid rule",
+   "where": "unresolved[already_paid], outcomes.paid_outcome (empty)"
+  },
+  {
+   "rule": "No add_note; notes not used",
+   "where": "notes.enabled=false"
+  },
+  {
+   "rule": "FINALIZATION: one close_call last; thank and say goodbye",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "Codes file: PTP none, No-PTP R07, DEC F01|F02, VOID RNG|JCB-unclear, transferred kcb_person",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "Supervisor mail: one question, no callback, no notes, no transfer except human queue",
+   "where": "identity.requirements, third_party.callback.source, notes.source, special_cases"
+  }
+ ],
+ "fixed": [
+  "third_party.callback.source: cited the supervisor mail together with the call sheet's own 'DO NOT book a callback' rule, because the two documents agree.",
+  "notes.source: changed to the supervisor mail ('no notes') and listed the call sheet and codes file as agreeing. Nothing about how notes work was changed.",
+  "Checked every other value against the documents and the API enums (sec_code, prod_kind loan, kcb_desk, PTP/No-PTP/DEC/VOID/transferred, R07/F01/F02/RNG/JCB-unclear/kcb_person). All are supported; no other changes were needed. The three documents do not conflict."
+ ],
+ "unresolved": [
+  "The documents define no days-late bands and no deadline, so bands is empty. The validator needs at least one band, and making one up would invent a threshold.",
+  "No question about paying today is dictated, so today_question is empty.",
+  "The third-party sentence and the below-full-proposal sentence have no phrase field. The documents give no close outcome for a third party who is not a wrong number.",
+  "The documents do not say what to say when the write fails; they only say to say that it failed.",
+  "Deceased account holder is not covered.",
+  "Promise recorded and then a transfer: the documents do not say which outcome wins; the default is kept.",
+  "Hardship and already-paid have no rule; statements of that kind have no defined route other than the dispute wording ('it was paid off and closed').",
+  "The callback and deceased outcome pairs stay empty because callbacks are not used and deceased is not covered. A strict check of these pairs may flag them as empty."
+ ]
+}

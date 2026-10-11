@@ -1,0 +1,243 @@
+{
+ "covered": [
+  {
+   "rule": "Authority: register is complete policy; 02 sole code list",
+   "where": "source_docs"
+  },
+  {
+   "rule": "Opening: Say verbatim \"This is Tessel Savings Bank\u2019s automated assistant. We record this call.\"",
+   "where": "phrases.opening, phrases.opening_verbatim"
+  },
+  {
+   "rule": "\"Am I speaking with {{title}} {{last_name}}?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "Two asks maximum ... then 50/R50 if unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "No debt, arrears, payment, product or associated details before all checks pass",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "ID order district / opening_year / token with formats",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "token exactly five digits, retain leading zeros",
+   "where": "identity.requirements[2].digits"
+  },
+  {
+   "rule": "No date question; no hint exception",
+   "where": "identity.requirements (no hint_field/hint_reply)"
+  },
+  {
+   "rule": "Two wrong answers TOTAL; API tries_left authoritative",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot, api_fields.verify_identity.remaining"
+  },
+  {
+   "rule": "Exhaustion: \"Please contact a Tessel branch.\" then 40/R40",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "Explicit refusal: explain once, second refusal 40/R41; purpose questions not refusals",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "Third party callback next business day 16:05-18:35, after now, one alternate",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "Scheduled 50/R51; twice invalid or declined 50/R52",
+   "where": "third_party.callback.scheduled_outcome, no_callback_outcome"
+  },
+  {
+   "rule": "Wrong number 50/R53",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "Deceased: \"Please accept our sympathy.\" then 50/R54",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "Exactly ONE product in cartera",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "contrato=id, clase=type, amt_due=full amount, dl_days=days late",
+   "where": "api_fields"
+  },
+  {
+   "rule": "giro spoken revolving account, plazo spoken term loan",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "Intro: \"I am calling about the overdue account.\"",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "Ask once: \"Can you pay this today?\"",
+   "where": "phrases.today_question"
+  },
+  {
+   "rule": "Calendar Mon-Sat open, Sunday closed",
+   "where": "calendar.business_days"
+  },
+  {
+   "rule": "Only holiday 2026-12-24",
+   "where": "calendar.holidays"
+  },
+  {
+   "rule": "Next weekday means following calendar week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "Missing month or year: ask",
+   "where": "calendar.missing_date_parts"
+  },
+  {
+   "rule": "Band I days 1-5: today + 3 calendar days preceding; zero attempts",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "Band II days 6-25: 20th of next month preceding; zero attempts",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "Band III days 26-75: earliest of today+10 calendar preceding / last business day of month; zero attempts",
+   "where": "bands[2]"
+  },
+  {
+   "rule": "Expired limit: no promise; 20/R10",
+   "where": "dates.past_deadline, outcomes.refused_reason"
+  },
+  {
+   "rule": "Ask full amt_due first",
+   "where": "amounts.full_first"
+  },
+  {
+   "rule": "Floor fixed 25 for either type, capped at amt_due; no API floor field",
+   "where": "amounts.floor_rules.*"
+  },
+  {
+   "rule": "Offer floor once; say \"The rest remains overdue.\"",
+   "where": "amounts.floor_offered_once, amounts.floor_wording"
+  },
+  {
+   "rule": "Accept floor through full inclusive, never ask how much",
+   "where": "amounts.accept_between_floor_and_full, amounts.never_ask_how_much"
+  },
+  {
+   "rule": "Single flat no -> 20/R10; no persuasion in any band",
+   "where": "outcomes.refused_reason, bands[*].attempts"
+  },
+  {
+   "rule": "Today permitted; date not after deadline",
+   "where": "dates.promise_today_allowed"
+  },
+  {
+   "rule": "Closed date: offer next business day if within deadline, otherwise deadline",
+   "where": "dates.weekend_or_holiday_roll_forward"
+  },
+  {
+   "rule": "After-deadline proposal: offer deadline",
+   "where": "dates.after_deadline_offer_deadline"
+  },
+  {
+   "rule": "Vague period: clarify once, then propose deadline",
+   "where": "dates.vague_ask_once_then_deadline"
+  },
+  {
+   "rule": "Read-back: \"Do you authorize this record?\"",
+   "where": "promise_write.confirm_phrase"
+  },
+  {
+   "rule": "One successful promise/product; ZERO retries; first failure 20/R99",
+   "where": "promise_write.one_promise_per_product, promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "\"We will send a confirmation letter.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\"Ask a branch to change a recorded promise.\"",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "Dispute: immediately 20/R17, ends the call, not a note",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "Hardship: sympathetic sentence, offer Care-4 once, 30/R31 or 20/R10, ends call",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "Human: ask once, transfer Desk-4, 30/R30",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "Absent routes: no restructuring, no already-paid",
+   "where": "unresolved[already_paid], unresolved[restructuring]; phrases.already_paid_sentence empty"
+  },
+  {
+   "rule": "add_note never used; no active note reasons",
+   "where": "notes.enabled, notes.reasons"
+  },
+  {
+   "rule": "Refusal to talk: 20/R10 after verification, 40/R41 before",
+   "where": "special_cases[refuse_to_talk], identity.declined_outcome"
+  },
+  {
+   "rule": "Robot question reply",
+   "where": "phrases.robot_reply"
+  },
+  {
+   "rule": "Scam question reply then continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "Unknown question: \"I do not have that information.\"",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "Transfer overrides any saved promise",
+   "where": "outcomes.transfer_overrides_promise"
+  },
+  {
+   "rule": "Saved promise -> 10 with no reason; otherwise 20",
+   "where": "outcomes.promise_outcome, outcomes.no_promise_outcome, outcomes.table[0]"
+  },
+  {
+   "rule": "No paid outcome or all-paid/notes precedence",
+   "where": "outcomes.paid_outcome, outcomes.all_paid_closes_as_paid, outcomes.no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "Thanks and goodbye before exactly one close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "Codes table outcomes 10-50 and reasons",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "Transfer queues Desk-4 for R30, Care-4 for R31",
+   "where": "special_cases[human].action.queue, special_cases[hardship].offer_transfer_queue"
+  },
+  {
+   "rule": "Paid route absent",
+   "where": "outcomes.paid_outcome, unresolved[paid_outcome]"
+  }
+ ],
+ "fixed": [
+  "No substantive value errors found: all values, enum codes (outcomes 10-50, reasons R10-R54, queues Desk-4/Care-4, fields district/opening_year/token, types giro/plazo) match the documents and openapi.json.",
+  "Extended source spans: identity source now cites 'get_account only after all three pass'; amounts source cites the below-floor, never-above-full and no-discounts sentences; phrases source cites the dictated intro and today question.",
+  "Clarified the hardship_sentence unresolved entry to say the sympathetic sentence is a written placeholder, and added 'No discounts, waivers or plans' to the restructuring unresolved entry."
+ ],
+ "unresolved": [
+  "No paid outcome exists (codes: 'Paid route absent'), so outcomes.paid_outcome stays empty; a validator that requires it will flag this.",
+  "No already-paid rule and no restructuring rule; these remarks only get acknowledged honestly within the ordinary discussion.",
+  "Bands cover days late 1-75 only; nothing is said for more than 75 days late.",
+  "The hardship sympathetic sentence is required, but its wording is not dictated."
+ ]
+}

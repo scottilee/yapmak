@@ -1,0 +1,513 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+  "tests/fixtures/external/selvi-turkish-fields/02-interface-guide.md"
+ ],
+ "bank_name": "Selvi Mutual Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "dogum_yili",
+    "ask_text": "In what year were you born?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+     "text": "1. dogum_yili: \"In what year were you born?\" Format year: exactly four digits."
+    }
+   },
+   {
+    "field": "ilce",
+    "ask_text": "What is your registered district?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+     "text": "2. ilce: \"What is your registered district?\" Format text: trim outer whitespace, preserve internal spaces."
+    }
+   },
+   {
+    "field": "guvenlik_sayisi",
+    "ask_text": "What is your six-digit security number?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+     "text": "3. guvenlik_sayisi: \"What is your six-digit security number?\" Format digits: exactly six, preserve leading zeros."
+    }
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "kalan_deneme",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "dogrulanmadi",
+   "yanlis"
+  ],
+  "declined_outcome": [
+   "dogrulanmadi",
+   "istemedi"
+  ],
+  "unclear_holder_outcome": [
+   "ulasilmadi",
+   "belirsiz"
+  ],
+  "failed_instruction": "Please verify your identity at a Selvi branch.",
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Ask at most twice, answering questions before repeating. Still unclear: ulasilmadi/belirsiz. ... No question has a recoverable format-hint exception. TWO wrong answers TOTAL across all questions exhaust the check; the API's kalan_deneme is authoritative. Exhaustion: say \"Please verify your identity at a Selvi branch.\" and close dogrulanmadi/yanlis. Explicit refusal: explain once that verification protects the account; a second refusal closes dogrulanmadi/istemedi. A question about the purpose does not count as a refusal."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "08:20",
+   "end": "12:10",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "ulasilmadi",
+    "geri_arama"
+   ],
+   "no_callback_outcome": [
+    "ulasilmadi",
+    "zaman_yok"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "A callback may be on the NEXT business day only, 08:20 through 12:10 inclusive, strictly after now. Ask for any missing date/time component instead of guessing. Ask once for an alternative after an invalid slot; a second invalid slot or refusal closes ulasilmadi/zaman_yok, with no booking. Successful booking closes ulasilmadi/geri_arama."
+   }
+  },
+  "wrong_number_outcome": [
+   "ulasilmadi",
+   "yanlis_numara"
+  ],
+  "deceased_outcome": [
+   "ulasilmadi",
+   "vefat"
+  ],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "A relative may neither verify nor promise for the customer. Reveal no purpose or account information. Ask when the customer can be reached. ... A wrong number closes ulasilmadi/yanlis_numara. If told the customer has died, say \"Please accept our condolences.\" and close ulasilmadi/vefat without another question."
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   6,
+   0,
+   1,
+   2,
+   3
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "ask",
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Business days are Sunday through Thursday. Friday and Saturday are closed. There are NO holidays. \"Next weekday\" means that weekday in the following calendar week; \"this weekday\" means the current week. Ask for missing month or year."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-16",
+   "days_late_min": 1,
+   "days_late_max": 16,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 5,
+    "adjustment": "preceding"
+   },
+   "attempts": [],
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "Days late 1\u201316: latest promise date is five CALENDAR days after today, adjusted backward to the preceding business date if closed. ... Days 1\u201316: ZERO persuasion attempts; a flat refusal closes that product as reddetti."
+   }
+  },
+  {
+   "name": "17-70",
+   "days_late_min": 17,
+   "days_late_max": 70,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 17,
+    "month_offset": 1,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "Days late 17\u201370: latest promise date is the seventeenth of NEXT month, likewise adjusted preceding. ... Days 17\u201370: ONE attempt, floor on deadline; after refusal stop and mark reddetti."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "percent",
+    "percent": 25,
+    "min_amount": 0
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder stays outstanding.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Ask full first; never ask how much the customer can pay. The floor for BOTH types is 25 percent of the full past-due amount, rounded to the nearest cent (a half cent rounds upward), capped at full. There is no minimum-payment response field. If full is too much, offer the floor once and say \"The remainder stays outstanding.\" Accept amounts between floor and full inclusive. Below floor: explain and offer floor; rejecting that offer is a flat refusal."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Today is allowed if it is a business day. ... If the computed deadline is already past, take no promise on that product and mark reddetti; never extend it. A closed proposed date moves to the next business day only if within deadline; otherwise offer deadline. A date past deadline gets a deadline counteroffer. Ask once for an exact day after a vague period; if still vague, propose deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, they never held the product, or they previously closed it.",
+   "action": {
+    "type": "note",
+    "reason": "itiraz"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "Dispute means not their debt, never held it or previously closed it: no argument or promise for that product; mark itiraz and continue others."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "zorluk"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "musteri_destegi",
+   "offer_outcome": [
+    "aktarildi",
+    "destek"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "Illness, bereavement or job loss: one short sympathetic sentence; no persuasion or voluntary promise for the affected product. Offer musteri_destegi once; if accepted transfer and close aktarildi/destek. If declined mark zorluk and continue other products."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak with a human agent.",
+   "action": {
+    "type": "transfer",
+    "queue": "genel_gorusme",
+    "outcome": "aktarildi",
+    "reason": "insan"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "A request for a human transfers immediately to genel_gorusme and closes aktarildi/insan; do not ask whether the assistant can help first."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or wants to end the conversation.",
+   "action": {
+    "type": "note",
+    "reason": "reddetti"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "A refusal to talk gets one request to continue; a second refusal stops and marks all remaining products reddetti. Before verification that second refusal closes dogrulanmadi/istemedi."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for new terms, a payment plan or restructuring of the debt.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "New terms are not available.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "NO restructuring rule or restructuring queue exists; say new terms are unavailable and continue unless the customer requests a human. Never invent a plan."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam or doubts the call is really from the bank.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify us using the number on your Selvi statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+    "text": "## 6. Special remarks, before persuasion ... Scam question: \"You can verify us using the number on your Selvi statement.\" and continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "soz_verildi",
+    "reasons": [],
+    "when": "At least one saved promise on a non-transfer call; reason omitted."
+   },
+   {
+    "outcome": "soz_yok",
+    "reasons": [
+     "reddetti",
+     "itiraz",
+     "zorluk",
+     "kayit_hatasi"
+    ],
+    "when": "No saved promise; reason of the first unpromised product in get_account order."
+   },
+   {
+    "outcome": "aktarildi",
+    "reasons": [
+     "insan",
+     "destek"
+    ],
+    "when": "Call transferred (human request or accepted hardship support)."
+   },
+   {
+    "outcome": "dogrulanmadi",
+    "reasons": [
+     "yanlis",
+     "istemedi"
+    ],
+    "when": "Identity check exhausted or refused."
+   },
+   {
+    "outcome": "ulasilmadi",
+    "reasons": [
+     "belirsiz",
+     "geri_arama",
+     "zaman_yok",
+     "yanlis_numara",
+     "vefat"
+    ],
+    "when": "Holder not reached."
+   }
+  ],
+  "promise_outcome": "soz_verildi",
+  "paid_outcome": "",
+  "transfer_outcome": "aktarildi",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "soz_yok",
+  "all_paid_closes_as_paid": false,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "kayit_hatasi",
+  "refused_reason": "reddetti",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "A transfer discards unsaved proposals, preserves saved promises and overrides any promise outcome. Otherwise at least one saved promise closes soz_verildi, with reason OMITTED. With no saved promise close soz_yok with the first unpromised product's reason in get_account order. There is no all-paid outcome or paid-note precedence rule. Thank the customer and say goodbye before exactly one close_call, the last tool call."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "reddetti",
+   "itiraz",
+   "zorluk",
+   "kayit_hatasi"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "On a non-transfer call add exactly one note for each unpromised product using reddetti, itiraz, zorluk or kayit_hatasi. No note on a promised product. Defer all notes until the final non-transfer decision: NONE before or after a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "There are one or two products, in get_account order. ... Ask once for the batch; after a no process in API order without asking today again for each product. Attempts are counted separately per product. ... A shared date after one product's deadline is capped for that product alone and explained at read-back."
+  }
+ },
+ "phrases": {
+  "opening": "This is Selvi Mutual Bank's automated assistant. This conversation is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue balances.",
+  "today_question": "Can you settle this balance today?",
+  "all_today_question": "Can you settle both balances today?",
+  "robot_reply": "I am Selvi Mutual Bank's automated assistant.",
+  "scam_reply": "You can verify us using the number on your Selvi statement.",
+  "prohibited_before_verification": [
+   "arrears",
+   "balance",
+   "payment",
+   "product"
+  ],
+  "after_promise_sentence": "A receipt will appear in your secure inbox.",
+  "already_paid_sentence": "I cannot confirm payment receipt from the information available here.",
+  "cannot_answer_sentence": "I do not have that information.",
+  "recorded_promise_change_reply": "Contact a branch to change a saved commitment.",
+  "product_naming": {
+   "doner_hesap": "revolving account",
+   "tasit_borcu": "vehicle borrowing"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Say exactly \"This is Selvi Mutual Bank's automated assistant. This conversation is recorded.\" Then ask \"Am I speaking with {{title}} {{last_name}}?\" ... Before all security answers pass, never say arrears, balance, payment or product ... Say \"I am calling about the overdue balances.\" ... doner_hesap is spoken as \"revolving account\"; tasit_borcu as \"vehicle borrowing\". ... First ask for one product: \"Can you settle this balance today?\" For two: \"Can you settle both balances today?\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 0,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you authorize me to save these exact commitments?",
+  "source": {
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+   "text": "Read all proposed product/amount/date triples together and ask exactly \"Do you authorize me to save these exact commitments?\" ... One successful promise per product. ZERO retries after a failed create_promise: mark kayit_hatasi for that product, explain the failure and continue other products."
+  }
+ },
+ "api_fields": {
+  "verify_identity.customer_id": "musteri_no",
+  "verify_identity.ok": "basarili",
+  "verify_identity.verified": "cevap_dogrulandi",
+  "verify_identity.all_verified": "tum_sorular_dogrulandi",
+  "verify_identity.remaining": "kalan_deneme",
+  "get_account.customer_id": "musteri_no",
+  "get_account.list": "urunler",
+  "get_account.id": "sozlesme",
+  "get_account.type": "tur",
+  "get_account.past_due": "geciken_tutar",
+  "get_account.days_late": "gecikme_gunu",
+  "create_promise.customer_id": "musteri_no",
+  "create_promise.product_id": "sozlesme",
+  "create_promise.amount": "tutar",
+  "create_promise.date": "tarih",
+  "create_promise.ok": "basarili",
+  "add_note.customer_id": "musteri_no",
+  "add_note.product_id": "sozlesme",
+  "add_note.reason": "neden",
+  "add_note.text": "metin",
+  "add_note.ok": "basarili",
+  "schedule_callback.customer_id": "musteri_no",
+  "schedule_callback.date": "tarih",
+  "schedule_callback.time": "saat",
+  "schedule_callback.ok": "basarili",
+  "transfer_to_agent.customer_id": "musteri_no",
+  "transfer_to_agent.queue": "kuyruk",
+  "transfer_to_agent.ok": "basarili",
+  "close_call.customer_id": "musteri_no",
+  "close_call.outcome": "sonuc",
+  "close_call.reason": "neden",
+  "close_call.ok": "basarili"
+ },
+ "unresolved": [
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule or paid outcome exists. A recent-payment remark alone selects no special action: say \"I cannot confirm payment receipt from the information available here.\" and continue ordinary discussion; do not invent a posting-delay claim. (No already_paid special case is routed because there is no paid outcome; the sentence is kept in phrases.already_paid_sentence.)",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "floor rounding",
+   "text": "The floor for BOTH types is 25 percent of the full past-due amount, rounded to the nearest cent (a half cent rounds upward), capped at full. The percent floor rule has no rounding field; rounding must be half-up to the nearest cent.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "Illness, bereavement or job loss: one short sympathetic sentence. The documents do not dictate the words; a short sentence was written.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "refuse_to_talk before verification",
+   "text": "Before verification that second refusal closes dogrulanmadi/istemedi. (Same pair as identity.declined_outcome; the refuse_to_talk case itself notes reddetti after verification.)",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/01-policy.md"
+  },
+  {
+   "topic": "failed get_account",
+   "text": "On failed get_account, basarili is false and urunler may be an empty array; the agent must not claim there are no debts from that failure. The documents give no close outcome/reason for this situation.",
+   "doc": "tests/fixtures/external/selvi-turkish-fields/02-interface-guide.md"
+  }
+ ]
+}

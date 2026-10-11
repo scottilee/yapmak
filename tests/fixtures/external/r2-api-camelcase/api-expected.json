@@ -1,0 +1,28 @@
+{
+  "axis": "camelcase",
+  "classification": "valid_contract",
+  "operations": [
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "schedule_callback",
+    "transfer_to_agent",
+    "close_call"
+  ],
+  "source": "openapi.json",
+  "assertions": [
+    {
+      "request_customer_property": "customerId",
+      "account_properties": [
+        "productId",
+        "type",
+        "pastDue",
+        "daysLate"
+      ],
+      "remaining_property": "checksRemaining",
+      "hint_property": "formatHint"
+    }
+  ],
+  "samples": []
+}

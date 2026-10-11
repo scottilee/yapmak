@@ -1,0 +1,371 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "24265fb0-3828-454e-ab73-8d939b6214be",
+ "iteration_id": "1b4b71ef-3694-4b7b-a3c5-ae26c44a1825",
+ "seconds": 138,
+ "passed": 5,
+ "total": 8,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-03",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-06",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Edge",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-09",
+   "family": "Edge",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "7f7ed48d-a715-4166-ac2b-3323b7ba1d62",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_2320d2cf-574",
+   "slowest_turn_s": 14.0,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "102820cf-566d-4074-912a-389302b98dfc",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_2278755e-23e",
+   "slowest_turn_s": 22.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "1383f4b7-b9ae-47d3-91fe-3a502862b56a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_5ec4d2c1-523",
+   "slowest_turn_s": 2.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "8a6a05f0-ea0d-4b5a-83a4-06024f45b6c2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_6e5ed6cb-673",
+   "slowest_turn_s": 2.3,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "outcome ('promise', None), expected ('no_promise', 'hardship')",
+    "conversation: The assistant failed to meet the closing outcome requirement. According to the success criteria (following Rule 32), because the customer mentioned a hardship (job loss), declined the support team offer, and named their own payment date, the call should have been closed with the outcome 'no_promise/hardship'. However, the system events show the assistant called the 'close_call' function with the o"
+   ],
+   "call_id": "5579117e-dedc-48be-8a19-1b4b68beafaf",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_e514b11f-3c8",
+   "slowest_turn_s": 2.1,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "promises [('p1', 637.5, '2026-10-23')], expected [('p1', 637.5, '2026-10-16')]",
+    "conversation: The call failed to meet several success criteria. Specifically, the floor (637.50) was offered three times (Messages 8, 10, and 12) instead of exactly once. Additionally, the promise was recorded for 2026-10-23 (as seen in Message 14, Message 17, and the create_promise system event) instead of the required date of 2026-10-16. While the assistant correctly handled the 350 vs 200 offer and only used"
+   ],
+   "call_id": "f5146d81-e3c9-488d-bb44-4bde2aaf043a",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_9cd1f70e-486",
+   "slowest_turn_s": 15.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Edge",
+   "pass": false,
+   "failed": [
+    "conversation: The call failed one of the success criteria: 'No second read-back or re-ask for the promise date'. Although the assistant successfully acknowledged the unrelated question in message 10 and created exactly one promise for the correct date and amount as shown in the system events, it performed a second read-back of the promise date ('Friday 16 October 2026') in message 10 after the user's interrupti"
+   ],
+   "call_id": "272b6ddb-d6e2-401a-a402-e2aad47e087b",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_fca0a8c1-a67",
+   "slowest_turn_s": 14.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "hard",
+   "family": "Edge",
+   "pass": true,
+   "failed": [],
+   "call_id": "9f4e4c75-a190-4ca5-a6d0-056213dde08c",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_37ed1069-224",
+   "slowest_turn_s": 11.4,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "7f7ed48d-a715-4166-ac2b-3323b7ba1d62",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_2320d2cf-574",
+    "slowest_turn_s": 14.0,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "102820cf-566d-4074-912a-389302b98dfc",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_2278755e-23e",
+    "slowest_turn_s": 22.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "1383f4b7-b9ae-47d3-91fe-3a502862b56a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_5ec4d2c1-523",
+    "slowest_turn_s": 2.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "8a6a05f0-ea0d-4b5a-83a4-06024f45b6c2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_6e5ed6cb-673",
+    "slowest_turn_s": 2.3,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "outcome ('promise', None), expected ('no_promise', 'hardship')",
+     "conversation: The assistant failed to meet the closing outcome requirement. According to the success criteria (following Rule 32), because the customer mentioned a hardship (job loss), declined the support team offer, and named their own payment date, the call should have been closed with the outcome 'no_promise/hardship'. However, the system events show the assistant called the 'close_call' function with the o"
+    ],
+    "call_id": "5579117e-dedc-48be-8a19-1b4b68beafaf",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_e514b11f-3c8",
+    "slowest_turn_s": 2.1,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "promises [('p1', 637.5, '2026-10-23')], expected [('p1', 637.5, '2026-10-16')]",
+     "conversation: The call failed to meet several success criteria. Specifically, the floor (637.50) was offered three times (Messages 8, 10, and 12) instead of exactly once. Additionally, the promise was recorded for 2026-10-23 (as seen in Message 14, Message 17, and the create_promise system event) instead of the required date of 2026-10-16. While the assistant correctly handled the 350 vs 200 offer and only used"
+    ],
+    "call_id": "f5146d81-e3c9-488d-bb44-4bde2aaf043a",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_9cd1f70e-486",
+    "slowest_turn_s": 15.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Edge",
+    "pass": false,
+    "failed": [
+     "conversation: The call failed one of the success criteria: 'No second read-back or re-ask for the promise date'. Although the assistant successfully acknowledged the unrelated question in message 10 and created exactly one promise for the correct date and amount as shown in the system events, it performed a second read-back of the promise date ('Friday 16 October 2026') in message 10 after the user's interrupti"
+    ],
+    "call_id": "272b6ddb-d6e2-401a-a402-e2aad47e087b",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_fca0a8c1-a67",
+    "slowest_turn_s": 14.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "hard",
+    "family": "Edge",
+    "pass": true,
+    "failed": [],
+    "call_id": "9f4e4c75-a190-4ca5-a6d0-056213dde08c",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_37ed1069-224",
+    "slowest_turn_s": 11.4,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

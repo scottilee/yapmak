@@ -1,0 +1,77 @@
+{
+ "bands": [
+  "all"
+ ],
+ "identity": [
+  "sec_code"
+ ],
+ "special_cases": [
+  "dispute",
+  "refuse_to_talk",
+  "human",
+  "restructuring",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands / deadline",
+   "text": "There is no k-date and no upper limit. A promise date is recordable when today or any business day after today. The schema requires a band with a deadline, so one band covers dl_days 1-90 (openapi.json range) and its deadline is a placeholder of 36500 calendar days that stands for 'no upper limit'; the documents give no deadline value.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "persuasion attempts",
+   "text": "Zero persuasion attempts in any band. The first \"no\" from the customer ends the call: close `No-PTP` / `R07`.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "below-full proposal sentence",
+   "text": "A proposal below the full amount: EXACTLY \"That is below what we can take.\" Then close `No-PTP` / `R07`. No phrase field holds this sentence.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "vague date",
+   "text": "A vague period (\"later\", \"after payday\", \"soon\"): ask once for the exact day. If still vague, close `No-PTP` / `R07` (no deadline fallback).",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "third-party sentence and outcome",
+   "text": "Third party: Say EXACTLY: \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" No callback; the documents give no close outcome for a non-wrong-number third party. The schema requires one, so the holder-not-confirmed code VOID / JCB-unclear is used for no_callback_outcome and (unused, callback disabled) scheduled_outcome.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "deceased",
+   "text": "The documents do not address a deceased account holder; no deceased sentence. The schema requires an outcome, so the holder-not-confirmed code VOID / JCB-unclear is used as the closest listed code.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/02-codes.txt"
+  },
+  {
+   "topic": "already_paid",
+   "text": "No \"already paid\" rule. The customer never gets the one-business-day sentence and no paid note. \"it was paid off and closed\" is handled with the dispute case (close `No-PTP` / `R07`).",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "hardship",
+   "text": "No hardship rule. The customer never gets sympathy for illness, bereavement or job loss.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "today question",
+   "text": "The documents do not dictate a question about paying today; after the debt intro they say only: Then state amt_due and dl_days.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "write failure sentence",
+   "text": "A second failure \u2192 close `No-PTP` / `R07` and say the write failed.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  },
+  {
+   "topic": "promise then transfer",
+   "text": "The documents do not say which outcome applies when a promise was recorded and the call is then transferred; default kept.",
+   "doc": "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md"
+  }
+ ],
+ "audit_fixed": [
+  "third_party.callback.source: cited the supervisor mail together with the call sheet's own 'DO NOT book a callback' rule, because the two documents agree.",
+  "notes.source: changed to the supervisor mail ('no notes') and listed the call sheet and codes file as agreeing. Nothing about how notes work was changed.",
+  "Checked every other value against the documents and the API enums (sec_code, prod_kind loan, kcb_desk, PTP/No-PTP/DEC/VOID/transferred, R07/F01/F02/RNG/JCB-unclear/kcb_person). All are supported; no other changes were needed. The three documents do not conflict."
+ ]
+}

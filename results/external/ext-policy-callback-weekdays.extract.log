@@ -1,0 +1,54 @@
+{
+ "bands": [
+  "1-4",
+  "5-13",
+  "14-32",
+  "33-80"
+ ],
+ "identity": [
+  "registered_birth_date",
+  "access_code",
+  "district"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "callback weekday restriction",
+   "text": "Only the next business day is eligible AND that date must be Tuesday or Thursday. If the next business day is neither, there is no eligible callback date; do not skip forward to a later Tuesday or Thursday.",
+   "doc": "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "Illness, bereavement or unemployment: one short sympathetic sentence, no persuasion; offer CareDesk once. (Wording not dictated; a short sympathetic sentence was written.)",
+   "doc": "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+  },
+  {
+   "topic": "refuse to talk closing",
+   "text": "If the customer refuses to talk, ask once whether to continue; second refusal stops and marks remaining products DECLINE. Before verification that second refusal closes ID-STOP/NO-CHECK. (Modelled as a DECLINE note on remaining products and the call ends; the close follows the section 10 precedence, so a saved promise still closes AGREED.)",
+   "doc": "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+  },
+  {
+   "topic": "debt statement wording",
+   "text": "State every product, amount and days late before asking for anything. (No dictated sentence; a short debt_intro was written from this content requirement.)",
+   "doc": "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+  },
+  {
+   "topic": "date before earliest eligible date",
+   "text": "If it precedes the earliest eligible date, offer the earliest eligible date, provided it is within deadline. (No dedicated IR field.)",
+   "doc": "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.debt_intro was empty although \u00a71 requires stating every product, amount and days late; added a short sentence carrying that content.",
+  "special_cases[refuse_to_talk].action changed from close NO-AGREEMENT/DECLINE to note DECLINE (ends_call true): \u00a79 says the second refusal 'marks remaining products DECLINE', and \u00a710 precedence then decides the close (a saved promise still closes AGREED, an earlier CONTEST product determines the reason).",
+  "Added unresolved entry for 'date precedes the earliest eligible date -> offer the earliest eligible date', which has no IR field; updated the debt-intro and refuse-to-talk unresolved texts."
+ ]
+}

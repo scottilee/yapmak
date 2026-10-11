@@ -1,0 +1,16 @@
+{
+  "classification": "unsupported_or_behavioral_requirements",
+  "requirements": [
+    {
+      "id": "strictly-future-promises",
+      "source": "01-specification.md \u00a75\u20136",
+      "expected": {
+        "today_allowed": false,
+        "earliest": "next_business_day_strict",
+        "initial_ask": "next_business_day"
+      },
+      "schema_gap": "DatePolicy stores false but validate rejects it. Do not turn it true or keep a today ask."
+    }
+  ],
+  "acceptance": "Faithfully implement each requirement or explicitly report unsupported/degraded and block affected actions. Degradation is a diagnostic success, not a runnable-agent pass. No exact diagnostic wording is required."
+}

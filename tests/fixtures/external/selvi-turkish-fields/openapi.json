@@ -1,0 +1,463 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Selvi Mutual Bank interface",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://selvi.example.invalid"
+    }
+  ],
+  "paths": {
+    "/verify_identity": {
+      "post": {
+        "operationId": "verify_identity",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cevap": {
+                    "type": "string"
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  },
+                  "soru": {
+                    "type": "string",
+                    "enum": [
+                      "dogum_yili",
+                      "ilce",
+                      "guvenlik_sayisi"
+                    ]
+                  }
+                },
+                "required": [
+                  "cevap",
+                  "musteri_no",
+                  "soru"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "kalan_deneme": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "tum_sorular_dogrulandi": {
+                      "type": "boolean"
+                    },
+                    "basarili": {
+                      "type": "boolean"
+                    },
+                    "cevap_dogrulandi": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "kalan_deneme",
+                    "tum_sorular_dogrulandi",
+                    "basarili",
+                    "cevap_dogrulandi"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get_account": {
+      "post": {
+        "operationId": "get_account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "urunler": {
+                      "type": "array",
+                      "minItems": 0,
+                      "maxItems": 2,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "gecikme_gunu": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 70
+                          },
+                          "geciken_tutar": {
+                            "type": "number",
+                            "minimum": 0.01
+                          },
+                          "tur": {
+                            "type": "string",
+                            "enum": [
+                              "doner_hesap",
+                              "tasit_borcu"
+                            ]
+                          },
+                          "sozlesme": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "gecikme_gunu",
+                          "geciken_tutar",
+                          "tur",
+                          "sozlesme"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "urunler",
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create_promise": {
+      "post": {
+        "operationId": "create_promise",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tarih": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "sozlesme": {
+                    "type": "string"
+                  },
+                  "tutar": {
+                    "type": "number",
+                    "minimum": 0.01
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tarih",
+                  "sozlesme",
+                  "tutar",
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/add_note": {
+      "post": {
+        "operationId": "add_note",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metin": {
+                    "type": "string"
+                  },
+                  "neden": {
+                    "type": "string",
+                    "enum": [
+                      "reddetti",
+                      "itiraz",
+                      "zorluk",
+                      "kayit_hatasi"
+                    ]
+                  },
+                  "sozlesme": {
+                    "type": "string"
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "neden",
+                  "sozlesme",
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schedule_callback": {
+      "post": {
+        "operationId": "schedule_callback",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "saat": {
+                    "type": "string",
+                    "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+                  },
+                  "tarih": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "saat",
+                  "tarih",
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer_to_agent": {
+      "post": {
+        "operationId": "transfer_to_agent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "kuyruk": {
+                    "type": "string",
+                    "enum": [
+                      "genel_gorusme",
+                      "musteri_destegi"
+                    ]
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kuyruk",
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/close_call": {
+      "post": {
+        "operationId": "close_call",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "neden": {
+                    "type": "string",
+                    "enum": [
+                      "reddetti",
+                      "itiraz",
+                      "zorluk",
+                      "kayit_hatasi",
+                      "insan",
+                      "destek",
+                      "yanlis",
+                      "istemedi",
+                      "belirsiz",
+                      "geri_arama",
+                      "zaman_yok",
+                      "yanlis_numara",
+                      "vefat"
+                    ]
+                  },
+                  "sonuc": {
+                    "type": "string",
+                    "enum": [
+                      "soz_verildi",
+                      "soz_yok",
+                      "aktarildi",
+                      "dogrulanmadi",
+                      "ulasilmadi"
+                    ]
+                  },
+                  "musteri_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sonuc",
+                  "musteri_no"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "basarili": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "basarili"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

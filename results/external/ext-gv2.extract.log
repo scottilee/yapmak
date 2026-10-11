@@ -1,0 +1,79 @@
+{
+ "bands": [
+  "all"
+ ],
+ "identity": [
+  "sec_code"
+ ],
+ "special_cases": [
+  "dispute",
+  "refuse_to_talk",
+  "human",
+  "scam",
+  "restructuring"
+ ],
+ "unresolved": [
+  {
+   "topic": "hardship",
+   "text": "The call sheet has no hardship/bereavement handling for the account holder.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "already_paid",
+   "text": "No separate already-paid sentence or outcome; \"it was paid off and closed\" is handled with the dispute case (close No-PTP / No-PTP). paid_outcome set to No-PTP accordingly; no paid outcome exists in the codes sheet (S8 reserved, not used).",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "vague_date",
+   "text": "vague (\"later\", \"after payday\") -> get the exact day once. still vague -> the call ends there (No-PTP / No-PTP). The deadline is not offered.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "bands",
+   "text": "No days-late bands are defined; a single band covers every days-late value with the k-date (20th of the month after the call).",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "floor_rounding",
+   "text": "bottom_line = greater(min_pmt, 15% of amt_due); the documents do not say how 15% is rounded.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "third_party_callback",
+   "text": "NO callback booking. say: the customer is to call GRIMSBY VALE FINANCE on the number printed on the statement. close NOANS / CNA. Callback scheduled_outcome has no meaning here and mirrors the CNA close. The IR has no slot for the third-party sentence (customer to call GRIMSBY VALE FINANCE on the number printed on the statement).",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "third_party_disclosure",
+   "text": "3RD PARTY: no purpose, no acct detail, no paying for the customer, no exception for family. No dedicated IR field; enforced only via prohibited_before_verification (\"applies to third parties too\").",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "sunday_vs_business_days",
+   "text": "\"business day = every day of the week\" conflicts with \"sun day named ... -> not recordable\". business_days kept as all seven days per the explicit definition; whether a Sunday promise date must be refused is not settled.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "transfer_after_promise",
+   "text": "The documents do not say whether a recorded promise followed by a transfer closes as PTP or TR-H; transfer_overrides_promise left at default.",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "create_promise amount field",
+   "text": "create_promise request schema defines the amount property as `sum` but lists `amt` as required; the call sheet does not name it.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "robot question",
+   "text": "ROBOT Q -> exactly \"GVF assistant.\" -> carry on. (no known special-case name; recorded as phrases.robot_reply)",
+   "doc": "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added unresolved entry: the sheet defines every day as a business day yet says a named Sunday is not recordable; internal conflict left flagged with business_days kept at all seven days.",
+  "Added unresolved entry: the third-party sentence (customer to call GRIMSBY VALE FINANCE on the statement number) has no IR slot.",
+  "Added unresolved entry for third-party non-disclosure rules (no purpose, no account detail, no paying for customer, no family exception).",
+  "Added unresolved entry: documents silent on whether a transfer after a recorded promise closes PTP or TR-H.",
+  "Extended amounts.source and third_party.source with the supporting sentences; restructuring trigger wording clarified."
+ ]
+}

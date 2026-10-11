@@ -1,0 +1,423 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+  "tests/fixtures/external/fenbrook-table-sheet/02-codes.md"
+ ],
+ "bank_name": "Fenbrook Community Credit Union",
+ "identity": {
+  "requirements": [
+   {
+    "field": "pi_code",
+    "ask_text": "What are the four digits of your security pin?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+     "text": "ONE question only. Ask EXACTLY \"What are the four digits of your security pin?\" | field `pi_code`. Format digits, exactly 4, leading zeros preserved. | No recoverable-format hint exists; no hint rule applies."
+    }
+   }
+  ],
+  "wrong_answer_limit": 2,
+  "wrong_count_source": "api",
+  "remaining_slot": "tries_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "CCC-FAIL",
+   "F-pin"
+  ],
+  "declined_outcome": [
+   "CCC-FAIL",
+   "F-dec"
+  ],
+  "unclear_holder_outcome": [
+   "CCC-NO",
+   "F-unclear"
+  ],
+  "failed_instruction": "Please use the FCCU app.",
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "Maximum wrong answers across the whole check = 2. Use the API's `tries_left`, never a private tally. | Exhausted \u2192 EXACTLY \"Please use the FCCU app.\" \u2192 close `CCC-FAIL` / `F-pin`. | A first refusal is met by one explanation of why the check protects the account; a second refusal closes `CCC-FAIL` / `F-dec`. | \"Why do you need it?\" is a question, not a refusal; answer and ask again. | 2 asks max. After 2 asks, close `CCC-NO` / `F-unclear`."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": false,
+   "days": "today_or_next_business_day",
+   "start": "10:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": false,
+   "scheduled_outcome": [
+    "CCC-NO",
+    "F-no"
+   ],
+   "no_callback_outcome": [
+    "CCC-NO",
+    "F-no"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "DO NOT book a callback. Say EXACTLY \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" | No callback booking. (codes list: CCC-NO : F-no | F-wrong | F-unclear; no third-party-specific code is listed, so the general no-promise pair CCC-NO / F-no is used)"
+   }
+  },
+  "wrong_number_outcome": [
+   "CCC-NO",
+   "F-wrong"
+  ],
+  "deceased_outcome": [
+   "CCC-NO",
+   "F-no"
+  ],
+  "deceased_sentence": "",
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "Wrong number \u2192 close `CCC-NO` / `F-wrong`. (deceased not covered; general no-promise pair CCC-NO / F-no from the codes list used)"
+  }
+ },
+ "calendar": {
+  "holidays": [],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "Business day = every day of the week. There are no shutdown days and no holidays. | \"Next <weekday>\" names that weekday in the following calendar week, even when spoken on that weekday itself. | A period named without month/year (\"the 15th\") resolves to the next occurrence on or after today."
+  }
+ },
+ "bands": [
+  {
+   "name": "all",
+   "days_late_min": 1,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "latest",
+    "rules": [
+     {
+      "kind": "nth_business_day",
+      "n": 5
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "preceding",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "k-date = the LATER of (a) the fifth (5th) business day after the call, and (b) the last business day of the current calendar month. Each candidate is itself adjusted to a business day before the comparison. | ONE persuasion attempt only: the full `amt_due` on the k-date; if the full has already been refused, the floor on the k-date. (days-late range 1..90 from openapi dl_days minimum/maximum)"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "share_loan": "minimum"
+  },
+  "floor_rules": {},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder falls due again.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "The full `amt_due` is asked first; the debtor is never asked what it can pay. | Floor per product = the `minimum` field. Floor is offered once with EXACTLY \"The remainder falls due again.\" | Below floor: \"That is below what we can take.\" \u2192 close `CCC-NO` / `F-no`."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": false,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "next_business_day",
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "Vague period: ask once for the exact day. Still vague \u2192 close `CCC-NO` / `F-no`. | Promise date recordable when today or any business day after today, no later than the k-date."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never had it, or it was paid off and closed.",
+   "action": {
+    "type": "close",
+    "outcome": "CCC-NO",
+    "reason": "F-no"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "\"Not my debt\" / \"never had it\" / \"paid off and closed\" \u2192 no argument, no promise, close `CCC-NO` / `F-no`."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions hardship such as illness, bereavement or job loss.",
+   "action": {
+    "type": "close",
+    "outcome": "CCC-NO",
+    "reason": "F-no"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "Hardship (illness / bereavement / job loss) \u2192 one short sentence of sympathy, no persuasion, no promise, close `CCC-NO` / `F-no`."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak with a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "fcc-desk",
+    "outcome": "CCC-TR",
+    "reason": "F-person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "Asks for a person \u2192 transfer queue `fcc-desk`, close `CCC-TR` / `F-person`."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Verify us on the number printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+    "text": "Asked whether this is a scam \u2192 EXACTLY \"Verify us on the number printed on your statement.\" Continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "CCC-OK",
+    "reasons": [],
+    "when": "a promise was recorded"
+   },
+   {
+    "outcome": "CCC-NO",
+    "reasons": [
+     "F-no",
+     "F-wrong",
+     "F-unclear"
+    ],
+    "when": "no promise, wrong number, or holder not confirmed"
+   },
+   {
+    "outcome": "CCC-FAIL",
+    "reasons": [
+     "F-pin",
+     "F-dec"
+    ],
+    "when": "security check failed or declined"
+   },
+   {
+    "outcome": "CCC-TR",
+    "reasons": [
+     "F-person"
+    ],
+    "when": "transferred to a person"
+   }
+  ],
+  "promise_outcome": "CCC-OK",
+  "paid_outcome": "",
+  "transfer_outcome": "CCC-TR",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "CCC-NO",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "F-no",
+  "refused_reason": "F-no",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/02-codes.md",
+   "text": "CCC-OK : (no reason) | CCC-NO : F-no | F-wrong | F-unclear | CCC-FAIL : F-pin | F-dec | CCC-TR : F-person; call sheet: A write fails \u2192 retry once. A second failure \u2192 close `CCC-NO` / `F-no`. Below floor ... close `CCC-NO` / `F-no`. Thank the customer and say goodbye before the close call when there is a record to acknowledge."
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": false,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/02-codes.md",
+   "text": "The add_note tool is not used by call sheet v1.0."
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "One product only. Fields: `kind`, `amt_due`, `dl_days`, `minimum`."
+  }
+ },
+ "phrases": {
+  "opening": "FCCU automated collections line. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue share loan of Fenbrook Community Credit Union.",
+  "today_question": "Can you pay the full amount due?",
+  "all_today_question": "",
+  "robot_reply": "FCCU assistant.",
+  "scam_reply": "Verify us on the number printed on your statement.",
+  "prohibited_before_verification": [
+   "owe",
+   "overdue",
+   "arrears",
+   "facility",
+   "payment"
+  ],
+  "after_promise_sentence": "FCCU will text you to confirm this arrangement.",
+  "already_paid_sentence": "",
+  "cannot_answer_sentence": "FCCU staff on the main line can answer that.",
+  "recorded_promise_change_reply": "Use the FCCU app to change a recorded arrangement.",
+  "product_naming": {
+   "share_loan": "share loan"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "Say EXACTLY \"FCCU automated collections line. This call is recorded.\" | Then EXACTLY \"Am I speaking with {{title}} {{last_name}}?\" | Until every security answer has passed, never say these words: owe, overdue, arrears, facility, payment. | Debt intro EXACTLY: \"I am calling about the overdue share loan of Fenbrook Community Credit Union.\" | The full `amt_due` is asked first | Asked whether this is a robot \u2192 EXACTLY \"FCCU assistant.\" | A successful promise is acknowledged EXACTLY: \"FCCU will text you to confirm this arrangement.\" | A request to alter a recorded arrangement \u2192 EXACTLY \"Use the FCCU app to change a recorded arrangement.\" | A question the tools cannot carry \u2192 EXACTLY \"FCCU staff on the main line can answer that.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Amount {{payment_amount}}, on {{date}}. Save this arrangement?",
+  "source": {
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+   "text": "EXACTLY one read-back: \"Amount {{payment_amount}}, on {{date}}. Save this arrangement?\" | A write fails \u2192 retry once. A second failure \u2192 close `CCC-NO` / `F-no`."
+  }
+ },
+ "api_fields": {
+  "verify_identity.customer_id": "cust_ref",
+  "get_account.customer_id": "cust_ref",
+  "create_promise.customer_id": "cust_ref",
+  "transfer_to_agent.customer_id": "cust_ref",
+  "close_call.customer_id": "cust_ref",
+  "verify_identity.remaining": "tries_left",
+  "get_account.type": "kind",
+  "get_account.past_due": "amt_due",
+  "get_account.days_late": "dl_days",
+  "create_promise.amount": "payment"
+ },
+ "unresolved": [
+  {
+   "topic": "today_question",
+   "text": "The documents say only that the full amt_due is asked first; they dictate no wording and do not say the first ask is for payment today. today_question holds a content-only sentence asking for the full amount.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "vague_date",
+   "text": "Vague period: ask once for the exact day. Still vague \u2192 close `CCC-NO` / `F-no` (closes instead of proposing the k-date).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "third_party_message",
+   "text": "Third party: DO NOT book a callback. Say EXACTLY \"Please ask {{title}} {{last_name}} to call us on the number printed on their statement.\" There is no IR field for this sentence, and the documents do not give the close outcome for a third party who is not a wrong number. callback.no_callback_outcome (and the unused scheduled_outcome, callback being disabled) are set to the general no-promise pair CCC-NO / F-no from the codes list because the schema requires a valid outcome; the documents do not name it for this situation.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "below_floor_sentence",
+   "text": "Below floor: \"That is below what we can take.\" \u2192 close `CCC-NO` / `F-no` (no IR phrase field for this sentence).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "already_paid",
+   "text": "No \"already paid\" rule. (\"paid off and closed\" is handled with the dispute case.)",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "restructuring",
+   "text": "No restructure rule. No discount, waiver, or instalment plan is ever offered.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "refuse_to_talk",
+   "text": "The documents do not say what to do when the customer refuses to talk (rule 16 covers only refusing the security question).",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "deceased",
+   "text": "The documents do not cover a deceased account holder. deceased_outcome is set to the general no-promise pair CCC-NO / F-no from the codes list only because the schema requires a valid outcome; no deceased sentence is dictated.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "transfer_overrides_promise",
+   "text": "The documents do not say which outcome applies when a promise was recorded and the call is then transferred; default kept.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  },
+  {
+   "topic": "effective_date",
+   "text": "Call sheet v1.0 is effective 14 October 2026; the IR has no field for an effective date.",
+   "doc": "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md"
+  }
+ ]
+}

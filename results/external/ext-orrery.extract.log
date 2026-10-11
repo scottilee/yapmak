@@ -1,0 +1,65 @@
+{
+ "bands": [
+  "1-60"
+ ],
+ "identity": [
+  "member_pin"
+ ],
+ "special_cases": [
+  "dispute",
+  "human",
+  "refuse_to_talk",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "hardship",
+   "text": "There is NO hardship rule ... These remarks alone trigger no special action; answer unavailable questions honestly and continue the ordinary full-only discussion.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "restructuring",
+   "text": "There is NO restructuring rule ... Never offer discounts, waivers or plans.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "already_paid",
+   "text": "NO already-paid rule in this campaign. Do not invent a support queue, a paid outcome or a payment-posting delay. There is no paid outcome.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "callback outcomes",
+   "text": "Callback endpoint retained, not enabled; no callback outcome or window. Callbacks are disabled; the callback outcome slots carry NR0/N0 (relative/no contact) only because a relative answering closes NR0/N0.",
+   "doc": "tests/fixtures/external/orrery-seven/03-codes.txt"
+  },
+  {
+   "topic": "relative sentence",
+   "text": "If a relative answers, say \"Please ask the customer to call our published number.\" Close NR0/N0. No security answers from relatives. (No dedicated IR phrase field.)",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "below-full proposals",
+   "text": "Below-full proposals are not promises; explain full-only and ask for the full amount, then treat rejection as a flat no. A single flat refusal closes R01; clarifying a volunteered proposal is still allowed.",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  },
+  {
+   "topic": "refuse_to_talk before verification",
+   "text": "Refusal to talk: immediately No-PTP/R01 after verification, ID0/D1 before it.",
+   "doc": "tests/fixtures/external/orrery-seven/01-register.txt"
+  },
+  {
+   "topic": "promise write failure wording",
+   "text": "A first unsuccessful create_promise closes R99 and must be described as unsuccessful. No success claim before success=true. (No dedicated IR phrase field; no dictated wording.)",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  },
+  {
+   "topic": "wrong-answer count vs API",
+   "text": "O-6: API tries_left is the global wrong-answer allowance: THREE wrong answers end the check. O-7 (1): ONE wrong answer exhausts security, not three. The API may still report tries_left > 0 after one wrong answer; the memo's limit of 1 governs (counted in code).",
+   "doc": "tests/fixtures/external/orrery-seven/02-signed-memo.txt"
+  }
+ ],
+ "audit_fixed": [
+  "identity.wrong_count_source changed from \"api\" to \"code\": O-7(1) sets ONE wrong answer as exhausting security, replacing O-6's statement that the API's tries_left (three) is the allowance. Trusting the API count could allow a second answer, so the limit of 1 is counted in code. Added an unresolved entry for this.",
+  "Added an unresolved entry for O-7(4): a failed create_promise 'must be described as unsuccessful'. There is no IR phrase field for this and the documents do not dictate the wording."
+ ]
+}
