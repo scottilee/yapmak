@@ -1,0 +1,18 @@
+FAIL PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > add_note > close_call
+       - promises [('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - notes [('p1', 'refused')], expected []
+       - conversation: The assistant failed to meet several criteria regarding the third product (credit card). 1. While all three products were initially stated before the first ask in [Message 6], the assistant failed to perform a read-back for the credit card in [Me
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 510.0, '2026-10-15')]
+       - notes [('p1', 'refused'), ('p2', 'refused'), ('p3', 'refused')], expected [('p2', 'refused'), ('p3', 'refused')]
+       - conversation: The conversation failed to meet several success criteria: - There was no promise recorded for the credit card. Instead, the system events show a 'refused' note was added for all three products (p1, p2, p3). - There was only one attempt made for t
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > add_note > add_note > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - notes [('p1', 'refused'), ('p2', 'refused')], expected []
+       - conversation: - The credit card payment was not recorded for 30 October; the assistant ended the call with no promise recorded. - The loan payment was not recorded for 23 October. - There was no read-back of any payment dates as the agent concluded the call du
+
+slowest agent turn per call: median 4 s, worst 20 s. Failed calls where the customer hung up: 0.
+
+0 / 3 passed (bank records and conversation checks). Last simulation ae74b7b5-c4bd-4e77-ac79-fcb1a5b46332, status completed, 129 s.

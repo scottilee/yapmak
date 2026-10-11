@@ -1,0 +1,73 @@
+{
+ "perm": 9,
+ "style": "clean",
+ "slot": "lb-09",
+ "exit": 0,
+ "seconds": 155,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "phone_last4 length",
+   "text": "The field is named phone_last4 but the brief says 'exactly 6 digits including leading zeros'; 6 digits was used as the brief states.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  },
+  {
+   "topic": "date hint reply",
+   "text": "The API can return hint 'day_month_swapped' for date_of_birth, but the brief does not say what to reply or whether the hint counts as a wrong answer; a short re-ask in day-month-year order was used.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  },
+  {
+   "topic": "cannot-answer sentence",
+   "text": "The brief gives no sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The brief requires 'one short sentence of sympathy' but does not dictate its words.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  },
+  {
+   "topic": "already paid / dispute with several products",
+   "text": "Rules 25-26 say to close as `paid` / `no_promise`/`dispute`, and add_note is never used, yet rule 37 speaks of 'all products already paid' and 'the first product ... that is not paid'. The brief does not say whether the call continues with the other products when only one is paid or disputed; the call is closed as the rules literally say.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  },
+  {
+   "topic": "service error sentence",
+   "text": "Rule 32 requires saying the promise could not be recorded but dictates no words, and the schema has no phrase field for it.",
+   "doc": "results/layer-b/lb-09/brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; the sentence now states only what rule 1 requires (automated assistant of Bank 9, call is recorded).",
+  "phrases.source: added the product naming quotes from rule 19.",
+  "outcomes.source: added the rule 36 quote supporting goodbye_before_close.",
+  "unresolved: added entries for already-paid/dispute handling with several products (no notes, rule 37 implies per-product status) and for the undictated service-error sentence."
+ ],
+ "audit_unresolved": [
+  "phone_last4 is said to be 'exactly 6 digits'; kept as stated despite the field name.",
+  "Reply to the API's day_month_swapped hint is not dictated, and the brief does not say whether it counts as a wrong answer.",
+  "No cannot-answer sentence is given.",
+  "The words of the hardship sympathy sentence are not dictated.",
+  "Whether the call continues with other products after one product is already paid or disputed (add_note is never used, rules 25-26 say close).",
+  "Words for 'could not record the promise' (rule 32) are not dictated."
+ ]
+}

@@ -1,0 +1,44 @@
+{
+ "bands": [
+  "band1",
+  "band2",
+  "band3"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "change_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "The documents do not say how to interpret a promise date with missing parts (e.g. day without month).",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  },
+  {
+   "topic": "days_late_outside_bands",
+   "text": "The deadline table covers 1 to 62 days late only; products outside that range are not addressed.",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[hardship].say: was empty although P15 27 requires one short sentence of sympathy; added 'I am sorry to hear that.'",
+  "phrases.opening: removed the added 'Hello,' so the sentence states only the dictated content (automated assistant of Bank 5, call recorded); opening_verbatim stays false because the words are not dictated.",
+  "special_cases[human].trigger: made explicit that it covers requests during the identity check (P15 15) as well as after verification (P15 29), both governed by M45 D."
+ ]
+}

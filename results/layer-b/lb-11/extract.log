@@ -1,0 +1,45 @@
+{
+ "bands": [
+  "band1"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the agent cannot answer. (On create_promise failure they only say: say you could not record it and close as no_promise / service_error.)",
+   "doc": "results/layer-b/lb-11/thread.txt"
+  },
+  {
+   "topic": "all_today_question",
+   "text": "Customers have only one product, so no question for several products is defined.",
+   "doc": "results/layer-b/lb-11/thread.txt"
+  },
+  {
+   "topic": "identity hint",
+   "text": "The documents do not mention the verify_identity hint (day_month_swapped); no date question is used, so no hint reply is defined.",
+   "doc": "results/layer-b/lb-11/thread.txt"
+  },
+  {
+   "topic": "missing date parts",
+   "text": "The documents do not say how to resolve a promise date given without a month or year; only vague dates (ask once, then propose the deadline) are covered.",
+   "doc": "results/layer-b/lb-11/thread.txt"
+  }
+ ],
+ "audit_fixed": [
+  "Source spans enriched to cite the precedence chain (7 Oct overrides, 9 Oct Compliance correction) and the full rule text for bands, callbacks, phrases, restructuring (promises stay recorded) and outcomes (goodbye before close). No operative values needed changing: retry_on_failure=0 (9 Oct wins over 7 Oct 'retry 2 times'), question order postcode->birth_year, wrong_answer_limit=5, deadline n=12, callback today_or_next_business_day, human ask_once_first=false were all verified as correct.",
+  "Added an unresolved entry for missing date parts (calendar.missing_date_parts left at default 'unresolved')."
+ ]
+}

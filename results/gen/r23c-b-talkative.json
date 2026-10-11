@@ -1,0 +1,162 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "e8391d52-954a-464f-9ee8-dc4963057890",
+ "iteration_id": "ca99e0a2-8cb2-456e-83c5-a30ae971b8b5",
+ "seconds": 118,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "medium",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "ad6bedeb-d868-45d4-95b8-153c6ff888a3",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_a6ce3a62-0a6",
+   "slowest_turn_s": 4.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The agent failed the requirement of making 'two attempts on the personal loan'. After the initial group request in Message 8, the agent made three distinct individual attempts to collect on the personal loan in Messages 12, 16, and 18, whereas the criteria specified two. All other criteria were met: the phone question was asked twice (Messages 4 and 6), the date of birth once (Message 2), exactly "
+   ],
+   "call_id": "18518676-88b9-420e-ac99-c6da7a70f95d",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_ca740034-dda",
+   "slowest_turn_s": 2.9,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "589f750b-9441-41e5-ada4-1b6c500937a5",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_7358c4d4-2dc",
+   "slowest_turn_s": 4.8,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "medium",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "ad6bedeb-d868-45d4-95b8-153c6ff888a3",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_a6ce3a62-0a6",
+    "slowest_turn_s": 4.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The agent failed the requirement of making 'two attempts on the personal loan'. After the initial group request in Message 8, the agent made three distinct individual attempts to collect on the personal loan in Messages 12, 16, and 18, whereas the criteria specified two. All other criteria were met: the phone question was asked twice (Messages 4 and 6), the date of birth once (Message 2), exactly "
+    ],
+    "call_id": "18518676-88b9-420e-ac99-c6da7a70f95d",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_ca740034-dda",
+    "slowest_turn_s": 2.9,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "589f750b-9441-41e5-ada4-1b6c500937a5",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_7358c4d4-2dc",
+    "slowest_turn_s": 4.8,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

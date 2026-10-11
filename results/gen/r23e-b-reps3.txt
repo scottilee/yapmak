@@ -1,0 +1,30 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 6 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 3 / 3 passed, 53 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 7 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 3 / 3 passed, 76 s
+
+FAIL PUB-11 medium Multi-product  | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - the call was not closed with close_call
+       - conversation: The assistant failed several success criteria and did not end the call properly. 1. The assistant did not call the 'create_promise' tool for any of the three products. 2. Although a read-back and confirmation occurred initially in Messages 8 and 
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 10 s. Failed calls where the customer hung up: 1.
+-- run 3 of 3: 2 / 3 passed, 278 s
+
+FAIL PUB-11 2/3
+PASS PUB-12 3/3
+PASS PUB-13 3/3
+
+2 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 4478ca77-79bc-4b02-b4b1-a51fbc7704fa, status completed, 408 s.

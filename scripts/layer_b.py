@@ -216,6 +216,34 @@ def render_raw(ir, bank, k):
     return {"01-mail.txt": mail, "02-policy.md": policy, "03-memo.txt": memo, "04-codes.txt": "\n".join(codes)}
 
 
+def render_thread(ir, bank, k):
+    """One mail thread (oldest first): a stale policy summary, a memo that changes several rules but gets one of them wrong,
+    and a later correction that reverses that one change. The generator IR is the state after the last mail."""
+    I = ir["identity"]; reqs = I["requirements"]
+    stale_reqs = reqs[1:] + reqs[:1] if len(reqs) > 1 else reqs
+    stale_limit = I["wrong_answer_limit"] + 1 if I["wrong_answer_limit"] < 5 else I["wrong_answer_limit"] - 1
+    bands = copy.deepcopy(ir["bands"]); stale_bands = copy.deepcopy(bands); stale_bands[-1]["deadline"] = {"kind": "nth_business_day", "n": 6}
+    retry = ir["promise_write"]["retry_on_failure"]; wrong_retry = (retry + 2) % 3
+    cb_days = ir["third_party"]["callback"]["days"]; stale_cb = "today_or_next_business_day" if cb_days == "next_business_day" else "next_business_day"
+    human_ask = _sc(ir, "human").get("ask_once_first", False)
+    base = render_clean(ir, bank, idreqs=stale_reqs, limit=stale_limit, bands=stale_bands, retry=retry, human_ask=not human_ask, cb_days=stale_cb,
+                        header=f"Operating rules of {bank} as circulated on 1 October 2026 (see the later messages in this thread for changes).")
+    order = ", ".join(f"`{r['field']}`" for r in reqs)
+    mail2 = "\n".join([f"From: operations@{bank.lower().replace(' ', '')}.example.invalid", "Date: 7 October 2026 09:40 UTC", "Subject: RE: collection-call rules — changes effective immediately", "",
+                        "Team, four changes to the rules below, everything else stands:",
+                        f"1. Security questions in this order: {order}. Question wording and formats unchanged. {I['wrong_answer_limit']} wrong answers in total end the check (was {stale_limit}).",
+                        f"2. Days late {bands[-1]['days_late_min']}–{bands[-1]['days_late_max']}: the deadline is {_deadline_text(bands[-1]['deadline'])} (no longer the sixth business day).",
+                        f"3. After a failed create_promise: {'no retry at all' if wrong_retry == 0 else 'retry ' + ('once' if wrong_retry == 1 else str(wrong_retry) + ' times')}.",
+                        f"4. Callbacks: {'next business day only, never today' if cb_days == 'next_business_day' else 'today or the next business day'}. Human requests: "
+                        + ("ask once whether you can help first." if human_ask else "transfer immediately, do not ask whether you can help."), "", "— Operations"])
+    mail3 = "\n".join([f"From: compliance@{bank.lower().replace(' ', '')}.example.invalid", "Date: 9 October 2026 16:15 UTC", "Subject: RE: RE: collection-call rules — correction to point 3", "",
+                        f"Correction to Operations' message of 7 October, point 3 only: after a failed create_promise the agent "
+                        + ("must NOT retry; the service-error outcome applies after the first failure." if retry == 0 else f"retries {'once' if retry == 1 else str(retry) + ' times'}, not {'zero times' if wrong_retry == 0 else str(wrong_retry)}.")
+                        + " Points 1, 2 and 4 of that message stand. The 1 October rules apply wherever the 7 October message did not change them.", "", "— Compliance"])
+    thread = "\n\n" + ("=" * 70) + "\n\n".join(["", mail3, mail2, "From: policy@" + bank.lower().replace(" ", "") + ".example.invalid\nDate: 1 October 2026 08:00 UTC\nSubject: collection-call rules\n\n" + base])
+    return {"thread.txt": "Mail thread, newest first.\n" + thread}
+
+
 def render(perm: int, style: str, out_dir: pathlib.Path) -> list[pathlib.Path]:
     ir = json.load(open(PERM_DIR / f"perm-{perm:02d}.policy.json"))
     bank = ir["bank_name"]
@@ -237,7 +265,7 @@ def render(perm: int, style: str, out_dir: pathlib.Path) -> list[pathlib.Path]:
     if style == "clean":
         (d / "brief.md").write_text(render_clean(ir, bank))
         return [d / "brief.md"]
-    files = render_raw(ir, bank, perm)
+    files = render_raw(ir, bank, perm) if style == "raw" else render_thread(ir, bank, perm)
     for n, t in files.items():
         (d / n).write_text(t)
     return [d / n for n in files]
@@ -342,7 +370,7 @@ def run_one(perm, style, out_dir, log):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", choices=["render", "run", "diff"])
-    ap.add_argument("--perm", type=int); ap.add_argument("--style", default="clean", choices=["clean", "raw"])
+    ap.add_argument("--perm", type=int); ap.add_argument("--style", default="clean", choices=["clean", "raw", "thread"])
     ap.add_argument("--perms", default="0:clean,3:clean,10:clean,20:clean,4:raw,6:raw,14:raw,26:raw")
     ap.add_argument("--policy"); ap.add_argument("--out", default="results/layer-b"); ap.add_argument("--lanes", type=int, default=2)
     a = ap.parse_args()

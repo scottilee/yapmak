@@ -14,6 +14,7 @@ from __future__ import annotations
 import datetime
 import dataclasses
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, get_args, get_origin, get_type_hints
 
@@ -292,6 +293,26 @@ class PromptSet:
 
 
 # ---------------------------------------------------------------------------------------------
+def defaulted_operative_fields(ir: PolicyIR) -> list[str]:
+    """Operative values that equal the schema default while their section cites no source text: a possible extraction gap
+    (the documents may simply agree with the default, so this is a trace warning, never a validation error)."""
+    out = []
+    if not ir.identity.source.text and ir.identity.wrong_answer_limit == 3:
+        out.append("identity.wrong_answer_limit=3")
+    if not ir.identity.source.text and ir.identity.holder_confirmation_asks == 2:
+        out.append("identity.holder_confirmation_asks=2")
+    cb = ir.third_party.callback
+    if cb.enabled and not cb.source.text and (cb.days, cb.start, cb.end) == ("today_or_next_business_day", "10:00", "19:00"):
+        out.append("third_party.callback window=default")
+    if not ir.promise_write.source.text and ir.promise_write.retry_on_failure == 1:
+        out.append("promise_write.retry_on_failure=1")
+    if not ir.multi_product.source.text and ir.multi_product.max_products == 3:
+        out.append("multi_product.max_products=3")
+    if not ir.calendar.source.text and not ir.calendar.holidays:
+        out.append("calendar.holidays=[]")
+    return out
+
+
 def merge_overlay(base: dict, overlay: dict) -> dict:
     out = json.loads(json.dumps(base))
     for k, v in overlay.items():
@@ -374,6 +395,19 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
     for r in ir.identity.requirements:
         if r.answer_format not in ANSWER_FORMATS:
             errs.append(f"identity requirement {r.field}: bad answer_format {r.answer_format}")
+        if r.answer_format == "date" and r.numeric_date_order not in ("dmy", "mdy"):
+            errs.append(f"identity requirement {r.field}: numeric_date_order must be dmy or mdy")
+        if r.answer_format == "digits" and (type(r.digits) is not int or r.digits < 1):
+            errs.append(f"identity requirement {r.field}: digits must be a positive integer for the digits format")
+    cb = ir.third_party.callback
+    if cb.enabled:
+        if cb.days not in ("today", "next_business_day", "today_or_next_business_day"):
+            errs.append("third_party.callback.days must be today, next_business_day or today_or_next_business_day")
+        for name, value in (("start", cb.start), ("end", cb.end)):
+            if not isinstance(value, str) or not re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", value):
+                errs.append(f"third_party.callback.{name} must be HH:MM (24-hour), got {value!r}")
+        if isinstance(cb.start, str) and isinstance(cb.end, str) and re.fullmatch(r"\d\d:\d\d", cb.start) and re.fullmatch(r"\d\d:\d\d", cb.end) and cb.start > cb.end:
+            errs.append("third_party.callback.start must not be after end")
     if not ir.bands:
         errs.append("bands is empty")
     for i, b in enumerate(ir.bands):

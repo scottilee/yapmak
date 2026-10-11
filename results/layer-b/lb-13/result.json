@@ -1,0 +1,50 @@
+{
+ "perm": 13,
+ "style": "raw",
+ "slot": "lb-13",
+ "exit": 0,
+ "seconds": 149,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [
+    "n/a: single-product policy"
+   ],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents dictate no sentence for questions the assistant cannot answer. After a failed create_promise P23 32 only says to 'say you could not record it' before closing as no_arrangement / system_error.",
+   "doc": "results/layer-b/lb-13/02-policy.md"
+  },
+  {
+   "topic": "all_today_question",
+   "text": "Only one product per customer is ever mentioned (P23 34), so there is no question about paying several products today.",
+   "doc": "results/layer-b/lb-13/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting 'Hello' \u2014 P23 1 dictates only the content (automated assistant of Bank 13, call recorded), so the sentence now states just that.",
+  "unresolved: removed the 'hardship sympathy wording' entry \u2014 P23 27 dictates the content ('one short sentence of sympathy'), so a short sympathy sentence is the required phrase and this is not an open question.",
+  "Source citations extended (human: M53 D overrides P23 29 'do not ask whether you can help'; band2 attempt count from P23 table; callback retry from P23 7; promise_write confirm phrase from P23 30; product naming from P23 19). No values changed."
+ ],
+ "audit_unresolved": [
+  "No dictated sentence for questions the assistant cannot answer (cannot_answer_sentence left empty); P23 32 only says to say the promise could not be recorded after a failed create_promise.",
+  "No several-product question (all_today_question) because the documents allow only one product per customer."
+ ]
+}

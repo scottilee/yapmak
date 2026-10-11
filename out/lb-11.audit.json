@@ -1,0 +1,162 @@
+{
+ "covered": [
+  {
+   "rule": "Precedence: 9 Oct Compliance corrects 7 Oct point 3 only; 7 Oct points 1, 2, 4 stand; 1 Oct rules apply elsewhere",
+   "where": "promise_write.retry_on_failure, identity, bands[0].deadline, third_party.callback.days, special_cases[human]"
+  },
+  {
+   "rule": "1. First sentence: automated assistant of Bank 11, call recorded; ask title + last name",
+   "where": "phrases.opening (opening_verbatim=false, content only), phrases.holder_question"
+  },
+  {
+   "rule": "2. Never say collections, debt, payment, credit card, loan before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "3. Only clear yes confirms; ask once more; else not_reached/unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "4. Robot reply / scam reply and continue",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
+  },
+  {
+   "rule": "5. Third party: say nothing, ask when reachable",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "6 + 7 Oct pt 4. Callback today or next business day, 10:00-17:30, after now; not_reached/callback",
+   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+  },
+  {
+   "rule": "7. Time outside window: ask once more, else not_reached/no_callback",
+   "where": "third_party.callback.retry_once, no_callback_outcome"
+  },
+  {
+   "rule": "8. Wrong number -> not_reached/wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "9. Deceased: 'I am sorry for your loss.' -> not_reached/deceased",
+   "where": "third_party.deceased_sentence, deceased_outcome"
+  },
+  {
+   "rule": "10. Refuses to talk -> no_promise/refused",
+   "where": "special_cases[refuse_to_talk], outcomes.refused_reason"
+  },
+  {
+   "rule": "11 + 7 Oct pt 1. Questions postcode then birth_year; formats text / year",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "12 + 7 Oct pt 1. 5 wrong answers total; wrong_answers_left",
+   "where": "identity.wrong_answer_limit=5, wrong_count_source, remaining_slot"
+  },
+  {
+   "rule": "13. 'Please use the mobile app or visit a branch.' -> not_verified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "14. Decline / asks purpose: explain once; second refusal not_verified/declined",
+   "where": "identity.decline_explain_once, asking_purpose_counts_as_decline, declined_outcome"
+  },
+  {
+   "rule": "15, 29 + 7 Oct pt 4. Human: transfer immediately to general, transferred/human",
+   "where": "special_cases[human] (ask_once_first=false)"
+  },
+  {
+   "rule": "16. Business days Mon-Sat, holidays 2026-10-14, 2026-10-15",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "17. 'Next <weekday>' = following week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "18. Debt intro, up to 1 product, 'Can you make this payment today?'",
+   "where": "phrases.debt_intro, phrases.today_question, multi_product.max_products"
+  },
+  {
+   "rule": "19. Floors and product naming",
+   "where": "amounts.floors, phrases.product_naming"
+  },
+  {
+   "rule": "20. Full first, never ask how much, floor once with 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "21. Promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "22 + 7 Oct pt 2. Band 1-90, deadline 12th business day, 2 attempts",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "23. Attempt 1 full on last business day this/next week (floor if full refused); attempt 2 floor on deadline",
+   "where": "bands[0].attempts"
+  },
+  {
+   "rule": "24. Attempts used up -> no promise",
+   "where": "outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "25. Already paid sentence, close paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "26. Dispute -> no_promise/dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "27. Hardship: sympathy, no persuasion, offer support transfer; decline no_promise/hardship; may record promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "28. Restructuring -> transfer restructuring; recorded promises stay",
+   "where": "special_cases[restructuring], multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "30. Read-back 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, one_promise_per_product"
+  },
+  {
+   "rule": "31. 'You will receive a text message confirming this promise.'",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "32 + 9 Oct. No retry; no_promise/service_error",
+   "where": "promise_write.retry_on_failure=0, outcomes.service_error_reason"
+  },
+  {
+   "rule": "33. 'You can change it in the mobile app.'",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "34. One product",
+   "where": "multi_product.max_products=1"
+  },
+  {
+   "rule": "35. add_note never used",
+   "where": "notes.enabled=false"
+  },
+  {
+   "rule": "36. Goodbye before close_call; outcome table",
+   "where": "outcomes.goodbye_before_close, outcomes.table"
+  },
+  {
+   "rule": "37. Outcome precedence",
+   "where": "outcomes.promise_outcome, paid_outcome, transfer_outcome, transfer_overrides_promise, no_promise_outcome"
+  }
+ ],
+ "fixed": [
+  "Source spans enriched to cite the precedence chain (7 Oct overrides, 9 Oct Compliance correction) and the full rule text for bands, callbacks, phrases, restructuring (promises stay recorded) and outcomes (goodbye before close). No operative values needed changing: retry_on_failure=0 (9 Oct wins over 7 Oct 'retry 2 times'), question order postcode->birth_year, wrong_answer_limit=5, deadline n=12, callback today_or_next_business_day, human ask_once_first=false were all verified as correct.",
+  "Added an unresolved entry for missing date parts (calendar.missing_date_parts left at default 'unresolved')."
+ ],
+ "unresolved": [
+  "No dictated sentence for questions the agent cannot answer (cannot_answer_sentence left empty); for a failed create_promise the documents only say to say it could not be recorded.",
+  "No multi-product today question (single product only).",
+  "verify_identity hint (day_month_swapped) not mentioned; no date question used, so no hint reply.",
+  "How to resolve promise dates missing a month/year is not stated."
+ ]
+}

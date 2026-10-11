@@ -1,0 +1,12 @@
+PASS PUB-01 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-06 hard   Edge           | verify > verify > get_account > close_call
+PASS PUB-02 hard   Edge           | schedule_callback > close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-05 hard   Edge           | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-03 hard   Edge           | verify > verify > verify > get_account > promise > close_call
+PASS PUB-08 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Edge           | verify > verify > get_account > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 6 s. Failed calls where the customer hung up: 0.
+
+8 / 8 passed (bank records and conversation checks). Last simulation be8c747b-3a9d-4bb1-939f-254780d257d0, status completed, 86 s.

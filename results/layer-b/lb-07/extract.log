@@ -1,0 +1,46 @@
+{
+ "bands": [
+  "band1",
+  "band2",
+  "band3"
+ ],
+ "identity": [
+  "company_number",
+  "founded_year",
+  "postcode"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "robot",
+  "refuse_to_talk",
+  "change_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "missing_date_parts",
+   "text": "The documents do not say how to interpret a promise date given without month or year.",
+   "doc": "results/layer-b/lb-07/thread.txt"
+  },
+  {
+   "topic": "identity_hint",
+   "text": "verify_identity can return hint day_month_swapped, but no security question is a date and the documents give no hint reply.",
+   "doc": "results/layer-b/lb-07/thread.txt"
+  },
+  {
+   "topic": "human_during_identity_check",
+   "text": "The 7 October message says 'Human requests: ask once whether you can help first' without limiting it to after verification; it is applied to all human requests (rule 15 during the identity check and rule 29 after it), but the documents do not say explicitly whether rule 15 is changed too.",
+   "doc": "results/layer-b/lb-07/thread.txt"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: dropped the 'Hello,' the extractor added; the documents only set the content (automated assistant of Bank 7, call recorded), so it is now a short sentence saying just that.",
+  "special_cases[human]: the source now cites rule 15 (during the identity check) and states that the 7 Oct point 4 overrides rule 29; the trigger now covers both phases.",
+  "Source spans: added the missing citations (the r5 third-party rule, the r7 retry, the r16 'now' clock and 'this <weekday>', the r36 goodbye, the r30 confirm phrase, the band3 attempts row, the cannot-answer and today-question content).",
+  "unresolved: added an entry noting that it is ambiguous whether the 7 Oct 'ask once whether you can help first' also changes rule 15 (a human request during the identity check)."
+ ]
+}

@@ -231,6 +231,13 @@ Write the JSON to {ir_path.relative_to(workspace)} with the Write tool. Write no
     asyncio.run(_query(prompt1, "policy_extraction", trace, **access))
     if not ir_path.exists():
         raise RuntimeError("extraction produced no policy file")
+    # snapshot of the first pass: if the audit pass times out or fails, the build continues with this when it validates
+    pass1_text = ir_path.read_text()
+    try:
+        check_artifact(pass1_text)
+        pass1_ok = not P.validate(P.PolicyIR.load(str(ir_path)), enums)
+    except Exception:
+        pass1_ok = False
 
     prompt2 = f"""You are the independent auditor of a policy extraction. Do NOT trust the extraction: re-read the source documents yourself.
 Source documents, in order:
@@ -244,7 +251,17 @@ documents conflict.
 Then: (1) write the corrected JSON back to {ir_path.relative_to(workspace)} (full file); (2) write {audit_path.relative_to(workspace)} as JSON:
 {{"covered": [{{"rule": "<short quote or number>", "where": "<json path>"}}], "fixed": ["<what you changed and why>"], "unresolved": ["<what the documents do not settle>"]}}.
 Do not run code."""
-    asyncio.run(_query(prompt2, "policy_audit", trace, **access))
+    try:
+        asyncio.run(_query(prompt2, "policy_audit", trace, **access))
+        audit_failed = ""
+    except Exception as e:  # timeout, SDK error, incomplete session
+        audit_failed = repr(e)[:300]
+        if not pass1_ok:
+            raise
+        ir_path.write_text(pass1_text)
+        audit_path.write_text(json.dumps({"covered": [], "fixed": [], "unresolved": [f"audit pass failed ({audit_failed}); the first-pass policy was used unaudited"]}))
+        if trace:
+            trace.event("policy_audit_fallback", error=audit_failed, used="pass1")
 
     check_artifact(ir_path.read_text())
     def load_candidate():
@@ -260,8 +277,24 @@ Do not run code."""
 ({_sources_text(brief_paths)}) and the tool API file {openapi_path}; see policy.py for the schema and {SCHEMA_GUIDE}
 Problems:
 """ + "\n".join("- " + p for p in problems) + f"\nWrite the corrected full JSON back to {ir_path.relative_to(workspace)}. Do not run code."
-        asyncio.run(_query(prompt3, "policy_repair", trace, max_turns=20, **access))
-        ir, problems = load_candidate()
+        try:
+            asyncio.run(_query(prompt3, "policy_repair", trace, max_turns=20, **access))
+            ir, problems = load_candidate()
+        except Exception as e:
+            problems = [f"repair pass failed: {e!r}"[:300]]
+        if problems and pass1_ok:
+            rejected = problems
+            ir_path.write_text(pass1_text)      # the audited version broke validation: fall back to the first pass
+            ir, problems = load_candidate()
+            try:
+                old_audit = json.loads(audit_path.read_text()) if audit_path.exists() else {}
+            except ValueError:
+                old_audit = {}
+            audit_path.write_text(json.dumps({"covered": [], "fixed": [],
+                                              "unresolved": list(old_audit.get("unresolved") or []) + [f"the audited policy failed validation ({'; '.join(rejected)[:300]}); the first-pass policy was used, so the audit's 'fixed' claims below were NOT applied"],
+                                              "rejected_audit": old_audit}))
+            if trace:
+                trace.event("policy_repair_fallback", used="pass1", rejected_problems=rejected, problems_after_fallback=problems)
         if problems:
             raise RuntimeError("policy still invalid after repair: " + "; ".join(problems))
     if not audit_path.exists():
@@ -272,7 +305,8 @@ Problems:
         raise ValueError("audit must be an object")
     if trace:
         trace.event("policy_compiled", artifact=str(ir_path.relative_to(workspace)), bands=len(ir.bands), identity_fields=[r.field for r in ir.identity.requirements],
-                    special_cases=[s.name for s in ir.special_cases], unresolved=ir.unresolved, audit_fixed=audit.get("fixed", []), audit_unresolved=audit.get("unresolved", []))
+                    special_cases=[s.name for s in ir.special_cases], unresolved=ir.unresolved, audit_fixed=audit.get("fixed", []), audit_unresolved=audit.get("unresolved", []),
+                    defaulted_without_source=P.defaulted_operative_fields(ir))
     return ir, audit
 
 

@@ -1,0 +1,71 @@
+{
+ "perm": 15,
+ "style": "thread",
+ "slot": "lb-15",
+ "exit": 0,
+ "seconds": 160,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "identity.hint_reply",
+   "text": "The API returns hint day_month_swapped for date_of_birth, but the documents dictate no reply for it; the reply used only restates the documented month-day-year order.",
+   "doc": "openapi.json"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-15/thread.txt"
+  },
+  {
+   "topic": "identity.phone_last4 digits",
+   "text": "The field is named phone_last4 but the documents say 'exactly 6 digits including leading zeros'; 6 is used as written.",
+   "doc": "results/layer-b/lb-15/thread.txt"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The documents require one short sentence of sympathy but do not dictate its words.",
+   "doc": "results/layer-b/lb-15/thread.txt"
+  },
+  {
+   "topic": "today_question (single product)",
+   "text": "The documents only dictate asking once whether the customer can pay all of it today; no separate single-product wording is given.",
+   "doc": "results/layer-b/lb-15/thread.txt"
+  },
+  {
+   "topic": "create_promise failure sentence",
+   "text": "Rule 32 says to say the promise could not be recorded; no exact wording is given and the schema has no phrase field for it.",
+   "doc": "results/layer-b/lb-15/thread.txt"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[refuse_to_talk].before_persuasion: true -> false. Refusal to talk is in section 1, not in section 5 ('these win over persuasion'), and rule 23 says a flat refusal uses a persuasion attempt, so it must not take priority over persuasion.",
+  "Added source quotes (holder re-ask, third party, attempts text, goodbye, confirm phrase) and two unresolved entries (single-product today question wording; wording for a failed create_promise)."
+ ],
+ "audit_unresolved": [
+  "No reply is dictated for the API hint day_month_swapped; the hint_reply only restates the documented month-day-year order.",
+  "No cannot-answer sentence is dictated.",
+  "phone_last4 is said to be 'exactly 6 digits including leading zeros'; kept at 6 as written, although the name suggests 4.",
+  "The words of the hardship sympathy sentence are not dictated.",
+  "No separate single-product today question is dictated; only 'ask once whether they can pay all of it today'.",
+  "Rule 32 'say you could not record it' has no dictated wording and the schema has no field for it."
+ ]
+}

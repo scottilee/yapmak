@@ -1,0 +1,66 @@
+{
+ "perm": 1,
+ "style": "clean",
+ "slot": "lb-01",
+ "exit": 0,
+ "seconds": 158,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The brief does not dictate a sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-01/brief.md"
+  },
+  {
+   "topic": "identity.date_of_birth.hint_reply",
+   "text": "The API can return hint day_month_swapped, but the brief does not dictate what to say; the reply used restates the brief's day-month-year reading order.",
+   "doc": "results/layer-b/lb-01/brief.md"
+  },
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "The brief does not say how to interpret a date with missing parts (e.g. a day without a month).",
+   "doc": "results/layer-b/lb-01/brief.md"
+  },
+  {
+   "topic": "promise_write.failure_sentence",
+   "text": "The brief says to say the promise could not be recorded after a second create_promise failure (rule 32), but gives no exact words and the schema has no dedicated field for it.",
+   "doc": "results/layer-b/lb-01/brief.md"
+  },
+  {
+   "topic": "hardship.multi_product",
+   "text": "Rule 27 closes the call as no-ptp / vulnerable when the transfer is declined; it does not say whether other products are handled first, so ends_call is true.",
+   "doc": "results/layer-b/lb-01/brief.md"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the invented greeting 'Hello,'; the brief only dictates the content (automated assistant of Bank 1, call recorded) and the opening is not verbatim.",
+  "outcomes.source: added the rule-36 goodbye-before-close quote that supports goodbye_before_close.",
+  "unresolved: added an entry noting rule 27 does not settle whether other products are handled before the hardship close; clarified the rule-32 failure sentence entry."
+ ],
+ "audit_unresolved": [
+  "No dictated sentence for questions the assistant cannot answer (phrases.cannot_answer_sentence left empty).",
+  "No wording dictated for the API hint day_month_swapped; hint_reply restates the brief's day-month-year order.",
+  "How to interpret dates with missing parts is not stated.",
+  "Rule 32 requires saying the promise could not be recorded but gives no words; the schema has no field for it.",
+  "Rule 27 does not say whether remaining products are handled before closing on a declined hardship transfer."
+ ]
+}

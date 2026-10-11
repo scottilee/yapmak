@@ -1,0 +1,62 @@
+{
+ "perm": 17,
+ "style": "thread",
+ "slot": "lb-17",
+ "exit": 0,
+ "seconds": 167,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "identity.hint_reply",
+   "text": "verify_identity can return hint day_month_swapped, but the documents do not say what to tell the customer when it does.",
+   "doc": "results/layer-b/lb-17/thread.txt"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The documents give no sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-17/thread.txt"
+  },
+  {
+   "topic": "human request during identity check",
+   "text": "Operations (7 Oct) say 'Human requests: ask once whether you can help first' without limiting it; rule 15 (transfer to front-desk during the identity check) predates it. The ask-once rule has been applied to every human request.",
+   "doc": "results/layer-b/lb-17/thread.txt"
+  },
+  {
+   "topic": "create_promise failure sentence",
+   "text": "Rule 32 requires saying the promise could not be recorded (no dictated wording); the schema has no phrase field for it.",
+   "doc": "results/layer-b/lb-17/thread.txt"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.opening: removed the added 'Hello,' so the sentence holds only what rule 1 asks for (the documents give the content, not the exact words; opening_verbatim stays false).",
+  "Source spans widened (identity, third_party, calendar, bands, outcomes, phrases, promise_write) to quote the rules they actually cover (rules 3, 5, 14, 16, 23, 24, 31, 36, product naming).",
+  "human special case: source text now shows that 7 Oct point 4 overrides rule 29; the unresolved entry is reworded to explain the reading used.",
+  "Added an unresolved entry: rule 32 requires a 'could not record it' sentence, but the schema has no phrase field for it.",
+  "Checked and left unchanged: identity order and limit of 2 (7 Oct), band2 end_of_month/calendar/following (7 Oct), callback next_business_day (7 Oct), retry_on_failure 0 (9 Oct correction overrides 7 Oct point 3). All enum values (outcomes, reasons, queues, note reasons, fields, product types) exist in openapi.json."
+ ],
+ "audit_unresolved": [
+  "verify_identity can return hint day_month_swapped; the documents do not say what to tell the customer (hint_reply left empty).",
+  "No cannot-answer sentence is given in the documents.",
+  "Whether 7 Oct 'ask once whether you can help first' also covers human requests during the identity check (rule 15); applied to all human requests.",
+  "Rule 32 'say you could not record it' has no dictated wording and no schema field."
+ ]
+}

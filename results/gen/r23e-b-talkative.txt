@@ -1,0 +1,9 @@
+PASS PUB-11 medium Multi-product  | verify > verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The assistant failed the success criteria regarding the number of payment attempts. It followed the identity verification instructions correctly by asking for the phone number twice (Messages 4 and 8) and the date of birth once (Message 2). It al
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 11 s, worst 15 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+2 / 3 passed (bank records and conversation checks). Last simulation b8905543-857b-47b3-a59d-3659a695dc62, status completed, 576 s.

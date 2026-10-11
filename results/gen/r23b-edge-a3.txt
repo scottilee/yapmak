@@ -1,0 +1,18 @@
+PASS PUB-01 hard   Edge           | transfer_to_agent > close_call
+PASS PUB-02 hard   Edge           | close_call
+PASS PUB-03 hard   Edge           | close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-05 hard   Edge           | verify > verify > get_account > close_call
+PASS PUB-06 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Edge           | verify > verify > get_account > close_call
+PASS PUB-08 hard   Edge           | verify > verify > get_account > close_call
+PASS PUB-09 hard   Edge           | close_call
+FAIL PUB-10 hard   Edge           | verify > verify > get_account > transfer_to_agent > close_call
+       - outcome ('transferred', 'support'), expected ('not_reached', 'deceased')
+       - transfers [{'queue': 'support'}], expected []
+       - identity or account tools used although the customer was not on the line
+       - conversation: The evaluation found that the assistant failed two of the success criteria. First, account details were disclosed in Message 6 (specifically the card's last four digits, the past-due amount, and the days late), which violates the requirement that
+
+slowest agent turn per call: median 7 s, worst 12 s. Failed calls where the customer hung up: 0.
+
+9 / 10 passed (bank records and conversation checks). Last simulation f8e32285-4a61-4baa-a149-6c2d9696c467, status completed, 132 s.

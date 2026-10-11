@@ -1,0 +1,562 @@
+{
+ "source_docs": [
+  "results/layer-b/lb-05/01-mail.txt",
+  "results/layer-b/lb-05/02-policy.md",
+  "results/layer-b/lb-05/03-memo.txt",
+  "results/layer-b/lb-05/04-codes.txt"
+ ],
+ "bank_name": "Bank 5",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "Could you please tell me your postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-05/03-memo.txt",
+     "text": "A. Security asks in this order: `postcode` FIRST, `birth_year` SECOND. Keep each question's wording and format."
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "Could you please tell me your birth year?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "results/layer-b/lb-05/03-memo.txt",
+     "text": "A. Security asks in this order: `postcode` FIRST, `birth_year` SECOND. Keep each question's wording and format."
+    }
+   }
+  ],
+  "wrong_answer_limit": 5,
+  "wrong_count_source": "api",
+  "remaining_slot": "wrong_answers_left",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": true,
+  "failed_outcome": [
+   "unverified",
+   "failed"
+  ],
+  "declined_outcome": [
+   "unverified",
+   "declined"
+  ],
+  "unclear_holder_outcome": [
+   "unreached",
+   "unclear"
+  ],
+  "failed_instruction": "Please use the mobile app or visit a branch.",
+  "source": {
+   "doc": "results/layer-b/lb-05/03-memo.txt",
+   "text": "5 wrong answers TOTAL across the whole check, not 4."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "09:00",
+   "end": "19:00",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "unreached",
+    "callback"
+   ],
+   "no_callback_outcome": [
+    "unreached",
+    "no_callback"
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-05/03-memo.txt",
+    "text": "E. Callbacks are for today or the next business day; the existing window remains."
+   }
+  },
+  "wrong_number_outcome": [
+   "unreached",
+   "wrong_number"
+  ],
+  "deceased_outcome": [
+   "unreached",
+   "deceased"
+  ],
+  "deceased_sentence": "I am sorry for your loss.",
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "Someone other than the customer (relative, colleague, friend): say nothing about the purpose. Ask when the customer can be reached."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-14",
+   "2026-10-15"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "Business days are Monday to Saturday, except Bank 5 holidays: 2026-10-14, 2026-10-15."
+  }
+ },
+ "bands": [
+  {
+   "name": "band1",
+   "days_late_min": 1,
+   "days_late_max": 25,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 3
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "| 1 to 25 | band1 | the third business day after today | 1 |"
+   }
+  },
+  {
+   "name": "band2",
+   "days_late_min": 26,
+   "days_late_max": 57,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 3
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "| 26 to 57 | band2 | the third business day after today | 2 |"
+   }
+  },
+  {
+   "name": "band3",
+   "days_late_min": 58,
+   "days_late_max": 62,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 12
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "results/layer-b/lb-05/03-memo.txt",
+    "text": "B. For days late 58\u201362 only, the deadline is no longer the sixth business day after today but the twelfth business day after today."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "business_overdraft": "minimum_due",
+   "equipment_loan": "scheduled_repayment"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "the rest stays overdue",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "Ask for the full past-due amount first. Never ask \"how much can you pay?\". Any amount between the floor and the full amount is accepted; an amount below the floor is refused, and the floor is offered once per product with the words \"the rest stays overdue\"."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "A promise date must be today or later, a business day, and not after the deadline. A weekend day or holiday rolls to the next business day. A vague date (next week, when I get paid): ask once for the exact day; if none follows, propose the deadline. A date after the deadline: offer the deadline instead."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid the product.",
+   "action": {
+    "type": "note",
+    "reason": "settled"
+   },
+   "say": "Payments can take one business day to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "Already paid: say \"Payments can take one business day to appear.\". Note the product as `settled` and continue with the other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes the debt: it is not their debt, they never had the product, or it was closed or paid off before.",
+   "action": {
+    "type": "note",
+    "reason": "disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "Dispute (not their debt, never had the product, closed or paid off before): note the product as `disputed` and continue with the other products."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes hardship such as illness, a death in the family, or job loss.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "distress"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "care",
+   "offer_outcome": [
+    "handed_over",
+    "care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "Hardship (illness, a death in the family, job loss): say one short sentence of sympathy, make no persuasion attempt, and offer a transfer to the `care` team. If they accept, call `transfer_to_agent` with queue `care` and close as `handed_over` / `care`. If they decline, close as `no_arrangement` / `distress`. A customer in hardship may still name a date and amount; record it."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks for a payment plan, lower instalments, or changing the terms.",
+   "action": {
+    "type": "transfer",
+    "queue": "restructure",
+    "outcome": "handed_over",
+    "reason": "restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "Restructuring (a payment plan, lower instalments, changing the terms): call `transfer_to_agent` with queue `restructure` and close as `handed_over` / `restructure`. Promises already recorded on this call stay recorded."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human agent, during the identity check or after verification.",
+   "action": {
+    "type": "transfer",
+    "queue": "desk",
+    "outcome": "handed_over",
+    "reason": "person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-05/03-memo.txt",
+    "text": "D. Human requests are handled by first asking once whether the assistant can help; transfer only if they insist."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The person suspects the call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify this call by phoning Bank 5's customer service number.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "If the person suspects a scam: say they can verify the call by phoning Bank 5's customer service number, and continue."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The person asks whether this is a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Bank 5's digital assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "If asked whether this is a robot: say \"I am Bank 5's digital assistant.\""
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk.",
+   "action": {
+    "type": "close",
+    "outcome": "no_arrangement",
+    "reason": "declined_payment"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "The customer refuses to talk: close as `no_arrangement` / `declined_payment`."
+   }
+  },
+  {
+   "name": "change_promise",
+   "trigger": "The customer asks whether a recorded promise can be changed.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can change it in the mobile app.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "results/layer-b/lb-05/02-policy.md",
+    "text": "If the customer asks whether a recorded promise can be changed: say \"You can change it in the mobile app.\""
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "arrangement",
+    "reasons": [],
+    "when": "At least one promise recorded."
+   },
+   {
+    "outcome": "settled",
+    "reasons": [],
+    "when": "All products already paid."
+   },
+   {
+    "outcome": "handed_over",
+    "reasons": [
+     "restructure",
+     "person",
+     "care"
+    ],
+    "when": "A transfer, with the transfer's reason, even after a promise."
+   },
+   {
+    "outcome": "no_arrangement",
+    "reasons": [
+     "declined_payment",
+     "distress",
+     "disputed",
+     "system_error"
+    ],
+    "when": "No promise: reason of the first product in get_account order that is not paid."
+   },
+   {
+    "outcome": "unverified",
+    "reasons": [
+     "failed",
+     "declined"
+    ],
+    "when": "Identity check failed or declined."
+   },
+   {
+    "outcome": "unreached",
+    "reasons": [
+     "callback",
+     "no_callback",
+     "wrong_number",
+     "deceased",
+     "unclear"
+    ],
+    "when": "Customer not reached."
+   }
+  ],
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "no_arrangement",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "system_error",
+  "refused_reason": "declined_payment",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "results/layer-b/lb-05/04-codes.txt",
+   "text": "CODE LIST C \u2014 authoritative enum combinations"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "declined_payment",
+   "distress",
+   "disputed",
+   "settled",
+   "system_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "Before closing a call that is not a transfer, add exactly one note (`add_note`) for each product without a promise, with the reason that applies: `declined_payment`, `distress`, `disputed`, `settled`, `system_error`. No notes on a transfer."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "`get_account` returns up to 2 products."
+  }
+ },
+ "phrases": {
+  "opening": "I am the automated assistant of Bank 5, and this call is recorded.",
+  "opening_verbatim": false,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling from the Bank 5 collections team about a late payment.",
+  "today_question": "Can you pay all of it today?",
+  "all_today_question": "Can you pay all of it today?",
+  "robot_reply": "I am Bank 5's digital assistant.",
+  "scam_reply": "You can verify this call by phoning Bank 5's customer service number.",
+  "prohibited_before_verification": [
+   "collections",
+   "debt",
+   "payment",
+   "credit card",
+   "loan"
+  ],
+  "after_promise_sentence": "You will receive a text message confirming this promise.",
+  "already_paid_sentence": "Payments can take one business day to appear.",
+  "cannot_answer_sentence": "",
+  "recorded_promise_change_reply": "You can change it in the mobile app.",
+  "product_naming": {
+   "business_overdraft": "business overdraft",
+   "equipment_loan": "equipment loan"
+  },
+  "source": {
+   "doc": "results/layer-b/lb-05/02-policy.md",
+   "text": "First sentence: say you are the automated assistant of Bank 5 and that the call is recorded. Then ask whether you are speaking with the customer, using title and last name."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 2,
+  "one_promise_per_product": true,
+  "confirm_phrase": "Do you confirm?",
+  "source": {
+   "doc": "results/layer-b/lb-05/03-memo.txt",
+   "text": "C. After a failed create_promise retry 2 times, not 1."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "The documents do not say how to interpret a promise date with missing parts (e.g. day without month).",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  },
+  {
+   "topic": "days_late_outside_bands",
+   "text": "The deadline table covers 1 to 62 days late only; products outside that range are not addressed.",
+   "doc": "results/layer-b/lb-05/02-policy.md"
+  }
+ ]
+}

@@ -125,8 +125,9 @@ def build(a):
             tr.event("workflow_readback", error=repr(e)[:200])
 
         # 4. pre-bank chat self-test (identity start + third party); never a simulation, never fatal ------------
+        checks = {}
         if not a.no_smoke:
-            selftest(ids, ir, tr, a.slot)
+            checks["selftest"] = selftest(ids, ir, tr, a.slot)
 
         # 5. one simulation (only with a case file and enough time) ------------------------------
         if a.cases and left() > SIM_MIN_BUDGET_S:
@@ -152,7 +153,7 @@ def build(a):
         # 6. final export (the published version is unchanged by the test) ----------------------------
         retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export", tr)
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
-        tr.event("run_end", success=True, elapsed_s=round(time.monotonic() - t_start, 1))
+        tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), elapsed_s=round(time.monotonic() - t_start, 1))
         print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:
         tr.event("run_end", success=False, error=repr(e)[:500], elapsed_s=round(time.monotonic() - t_start, 1), exported=checkpoint_exported)
@@ -179,9 +180,12 @@ def selftest(ids, ir: P.PolicyIR, tr: Trace, slot: str):
     try:
         p = runcontrol.run(cmd, seconds=CHAT_CHECK_BUDGET_S, cwd=ROOT)
         out = json.loads(res.read_text()) if p.returncode in (0, 1) and res.exists() else {"ok": None, "stdout": p.stdout[-1500:], "stderr": p.stderr[-800:]}
-        tr.event("selftest", ok=bool(out.get("ok")) and p.returncode == 0, result_path=str(res.relative_to(ROOT)), result=out, exit_code=p.returncode, duration_ms=int((time.time() - t0) * 1000))
+        ok = bool(out.get("ok")) and p.returncode == 0
+        tr.event("selftest", ok=ok, result_path=str(res.relative_to(ROOT)), result=out, exit_code=p.returncode, duration_ms=int((time.time() - t0) * 1000))
+        return ok
     except Exception as e:
         tr.event("selftest", ok=None, error=repr(e)[:300], duration_ms=int((time.time() - t0) * 1000))
+        return None
 
 
 if __name__ == "__main__":

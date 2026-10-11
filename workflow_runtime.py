@@ -102,8 +102,10 @@ def _calendar_dict():
     c = POLICY['calendar']
     return dict(next_weekday_means_following_week=bool(c.get('next_weekday_means_following_week', True)), missing_date_parts='next_occurrence')
 
-def _resolve_date(prefix, today):
-    """Structured date extraction -> ('ok', iso) | ('vague', '') | ('none', '') | ('unreadable', '')."""
+def _resolve_date(prefix, today, offer_date=None):
+    """Structured date extraction -> ('ok', iso) | ('vague', '') | ('none', '') | ('unreadable', '').
+    `offer_date`: the date currently proposed by the agent; when the customer's words fit several readings, the one that
+    restates the offer wins (an acceptance restating the date is not a new proposal)."""
     kind = _get(prefix + '_kind')
     if kind in ('', 'none'):
         return 'none', ''
@@ -113,12 +115,32 @@ def _resolve_date(prefix, today):
     expr = None
     if kind in ('today', 'tomorrow'):
         expr = dict(keyword=kind)
-    elif kind == 'weekday' and not _int(_get(prefix + '_day')):
-        wd = _get(prefix + '_weekday').lower()
-        if wd not in WEEKDAYS:
-            return 'unreadable', ''
+    elif kind == 'weekday' and _get(prefix + '_weekday').lower() in WEEKDAYS:
+        wd = WEEKDAYS.index(_get(prefix + '_weekday').lower())
         rel = _get(prefix + '_relative').lower()
-        expr = dict(weekday=WEEKDAYS.index(wd), relative='next' if rel == 'next' else 'this')
+        day = _int(_get(prefix + '_day'))
+        expr = dict(weekday=wd, relative='next' if rel == 'next' else 'this')
+        if day:
+            # a day number next to a weekday is kept only when it names that weekday ("Tuesday the 27th", "Friday the 23rd");
+            # a stray number from another sentence ("my wedding is on the 30th ... I can pay this Friday") is ignored
+            d_expr = dict(day=day)
+            m = _int(_get(prefix + '_month'))
+            if m:
+                d_expr['month'] = m
+            cands = []
+            cand = resolve_date_expr(today, d_expr, _calendar_dict())
+            if cand and cand != 'vague' and datetime.date.fromisoformat(cand).weekday() == wd:
+                cands.append((d_expr, cand))                       # "Tuesday the 27th": the number names that weekday
+            for relative in ('this', 'next'):
+                c2 = resolve_date_expr(today, dict(weekday=wd, relative=relative), _calendar_dict())
+                if c2 and c2 != 'vague' and int(c2[8:10]) == day:
+                    cands.append((dict(weekday=wd, relative=relative), c2))
+            if offer_date and any(c == offer_date for _, c in cands):
+                expr = next(e for e, c in cands if c == offer_date)  # restating the offer
+            elif rel in ('this', 'next'):
+                expr = next((e for e, c in cands if 'weekday' in e), expr)   # "this Friday" + a stray number: the weekday wins
+            elif cands:
+                expr = cands[0][0]
     elif kind in ('date', 'weekday'):
         day = _int(_get(prefix + '_day'))
         if day is None:
@@ -283,9 +305,14 @@ def _ask_text(i):
 def _transfer(S, case_name):
     sc = _sc(case_name) or dict(action=dict())
     a = sc.get('action', {})
-    queue = a.get('queue') or sc.get('offer_transfer_queue') or ''
-    outcome = a.get('outcome') or (sc.get('offer_outcome') or ['', ''])[0] or POLICY['outcomes']['transfer_outcome']
-    reason = a.get('reason') or (sc.get('offer_outcome') or ['', ''])[1] or ''
+    offer = sc.get('offer_outcome') or ['', '']
+    if sc.get('offer_transfer_queue'):
+        # an offered transfer (hardship -> support team): the offer's queue and outcome, never the decline action's close outcome
+        queue, outcome, reason = sc['offer_transfer_queue'], offer[0] or POLICY['outcomes']['transfer_outcome'], offer[1] or ''
+    else:
+        queue = a.get('queue') or ''
+        outcome = a.get('outcome') or POLICY['outcomes']['transfer_outcome']
+        reason = a.get('reason') or ''
     S['transfer'] = dict(queue=queue, outcome=outcome, reason=reason)
     vars['transfer_queue'] = queue
     vars['goodbye_text'] = 'I will connect you to a colleague now. Thank you for your time, goodbye.'
@@ -307,6 +334,8 @@ def st_cb_route():
     status, date = _resolve_date('cb', S['today'])
     t = _get('cb_time')
     _clear_date('cb'); _clear('cb_time')
+    if status == 'none' and t and S.get('cb_date'):
+        status, date = 'ok', S['cb_date']          # the day came in the previous turn, the time now
     ok = False
     if status == 'ok' and t:
         pol = dict(start=CB['start'], end=CB['end'], days=CB['days'], must_be_after_now=bool(CB.get('must_be_after_now', True)), holidays=_cal()[0], business_days=_cal()[1])
@@ -317,12 +346,22 @@ def st_cb_route():
         _save(S)
         return _set_next('schedule_callback')
     if status == 'ok' and not t and intent not in ('cannot_say', 'refuses'):
+        S['cb_date'] = date
         vars['neg_instruction'] = 'They named a day but no time. Ask at what time ' + _fmt(date) + ' would suit; do not propose a time yourself.'
         _save(S)
         return _set_next('third_party')
+    S['cb_date'] = None
     if not S.get('cb_asked') and bool(CB.get('retry_once', True)) and intent != 'refuses':
         S['cb_asked'] = True
-        vars['neg_instruction'] = ('That time is outside the window I can offer. ' if status in ('ok', 'vague', 'unreadable') and (t or status != 'none') else '') + 'Ask once more for another day and time: today until ' + CB['end'] + ' or the next business day between ' + CB['start'] + ' and ' + CB['end'] + '.'
+        days = CB.get('days') or 'today_or_next_business_day'
+        if days == 'today':
+            window = 'today between ' + CB['start'] + ' and ' + CB['end']
+        elif days == 'next_business_day':
+            window = 'the next business day between ' + CB['start'] + ' and ' + CB['end']
+        else:
+            window = 'today until ' + CB['end'] + ' or the next business day between ' + CB['start'] + ' and ' + CB['end']
+        outside = 'That time is outside the window I can offer. ' if status == 'ok' and t else ''
+        vars['neg_instruction'] = outside + 'Ask once more for another day and time: ' + window + '.'
         _save(S)
         return _set_next('third_party')
     _close(S, CB['no_callback_outcome'][0], CB['no_callback_outcome'][1], 'I understand. I will not schedule a call back. Thank you for your time, goodbye.')
@@ -341,12 +380,30 @@ def st_cb_after():
         return _set_next('third_party')
     _close(S, CB['no_callback_outcome'][0], CB['no_callback_outcome'][1], 'I understand. I will not schedule a call back. Thank you for your time, goodbye.')
 
+def _has_complete_answer(r, S):
+    """True when the extracted variables (plus accumulated parts) already hold a full answer in the question's format."""
+    fmt = r.get('answer_format', 'text')
+    if fmt == 'date':
+        parts = S.get('id_parts') or dict()
+        d, m, y = _int(_get('id_day')) or parts.get('d'), _int(_get('id_month')) or parts.get('m'), _int(_get('id_year')) or parts.get('y')
+        return bool(d and m and y)
+    if fmt == 'digits':
+        n = int(r.get('digits') or 4)
+        raw = re.sub('[^0-9]', '', _get('id_digits'))
+        return len(_str(S.get('id_digits_acc')) + raw) >= n
+    if fmt == 'year':
+        return bool(_int(_get('id_year')))
+    return bool(_get('id_text'))
+
 def st_id_route(i):
     S = _S()
     I = POLICY['identity']
     r = I['requirements'][i]
     intent = _get('id_intent')
     _clear('id_intent')
+    if intent in ('question', 'asks_purpose', 'other') and _has_complete_answer(r, S):
+        S['id_question_pending'] = True    # verify the answer first; the next sentence also covers the question
+        intent = 'answers'
     if intent == 'question':
         # answer, then invite the answer without restating the question (judges count a restated question as "asked again")
         vars['id_say'] = 'These questions protect your account, and I can tell you more once your identity is confirmed. Please go ahead.'
@@ -468,7 +525,7 @@ def st_verify_after(i):
             _save(S)
             return _set_next('get_account')
         S['id_idx'] = i + 1
-        vars['id_say'] = _ask_text(i + 1)
+        vars['id_say'] = _q_prefix(S) + _ask_text(i + 1)
         _save(S)
         return _set_next('ask_' + str(i + 1))
     if hint:
@@ -485,9 +542,14 @@ def st_verify_after(i):
     exhausted = (left is not None and left <= 0) or (left is None and S['id_wrong'] >= int(I.get('wrong_answer_limit', 3)))
     if exhausted:
         return _close(S, I['failed_outcome'][0], I['failed_outcome'][1], 'I am sorry, I could not verify your identity, so I cannot continue on this call. ' + (I.get('failed_instruction') or '') + ' Thank you for your time, goodbye.')
-    vars['id_say'] = 'That does not match our records. ' + _q(r)
+    vars['id_say'] = _q_prefix(S) + 'That does not match our records. ' + _q(r)
     _save(S)
     _set_next('ask_' + str(i))
+
+def _q_prefix(S):
+    if S.pop('id_question_pending', False):
+        return 'These questions protect your account, and I can tell you more once your identity is confirmed. '
+    return ''
 
 def st_init_products():
     S = _S()
@@ -516,6 +578,8 @@ def st_init_products():
         p['deadline'] = deadline(S['today'], band['deadline'], h, b)
         if not p['deadline']:
             raise ValueError('Cannot resolve policy deadline')
+        if p['deadline'] < S['today']:
+            p['deadline'] = next_business_day(S['today'], h, b) or S['today']   # never propose or record a past date
         p['attempts'] = band.get('attempts', [])
         p['attempts_used'] = 0
         p['full_refused'] = False
@@ -566,15 +630,21 @@ def _start_attempt(S, p, k):
     h, b = _cal()
     amount = p['floor'] if (a.get('amount') == 'floor' or (p.get('full_refused') and a.get('floor_if_full_refused', True))) else p['full']
     date = attempt_date(S['today'], a.get('date', 'deadline'), p['deadline'], h, b) or p['deadline']
+    if date > p['deadline']:
+        date = p['deadline']                      # a persuasion attempt never proposes a date after the product's deadline
     p['attempts_used'] = k
     prev = S.get('offer') or dict()
     same_amount = prev and abs(float(prev.get('amount') or 0) - float(amount)) < 0.005
+    if same_amount and prev.get('date') == date:
+        return _start_attempt(S, p, k + 1)        # identical to what the customer just refused: go to the next attempt
     S['offer'] = dict(amount=amount, date=date)
     S['awaiting'] = 'offer'
     if same_amount:
         vars['neg_instruction'] = 'Propose the same amount for a different day: ask whether they can make the payment you proposed on ' + _fmt(date) + ' instead. Refer to it as the amount already proposed; do not say the number again and do not repeat that the rest stays overdue.'
         return True
     floor_note = ''
+    if amount == p['floor'] and amount < p['full']:
+        p['floor_offered'] = True
     if amount == p['floor'] and amount < p['full'] and not p.get('floor_note_said'):
         floor_note = ' Say that ' + POLICY['amounts'].get('floor_wording', 'the rest stays overdue') + '.'
         p['floor_note_said'] = True
@@ -591,6 +661,9 @@ def _enter_product(S, k):
     if not _start_attempt(S, p, 1):
         p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
         return _advance(S)
+    if any(q['proposed'] and not q['recorded'] for q in S['products']):
+        # earlier products have proposals waiting for the common read-back: nothing is noted or recorded yet
+        vars['neg_instruction'] = _get('neg_instruction') + ' Do not say that any earlier payment is noted or recorded; everything is confirmed together at the end.'
     _save(S)
     _set_next('negotiate')
 
@@ -790,9 +863,29 @@ def st_neg_route():
     _clear('cust_intent')
     amount = _float(_get('prop_amount'))
     _clear('prop_amount')
-    date_status, date = _resolve_date('prop', S['today'])
+    date_status, date = _resolve_date('prop', S['today'], (S.get('offer') or dict()).get('date'))
     _clear_date('prop')
     aw = S.get('awaiting', '')
+    if intent in ('other', 'scam', 'none', '', 'goodbye'):
+        S['idle'] = S.get('idle', 0) + 1
+        if intent == 'goodbye' or S['idle'] >= 8:
+            # an explicit goodbye, or eight turns without a usable answer: the open proposal is treated as declined and the call wraps up.
+            # Chatter alone never ends a call early: talkative customers ramble for several turns before answering.
+            S['idle'] = 0
+            for k in _targets(S):
+                q = S['products'][k]
+                if not q['proposed'] and not q['disposition']:
+                    q['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
+            S['offer'] = None
+            return _advance(S)
+        # chatter: no re-ask (judges count a repeated proposal as another persuasion attempt) — a few words, then wait
+        if intent == 'scam':
+            vars['neg_instruction'] = (POLICY['phrases'].get('scam_reply') or 'You can verify this call through the bank\'s official customer service number.') + ' Then wait; do not repeat the proposal or any amount or date.'
+        else:
+            vars['neg_instruction'] = 'Reply in a few words and invite them to come back to the payment whenever they are ready; do not repeat the proposal or any amount or date.'
+        _save(S)
+        return _set_next('negotiate')
+    S['idle'] = 0
     if intent == 'question':
         o = S.get('offer') or dict()
         if S.get('awaiting') == 'support':
@@ -823,6 +916,8 @@ def st_neg_route():
         vars['neg_instruction'] = 'The customer seems to be in the middle of a sentence. Say only "Yes?" or "Go on" and wait.'
         _save(S)
         return _set_next('negotiate')
+    if aw == 'support' and intent in ('human', 'restructuring') and amount is None and date_status == 'none':
+        return _transfer(S, 'hardship')    # "yes, please connect me to the support team" reads as a request for a person: it accepts the offer
     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
         if _special(S, intent):
             return
@@ -831,13 +926,23 @@ def st_neg_route():
         if intent in ('accepts', 'pays_today') and amount is None and date_status in ('none',):
             return _transfer(S, 'hardship')
         if intent in ('refuses', 'too_much') and amount is None and date_status == 'none':
-            hr = ((_sc('hardship') or dict()).get('action') or dict()).get('reason') or 'hardship'
+            hsc = _sc('hardship') or dict()
+            hr = (hsc.get('action') or dict()).get('reason') or 'hardship'
+            if hsc.get('ends_call', True) is False and len(S['products']) > 1:
+                for k in _targets(S):
+                    if not S['products'][k]['proposed'] and not S['products'][k]['disposition']:
+                        S['products'][k]['disposition'] = hr
+                if _undecided(S):
+                    S['awaiting'] = 'offer'
+                    return _advance_with_prefix(S, 'Say you understand and will not ask about that one; then move on.')
+                if any(p['proposed'] for p in S['products']):
+                    return _readback(S)
+                vars['goodbye_text'] = 'I understand. I will not record a promise today. Thank you for your time, and goodbye.'
+                _save(S)
+                return _set_next('finalize')
             for p in S['products']:
                 if not p['proposed'] and not p['disposition']:
                     p['disposition'] = hr
-            for p in S['products']:
-                if p['proposed'] and not p['recorded']:
-                    pass
             if any(p['proposed'] for p in S['products']):
                 return _readback(S)
             vars['goodbye_text'] = 'I understand. I will not record a promise today. Thank you for your time, and goodbye.'
@@ -927,6 +1032,11 @@ def st_neg_route():
     _save(S)
     _set_next('negotiate')
 
+def _today_bd(S):
+    """Today when it is a business day, otherwise the next business day: the earliest date the agent may offer."""
+    h, b = _cal()
+    return next_business_day(S['today'], h, b) or S['today']
+
 def _too_much(S):
     A = POLICY['amounts']
     targets = _targets(S)
@@ -950,7 +1060,9 @@ def _too_much(S):
         return _advance(S)
     p['floor_offered'] = True
     p['floor_note_said'] = True
-    date = (S.get('offer') or dict()).get('date') or S['today']
+    date = (S.get('offer') or dict()).get('date') or _today_bd(S)
+    if date > p['deadline']:
+        date = p['deadline']
     S['offer'] = dict(amount=p['floor'], date=date)
     S['awaiting'] = 'offer'
     vars['neg_instruction'] = 'Offer the ' + _floor_words(p) + ' for the ' + p['name'] + ', ' + _money(p['floor']) + ', on ' + _fmt(date) + ' (it is the lowest amount this call can take). Say that ' + A.get('floor_wording', 'the rest stays overdue') + '. Ask whether they can make that payment.'
@@ -963,7 +1075,7 @@ def _proposal(S, amount, date, date_status):
         return _advance(S)
     multi_all = len(targets) > 1
     if date_status == 'none':
-        date_status, date = 'ok', (S.get('offer') or dict()).get('date') or S['today']
+        date_status, date = 'ok', (S.get('offer') or dict()).get('date') or _today_bd(S)
     if amount is None and S.get('offer') and not multi_all:
         amount = S['offer'].get('amount')      # the amount currently on the table (e.g. the floor) stays
     if multi_all:
@@ -1009,10 +1121,19 @@ def st_readback_route():
     _clear('rb_intent')
     amount = _float(_get('prop_amount'))
     _clear('prop_amount')
-    date_status, date = _resolve_date('prop', S['today'])
+    date_status, date = _resolve_date('prop', S['today'], (S.get('offer') or dict()).get('date'))
     _clear_date('prop')
     if intent == 'hardship' and S.get('hardship_offered'):
         intent = 'declines'
+    if intent in ('other', 'none', '', 'goodbye'):
+        S['rb_idle'] = S.get('rb_idle', 0) + 1
+        if intent != 'goodbye' and S['rb_idle'] < 6:
+            _save(S)
+            return _set_next('readback')       # re-enter: the read-back sentence is spoken again and the confirmation asked again
+        S['rb_idle'] = 0
+        intent = 'declines'                    # goodbye, or six turns without an answer: not confirmed
+    else:
+        S['rb_idle'] = 0
     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
         if _special(S, intent):
             return

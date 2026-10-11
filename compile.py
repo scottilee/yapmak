@@ -207,9 +207,7 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
         "- Never state or invent an amount, balance, date, product or account detail that is not in your current instruction; before the "
         "security check is complete you know nothing about the account. If you have nothing new to say, ask the customer to hold on for a moment."
     )
-    extra = [u.get("text", "") for u in ir.unresolved if isinstance(u, dict) and u.get("text")]
-    if extra:
-        system += "\nFurther rules from the bank's documents that apply throughout the call:\n" + "\n".join("- " + t[:400] for t in extra[:12])
+    # `unresolved` entries are the extractor's notes about gaps and conflicts; they are evidence in the trace, never dialogue rules.
     stages = {
         "opening": (
             "You have said the opening line and asked whether you are speaking with {{title}} {{last_name}}. Your only job is to find out who is on the line. "
@@ -251,8 +249,8 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
 # =============================================================================================
 # Assembler
 # =============================================================================================
-INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "scam", "refuses_to_talk", "question", "other"]
-ROUTED_INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question"]
+INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "scam", "refuses_to_talk", "question", "goodbye", "other"]
+ROUTED_INTENTS = ["accepts", "pays_today", "proposes", "refuses", "too_much", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "goodbye", "other", "scam"]
 
 
 def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.PromptSet | None = None) -> dict:
@@ -356,12 +354,14 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
             "proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. "
             "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. "
             "hardship = mentions illness, a death in the family or losing their job — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
-            "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. other.", INTENTS),
+            "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. goodbye = says goodbye or that they are hanging up or ending the call now. other.", INTENTS),
         ext("prop_amount", "float", "An amount of money the customer offers to pay, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none; an amount they say they cannot pay, or one unrelated to a payment, does not count."),
     ] + date_ext("prop", "the payment date the customer named")
     multi = ir.multi_product.max_products > 1
     if multi:
-        neg_schema.append(ext("prop_product", "string", "Which product the customer's statement is about, when they named one: 1, 2 or 3 as in the list {{product_list}}; all if they said all of them or named none.", ["1", "2", "3", "all"]))
+        nums = [str(i) for i in range(1, ir.multi_product.max_products + 1)]
+        nums_text = ", ".join(nums[:-1]) + " or " + nums[-1]
+        neg_schema.append(ext("prop_product", "string", f"Which product the customer's statement is about, when they named one: {nums_text} as in the list {{{{product_list}}}}; all if they said all of them or named none.", nums + ["all"]))
     neg_transitions = [on_enum("cust_intent", ROUTED_INTENTS, "neg_route")]
     nodes["state_debt"] = conv_node("state_debt", prompts.stages["negotiate"], neg_schema, neg_transitions,
                                     on_enter={"type": "tts", "text": "{{debt_statement}}"}, first_only=True, max_turns=12, max_turn_target="neg_route")
@@ -370,13 +370,13 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     rb_schema = [ext("rb_intent", "string",
                      "The customer's answer to the read-back in the LAST message: confirms (yes, correct, I confirm), changes (they give a different amount or date), declines (no, without a new value), "
                      "already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), "
-                     "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, other.",
-                     ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "other"]),
+                     "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, goodbye (says goodbye or is hanging up), other.",
+                     ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "goodbye", "other"]),
                  ext("prop_amount", "float", "A new amount the customer named, as a number. Empty if none.")] + date_ext("prop", "a new payment date the customer named")
     if multi:
-        rb_schema.append(ext("prop_product", "string", "Which product a change refers to: 1, 2 or 3 as in the list {{product_list}}; all if not specified.", ["1", "2", "3", "all"]))
+        rb_schema.append(ext("prop_product", "string", f"Which product a change refers to: {nums_text} as in the list {{{{product_list}}}}; all if not specified.", nums + ["all"]))
     nodes["readback"] = conv_node("readback", prompts.stages["readback"], rb_schema,
-                                  [on_enum("rb_intent", ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk"], "readback_route")],
+                                  [on_enum("rb_intent", ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "goodbye", "other"], "readback_route")],
                                   on_enter={"type": "tts", "text": "{{readback_text}}"}, max_turns=6, max_turn_target="readback_route")
     nodes["readback_route"] = cn("readback_route", ["write_step", "readback", "negotiate", "transfer", "finalize"], default="readback")
 

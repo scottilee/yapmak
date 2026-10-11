@@ -4,6 +4,7 @@
 extractor (`extract.py`, claude-opus-5-5, 3 passes) on each, and compared the extracted IR with the generator's IR:
 
 - **clean** (4): one self-contained brief in the hidden-brief style, natural language only (no DSL hints).
+- **thread** (4, round 2): one mail thread, newest first: a stale 1 October policy, a 7 October memo changing four rules (one of them wrongly), a 9 October correction reversing that one change.
 - **raw** (4): cover mail quoting obsolete settings + stale base policy + signed memo that overrides identity order,
   wrong-answer limit, one band's deadline, retries, human handling and callback days + code list. The generator IR is
   what the memo says.
@@ -17,15 +18,23 @@ generator's IR as the truth (`tests/invariants.py`).
 | sample | style | extraction | operative diffs | functional | unresolved notes |
 |---|---|---|---|---|---|
 | lb-00 | clean | 150 s | 0 | all pass | 5 |
+| lb-01 | clean | 158 s | 0 | all pass | 5 |
 | lb-03 | clean | 168 s | 0 | all pass | 9 |
-| lb-10 | clean | 142 s | 0 | all pass | 5 |
-| lb-20 | clean | 141 s | 0 | all pass | 4 |
 | lb-04 | raw | 158 s | 0 | all pass | 6 |
+| lb-05 | raw | 149 s | 0 | all pass | 3 |
 | lb-06 | raw | 165 s | 0 | all pass | 4 |
+| lb-07 | thread | 157 s | 0 | all pass | 3 |
+| lb-09 | clean | 155 s | 0 | all pass | 6 |
+| lb-10 | clean | 142 s | 0 | all pass | 5 |
+| lb-11 | thread | 151 s | 0 | all pass | 4 |
+| lb-13 | raw | 149 s | 0 | all pass | 2 |
 | lb-14 | raw | 155 s | 0 | all pass | 5 |
+| lb-15 | thread | 160 s | 0 | all pass | 6 |
+| lb-17 | thread | 167 s | 0 | all pass | 4 |
+| lb-20 | clean | 141 s | 0 | all pass | 4 |
 | lb-26 | raw | 183 s | 0 | all pass | 8 |
 
-**Result: 8/8 match on every operative field and 8/8 behave as the generator's policy in all scenarios**, incl. hyphenated
+**Result: 16/16 match on every operative field and 16/16 behave as the generator's policy in all scenarios** (round 1: 4 clean + 4 raw packs; round 2, 10 Oct 23:52 UTC: 2 clean, 2 raw packs, 4 **mail threads** where a later message reverses one change of an earlier memo — the generator IR is the state after the last mail), incl. hyphenated
 vocabularies, 1–4 identity questions, Mon–Thu and Saturday calendars, calendar-day / end-of-month / fixed-date deadlines,
 and all four memo packs (the memo wins; the obsolete mail quotes are ignored and logged as historical).
 Extraction took 141–183 s per sample (quiet Claude), about $1 each (~$8 total).

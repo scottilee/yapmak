@@ -1,0 +1,15 @@
+PASS PUB-01 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-06 hard   Edge           | verify > verify > get_account > close_call
+PASS PUB-02 hard   Edge           | schedule_callback > close_call
+PASS PUB-04 hard   Edge           | verify > verify > get_account > promise > close_call
+FAIL PUB-05 hard   Edge           | verify > verify > get_account > close_call
+       - outcome ('no_promise', 'hardship'), expected ('transferred', 'support')
+       - transfers [], expected [{'queue': 'support'}]
+       - conversation: The assistant failed to meet the transfer requirement. While it offered a transfer in message 8 and the user accepted in message 9, the assistant instead ended the call in message 16. Furthermore, the system events show that the call was closed w
+PASS PUB-03 hard   Edge           | verify > verify > verify > get_account > promise > close_call
+PASS PUB-08 hard   Edge           | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Edge           | verify > verify > get_account > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 6 s. Failed calls where the customer hung up: 0.
+
+7 / 8 passed (bank records and conversation checks). Last simulation 1f17f0af-b4c4-4cce-a92c-beeb8c3f47d7, status completed, 109 s.
