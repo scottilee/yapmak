@@ -237,6 +237,7 @@ class PromiseWritePolicy:
 class PolicyIR:
     source_docs: list[str] = field(default_factory=list)
     bank_name: str = ""
+    language: str = "en"      # ISO code of the language the phone agent must speak, as the documents require (e.g. "tr")
     identity: IdentityPolicy = field(default_factory=IdentityPolicy)
     third_party: ThirdPartyPolicy = field(default_factory=ThirdPartyPolicy)
     calendar: Calendar = field(default_factory=Calendar)

@@ -106,7 +106,8 @@ def parse_openapi(path: str) -> dict[str, ToolSpec]:
             servers = op.get("servers") or ops.get("servers") or spec.get("servers") or []
             base = servers[0]["url"].rstrip("/") if servers else ""
             parsed = urlsplit(base)
-            if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment or "{" in base:
+            loopback = parsed.hostname in ("127.0.0.1", "localhost", "::1")      # a local stand-in for rehearsals only; the engine cannot reach it
+            if (parsed.scheme != "https" and not (loopback and parsed.scheme == "http")) or not parsed.hostname or parsed.username or parsed.password or parsed.query or parsed.fragment or "{" in base:
                 raise ValueError(f"{name}: expected an absolute HTTPS server without credentials or variables")
             host = parsed.hostname
             try:

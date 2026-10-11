@@ -218,12 +218,32 @@ def sc_clause(ir: P.PolicyIR, name: str, tuned: str) -> str:
     return tuned + " (the bank's words: " + t[0].lower() + t[1:] + ")"
 
 
+LANGUAGE_NAMES = {"en": "English", "tr": "Turkish", "de": "German", "fr": "French", "es": "Spanish", "it": "Italian", "nl": "Dutch", "pt": "Portuguese",
+                  "pl": "Polish", "ar": "Arabic", "el": "Greek", "sv": "Swedish", "da": "Danish", "no": "Norwegian", "fi": "Finnish", "ro": "Romanian"}
+
+
+def language_name(ir: P.PolicyIR) -> str:
+    code = (ir.language or "en").strip().lower()
+    return LANGUAGE_NAMES.get(code, code or "English")
+
+
+def say_entry(ir: P.PolicyIR, var: str, task: str):
+    """How a node speaks a runtime-composed sentence: fixed TTS in English; in another language the model says it from an
+    exact-translation instruction (the runtime composes its sentences in English)."""
+    if (ir.language or "en").strip().lower() == "en":
+        return {"type": "tts", "text": "{{" + var + "}}"}, task
+    lang = language_name(ir)
+    task = (task + f"\nSAY NOW, in {lang}, exactly this message, translated faithfully (keep every number, amount, date and name as given; "
+            f"say dates in the natural {lang} form): {{{{{var}}}}}")
+    return {"type": "llm"}, task
+
+
 def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
     ph = ir.phrases
     bank = ir.bank_name or "the bank"
     prohibited = ", ".join(ph.prohibited_before_verification) or "collections, debt, payment, the product"
     system = (
-        f"You are {bank}'s digital assistant on an outbound phone call to {{{{title}}}} {{{{last_name}}}}. Speak English. "
+        f"You are {bank}'s digital assistant on an outbound phone call to {{{{title}}}} {{{{last_name}}}}. Speak {language_name(ir)}. "
         "Keep every turn to one to three short sentences and ask one question at a time. Address the customer as {{title}} {{last_name}}.\n"
         "You have no tools. The system carries out every action itself and tells you in your current instruction what was done; "
         "never confirm that an action has happened unless your current instruction says so.\n"
@@ -309,6 +329,8 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     def cn(stage, targets, default=None):
         if "negotiate" in targets and "handover" not in targets:
             targets = list(targets) + ["handover"]       # every route that can enter a product can hand over to the next one
+        if "close_noreason" in targets and "farewell" not in targets and (ir.language or "en").strip().lower() != "en" and ir.outcomes.goodbye_before_close:
+            targets = list(targets) + ["farewell"]       # non-English: the farewell node speaks the goodbye before the close
         return code_node(stage, code_for(stage, ir, slots), targets, default)
 
     # --- setup and opening -------------------------------------------------------------------
@@ -372,9 +394,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
             schema += [ext("id_year", "integer", "The four-digit year the customer gave.")]
         else:
             schema += [ext("id_text", "string", "The answer the customer gave, verbatim, letters and digits only.")]
-        nodes[f"ask_{i}"] = conv_node(f"ask_{i}", prompts.stages["identity"], schema,
+        ask_entry, ask_task = say_entry(ir, "id_say", prompts.stages["identity"])
+        nodes[f"ask_{i}"] = conv_node(f"ask_{i}", ask_task, schema,
                                       [on_enum("id_intent", ["answers", "declines", "asks_purpose", "question", "wants_human", "refuses_to_talk"], f"id_route_{i}")],
-                                      on_enter={"type": "tts", "text": "{{id_say}}"}, max_turns=10, max_turn_target=f"id_route_{i}")
+                                      on_enter=ask_entry, max_turns=10, max_turn_target=f"id_route_{i}")
         nodes[f"id_route_{i}"] = cn(f"id_route_{i}", [f"verify_{i}", f"ask_{i}", "finalize", "transfer"], default=f"ask_{i}")
         nodes[f"id_route_{i}"]["transitions"][0] = guarded_dispatch(f"verify_{i}", "v_ok")
         nodes[f"verify_{i}"] = api_node(f"verify_{i}", tools["verify_identity"],
@@ -416,13 +439,14 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
             neg_schema.append(ext("prop_product_2", "string", f"The product that second statement is about: {nums_text}; none if there is none.", nums + ["none"]))
             neg_schema.append(ext("prop_amount_2", "float", "A second amount named for that other product, as a number. Empty if none."))
     neg_transitions = [on_enum("cust_intent", ROUTED_INTENTS, "neg_route")]
-    nodes["state_debt"] = conv_node("state_debt", prompts.stages["negotiate"], neg_schema, neg_transitions,
-                                    on_enter={"type": "tts", "text": "{{debt_statement}}"}, first_only=True, max_turns=12, max_turn_target="neg_route")
+    sd_entry, sd_task = say_entry(ir, "debt_statement", prompts.stages["negotiate"])
+    nodes["state_debt"] = conv_node("state_debt", sd_task, neg_schema, neg_transitions,
+                                    on_enter=sd_entry, first_only=True, max_turns=12, max_turn_target="neg_route")
     nodes["negotiate"] = conv_node("negotiate", prompts.stages["negotiate"], neg_schema, neg_transitions, max_turns=40, max_turn_target="neg_route")
     # product hand-over: the first sentence for the next product is fixed text ({{handover_text}} from the runtime), then the node
     # behaves like `negotiate` (same prompt, extraction and routing)
-    nodes["handover"] = conv_node("handover", prompts.stages["negotiate"], neg_schema, neg_transitions,
-                                  on_enter={"type": "tts", "text": "{{handover_text}}"}, max_turns=40, max_turn_target="neg_route")
+    ho_entry, ho_task = say_entry(ir, "handover_text", prompts.stages["negotiate"])
+    nodes["handover"] = conv_node("handover", ho_task, neg_schema, neg_transitions, on_enter=ho_entry, max_turns=40, max_turn_target="neg_route")
     nodes["neg_route"] = cn("neg_route", ["negotiate", "readback", "transfer", "finalize"], default="negotiate")
     rb_schema = [ext("rb_intent", "string",
                      "The customer's answer to the read-back in the LAST message: confirms (a clear yes: yes, correct, I confirm; a hedged or conditional reply such as 'I suppose, but do not record it yet' is NOT confirms but question or other), changes (they give a different amount or date, or ask to move a payment to another date), declines (no, without a new value), "
@@ -441,9 +465,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
         elif COMPOUND_SCHEMA == "compact":
             rb_schema.append(ext("prop_amount_2", "float", "A second new amount for another product, as a number. Empty if none."))
             rb_schema.append(ext("prop_product_2", "string", f"The product the second amount is for: {nums_text}; none if there is none.", nums + ["none"]))
-    nodes["readback"] = conv_node("readback", prompts.stages["readback"], rb_schema,
+    rb_entry, rb_task = say_entry(ir, "readback_text", prompts.stages["readback"])
+    nodes["readback"] = conv_node("readback", rb_task, rb_schema,
                                   [on_enum("rb_intent", ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "goodbye", "other"], "readback_route")],
-                                  on_enter={"type": "tts", "text": "{{readback_text}}"}, max_turns=6, max_turn_target="readback_route")
+                                  on_enter=rb_entry, max_turns=6, max_turn_target="readback_route")
     nodes["readback_route"] = cn("readback_route", ["write_step", "readback", "negotiate", "transfer", "finalize"], default="readback")
 
     # --- writes, notes, transfer, close -----------------------------------------------------------
@@ -462,7 +487,15 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["add_note"] = api_node("add_note", tools["add_note"], body("add_note", customer_id="{{customer_id}}", product_id="{{n_product_id}}", reason="{{n_reason}}"),
                                  "notes_step", [{"path": "data." + slots["ok_by_tool"]["add_note"], "variable": "n_ok"}])
     # rule 47 (thank + goodbye before close) is a policy choice, not a template assumption
-    goodbye = {"type": "tts", "text": "{{goodbye_text}}"} if ir.outcomes.goodbye_before_close else {"type": "silent"}
+    non_en = (ir.language or "en").strip().lower() != "en"
+    goodbye = {"type": "tts", "text": "{{goodbye_text}}"} if (ir.outcomes.goodbye_before_close and not non_en) else {"type": "silent"}
+    if non_en and ir.outcomes.goodbye_before_close:
+        fw_entry, fw_task = say_entry(ir, "goodbye_text", "You are ending the call. Say the farewell message below and nothing else; do not ask a question.")
+        nodes["farewell"] = conv_node("farewell", fw_task, [], [on_enum("close_target", ["close_reason"], "close_reason"), on_enum("close_target", ["close_noreason"], "close_noreason")],
+                                      on_enter=fw_entry, max_turns=1, max_turn_target="close_noreason")
+        nodes["farewell"]["transitions"] = [
+            {"target_node": "close_reason", "description": "close with reason", "condition": {"variable": "close_target", "operator": "equals", "operand": "close_reason"}},
+            {"target_node": "close_noreason", "description": "close", "condition": {"variable": "close_target", "operator": "equals", "operand": "close_noreason"}}]
     ok_close = "data." + slots["ok_by_tool"]["close_call"]
     nodes["close_reason"] = api_node("close_reason", tools["close_call"], body("close_call", customer_id="{{customer_id}}", outcome="{{final_outcome}}", reason="{{final_reason}}"),
                                      "end", [{"path": ok_close, "variable": "close_ok"}], on_enter=goodbye)

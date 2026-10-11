@@ -249,6 +249,13 @@ def _band(days_late):
     hi = max(bands, key=lambda b: b['days_late_max'])
     return lo if days_late < lo['days_late_min'] else hi
 
+def _go_close(target):
+    """The close: English speaks the goodbye as fixed TTS on the close node; another language says it in the farewell node first."""
+    if _str(POLICY.get('language') or 'en').lower() != 'en' and bool(POLICY['outcomes'].get('goodbye_before_close', True)) and _get('goodbye_text'):
+        vars['close_target'] = target
+        return _set_next('farewell')
+    return _set_next(target)
+
 def _set_next(n):
     vars['next'] = n
 
@@ -1633,7 +1640,7 @@ def st_finalize():
         _consume_aside_into_goodbye()
         return _set_next('notes_step')
     _consume_aside_into_goodbye()
-    _set_next('close_reason' if reason else 'close_noreason')
+    _go_close('close_reason' if reason else 'close_noreason')
 
 def st_notes_step():
     S = _S()
@@ -1647,7 +1654,7 @@ def st_notes_step():
         _save(S)
         return _set_next('add_note')
     _save(S)
-    _set_next('close_reason' if _get('final_reason') else 'close_noreason')
+    _go_close('close_reason' if _get('final_reason') else 'close_noreason')
 
 def _stuck(stage):
     """Insurance against endless calls: a routing stage visited far more often than any conversation needs closes the call."""

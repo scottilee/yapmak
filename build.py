@@ -46,15 +46,32 @@ def file_sha(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("case_folder", nargs="?", help="final-case form: a folder of the bank's documents (Markdown, Word, PDF, Excel, text)")
+    ap.add_argument("mock_url", nargs="?", help="final-case form: the team's mock of the bank's services; its /openapi.json is the tool API")
     ap.add_argument("--briefs", help="comma-separated brief files, in reading order; required unless --policy is given")
-    ap.add_argument("--openapi", required=True)
-    ap.add_argument("--slot", required=True, help="workflow slot and output name, e.g. hidden-1")
+    ap.add_argument("--openapi", help="tool API file (OpenAPI JSON or YAML); taken from the mock in the final-case form")
+    ap.add_argument("--slot", default=None, help="workflow slot and output name, e.g. hidden-1 (default: final in the final-case form)")
     ap.add_argument("--cases", help="case file for the self-test simulation (public-test-set.json format); omit to skip the simulation")
     ap.add_argument("--brief", help="brief letter filter for --cases (A or B)")
     ap.add_argument("--policy", help="skip extraction and use this policy JSON (fixture path, '+'-joined overlays allowed)")
     ap.add_argument("--deadline", type=int, default=1800, help="seconds for the whole build")
     ap.add_argument("--no-smoke", action="store_true")
     a = ap.parse_args()
+    a.inputs = None
+    if a.case_folder or a.mock_url:
+        if not (a.case_folder and a.mock_url):
+            ap.error("the final-case form needs both: build.py <case_folder> <mock_url>")
+        import case_inputs
+        a.inputs = case_inputs.prepare(a.case_folder, a.mock_url, ROOT)
+        a.briefs = ",".join(a.inputs["briefs"])
+        a.openapi = a.inputs["openapi"]
+        a.slot = a.slot or "final"
+        if not a.briefs:
+            ap.error("no readable documents in the case folder")
+    if not a.slot:
+        ap.error("--slot is required")
+    if not a.openapi:
+        ap.error("--openapi is required unless the final-case form is used")
     if not a.briefs and not a.policy:
         ap.error("--briefs is required unless --policy is given")
 
@@ -68,6 +85,9 @@ def main():
 
 def build(a):
     t_start = time.monotonic()
+    for k in ("case_folder", "mock_url", "inputs"):
+        if not hasattr(a, k):
+            setattr(a, k, None)
     left = runcontrol.remaining
 
     def persist(fn, what):
@@ -85,6 +105,7 @@ def build(a):
     try:
         dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT, capture_output=True, text=True, timeout=runcontrol.timeout(5)).stdout.strip()
         tr.event("run_start", slot=a.slot, brief_paths=briefs, openapi_path=a.openapi, commit=git_head(ROOT), tree_dirty=bool(dirty),
+                 case_folder=a.case_folder, mock_url=a.mock_url, skipped_documents=(a.inputs or {}).get("skipped"), started_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                  argv=sys.argv, input_sha256_16={p: file_sha(p) for p in briefs + [a.openapi] + (a.policy.split("+") if a.policy else [])},
                  code_sha256_16={f: file_sha(ROOT / f) for f in ("build.py", "extract.py", "compile.py", "compiler_nodes.py", "compiler_openapi.py", "compiler_checks.py", "workflow_runtime.py", "policy.py", "bankcal.py", "freya.py", "trace.py", "runcontrol.py", "artifact_security.py", "retrying.py", "scripts/chatlib.py", "scripts/chat_selftest.py")},
                  deadline_s=a.deadline, builder_model=X.MODEL, agent_model=freya.AGENT_LLM)
@@ -177,7 +198,8 @@ def build(a):
         persist(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export")
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
         degraded = list(X.DEGRADED) + ([] if all(v is True for v in checks.values()) else [f"check failed: {k}" for k, v in checks.items() if v is not True])
-        tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1))
+        tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1),
+                 ended_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
         print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "degraded": degraded,
                           "unresolved": len(ir.unresolved), "api_mapping_notes": len(C.MAPPING_NOTES), "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:

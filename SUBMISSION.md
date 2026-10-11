@@ -87,3 +87,20 @@ current environment secret values and recognizable API-key/Bearer-token formats 
 - The agent calls only the seven bank tools, all as engine-fired `api_request` nodes; code nodes and hooks are allowed.
 - `freya.save_workflow` reuses one workflow per slot (`.freya-agents.json`, not committed).
 - Organizers re-run the builder at the submitted commit and compare with the trace: the build shape is fixed (no wall-clock-dependent iteration).
+
+## Final case (one case, Turkish, team-written mock) — the form announced on 11 Oct
+
+The final is one case: a zip of the bank's documents (Markdown, Word, PDF, Excel; `BRIEF.md` first, `README.md` describes the rest).
+There is no tool API file: the team writes a mock of the bank's services on Cloudflare Workers from the zip's service contract and test
+customers (`results/audit/mock-requirements.md`), deploys it, and the builder reads the API from `<mock_url>/openapi.json`.
+
+```bash
+unzip final.zip -d hidden/final                      # the documents, unchanged
+source .env && (cd mock && npx wrangler deploy)      # the team's mock -> https://<name>.<subdomain>.workers.dev
+scripts/submit_final.sh hidden/final https://<name>.<subdomain>.workers.dev --push
+```
+`submit_final.sh` commits the inputs, runs `build.py hidden/final <mock_url>` (slot `final`; Word/PDF/Excel are converted to text under
+`hidden/final/_text/`), commits `out/final.workflow.json`, `traces/final.jsonl` and the policy/audit files, and writes `submission.json`
+(team, members, repo, commit, run_command, workflow, trace, mock_url) from `submission/config.json`. Send `submission.json` to the kit
+address before 20:00 UTC. The trace (JSON lines) records start/end time, every builder model call with its purpose, the Freya workflow
+and agent IDs with step and tool counts, and the self-test results.
