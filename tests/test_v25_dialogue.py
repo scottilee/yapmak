@@ -239,3 +239,33 @@ def test_product_handover_is_spoken_as_fixed_text():
     assert spoken == ["Thank you. For your personal loan, can you make a payment of 1320.00 on Friday 16 October 2026?",
                       "I understand. For your car loan, can you make a payment of 140.00 on Friday 16 October 2026?"], spoken
     assert _promises(bank) == [("p1", 510.0, "2026-10-15")]
+
+
+def test_transport_failure_on_identity_check_is_retried_not_counted():
+    # the bank answered the first identity check with an HTML error page (no parseable result): the check is fired again, silently
+    case = CASES["PUB-01"]
+    bank = MockBank(copy.deepcopy(case)); bank.drop = {"verify_identity": 1}
+    drv = Driver(WF_A, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"), verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB])
+    drv.run()
+    verifies = [n for n, b in bank.calls if n == "verify_identity"]
+    assert len(verifies) == 3, bank.calls                      # dropped + retried + second question
+    assert not any("does not match" in t for n, t in drv.spoken), [t for n, t in drv.spoken]
+    assert _promises(bank) == [("p1", 420.0, "2026-10-14")]
+
+
+def test_transport_failure_on_account_lookup_is_retried():
+    case = CASES["PUB-01"]
+    bank = MockBank(copy.deepcopy(case)); bank.drop = {"get_account": 1}
+    drv = Driver(WF_A, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"), verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today"}, YES_RB])
+    drv.run()
+    assert [n for n, b in bank.calls].count("get_account") == 2, bank.calls
+    assert _promises(bank) == [("p1", 420.0, "2026-10-14")]
+
+
+def test_three_transport_failures_close_as_service_error():
+    case = CASES["PUB-01"]
+    bank = MockBank(copy.deepcopy(case)); bank.drop = {"verify_identity": 5}
+    drv = Driver(WF_A, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"), verified(case))
+    drv.run()
+    closes = [(b["outcome"], b.get("reason")) for n, b in bank.calls if n == "close_call"]
+    assert closes == [("no_promise", "service_error")], bank.calls

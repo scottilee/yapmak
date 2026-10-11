@@ -381,13 +381,13 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
                                         body("verify_identity", customer_id="{{customer_id}}", field=r.field, answer="{{id_answer}}"),
                                         f"verify_after_{i}",
                                         [{"path": "data." + V[k], "variable": var} for k, var in (("ok", "v_ok"), ("verified", "v_verified"), ("all_verified", "v_all"), ("remaining", "v_left"), ("hint", "v_hint")) if V[k] != "__none__"])
-        nxt = [f"ask_{i}", "get_account", "finalize"] + ([f"ask_{i + 1}"] if i + 1 < len(reqs) else [])
+        nxt = [f"ask_{i}", "get_account", "finalize", f"verify_{i}"] + ([f"ask_{i + 1}"] if i + 1 < len(reqs) else [])   # verify_i again after a transport failure
         nodes[f"verify_after_{i}"] = cn(f"verify_after_{i}", nxt, default=f"ask_{i}")
 
     # --- account and negotiation ------------------------------------------------------------------
     nodes["get_account"] = api_node("get_account", tools["get_account"], body("get_account", customer_id="{{customer_id}}"), "init_products",
                                     [{"path": "data." + A["list"], "variable": "products_raw"}], retries=1)
-    nodes["init_products"] = cn("init_products", ["state_debt"])
+    nodes["init_products"] = cn("init_products", ["state_debt", "get_account", "finalize"])     # get_account again after a transport failure
     neg_schema = [
         ext("cust_intent", "string",
             "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that), or said yes to an offer the assistant just made. pays_today = says they can pay today / now. "

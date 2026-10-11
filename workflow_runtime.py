@@ -571,10 +571,23 @@ def st_id_route(i):
     _save(S)
     _set_next('verify_' + str(i))
 
+def _service_failure(S, what):
+    """A bank tool answered with no parseable result twice: a technical problem, never the customer's fault."""
+    O = POLICY['outcomes']
+    return _close(S, O['no_promise_outcome'], O.get('service_error_reason') or '', 'I am sorry, I have a technical problem with ' + what + ' and cannot continue this call. Thank you for your time, goodbye.')
+
 def st_verify_after(i):
     S = _S()
     I = POLICY['identity']
     r = I['requirements'][i]
+    if _get('v_ok') == '' and _get('v_verified') == '':
+        # no parseable answer from the bank (HTTP error page, timeout): the check is fired again with the same answer; it is not a wrong answer
+        S['v_fail'] = S.get('v_fail', 0) + 1
+        _save(S)
+        if S['v_fail'] <= 2:
+            return _set_next('verify_' + str(i))
+        return _service_failure(S, 'the identity check')
+    S['v_fail'] = 0
     ok = _get('v_ok').lower() == 'true'
     verified = _get('v_verified').lower() == 'true'
     left = _int(_get('v_left'))
@@ -616,6 +629,13 @@ def st_init_products():
     S = _S()
     A = SLOTS['account']
     prods = _products_from_vars()
+    if not prods:
+        # no product list came back (HTTP error page, timeout): the lookup is fired again; it is not an empty account
+        S['ga_fail'] = S.get('ga_fail', 0) + 1
+        _save(S)
+        if S['ga_fail'] <= 2:
+            return _set_next('get_account')
+        return _service_failure(S, 'the account lookup')
     out = []
     h, b = _cal()
     for raw in prods:

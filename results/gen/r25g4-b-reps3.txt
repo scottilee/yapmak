@@ -1,0 +1,37 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 42 s, worst 43 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 1 of 3: 3 / 3 passed, 221 s
+
+FAIL PUB-11 medium Multi-product  | verify > verify > get_account > promise
+       - outcome (None, None), expected ('promise', None)
+       - promises [('p1', 220.0, '2026-10-16')], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - the call was not closed with close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The agent failed one of the security criteria. While the phone question was correctly asked again once (Message 8), the date of birth was also asked a second time (Message 4) which violated the requirement that it not be asked again. All other cr
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The assistant correctly identified the deadlines and read back the correct dates (30 October for the credit card and 23 October for the loan) in Message 8. However, the system events indicate that the 'create_promise' API calls failed due to work
+
+slowest agent turn per call: median 28 s, worst 31 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 3: 0 / 3 passed, 243 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 24 s, worst 25 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 3 of 3: 3 / 3 passed, 158 s
+
+FAIL PUB-11 2/3
+FAIL PUB-12 2/3
+FAIL PUB-13 2/3
+
+0 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation b26a2747-a389-4f21-838f-2788f649fb7c, status completed, 622 s.

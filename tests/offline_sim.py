@@ -32,6 +32,10 @@ class MockBank:
 
     def call(self, name, body):
         self.calls.append((name, dict(body)))
+        drops = getattr(self, "drop", None) or {}
+        if drops.get(name, 0) > 0:
+            drops[name] -= 1
+            return {"__http": 502}          # the engine saw an HTML error page: no parseable result, no variables set
         ident = self.case["identity"]
         if name == "verify_identity":
             f, a = body.get("field"), str(body.get("answer", ""))

@@ -1,0 +1,67 @@
+FAIL PUB-01 easy   Happy path     | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 420.0, '2026-10-14')]
+       - the call was not closed with close_call
+       - conversation: The call ended immediately after the user identified himself, failing multiple mandatory success criteria. Specifically, the 'create_promise' function was not called (it was required exactly once), security questions were never administered or pa
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+FAIL PUB-04 medium Dates          | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 1250.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The call ended prematurely after the initial greeting and identification. As a result, several success criteria were not met: 1) No promise date of 23 October was established. 2) The scenario involving 'her own date' versus a refusal never occurr
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+FAIL PUB-09 medium Restructuring  | (no tool calls)
+       - outcome (None, None), expected ('transferred', 'restructuring')
+       - transfers [], expected [{'queue': 'restructuring'}]
+       - the call was not closed with close_call
+       - conversation: The conversation failed to meet the first success criterion: the function `transfer_to_agent` was never called with the queue `restructuring`. The transcript shows the agent only asked for identification before the call ended, and the system even
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 13 s, worst 20 s. Failed calls where the customer hung up: 3.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 1 of 3: 7 / 10 passed, 170 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 10 s, worst 44 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 10 / 10 passed, 212 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 8 s, worst 34 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 10 / 10 passed, 180 s
+
+FAIL PUB-01 2/3
+PASS PUB-02 3/3
+PASS PUB-03 3/3
+FAIL PUB-04 2/3
+PASS PUB-05 3/3
+PASS PUB-06 3/3
+PASS PUB-07 3/3
+PASS PUB-08 3/3
+FAIL PUB-09 2/3
+PASS PUB-10 3/3
+
+7 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 9f4d96eb-2766-485a-8279-0ba1c0bfd9e7, status completed, 563 s.
