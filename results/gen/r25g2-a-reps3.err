@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/freya.py", line 213, in run_simulation
+    sim = api("POST", "/api/v2/simulations", {
+        "agentId": agent_id, "name": name, "mode": "chat", "selectedPersonaIds": list(variables_by_persona),
+        "customerVariablesMap": variables_by_persona, "maxConcurrentCalls": concurrency, "runsPerPersona": 1, "maxCallDurationSeconds": max_seconds,
+        "assistantLlmOverride": AGENT_LLM, "routingLlmOverride": AGENT_LLM, "extractionLlmOverride": AGENT_LLM,
+        "personaLlmOverride": SIM_LLM, "analysisLlmOverride": SIM_LLM})
+  File "/Users/sl/sbx/hackathon/freya.py", line 37, in api
+    raise APIError(method, path, e.code, redact(e.read().decode(errors="replace"))[:1500]) from None
+freya.APIError: POST /api/v2/simulations -> 403: {"success":false,"data":{"message":"Workspace plan limit reached. Maximum 1 concurrent simulations allowed. Current: 1","result":{"error":"Workspace plan limit reached. Maximum 1 concurrent simulations allowed. Current: 1"}}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 121, in <module>
+    if __name__ == "__main__": main()
+                               ~~~~^^
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 67, in main
+    rows, sim_id, it_id, status, took, med = run_once(a.agent_id, cases, ids)
+                                             ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/tools/run_cases.py", line 88, in run_once
+    sim_id, it_id, status = freya.run_simulation(agent_id, f"cases {time.strftime('%H:%M:%S')}", {ids[c["id"]]: sessions[c["id"]] for c in cases})
+                            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/freya.py", line 224, in run_simulation
+    runcontrol.sleep(min(30, busy_until - time.monotonic()))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/runcontrol.py", line 28, in sleep
+    time.sleep(timeout(seconds))
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/sl/sbx/hackathon/runcontrol.py", line 42, in expired
+    raise DeadlineExceeded('build deadline exceeded')
+runcontrol.DeadlineExceeded: build deadline exceeded

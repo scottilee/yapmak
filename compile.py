@@ -307,6 +307,8 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes = {}
 
     def cn(stage, targets, default=None):
+        if "negotiate" in targets and "handover" not in targets:
+            targets = list(targets) + ["handover"]       # every route that can enter a product can hand over to the next one
         return code_node(stage, code_for(stage, ir, slots), targets, default)
 
     # --- setup and opening -------------------------------------------------------------------
@@ -417,6 +419,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["state_debt"] = conv_node("state_debt", prompts.stages["negotiate"], neg_schema, neg_transitions,
                                     on_enter={"type": "tts", "text": "{{debt_statement}}"}, first_only=True, max_turns=12, max_turn_target="neg_route")
     nodes["negotiate"] = conv_node("negotiate", prompts.stages["negotiate"], neg_schema, neg_transitions, max_turns=40, max_turn_target="neg_route")
+    # product hand-over: the first sentence for the next product is fixed text ({{handover_text}} from the runtime), then the node
+    # behaves like `negotiate` (same prompt, extraction and routing)
+    nodes["handover"] = conv_node("handover", prompts.stages["negotiate"], neg_schema, neg_transitions,
+                                  on_enter={"type": "tts", "text": "{{handover_text}}"}, max_turns=40, max_turn_target="neg_route")
     nodes["neg_route"] = cn("neg_route", ["negotiate", "readback", "transfer", "finalize"], default="negotiate")
     rb_schema = [ext("rb_intent", "string",
                      "The customer's answer to the read-back in the LAST message: confirms (a clear yes: yes, correct, I confirm; a hedged or conditional reply such as 'I suppose, but do not record it yet' is NOT confirms but question or other), changes (they give a different amount or date, or ask to move a payment to another date), declines (no, without a new value), "

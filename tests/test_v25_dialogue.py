@@ -228,3 +228,14 @@ def test_cut_off_number_next_to_an_acceptance_is_ignored():
         {"_node": "negotiate", "cust_intent": "accepts", "prop_amount": 6},
         {"_node": "readback", "rb_intent": "confirms", "prop_amount": 630}], "2026-10-14T11:00")
     assert _promises(bank) == [("p1", 637.5, "2026-10-16")], (_promises(bank), [t for n, t in drv.spoken if n in ("negotiate", "readback")])
+
+
+def test_product_handover_is_spoken_as_fixed_text():
+    case = CASES["PUB-12"]
+    bank, drv = _run(WF_B, "PUB-12", verified(case) + [
+        {"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "tomorrow", "prop_product": "1"},
+        {"_node": "negotiate", "cust_intent": "refuses"}, {"_node": "negotiate", "cust_intent": "refuses"}, {"_node": "negotiate", "cust_intent": "refuses"}, YES_RB])
+    spoken = [t for n, t in drv.spoken if n == "handover"]
+    assert spoken == ["Thank you. For your personal loan, can you make a payment of 1320.00 on Friday 16 October 2026?",
+                      "I understand. For your car loan, can you make a payment of 140.00 on Friday 16 October 2026?"], spoken
+    assert _promises(bank) == [("p1", 510.0, "2026-10-15")]

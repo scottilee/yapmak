@@ -1,0 +1,93 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "671d11ae-400c-451c-a2e9-670951907b10",
+ "iteration_id": "01796002-451a-4c46-b22c-3ab2880d8a54",
+ "seconds": 520,
+ "passed": 0,
+ "total": 1,
+ "runs": 2,
+ "final": [
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 2,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed the requirement of making exactly 'two attempts on the personal loan'. After the user refused to pay all debts (Message 9), the assistant made three distinct follow-up attempts for the personal loan: a full balance request in Message 10, an instalment request in Message 12, and a smaller partial payment request in Message 14. All other criteria were met: the phone question was"
+   ],
+   "call_id": "a1cad651-a513-49e4-86f8-7ef8fb6e9791",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_d28b1a1e-791",
+   "slowest_turn_s": 23.9,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "eb65698a-9df9-4a20-aa26-55e2df02d4f1",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_39e537cf-4a7",
+    "slowest_turn_s": 48.3,
+    "ended": "assistant-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed the requirement of making exactly 'two attempts on the personal loan'. After the user refused to pay all debts (Message 9), the assistant made three distinct follow-up attempts for the personal loan: a full balance request in Message 10, an instalment request in Message 12, and a smaller partial payment request in Message 14. All other criteria were met: the phone question was"
+    ],
+    "call_id": "a1cad651-a513-49e4-86f8-7ef8fb6e9791",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_d28b1a1e-791",
+    "slowest_turn_s": 23.9,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

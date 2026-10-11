@@ -1,0 +1,449 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "58bf1bc1-d437-473c-9201-aa024bab59a3",
+ "iteration_id": "d4c10843-1b7a-4ac6-a588-676b220fdc86",
+ "seconds": 109,
+ "passed": 9,
+ "total": 10,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-02",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-03",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-04",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-05",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-06",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-07",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-08",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-09",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-10",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "17c727c7-79d4-4f30-9f2d-0e8fae91c498",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_7d5e9bbd-e40",
+   "slowest_turn_s": 8.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "outcome ('not_reached', 'callback'), expected ('not_reached', 'wrong_number')",
+    "callbacks [{'date': '2026-10-15', 'time': '11:00'}], expected []",
+    "conversation: The conversation failed several criteria: 1) A5,10 was violated because the agent executed the `schedule_callback` tool, which is explicitly forbidden. 2) A8 was violated because the assistant scheduled a callback agreement after a wrong-number correction (user identifying as the sister, not Maria) instead of the correction governing the call. The call ended properly via assistant-ended-call and u"
+   ],
+   "call_id": "c80ecf08-0ce8-4e77-8c6e-3ab38758949d",
+   "tools": [
+    "schedule_callback",
+    "close_call"
+   ],
+   "customer_id": "c_db35322e-db2",
+   "slowest_turn_s": 6.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "94de6e36-09e1-4829-9ea3-122f26429bd9",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_b918767b-834",
+   "slowest_turn_s": 5.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "b049f8d1-da4c-471d-81a0-7c30f841abd7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_20c28a6e-308",
+   "slowest_turn_s": 9.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "0046a6d0-9515-4966-8e02-7ef33192b148",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "transfer_to_agent",
+    "close_call"
+   ],
+   "customer_id": "c_7100322d-bfb",
+   "slowest_turn_s": 3.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "1d370fd0-078a-48b1-9444-d6e9a1d9bf34",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_72ed08f3-865",
+   "slowest_turn_s": 5.5,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "8bf0ffac-af93-4626-a02f-333140efffa4",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_93d434f3-d37",
+   "slowest_turn_s": 4.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "3b2f936e-22b0-4ddc-9211-e543a8e743fc",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "close_call"
+   ],
+   "customer_id": "c_c10981e6-2f8",
+   "slowest_turn_s": 3.4,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "f3cc2bb3-82b0-4c01-9213-bd7a8e072329",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_c12b9b0f-c6e",
+   "slowest_turn_s": 6.6,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "e435048a-7bdb-4bf6-bd85-da4578b03915",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_1aa284fb-163",
+   "slowest_turn_s": 11.8,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "17c727c7-79d4-4f30-9f2d-0e8fae91c498",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_7d5e9bbd-e40",
+    "slowest_turn_s": 8.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "outcome ('not_reached', 'callback'), expected ('not_reached', 'wrong_number')",
+     "callbacks [{'date': '2026-10-15', 'time': '11:00'}], expected []",
+     "conversation: The conversation failed several criteria: 1) A5,10 was violated because the agent executed the `schedule_callback` tool, which is explicitly forbidden. 2) A8 was violated because the assistant scheduled a callback agreement after a wrong-number correction (user identifying as the sister, not Maria) instead of the correction governing the call. The call ended properly via assistant-ended-call and u"
+    ],
+    "call_id": "c80ecf08-0ce8-4e77-8c6e-3ab38758949d",
+    "tools": [
+     "schedule_callback",
+     "close_call"
+    ],
+    "customer_id": "c_db35322e-db2",
+    "slowest_turn_s": 6.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "94de6e36-09e1-4829-9ea3-122f26429bd9",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_b918767b-834",
+    "slowest_turn_s": 5.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "b049f8d1-da4c-471d-81a0-7c30f841abd7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_20c28a6e-308",
+    "slowest_turn_s": 9.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "0046a6d0-9515-4966-8e02-7ef33192b148",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "transfer_to_agent",
+     "close_call"
+    ],
+    "customer_id": "c_7100322d-bfb",
+    "slowest_turn_s": 3.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "1d370fd0-078a-48b1-9444-d6e9a1d9bf34",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_72ed08f3-865",
+    "slowest_turn_s": 5.5,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "8bf0ffac-af93-4626-a02f-333140efffa4",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_93d434f3-d37",
+    "slowest_turn_s": 4.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "3b2f936e-22b0-4ddc-9211-e543a8e743fc",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "close_call"
+    ],
+    "customer_id": "c_c10981e6-2f8",
+    "slowest_turn_s": 3.4,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "f3cc2bb3-82b0-4c01-9213-bd7a8e072329",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_c12b9b0f-c6e",
+    "slowest_turn_s": 6.6,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "e435048a-7bdb-4bf6-bd85-da4578b03915",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_1aa284fb-163",
+    "slowest_turn_s": 11.8,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

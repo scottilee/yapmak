@@ -1,0 +1,15 @@
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+
+slowest agent turn per call: median 6 s, worst 6 s. Failed calls where the customer hung up: 0.
+-- run 1 of 2: 1 / 1 passed, 54 s
+
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The conversation failed to meet the specific attempt criteria. While the identity verification criteria were met (the phone question was asked twice in Messages 4 and 6, and the date of birth was asked once in Message 2), and exactly one promise 
+
+slowest agent turn per call: median 10 s, worst 10 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 2: 0 / 1 passed, 141 s
+
+FAIL PUB-12 1/2
+
+0 / 1 passed (bank records and conversation checks), a customer counts with 2 of 2 runs. Last simulation 77524f95-3dc5-441d-84d9-4183a3a219d7, status completed, 195 s.

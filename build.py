@@ -69,6 +69,12 @@ def main():
 def build(a):
     t_start = time.monotonic()
     left = runcontrol.remaining
+
+    def persist(fn, what):
+        """Publish-path calls keep retrying through a platform outage for as long as the build budget allows (30 s apart),
+        keeping the final-export reserve; an unpublished agent scores zero, so these never give up early."""
+        attempts = max(4, int((left() - FINAL_EXPORT_RESERVE_S) / 30))
+        return retry(fn, what, tr, attempts=attempts, wait_s=30)
     briefs = a.briefs.split(",") if a.briefs else []
     out = ROOT / "out"
     out.mkdir(exist_ok=True)
@@ -119,12 +125,12 @@ def build(a):
             tr.event("offline_invariants", error=repr(e)[:300])
 
         # 3. publish + checkpoint ---------------------------------------------------------------
-        retry(lambda: freya.validate_workflow(a.slot, wf), "validate", tr)
-        ids = retry(lambda: freya.save_workflow(a.slot, wf), "publish", tr)
+        persist(lambda: freya.validate_workflow(a.slot, wf), "validate")
+        ids = persist(lambda: freya.save_workflow(a.slot, wf), "publish")
         if "version" not in ids:
-            ids["version"] = retry(lambda: freya.update_workflow(ids["workflow_id"], wf), "publish_first", tr)   # first create: pin the agent model and publish
+            ids["version"] = persist(lambda: freya.update_workflow(ids["workflow_id"], wf), "publish_first")   # first create: pin the agent model and publish
         tr.event("workflow_published", steps=len(wf["nodes"]), tools=sorted({pa["function"]["name"] for n in wf["nodes"].values() for pa in n.get("pre_actions", []) if pa["function"].get("handler") == "__function__:api_call"}), slot=a.slot, workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
-        retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "checkpoint_export", tr)
+        persist(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "checkpoint_export")
         checkpoint_exported = True
         tr.event("checkpoint_export", path=str(export_path.relative_to(ROOT)), version=ids.get("version"))
 
@@ -166,7 +172,7 @@ def build(a):
             tr.event("simulation_skipped", reason="not enough time left", left_s=int(left()))
 
         # 6. final export (the published version is unchanged by the test) ----------------------------
-        retry(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export", tr)
+        persist(lambda: freya.export_workflow(ids["workflow_id"], str(export_path)), "final_export")
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
         degraded = list(X.DEGRADED) + ([] if all(v is True for v in checks.values()) else [f"check failed: {k}" for k, v in checks.items() if v is not True])
         tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1))

@@ -1,0 +1,13 @@
+FAIL PUB-11 hard   Unlike round: conversation boundaries | verify > verify > get_account
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16')]
+       - notes [], expected [('p2', 'dispute'), ('p3', 'hardship')]
+       - the call was not closed with close_call
+       - conversation: The assistant met criterion B2 by listing the credit card, personal loan, and car loan in [Message 6] before asking for payment. However, the call ended immediately after the customer's response in [Message 7]. As a result, the assistant failed t
+PASS PUB-12 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+PASS PUB-13 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 17 s, worst 30 s. Failed calls where the customer hung up: 1.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+2 / 3 passed (bank records and conversation checks). Last simulation a6b8ae8c-9031-40b5-94df-0bfd88be0651, status completed, 141 s.

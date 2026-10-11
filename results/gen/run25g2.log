@@ -1,0 +1,28 @@
+== v25g gate 2026-10-11T11:24:53Z
+publish gen-a attempt 1 failed
+publish gen-a attempt 2 failed
+publish gen-a attempt 3 failed
+publish gen-a attempt 4 failed
+publish gen-ab attempt 1 failed
+publish gen-ab attempt 2 failed
+publish gen-ab attempt 3 failed
+publish gen-ab attempt 4 failed
+waiting: unhealthy 2026-10-11T11:44:24Z
+waiting: unhealthy 2026-10-11T11:46:15Z
+waiting: unhealthy 2026-10-11T11:48:05Z
+waiting: unhealthy 2026-10-11T11:49:56Z
+waiting: unhealthy 2026-10-11T11:51:46Z
+waiting: unhealthy 2026-10-11T11:53:36Z
+exit A-reps3 FAILED attempt 1:  2026-10-11T11:56:22Z
+waiting: unhealthy 2026-10-11T11:58:24Z
+exit A-reps3 FAILED attempt 2: freya.APIError: POST /api/v2/simulations -> 503: {"success":false,"data":{"message":"API key validation is temporarily u 2026-10-11T12:02:56Z
+waiting: unhealthy 2026-10-11T12:05:17Z
+exit A-reps3 FAILED attempt 3: runcontrol.DeadlineExceeded: build deadline exceeded 2026-10-11T12:10:52Z
+exit B-reps3 FAILED attempt 1: TimeoutError: simulation polling deadline exceeded 2026-10-11T12:34:01Z
+exit B-reps3 FAILED attempt 2: runcontrol.DeadlineExceeded: build deadline exceeded 2026-10-11T12:40:04Z
+exit B-reps3 FAILED attempt 3: runcontrol.DeadlineExceeded: build deadline exceeded 2026-10-11T12:46:07Z
+== variant G 2026-10-11T12:48:07Z
+published {'workflow_id': '516d7b3d-12a7-4794-be8a-12133b653e46', 'agent_id': '8912d228-94d9-4308-b85c-3054f1ff15a6', 'version': 46} (4.1s)
+exit G-pub12 0 :: 0 / 1 passed (bank records and conversation checks), a customer counts 2026-10-11T12:58:45Z
+exit G-edge1b 0 :: 2 / 3 passed (bank records and conversation checks). Last simulation a 2026-10-11T13:01:12Z
+batch done 2026-10-11T13:01:12Z

@@ -721,7 +721,9 @@ def _start_attempt(S, p, k):
     vars['neg_instruction'] = 'Propose this payment for the ' + p['name'] + ': ' + _money(amount) + ' on ' + _fmt(date) + '. Ask whether they can make that payment.' + floor_note + stay
     return True
 
-def _enter_product(S, k):
+def _enter_product(S, k, lead=None):
+    """Start on product k. A hand-over from another product is SPOKEN by fixed text (the `handover` node's TTS): live, the dialogue
+    model ignored the hand-over instruction after a refusal ladder and invented a third offer for the finished product."""
     prev = S['products'][S['pi']] if S.get('phase') == 'product' and S.get('pi') is not None and 0 <= int(S.get('pi') or 0) < len(S['products']) and int(S.get('pi') or 0) != k else None
     S['phase'] = 'product'
     S['pi'] = k
@@ -730,14 +732,23 @@ def _enter_product(S, k):
     if not _start_attempt(S, p, 1):
         p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
         return _advance(S)
-    if prev is not None and prev.get('disposition') and not prev.get('proposed'):
-        # hand-over after a refusal: name the finished product so the model does not continue its ladder (live: a third, invented offer)
-        vars['neg_instruction'] = 'The ' + prev['name'] + ' is finished: do not propose anything more for it. Now the ' + p['name'] + '. ' + _get('neg_instruction')
     if any(q['proposed'] and not q['recorded'] for q in S['products']):
         # earlier products have proposals waiting for the common read-back: nothing is noted or recorded yet
         vars['neg_instruction'] = _get('neg_instruction') + ' Do not say that any earlier payment is noted or recorded; everything is confirmed together at the end.'
     _save(S)
-    _set_next('negotiate')
+    if prev is None and not lead:
+        return _set_next('negotiate')
+    o = S.get('offer') or dict()
+    amount, date = float(o.get('amount') or p['full']), o.get('date') or p['deadline']
+    lead = lead or ('I understand.' if (prev is not None and prev.get('disposition') and not prev.get('proposed')) else 'Thank you.')
+    note = ''
+    if amount < float(p['full']) and not p.get('floor_note_said'):
+        fw = POLICY['amounts'].get('floor_wording') or 'the rest stays overdue'
+        note = ' ' + fw[:1].upper() + fw[1:] + ('' if fw.endswith('.') else '.')
+        p['floor_note_said'] = True
+        _save(S)
+    vars['handover_text'] = lead + ' For your ' + p['name'] + ', can you make a payment of ' + _money(amount) + ' on ' + _fmt(date) + '?' + note
+    _set_next('handover')
 
 def _advance(S):
     """Move to the next undecided product, or to the read-back / finalization."""
@@ -1008,10 +1019,11 @@ def _special(S, intent):
         return True
     return False
 
-def _advance_with_prefix(S, prefix):
+def _advance_with_prefix(S, prefix, lead='I understand, and I will not ask about that one.'):
+    """Next product with a leading sentence: spoken verbatim by the hand-over text; the LLM instruction keeps the prefix for follow-ups."""
     rest = _undecided(S)
     if rest:
-        _enter_product(S, rest[0])
+        _enter_product(S, rest[0], lead=lead)
         vars['neg_instruction'] = prefix + ' ' + _get('neg_instruction')
         return True
     _advance(S)

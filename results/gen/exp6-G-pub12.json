@@ -1,0 +1,114 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "88baaf12-f1f0-48af-b6cf-4c747f9e401b",
+ "iteration_id": "9b6aa28d-7139-4fad-ad23-7af2830369ee",
+ "seconds": 619,
+ "passed": 0,
+ "total": 1,
+ "runs": 3,
+ "final": [
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 2,
+   "runs": 3,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": true,
+   "failed": [],
+   "call_id": "ab2fbb1f-b3bf-4987-8fb9-e8c285474ff7",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_a7bf8ad8-2d9",
+   "slowest_turn_s": 8.8,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 510.0, '2026-10-15')]",
+     "notes [], expected [('p2', 'refused'), ('p3', 'refused')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation failed on several criteria: 1. Only one attempt was made on the personal loan (Message 8), failing the requirement for two attempts. 2. No promise was recorded for the credit card (no create_promise tool call). 3. No 'refused' notes were recorded for the other two products (no add_note tool calls). While the security questions were handled correctly with the phone question repeate"
+    ],
+    "call_id": "1036c160-d38a-4fa7-af96-5bdc695adbd8",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account"
+    ],
+    "customer_id": "c_ef508004-f02",
+    "slowest_turn_s": 31.4,
+    "ended": "customer-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "390ae323-de3e-4a6e-bb4a-1a9b11cdf7c5",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_4add1412-6df",
+    "slowest_turn_s": 24.8,
+    "ended": "assistant-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "ab2fbb1f-b3bf-4987-8fb9-e8c285474ff7",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_a7bf8ad8-2d9",
+    "slowest_turn_s": 8.8,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

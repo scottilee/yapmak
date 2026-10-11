@@ -206,8 +206,8 @@ SIM_LLM = {"provider": "google", "model": "gemini-3-flash-preview"}        # pla
 
 def run_simulation(agent_id, name, variables_by_persona, max_seconds=420, concurrency=int(os.environ.get("FREYA_SIM_CONCURRENCY", "5"))):
     """Start a text simulation, wait for it, return (simulation_id, iteration_id)."""
-    with runcontrol.deadline(90):
-        busy_until = time.monotonic() + 90
+    with runcontrol.deadline(240):                   # a degraded platform (503 streaks) needs more than 90 s to accept a simulation
+        busy_until = time.monotonic() + 240
         while True:                      # bounded workspace contention wait
             try:
                 sim = api("POST", "/api/v2/simulations", {
@@ -219,7 +219,7 @@ def run_simulation(agent_id, name, variables_by_persona, max_seconds=420, concur
             except RuntimeError as e:
                 if "concurrent simulations" not in str(e): raise
                 if time.monotonic() >= busy_until:
-                    raise TimeoutError("simulation slot busy for 90 seconds") from e
+                    raise TimeoutError("simulation slot busy for 240 seconds") from e
                 inherited_event("simulation_wait", remaining_s=round(busy_until - time.monotonic(), 1))
                 runcontrol.sleep(min(30, busy_until - time.monotonic()))
     sim_id = (sim.get("simulation") or sim)["id"]

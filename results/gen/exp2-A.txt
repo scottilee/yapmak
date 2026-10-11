@@ -1,0 +1,16 @@
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+
+slowest agent turn per call: median 48 s, worst 48 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 1 of 2: 1 / 1 passed, 259 s
+
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The assistant failed the requirement of making exactly 'two attempts on the personal loan'. After the user refused to pay all debts (Message 9), the assistant made three distinct follow-up attempts for the personal loan: a full balance request in
+
+slowest agent turn per call: median 24 s, worst 24 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 2: 0 / 1 passed, 261 s
+
+FAIL PUB-12 1/2
+
+0 / 1 passed (bank records and conversation checks), a customer counts with 2 of 2 runs. Last simulation 671d11ae-400c-451c-a2e9-670951907b10, status completed, 520 s.

@@ -1,0 +1,10 @@
+FAIL PUB-11 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > add_note > add_note > close_call
+       - notes [('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'hardship')]
+       - conversation: The assistant failed the success criteria on two counts: 1. It violated the 'no persuasion on either loan' rule (A32) by asking the user to make a payment on the car loan in [Message 10] immediately after the user declared a hardship (job loss) i
+FAIL PUB-12 hard   Unlike round: conversation boundaries | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - conversation: The agent failed the success criteria because it made a persuasion attempt on a disputed loan. Specifically, in Message 7, the user stated that the personal loan (p2) was not theirs (dispute). However, in Message 12, the assistant asked for a pay
+PASS PUB-13 hard   Unlike round: conversation boundaries | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 31 s. Failed calls where the customer hung up: 0.
+
+1 / 3 passed (bank records and conversation checks). Last simulation 31cedc1a-6ef5-4356-bf9e-17b11feda278, status completed, 218 s.

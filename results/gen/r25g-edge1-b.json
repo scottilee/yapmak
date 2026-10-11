@@ -1,0 +1,166 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "31cedc1a-6ef5-4356-bf9e-17b11feda278",
+ "iteration_id": "8fe05fc0-7222-4fe3-a6a6-1a1064b76188",
+ "seconds": 218,
+ "passed": 1,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-12",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "Unlike round: conversation boundaries",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "notes [('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'hardship')]",
+    "conversation: The assistant failed the success criteria on two counts: 1. It violated the 'no persuasion on either loan' rule (A32) by asking the user to make a payment on the car loan in [Message 10] immediately after the user declared a hardship (job loss) in [Message 7]. 2. In the system events, the note for the car loan (p3) was recorded with the reason 'refused' rather than 'hardship', failing criterion B7"
+   ],
+   "call_id": "89c4d0ec-7118-46b5-a798-795fb608ba25",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_45cf1608-732",
+   "slowest_turn_s": 31.2,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": false,
+   "failed": [
+    "conversation: The agent failed the success criteria because it made a persuasion attempt on a disputed loan. Specifically, in Message 7, the user stated that the personal loan (p2) was not theirs (dispute). However, in Message 12, the assistant asked for a payment of 1320.00 for the personal loan, which violates the requirement of 'no attempts on paid/disputed loans'. Other criteria were met: the card (p1) rece"
+   ],
+   "call_id": "262d338b-c47c-4627-bcaf-6c7af270969e",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "add_note",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_1bf325f5-7c6",
+   "slowest_turn_s": 3.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "Unlike round: conversation boundaries",
+   "pass": true,
+   "failed": [],
+   "call_id": "3d156d59-2e6d-48f2-9b1b-2f1c10871e96",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_baa14cb7-f22",
+   "slowest_turn_s": 2.6,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "notes [('p2', 'dispute'), ('p3', 'refused')], expected [('p2', 'dispute'), ('p3', 'hardship')]",
+     "conversation: The assistant failed the success criteria on two counts: 1. It violated the 'no persuasion on either loan' rule (A32) by asking the user to make a payment on the car loan in [Message 10] immediately after the user declared a hardship (job loss) in [Message 7]. 2. In the system events, the note for the car loan (p3) was recorded with the reason 'refused' rather than 'hardship', failing criterion B7"
+    ],
+    "call_id": "89c4d0ec-7118-46b5-a798-795fb608ba25",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_45cf1608-732",
+    "slowest_turn_s": 31.2,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": false,
+    "failed": [
+     "conversation: The agent failed the success criteria because it made a persuasion attempt on a disputed loan. Specifically, in Message 7, the user stated that the personal loan (p2) was not theirs (dispute). However, in Message 12, the assistant asked for a payment of 1320.00 for the personal loan, which violates the requirement of 'no attempts on paid/disputed loans'. Other criteria were met: the card (p1) rece"
+    ],
+    "call_id": "262d338b-c47c-4627-bcaf-6c7af270969e",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "add_note",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_1bf325f5-7c6",
+    "slowest_turn_s": 3.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "Unlike round: conversation boundaries",
+    "pass": true,
+    "failed": [],
+    "call_id": "3d156d59-2e6d-48f2-9b1b-2f1c10871e96",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_baa14cb7-f22",
+    "slowest_turn_s": 2.6,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

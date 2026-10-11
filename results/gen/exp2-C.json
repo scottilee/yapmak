@@ -1,0 +1,93 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "77524f95-3dc5-441d-84d9-4183a3a219d7",
+ "iteration_id": "2ed993c2-e574-4a6d-b82d-526859e8abb3",
+ "seconds": 195,
+ "passed": 0,
+ "total": 1,
+ "runs": 2,
+ "final": [
+  {
+   "id": "PUB-12",
+   "family": "Multi-product",
+   "passes": 1,
+   "runs": 2,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "Multi-product",
+   "pass": false,
+   "failed": [
+    "conversation: The conversation failed to meet the specific attempt criteria. While the identity verification criteria were met (the phone question was asked twice in Messages 4 and 6, and the date of birth was asked once in Message 2), and exactly one promise was recorded for the credit card (Message 16 and system event 'create_promise' for p1), and 'refused' notes were correctly added for the other two product"
+   ],
+   "call_id": "60b577bd-6cd8-4a8f-af7f-51def384011e",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "add_note",
+    "add_note",
+    "close_call"
+   ],
+   "customer_id": "c_b37ee524-5b4",
+   "slowest_turn_s": 10.3,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": true,
+    "failed": [],
+    "call_id": "6fe53937-b3dc-40f4-b08b-3128488d4578",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_945bffb7-cb3",
+    "slowest_turn_s": 6.4,
+    "ended": "assistant-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "Multi-product",
+    "pass": false,
+    "failed": [
+     "conversation: The conversation failed to meet the specific attempt criteria. While the identity verification criteria were met (the phone question was asked twice in Messages 4 and 6, and the date of birth was asked once in Message 2), and exactly one promise was recorded for the credit card (Message 16 and system event 'create_promise' for p1), and 'refused' notes were correctly added for the other two product"
+    ],
+    "call_id": "60b577bd-6cd8-4a8f-af7f-51def384011e",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "add_note",
+     "add_note",
+     "close_call"
+    ],
+    "customer_id": "c_b37ee524-5b4",
+    "slowest_turn_s": 10.3,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}
