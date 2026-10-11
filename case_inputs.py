@@ -83,6 +83,8 @@ def convert(path: pathlib.Path, dest_dir: pathlib.Path) -> pathlib.Path | None:
     if path.name.lower() in SKIP_NAMES:
         return None
     if suf in TEXT_SUFFIXES:
+        if suf == ".json" and path.stat().st_size > 150_000:
+            return None          # a large JSON file is data (test fixtures), not a document for the extractor; the trace lists it as skipped
         return path
     dest_dir.mkdir(parents=True, exist_ok=True)
     if suf == ".docx":

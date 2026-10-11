@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # The final-case submission in one command:
 #
-#   scripts/submit_final.sh <case_folder> <mock_url> [--push] [--deadline SECONDS]
+#   scripts/submit_final.sh <case_folder> <mock_url> [--push] [--deadline SECONDS] [--reuse]
+#
+#   --reuse: do not rebuild; commit the artifacts of the last build.py run (out/final.*, traces/final.jsonl, traces/final.build.log)
+#            exactly as reviewed, with the run_command taken from the trace's run_start event.
 #
 #   1. commits the case folder unchanged (the organisers' zip, extracted)
 #   2. runs the builder in its final-case form:  build.py <case_folder> <mock_url>   (slot "final")
@@ -11,10 +14,11 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=.venv/bin/python
-push=0; deadline=1800; args=()
+push=0; deadline=1800; reuse=0; args=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --push) push=1 ;;
+    --reuse) reuse=1 ;;
     --deadline) deadline="$2"; shift ;;
     -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
     *) args+=("$1") ;;
@@ -41,9 +45,26 @@ if git diff --cached --quiet -- "$folder"; then log "inputs already committed"; 
 # 2. the build
 run_start=$(mktemp); touch "$run_start"
 cmd="source .env && $PY build.py '$folder' '$mock' --deadline $deadline"
-log "build: $cmd"
 status=ok
-if bash -c "$cmd" 2>&1 | tee traces/final.build.log; then log "build finished"; else status=FAILED; log "build FAILED (see traces/final.build.log)"; fi
+if [ "$reuse" = "1" ]; then
+  [ -f traces/final.jsonl ] && [ -f out/final.workflow.json ] || { log "--reuse: no previous build (traces/final.jsonl / out/final.workflow.json missing)"; exit 1; }
+  cmd=$($PY - <<'EOF3'
+import json, shlex
+with open("traces/final.jsonl") as f:
+    for line in f:
+        e = json.loads(line)
+        if e.get("event") == "run_start":
+            argv = e.get("argv") or []
+            print("source .env && .venv/bin/python " + " ".join(shlex.quote(a) for a in argv)); break   # argv[0] is build.py
+EOF3
+)
+  [ -n "$cmd" ] || { log "--reuse: the trace has no run_start event"; exit 1; }
+  log "reusing the last build: $cmd"
+  touch -d '2000-01-01' "$run_start"
+else
+  log "build: $cmd"
+  if bash -c "$cmd" 2>&1 | tee traces/final.build.log; then log "build finished"; else status=FAILED; log "build FAILED (see traces/final.build.log)"; fi
+fi
 
 # 3. scan + commit the artifacts
 arts=()
@@ -54,6 +75,7 @@ rm -f "$run_start"
 [ "${#arts[@]}" -gt 0 ] || { log "no artifacts produced; nothing to commit"; exit 1; }
 $PY scripts/check_artifacts.py "${arts[@]}" || { log "artifact scan FAILED: fix before committing (never commit credentials)"; exit 1; }
 git add -- "${arts[@]}" "$folder"
+[ -d mock ] && git add -- mock .gitignore 2>/dev/null || true     # the team's mock source travels with the submission commit
 if git diff --cached --quiet; then log "artifacts unchanged since the last commit"; else git commit -q -m "Final case build"; fi
 commit=$(git rev-parse HEAD); log "artifacts committed: $commit"
 
@@ -62,8 +84,10 @@ $PY - "$commit" "$cmd" "$mock" <<'EOF2'
 import json, sys
 commit, cmd, mock = sys.argv[1:4]
 cfg = json.load(open("submission/config.json"))
+# run_command in the organisers' placeholder form (they substitute their own folder and mock URL); the literal command of this
+# run is in the trace's run_start.argv and in traces/final.build.log. Needs .env (FREYA_API_KEY, FREYA_BANK_TEAM_KEY) and requirements.txt.
 sub = {"team": cfg["team"], "members": cfg.get("members", []), "repo": cfg["repo"], "commit": commit,
-       "run_command": cmd, "workflow": "out/final.workflow.json", "trace": "traces/final.jsonl", "mock_url": mock}
+       "run_command": "python3 build.py {case_folder} {mock_url}", "workflow": "out/final.workflow.json", "trace": "traces/final.jsonl", "mock_url": mock}
 json.dump(sub, open("submission.json", "w"), indent=2, ensure_ascii=False); open("submission.json", "a").write("\n")
 print(json.dumps(sub, indent=2, ensure_ascii=False))
 EOF2

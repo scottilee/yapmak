@@ -1,0 +1,55 @@
+25/617 complete; mismatches=0
+50/617 complete; mismatches=0
+75/617 complete; mismatches=0
+100/617 complete; mismatches=0
+125/617 complete; mismatches=0
+150/617 complete; mismatches=0
+175/617 complete; mismatches=0
+200/617 complete; mismatches=0
+225/617 complete; mismatches=0
+250/617 complete; mismatches=0
+275/617 complete; mismatches=0
+300/617 complete; mismatches=0
+325/617 complete; mismatches=0
+350/617 complete; mismatches=0
+375/617 complete; mismatches=0
+400/617 complete; mismatches=0
+425/617 complete; mismatches=0
+450/617 complete; mismatches=0
+475/617 complete; mismatches=0
+500/617 complete; mismatches=0
+525/617 complete; mismatches=0
+550/617 complete; mismatches=0
+575/617 complete; mismatches=0
+600/617 complete; mismatches=0
+{
+  "base_url": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev",
+  "source": "hidden/final/test-environment/test-customers.json",
+  "source_sha256": "009d3609d33a3b001ce04861822cd2592cb5482a7a5b0a5cb69442592889aa65",
+  "source_unchanged": true,
+  "started_utc": "2026-10-11T17:40:54.709052+00:00",
+  "ended_utc": "2026-10-11T17:42:40.246443+00:00",
+  "customers": 34,
+  "cards": 62,
+  "cases": 617,
+  "matched": 617,
+  "mismatches": 0,
+  "by_service": {
+    "cards.list": 34,
+    "cards.balance": 65,
+    "statement.week.get": 65,
+    "statement.week.decide": 195,
+    "statement.week.change": 195,
+    "contact.email.get": 34,
+    "statement.pdf.send": 29
+  },
+  "expected_non_200": 8,
+  "delayed": [
+    {
+      "case": 273,
+      "expected_seconds": 12,
+      "observed_seconds": 12.039
+    }
+  ],
+  "failed_cases": []
+}

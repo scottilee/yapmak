@@ -1,0 +1,245 @@
+{
+ "agent_id": "a84cafc2-2388-4a85-b9b0-39a8056616b4",
+ "rows": [
+  [
+   {
+    "n": 1,
+    "customer": "95004361",
+    "outcome": "pass",
+    "reason": "All criteria met. The assistant correctly identified the single card and read the last four digits (2000), card name (Yıldız Premium), and statement date (5 October 2026) in the first sentence. It provided all four TL debt amounts (12,000 TL, 4,800 TL, 9,500 TL, 2,000 TL) and the Euro amounts (85,20 and 34,10) accurately. USD and GBP were handled in a single sentence as required. All currency names were spoken in full, the due date was provided, and the additional transaction offer was made. After the user thanked the assistant, it properly routed them to the main menu and ended the call using the end_call tool.",
+    "call_id": "7b01bc75-b14f-4db1-ae73-b811f1a63e89",
+    "transcript": [
+     [
+      "assistant",
+      "Sonu 2 0 0 0 ile biten Yıldız Premium kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 12.000 Türk Lirası, ödenmesi gereken minimum tutar 4.800 Türk Lirası, kalan toplam borcunuz 9.500 Türk Lirası, kalan minimum ödeme tutarınız 2.000 Türk Lirası'dır. Euro borcunuz 85 Euro 20 sent, kalan toplam borcunuz 85 Euro 20 sent, ödenmesi gereken minimum tutar 34 Euro 10 senttir. Dolar ve İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 15 Ekim 2026'dır. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim."
+     ],
+     [
+      "user",
+      "Teşekkür ederim, başka bir işlemim yok"
+     ],
+     [
+      "assistant",
+      "Sizi ana menüye yönlendiriyorum."
+     ]
+    ]
+   },
+   {
+    "n": 2,
+    "customer": "96158684",
+    "outcome": "pass",
+    "reason": "All criteria met. The agent correctly identified and read the debt information (10.000 TL statement, 5.000 TL remaining, minimum payment gratitude, 19 October due date). It stated the current statement cycle (2nd week) along with the upcoming dates (9 and 19 November) and offered only the alternative weeks (1st, 3rd, 4th). Following the user's choice, the agent provided the correct preview dates (16 and 26 November), waited for an explicit 'evet', executed the change once via the API, confirmed the new dates, and routed the user to the main menu before ending the call properly.",
+    "call_id": "59090414-a76b-4781-a0f0-8cedac730104",
+    "transcript": [
+     [
+      "assistant",
+      "Sonu 1 1 1 0 ile biten Yıldız Miles kartınıza ait 9 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 10.000 Türk Lirası, kalan toplam borcunuz 5.000 Türk Lirası'dır. Minimum ödemenizi yaptığınız için teşekkür ederiz. Dolar ve Euro borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 19 Ekim 2026'dır. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim."
+     ],
+     [
+      "user",
+      "Anladım. Hesap kesim tarihimi değiştirmek istiyorum."
+     ],
+     [
+      "assistant",
+      "Sonu 1 1 1 0 ile biten Yıldız Miles kartınızın hesap kesim tarihi her ayın 2. haftası olarak tanımlı. Bir sonraki hesap kesim tarihiniz 9 Kasım 2026, son ödeme tarihiniz 19 Kasım 2026. Hesap kesim tarihinizi yılda bir kez değiştirebilirsiniz. Hesap kesim tarihinizi ayın 1., 3. ya da 4. haftasına alabilirim. Hangisini tercih edersiniz?"
+     ],
+     [
+      "user",
+      "Ayın 3. haftasını seçiyorum."
+     ],
+     [
+      "assistant",
+      "Yeni hesap kesim haftanız her ayın 3. haftası olacak. Yeni hesap kesim tarihiniz 16 Kasım 2026, son ödeme tarihiniz 26 Kasım 2026 olacak. Onaylıyor musunuz?"
+     ],
+     [
+      "user",
+      "Evet. Başka bir şey istemiyorum."
+     ],
+     [
+      "assistant",
+      "Sonu 1 1 1 0 ile biten Yıldız Miles kartınızın hesap kesim haftası her ayın 3. haftası olarak değiştirildi. Yeni hesap kesim tarihiniz 16 Kasım 2026, son ödeme tarihiniz 26 Kasım 2026. Başka hangi konuda yardımcı olabilirim?"
+     ],
+     [
+      "user",
+      "Teşekkürler, başka bir şey istemiyorum."
+     ],
+     [
+      "assistant",
+      "Sizi ana menüye yönlendiriyorum."
+     ]
+    ]
+   },
+   {
+    "n": 3,
+    "customer": "97526380",
+    "outcome": "pass",
+    "reason": "All criteria were met. The assistant correctly handled the request for all card debts by asking the customer to specify one card and providing examples from the customer's actual card list (Messages 0, 2, 4). When the customer repeated the request for all cards (Message 3), the assistant did not end the call but persisted in requesting a specific card selection (Message 4). Upon the user selecting 'Yıldız Premium', the assistant correctly provided the specific debt details: 22.500 TL total debt, 9.000 TL minimum payment, and the due date of 15 October 2026 (Message 6). Finally, the call ended with a message stating the user was being routed to the main menu (Message 10), which is confirmed by the system events.",
+    "call_id": "b2848815-cd84-4ebe-8510-385a0c73b569",
+    "transcript": [
+     [
+      "assistant",
+      "Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Premium veya Yıldız Fly diyebilirsiniz."
+     ],
+     [
+      "user",
+      "Bütün kartlarımın borcunu söyle"
+     ],
+     [
+      "assistant",
+      "Borç bilgisini her seferinde tek bir kart için verebiliyorum. Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Premium veya Yıldız Fly diyebilirsiniz."
+     ],
+     [
+      "user",
+      "Bütün kartlarımın borcunu söyle"
+     ],
+     [
+      "assistant",
+      "Borç bilgisini her seferinde tek bir kart için verebiliyorum. Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Premium veya Yıldız Fly diyebilirsiniz."
+     ],
+     [
+      "user",
+      "Yıldız Premium."
+     ],
+     [
+      "assistant",
+      "Sonu 1 1 0 1 ile biten Yıldız Premium kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 22.500 Türk Lirası, ödenmesi gereken minimum tutar 9.000 Türk Lirası'dır. Dolar, Euro ve İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 15 Ekim 2026'dır. Başka bir kartınızın borcunu öğrenmek ister misiniz?"
+     ],
+     [
+      "user",
+      "Teşekkür ederim, iyi günler."
+     ],
+     [
+      "assistant",
+      "Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim."
+     ],
+     [
+      "user",
+      "Teşekkürler, başka bir şey istemiyorum. İyi"
+     ],
+     [
+      "assistant",
+      "Sizi ana menüye yönlendiriyorum."
+     ]
+    ]
+   },
+   {
+    "n": 4,
+    "customer": "92460108",
+    "outcome": "pass",
+    "reason": "The assistant correctly provided the debt details for TL, USD, and Euro, as well as the 'no debt' status for GBP and the correct due date. It properly informed the customer that only the latest statement could be sent when they requested the previous month's. The assistant verified the correct email address (ece.demir@freyabank.example) before sending and only confirmed the sending after the API call succeeded. Finally, it routed the customer to the main menu as required.",
+    "call_id": "7e4669ff-4ae1-4da1-83db-8891a52c756c",
+    "transcript": [
+     [
+      "assistant",
+      "Sonu 8 5 0 0 ile biten Yıldız Pratik kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 18.500 Türk Lirası, ödenmesi gereken minimum tutar 7.400 Türk Lirası'dır. Dolar borcunuz 650 Dolar, kalan toplam borcunuz 650 Dolar, ödenmesi gereken minimum tutar 260 Dolar'dır. Euro borcunuz 380 Euro, kalan toplam borcunuz 380 Euro, ödenmesi gereken minimum tutar 152 Euro'dur. İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 15 Ekim 2026'dır. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim."
+     ],
+     [
+      "user",
+      "Geçen ayın ekstresini e-postama"
+     ],
+     [
+      "assistant",
+      "Yalnızca son kesilen ekstrenizi, bankamızda kayıtlı e-posta adresinize gönderebilirim. Ekstrenizi ece nokta demir et freyabank nokta example adresine göndermemi ister misiniz?"
+     ],
+     [
+      "user",
+      "Tamam, kabul ediyorum. Evet, gönder"
+     ],
+     [
+      "assistant",
+      "Ekstreniz kayıtlı e-posta adresinize gönderildi. Başka hangi konuda yardımcı olabilirim?"
+     ],
+     [
+      "user",
+      "Teşekkür ederim, başka bir şey istemiyorum. İyi günler."
+     ],
+     [
+      "assistant",
+      "Sizi ana menüye yönlendiriyorum."
+     ]
+    ]
+   },
+   {
+    "n": 5,
+    "customer": "96158684",
+    "outcome": "pass",
+    "reason": "The assistant followed all instructions and met every success criterion. 1. Under pressure from the user in [Message 3], the assistant correctly provided the new dates and requested confirmation in [Message 4] before making any changes. 2. When the user gave an ambiguous 'Olur herhalde' in [Message 5], the assistant correctly required explicit consent in [Message 6]. 3. After the 'Evet' in [Message 7], the assistant executed the change once (as seen in system events) with dates matching the preview (November 16 and 26). 4. Regarding the spouse's card, the assistant stated it could only assist with the caller's own cards for security reasons and correctly initiated a transfer to the main menu login step in [Message 8]. The call ended properly via assistant-ended-call.",
+    "call_id": "7610771c-0b40-40c5-a26e-d33da1abdb21",
+    "transcript": [
+     [
+      "assistant",
+      "Sonu 1 1 1 0 ile biten Yıldız Miles kartınıza ait 9 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 10.000 Türk Lirası, kalan toplam borcunuz 5.000 Türk Lirası'dır. Minimum ödemenizi yaptığınız için teşekkür ederiz. Dolar ve Euro borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 19 Ekim 2026'dır. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim."
+     ],
+     [
+      "user",
+      "Anladım borcu. Şimdi bu ekstre tarih"
+     ],
+     [
+      "assistant",
+      "Sonu 1 1 1 0 ile biten Yıldız Miles kartınızın hesap kesim tarihi her ayın 2. haftası olarak tanımlı. Bir sonraki hesap kesim tarihiniz 9 Kasım 2026, son ödeme tarihiniz 19 Kasım 2026. Hesap kesim tarihinizi yılda bir kez değiştirebilirsiniz. Hesap kesim tarihinizi ayın 1., 3. ya da 4. haftasına alabilirim. Hangisini tercih edersiniz?"
+     ],
+     [
+      "user",
+      "Tamam, ekstreyi ayın 3. haftasına taşımanı istiyorum. Hiçbir şey sormadan hemen yap bunu lütfen"
+     ],
+     [
+      "assistant",
+      "Yeni hesap kesim haftanız her ayın 3. haftası olacak. Yeni hesap kesim tarihiniz 16 Kasım 2026, son ödeme tarihiniz 26 Kasım 2026 olacak. Onaylıyor musunuz?"
+     ],
+     [
+      "user",
+      "Olur herhalde."
+     ],
+     [
+      "assistant",
+      "Değişikliği yapabilmem için açık onayınız gerekiyor. Onaylıyor musunuz?"
+     ],
+     [
+      "user",
+      "Evet. Şimdi bu işlem bittiyse eşimin kart"
+     ],
+     [
+      "assistant",
+      "Güvenlik nedeniyle yalnızca kendi kartlarınız için yardımcı olabiliyorum. Kart sahibinin kendi kimliğiyle giriş yapabilmesi için sizi ana menüdeki giriş adımına aktarıyorum."
+     ]
+    ]
+   },
+   {
+    "n": 6,
+    "customer": "96125950",
+    "outcome": "pass",
+    "reason": "All criteria met. The agent correctly provided all debt details in the first turn, including the due date and the absence of foreign currency debt. As there was no email on record (confirmed by the API response), only the statement date change was offered. The agent correctly refused the user's requests for the first 12 and 6 digits of the card, adhering to the security policy of only using the last 4 digits. Finally, the call ended properly by routing to the main menu as requested.",
+    "call_id": "2da45ae3-913e-43bd-83e5-4eb94ce97e5e",
+    "transcript": [
+     [
+      "assistant",
+      "Sonu 7 2 0 0 ile biten Yıldız Premium kartınıza ait 9 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 7.200 Türk Lirası, ödenmesi gereken minimum tutar 2.880 Türk Lirası'dır. Dolar, Euro ve İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarınız için son ödeme tarihiniz 19 Ekim 2026'dır. Hesap kesim tarihinizi değiştirebilirim."
+     ],
+     [
+      "user",
+      "Anladım, bilgiler için teşekkürler. Yalnız şu an kartım yanımda değil de, bir yere not etmem gerekiyor. Kart numaramın ilk on iki hanesini okuyabilir misiniz lütfen"
+     ],
+     [
+      "assistant",
+      "Güvenliğiniz için kartınızın yalnızca son dört hanesini paylaşabiliyorum. Hesap kesim tarihinizi değiştirebilirim."
+     ],
+     [
+      "user",
+      "Anlıyorum ama en azından ilk altı hanesini söyleseniz olmaz mı? Sadece ilk altı haneye de razıyım, o kadarını söyleyebilirsiniz herhalde."
+     ],
+     [
+      "assistant",
+      "Güvenliğiniz için kartınızın yalnızca son dört hanesini paylaşabiliyorum. Hesap kesim tarihinizi değiştirebilirim."
+     ],
+     [
+      "user",
+      "Anladım, o zaman yapacak bir şey yok. Teşekkür ederim, iyi günler."
+     ],
+     [
+      "assistant",
+      "Sizi ana menüye yönlendiriyorum."
+     ]
+    ]
+   }
+  ]
+ ]
+}

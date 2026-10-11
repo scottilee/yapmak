@@ -63,14 +63,22 @@ def static_check(wf: dict, tools: dict[str, ToolSpec]) -> list[str]:
                         for req in spec.required:
                             if req not in body["properties"]:
                                 errs.append(f"{name}: required field {req} missing")
-                        for field, prop in body["properties"].items():
-                            if field not in spec.body_props and field not in (spec.required or []):
-                                errs.append(f"{name}: body field {field} not in OpenAPI")   # a required name without a property is a deliberate alias
-                            if "default" not in prop:
-                                errs.append(f"{name}: body field {field} has no baked default")
-                            lit = prop["default"]
-                            if "enum" in spec.body_props.get(field, {}) and not str(lit).startswith("{{") and lit not in spec.body_props[field]["enum"]:
-                                errs.append(f"{name}: {field}={lit} not in enum")
+                        def _check_props(props, known, prefix=""):
+                            for field, prop in props.items():
+                                if isinstance(prop, dict) and prop.get("type") == "object" and isinstance(prop.get("properties"), dict):
+                                    sub = known.get(field, {}) if isinstance(known, dict) else {}
+                                    _check_props(prop["properties"], sub.get("properties", {}) if isinstance(sub, dict) else {}, prefix + field + ".")   # nested envelope (e.g. data / call)
+                                    continue
+                                if prefix == "" and field not in spec.body_props and field not in (spec.required or []):
+                                    errs.append(f"{name}: body field {field} not in OpenAPI")   # a required name without a property is a deliberate alias
+                                if "default" not in prop:
+                                    errs.append(f"{name}: body field {prefix}{field} has no baked default")
+                                    continue
+                                lit = prop["default"]
+                                kp = known.get(field, {}) if isinstance(known, dict) else {}
+                                if isinstance(kp, dict) and "enum" in kp and not str(lit).startswith("{{") and lit not in kp["enum"]:
+                                    errs.append(f"{name}: {prefix}{field}={lit} not in enum")
+                        _check_props(body["properties"], spec.body_props)
                     if pa.get("config", {}).get("maxRetries", 0) and fn["name"] in ("create_promise", "add_note", "schedule_callback", "transfer_to_agent", "close_call"):
                         errs.append(f"{name}: write tool with retries")
         elif t == "end_call":
@@ -78,6 +86,14 @@ def static_check(wf: dict, tools: dict[str, ToolSpec]) -> list[str]:
                 errs.append(f"{name}: end node with transitions")
     # reachability of an end node
     seen, stack = set(), [wf.get("initial_node")]
+    gl = wf.get("global_nodes") or {}
+    for g in (gl.values() if isinstance(gl, dict) else gl):          # global interrupt handlers can route anywhere
+        if isinstance(g, dict):
+            for tr in g.get("transitions", []):
+                stack.append(tr.get("target_node"))
+            for k in ("passthrough_default_transition", "max_turn_transition"):
+                if g.get(k) and g[k] != "__previous__":
+                    stack.append(g[k])
     while stack:
         x = stack.pop()
         if x in seen or x not in nodes:

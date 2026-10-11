@@ -34,3 +34,15 @@ curl -s https://<name>.<subdomain>.workers.dev/openapi.json | head -c 300
 ```
 Then the builder runs as: `.venv/bin/python build.py <case_folder> https://<name>.<subdomain>.workers.dev`
 (or `scripts/submit_final.sh <case_folder> <mock_url> --push`).
+
+## Status 11 Oct 17:45 UTC (final case, after the service contract arrived)
+The list above was written for the collections form and is superseded. The real contract is
+`hidden/final/sources/documents/2026-10-01-service-contract.md` (seven POST services under `/voice/v1/`, `{data, call}` in,
+`{data, result}` out). `mock/src/contract.js` carries the routes, the per-service not-found errors (section 4/6 of the contract),
+the required fields and the OpenAPI document the builder reads; `mock/src/index.js` answers from `customers.json`
+(= `test-environment/test-customers.json`). `scripts/verify_mock.py <mock_url>` replays every one of the 617 test entries and
+the error cases: 617/617 bodies and status codes match the file; unknown customer/card/week → the contract's 404/400 codes.
+Deliberate leniencies (they can only help the agent, never a simulated caller): `statementDay`, `intAddressInfoType`, `aiFlow`,
+`currencyType`, `statementDate` and `emailAddress` are not required by the mock (the contract marks them required and the OpenAPI
+says so, so the authored workflow sends them); an unknown masked card number is matched by its last four digits when that is
+unambiguous within the customer; `/oauth2/token` answers a dummy token.

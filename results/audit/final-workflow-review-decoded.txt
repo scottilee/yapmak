@@ -1,0 +1,729 @@
+
+### NODE start
+
+try:
+    vars['flow_started'] = 'yes'
+except Exception:
+    pass
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "load_cards", "description": "always", "condition": {"operator": "always"}}]
+
+### NODE load_cards
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 1}, "function": {"name": "load_cards", "handler": "__function__:api_call", "description": "cards.list: the customer's eligible credit cards.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/cards.list"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"customerNo": {"type": "string", "default": "{{customerNumber}}"}, "aiFlow": {"type": "string", "default": "CardOps"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    v = vars.get('customerNumber')\n    if v:\n        config['body'] = dict(data=dict(customerNo=str(v), aiFlow='CardOps'), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "load_contact", "description": "cards.list succeeded", "condition": {"logic": "or", "conditions": [{"variable": "cards_rc", "operator": "equals", "operand": "1"}, {"variable": "load_cards_response.data.result.returnCode", "operator": "equals", "operand": "1"}]}}, {"target_node": "end_no_card", "description": "No valid card (404 FB_IVR_CHANNEL_102)", "condition": {"logic": "or", "conditions": [{"variable": "cards_rc", "operator": "equals", "operand": "FB_IVR_CHANNEL_102"}, {"variable": "load_cards_response.data.result.returnCode", "operator": "equals", "operand": "FB_IVR_CHANNEL_102"}, {"variable": "cards_http", "operator": "equals", "operand": "404"}, {"variable": "load_cards_status_code", "operator": "equals", "operand": "404"}]}}, {"target_node": "end_service_error", "description": "always: service failed", "condition": {"operator": "always"}}]
+
+### NODE load_contact
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 1}, "function": {"name": "load_contact", "handler": "__function__:api_call", "description": "contact.email.get: registered e-mail, needed before the offer.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/contact.email.get"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"customerNo": {"type": "string", "default": "{{customerNumber}}"}, "intAddressInfoType": {"type": "string", "enum": ["E", "P", "B"], "default": "E"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    v = vars.get('customerNumber')\n    if v:\n        config['body'] = dict(data=dict(customerNo=str(v), intAddressInfoType='E'), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "prepare_cards", "description": "always", "condition": {"operator": "always"}}]
+
+### NODE prepare_cards
+
+import json
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+def dg(x):
+    return ' '.join(list(str(x)))
+def digits(x):
+    return ''.join(ch for ch in str(x or '') if ch.isdigit())
+def obj(v):
+    if isinstance(v, (list, dict)):
+        return v
+    if isinstance(v, str) and v.strip()[:1] in ('[', '{'):
+        try:
+            return json.loads(v)
+        except Exception:
+            try:
+                import ast
+                return ast.literal_eval(v)
+            except Exception:
+                return None
+    return None
+def flat_list(prefix):
+    items = dict()
+    for k in list(vars.keys()):
+        k = str(k)
+        if not k.startswith(prefix):
+            continue
+        rest = k[len(prefix):].replace('[', '.').replace(']', '')
+        bits = [x for x in rest.split('.') if x]
+        if len(bits) == 2 and bits[0].isdigit():
+            items.setdefault(int(bits[0]), dict())[bits[1]] = vars.get(k)
+    return [items[i] for i in sorted(items)]
+def nm(c):
+    return c['name'] or ('sonu ' + dg(c['last4']) + ' ile biten kart')
+def join_tr(ns):
+    if len(ns) <= 1:
+        return ''.join(ns)
+    return ', '.join(ns[:-1]) + ' ve ' + ns[-1]
+for k, v in [('sel_tries', 0), ('card_name_said', ''), ('card_digits_said', ''), ('select_intent', 'none'), ('week_state', 'open'), ('email_sent_count', 0), ('offer_choice', 'none'), ('other_card_answer', 'none'), ('email_answer', 'none'), ('confirm_answer', 'none'), ('wanted_week', 'none'), ('week_answer', 'none'), ('oos_answer', 'none'), ('offer_lead', ''), ('reading_text', ''), ('reading_kind', ''), ('pdf_rc', '')]:
+    vars[k] = v
+try:
+    raw = obj(vars.get('cards_raw'))
+    if not isinstance(raw, list):
+        raw = flat_list('load_cards_response.data.data.cards')
+    cards = []
+    for c in raw:
+        if not isinstance(c, dict):
+            continue
+        n = str(c.get('cardNumber') or '')
+        l4 = str(c.get('cardNumberLast4') or '') or digits(n)[-4:]
+        cards.append(dict(number=n, last4=l4, name=str(c.get('productName') or '').strip(), main=str(c.get('isMainCard')).lower() != 'false'))
+    vars['cards_json'] = json.dumps(cards, ensure_ascii=False)
+    elig = [c for c in cards if c['main']] or cards
+    vars['card_count'] = len(elig)
+    names = []
+    for c in elig:
+        if nm(c) not in names:
+            names.append(nm(c))
+    vars['card_names_text'] = join_tr(names)
+    ex = [x for x in names if not x.startswith('sonu ') and len(x.split()) <= 4 and len(x) <= 30][:2]
+    q = 'Hangi kartınızın borcunu öğrenmek istersiniz?'
+    if len(ex) == 2:
+        q = q + ' Örneğin, ' + ex[0] + ' veya ' + ex[1] + ' diyebilirsiniz.'
+    elif len(ex) == 1:
+        q = q + ' Örneğin, ' + ex[0] + ' diyebilirsiniz.'
+    vars['select_question'] = q
+    vars['select_prompt'] = q
+    if len(elig) == 1:
+        c = elig[0]
+        vars['selected_card_number'] = c['number']
+        vars['selected_card_last4'] = c['last4']
+        vars['selected_card_name'] = c['name']
+        vars['card_state'] = 'resolved'
+    elif len(elig) == 0:
+        vars['card_state'] = 'none'
+    else:
+        vars['card_state'] = 'choose'
+except Exception:
+    vars['card_state'] = 'error'
+try:
+    em = s('contact_email') or s('load_contact_response.data.data.ibanEmail')
+    ok = '@' in em
+    if s('contact_rc') == '1' or s('load_contact_response.data.result.returnCode') == '1':
+        vars['email_state'] = 'ok' if ok else 'none'
+    else:
+        vars['email_state'] = 'error'
+    vars['registered_email'] = em if ok else ''
+    q2 = ''
+    if ok:
+        local, dom = em.split('@', 1)
+        messy = len(local) > 20 or any(ch.isdigit() for ch in local) or sum(local.count(x) for x in '.-_') > 1
+        if messy:
+            dn = dom.split('.')[0]
+            q2 = 'Ekstrenizi ' + local[:1] + ' ile başlayan ' + dn[:1].upper() + dn[1:] + ' adresinize göndermemi ister misiniz?'
+        else:
+            q2 = 'Ekstrenizi ' + em + ' adresine göndermemi ister misiniz?'
+    vars['email_question'] = q2
+except Exception:
+    vars['email_state'] = 'error'
+    vars['email_question'] = ''
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "load_balance", "description": "Single eligible card", "condition": {"logic": "or", "conditions": [{"variable": "card_state", "operator": "equals", "operand": "resolved"}]}}, {"target_node": "end_no_card", "description": "No eligible card", "condition": {"logic": "or", "conditions": [{"variable": "card_state", "operator": "equals", "operand": "none"}]}}, {"target_node": "select_card", "description": "Several cards", "condition": {"logic": "or", "conditions": [{"variable": "card_state", "operator": "equals", "operand": "choose"}]}}, {"target_node": "end_service_error", "description": "always: card data unusable", "condition": {"operator": "always"}}]
+
+### NODE select_card
+
+on_enter: {"type": "tts", "text": "{{select_prompt}}"}
+task_message: "Card selection. Your only job is to find out which of the caller's own cards they want the statement debt for. The question was just asked. The caller's cards (names only): {{card_names_text}}. If the answer is unclear or the caller asks to repeat, repeat briefly: '{{select_prompt}}'. The debt is given for one card at a time. Never read amounts or dates here. Never say any card digits, never repeat digits the caller said, and never confirm the card with a sentence like '... kartınızla devam ediyorum'. Never mention a card name that is not in the list above. Do not call any tool."
+extraction_schema: [{"name": "card_name_said", "type": "string", "description": "The card name or part of a card name (e.g. 'Premium', 'Yıldız Miles Gold') in the caller's LAST message only, as said. Empty if the last message names no card.", "min_confidence": 0.6}, {"name": "card_digits_said", "type": "string", "description": "Card digits the caller said in their LAST message, as digits only: last four (e.g. 'kırk iki elli üç' or 'dört iki beş üç' -> 4253), last six, or the whole card number. Empty if none.", "validation_pattern": "^([0-9]{4}|[0-9]{6}|[0-9]{15,16})$", "max_retries": 1, "min_confidence": 0.6}, {"name": "select_intent", "type": "string", "enum_values": ["all_cards", "none"], "description": "all_cards = in the LAST message the caller asks for the debt of all or several cards at once; otherwise none.", "min_confidence": 0.6}]
+max_node_turns: 4
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "resolve_card", "description": "Caller named a card, gave digits or asked for all cards", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "card_name_said", "operator": "is_set"}, {"variable": "card_name_said", "operator": "not_equals", "operand": ""}]}, {"logic": "and", "conditions": [{"variable": "card_digits_said", "operator": "is_set"}, {"variable": "card_digits_said", "operator": "not_equals", "operand": ""}]}, {"variable": "select_intent", "operator": "equals", "operand": "all_cards"}]}}]
+
+### NODE resolve_card
+
+import json
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+def dg(x):
+    return ' '.join(list(str(x)))
+def digits(x):
+    return ''.join(ch for ch in str(x or '') if ch.isdigit())
+def norm(t):
+    t = str(t or '').replace('I', 'ı').replace('İ', 'i').lower()
+    t = ''.join(ch if (ch.isalnum() or ch.isspace()) else ' ' for ch in t)
+    return ' '.join(t.split())
+def nm(c):
+    return c.get('name') or ('sonu ' + dg(c.get('last4')) + ' ile biten kart')
+def join_tr(ns):
+    if len(ns) <= 1:
+        return ''.join(ns)
+    return ', '.join(ns[:-1]) + ' ve ' + ns[-1]
+def uniq(lst):
+    out = []
+    for c in lst:
+        if nm(c) not in out:
+            out.append(nm(c))
+    return out
+STOP = ['kart', 'kartı', 'kartım', 'kartımın', 'kartımı', 'kartını', 'kartlarım', 'olan', 'benim', 'borcu', 'borcunu', 'lütfen', 'ile', 'biten', 'sonu', 'none', 'null']
+try:
+    cards = json.loads(s('cards_json') or '[]')
+    elig = [c for c in cards if c.get('main')] or cards
+    said = norm(vars.get('card_name_said'))
+    dd = digits(vars.get('card_digits_said'))
+    intent = s('select_intent')
+    q = s('select_question')
+    toks = [t for t in said.split() if t not in STOP]
+    cand = list(cards)
+    if toks:
+        def tok_ok(c):
+            ct = norm(c.get('name')).split()
+            return all(any(x.startswith(t) or (len(t) >= 4 and t.startswith(x)) for x in ct) for t in toks)
+        cand = [c for c in cand if tok_ok(c)]
+        full = [c for c in cand if norm(c.get('name')) and norm(c.get('name')) in said]
+        if full:
+            m = max(len(norm(c.get('name'))) for c in full)
+            cand = [c for c in full if len(norm(c.get('name'))) == m]
+    if dd:
+        keep = []
+        for c in cand:
+            n = str(c.get('number') or '').replace(' ', '')
+            if len(dd) == 4:
+                if c.get('last4') == dd:
+                    keep.append(c)
+            elif len(dd) == 6:
+                tail = n[-6:]
+                if tail.isdigit():
+                    if tail == dd:
+                        keep.append(c)
+                elif c.get('last4') == dd[-4:]:
+                    keep.append(c)
+            elif len(dd) >= 15:
+                if len(n) == len(dd) and all((not a.isdigit()) or a == b for a, b in zip(n, dd)):
+                    keep.append(c)
+        cand = keep
+    if not toks and not dd:
+        cand = []
+    state = 'retry'
+    fail = False
+    p = q
+    if len(cand) == 1:
+        c = cand[0]
+        if not c.get('main'):
+            p = (c.get('name') or 'Bu') + ' kartınız için ekstre borcu sorgulanamıyor. Lütfen başka bir kartınızı seçin. ' + q
+        else:
+            vars['selected_card_number'] = c.get('number')
+            vars['selected_card_last4'] = c.get('last4')
+            vars['selected_card_name'] = c.get('name') or ''
+            state = 'resolved'
+    elif len(cand) > 1:
+        ns = uniq(cand)
+        l4s = set(c.get('last4') for c in cand)
+        if len(ns) > 1:
+            p = join_tr(ns) + ' kartlarınız var. Hangisinin borcunu öğrenmek istersiniz?'
+        elif len(l4s) > 1 or len(dd) < 4:
+            p = ns[0] + ' isimli birden fazla kartınız var. Kartınızın son dört hanesini söyler misiniz?'
+        elif len(dd) == 4:
+            p = 'Son dört hanesi ' + dg(dd) + ' olan birden fazla kartınız var. Kartınızın son altı hanesini söyler misiniz?'
+        elif len(dd) == 6:
+            p = 'Son altı hanesi aynı olan birden fazla kartınız var. Kart numaranızı söyler misiniz?'
+        else:
+            fail = True
+    else:
+        fail = True
+    if fail:
+        t = int(float(s('sel_tries') or 0)) + 1
+        vars['sel_tries'] = t
+        if intent == 'all_cards' and not toks and not dd:
+            p = 'Borç bilgisini her seferinde tek bir kart için verebiliyorum. ' + q
+        elif toks or dd:
+            p = 'Söylediğiniz bilgiyle eşleşen bir kartınız bulunmuyor. Kartlarınız: ' + join_tr(uniq(elig)) + '. Hangisinin borcunu öğrenmek istersiniz?'
+        else:
+            p = q
+        if t >= 3:
+            state = 'tries'
+    vars['select_prompt'] = p
+    vars['card_state'] = state
+except Exception:
+    vars['select_prompt'] = s('select_question')
+    vars['card_state'] = 'retry'
+vars['card_name_said'] = ''
+vars['card_digits_said'] = ''
+vars['select_intent'] = 'none'
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "load_balance", "description": "Card settled", "condition": {"logic": "or", "conditions": [{"variable": "card_state", "operator": "equals", "operand": "resolved"}]}}, {"target_node": "end_tries", "description": "Three failed tries", "condition": {"logic": "or", "conditions": [{"variable": "card_state", "operator": "equals", "operand": "tries"}]}}, {"target_node": "select_card", "description": "always: ask again", "condition": {"operator": "always"}}]
+
+### NODE load_balance
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 1}, "function": {"name": "load_balance", "handler": "__function__:api_call", "description": "cards.balance for the selected card.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/cards.balance"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"cardNumber": {"type": "string", "default": "{{selected_card_number}}"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    v = vars.get('selected_card_number')\n    if v:\n        config['body'] = dict(data=dict(cardNumber=str(v)), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "build_reading", "description": "cards.balance succeeded", "condition": {"logic": "or", "conditions": [{"variable": "balance_rc", "operator": "equals", "operand": "1"}, {"variable": "load_balance_response.data.result.returnCode", "operator": "equals", "operand": "1"}]}}, {"target_node": "end_service_error", "description": "always: service failed", "condition": {"operator": "always"}}]
+
+### NODE build_reading
+
+import json, datetime
+MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+def num(v):
+    try:
+        return float(v)
+    except Exception:
+        return None
+def pd(t):
+    try:
+        t = str(t or '').strip()
+        if len(t) >= 10 and t[2] == '.' and t[5] == '.':
+            return datetime.date(int(t[6:10]), int(t[3:5]), int(t[0:2]))
+        if len(t) >= 10 and t[4] == '-' and t[7] == '-':
+            return datetime.date(int(t[0:4]), int(t[5:7]), int(t[8:10]))
+    except Exception:
+        pass
+    return None
+def fd(t):
+    d = pd(t)
+    return '' if d is None else str(d.day) + ' ' + MONTHS[d.month - 1] + ' ' + str(d.year)
+def cop(n):
+    U = ['', 'dir', 'dir', 'tür', 'tür', 'tir', 'dır', 'dir', 'dir', 'dur']
+    T = ['', 'dur', 'dir', 'dur', 'tır', 'dir', 'tır', 'tir', 'dir', 'dır']
+    if n % 10:
+        return U[n % 10]
+    if n % 100:
+        return T[(n % 100) // 10]
+    if n % 1000:
+        return 'dür'
+    return 'dir'
+def fdc(t):
+    d = pd(t)
+    return '' if d is None else fd(t) + chr(39) + cop(d.year)
+def dg(x):
+    return ' '.join(list(str(x)))
+def obj(v):
+    if isinstance(v, (list, dict)):
+        return v
+    if isinstance(v, str) and v.strip()[:1] in ('[', '{'):
+        try:
+            return json.loads(v)
+        except Exception:
+            try:
+                import ast
+                return ast.literal_eval(v)
+            except Exception:
+                return None
+    return None
+CUR = dict(TL=('Türk Lirası', 'lira', 'kuruş'), USD=('Dolar', 'Dolar', 'sent'), EUR=('Euro', 'Euro', 'sent'), GBP=('İngiliz Sterlini', 'İngiliz Sterlini', 'peni'))
+SUF = dict(TL='dır', USD='dır', EUR='dur', GBP='dir')
+SUB = dict(kuruş='tur', sent='tir', peni='dir')
+def amt(cur, x, end=False):
+    c = int(round(abs(float(x)) * 100))
+    w = c // 100
+    f = c % 100
+    full, main, sub = CUR[cur]
+    if f == 0:
+        return format(w, ',').replace(',', '.') + ' ' + full + (chr(39) + SUF[cur] if end else '')
+    return format(w, ',').replace(',', '.') + ' ' + main + ' ' + str(f) + ' ' + sub + (SUB[sub] if end else '')
+def join_tr(ns):
+    if len(ns) <= 1:
+        return ''.join(ns)
+    return ', '.join(ns[:-1]) + ' ve ' + ns[-1]
+try:
+    b = obj(vars.get('balance_raw'))
+    if not isinstance(b, dict):
+        b = None
+    P = 'load_balance_response.data.data.'
+    def bg(path):
+        if b is not None:
+            cur = b
+            for p in path.split('.'):
+                if isinstance(cur, dict) and p in cur:
+                    cur = cur[p]
+                else:
+                    return None
+            return cur
+        return vars.get(P + path)
+    def present(key):
+        if b is not None:
+            return isinstance(b.get(key), dict) and len(b.get(key)) > 0
+        return any(str(k).startswith(P + key + '.') for k in list(vars.keys()))
+    bl4 = str(bg('cardNumberLast4') or '')
+    if bl4 and s('selected_card_last4') and bl4 != s('selected_card_last4'):
+        raise ValueError('card mismatch')
+    today = pd(s('now'))
+    name = s('selected_card_name')
+    ref = 'Sonu ' + dg(s('selected_card_last4')) + ' ile biten ' + (name + ' ' if name else '')
+    st = str(bg('statementDate') or '')
+    lp = str(bg('lastPayDate') or '')
+    nlp = str(bg('nextLastPayDate') or '')
+    nst = str(bg('nextStatementDate') or '')
+    vars['stmt_date_raw'] = st
+    CN = dict(TL='Türk Lirası', USD='Dolar', EUR='Euro', GBP='İngiliz Sterlini')
+    info = []
+    for cur, key in [('TL', 'debtTL'), ('USD', 'debtUSD'), ('EUR', 'debtEUR'), ('GBP', 'debtGBP')]:
+        if not present(key):
+            continue
+        sd = num(bg(key + '.statementDebt')) or 0.0
+        mp = num(bg(key + '.minPayment')) or 0.0
+        rd = num(bg(key + '.remainingDebt'))
+        if rd is None:
+            rd = sd
+        rmp = num(bg(key + '.remainingMinPayment'))
+        if rmp is None:
+            rmp = mp
+        td = num(bg(key + '.totalDebt')) or 0.0
+        info.append(dict(cur=cur, sd=sd, mp=mp, rd=rd, rmp=rmp, td=td, has=rd > 0))
+    debts = [i for i in info if i['has']]
+    tl_total = sum(i['td'] for i in info if i['cur'] == 'TL')
+    dlp = pd(lp)
+    parts = []
+    cut_today = bool(today and pd(nst) == today)
+    if cut_today:
+        parts.append('Hesap kesim tarihiniz bugün, ekstreniz saat 00.00 itibarıyla kesilecek.')
+    total_said = False
+    if not debts:
+        kind = 'no_debt'
+        if not fd(st):
+            parts.append(ref + 'kartınızda ekstre borcunuz bulunmamaktadır.')
+        else:
+            parts.append(ref + 'kartınızın ' + fd(st) + ' tarihli ekstresinden borcunuz bulunmamaktadır.')
+            if tl_total > 0:
+                parts.append('Gelecek dönemler dahil toplam borcunuz ' + amt('TL', tl_total, True) + '.')
+                total_said = True
+            due = lp if (dlp and today and dlp >= today) else nlp
+            if fd(due):
+                parts.append('Son ödeme tarihiniz ' + fd(due) + ' olacaktır.')
+    else:
+        kind = 'debt'
+        first = True
+        for i in debts:
+            c = i['cur']
+            lead = ''
+            if first:
+                lead = ref + 'kartınıza ait ' + (fd(st) + ' tarihinde kesilen ekstre ' if fd(st) else 'ekstre ')
+                first = False
+            if c == 'TL':
+                if i['rmp'] <= 0:
+                    t = 'Türk Lirası borcunuz ' + amt(c, i['sd']) + ', kalan toplam borcunuz ' + amt(c, i['rd'], True) + '. Minimum ödemenizi yaptığınız için teşekkür ederiz.'
+                elif i['rmp'] >= i['mp']:
+                    t = 'Türk Lirası borcunuz ' + amt(c, i['sd']) + ', ödenmesi gereken minimum tutar ' + amt(c, i['mp'], True) + '.'
+                else:
+                    t = 'Türk Lirası borcunuz ' + amt(c, i['sd']) + ', ödenmesi gereken minimum tutar ' + amt(c, i['mp']) + ', kalan toplam borcunuz ' + amt(c, i['rd']) + ', kalan minimum ödeme tutarınız ' + amt(c, i['rmp'], True) + '.'
+            else:
+                t = CN[c] + ' borcunuz ' + amt(c, i['sd']) + ', kalan toplam borcunuz ' + amt(c, i['rd']) + ', ödenmesi gereken minimum tutar ' + amt(c, i['mp'], True) + '.'
+            parts.append(lead + t)
+        clear = [CN[i['cur']] for i in info if not i['has']]
+        if clear:
+            parts.append(join_tr(clear) + ' borcunuz bulunmamaktadır.')
+        ap = num(bg('debtTL.remainAutomaticPaymentAmount')) or 0.0
+        if str(bg('automaticPaymentFlag') or '').upper() == 'Y' and ap > 0 and dlp and today and today > dlp:
+            parts.append('Otomatik ödeme talimatınızdan alınacak kalan tutar ' + amt('TL', ap, True) + '.')
+        if dlp and today and dlp == today:
+            parts.append('Borçlarınız için son ödeme tarihiniz bugündür.')
+        elif dlp and today and dlp < today:
+            parts.append(fd(lp) + ' olan son ödeme tarihiniz geçmiştir.')
+            if tl_total > 0:
+                parts.append('Gelecek dönemler dahil toplam Türk Lirası borcunuz ' + amt('TL', tl_total, True) + '.')
+                total_said = True
+        elif dlp:
+            parts.append('Borçlarınız için son ödeme tarihiniz ' + fdc(lp) + '.')
+    if cut_today and not total_said and tl_total > 0:
+        parts.append('Gelecek dönemler dahil toplam Türk Lirası borcunuz ' + amt('TL', tl_total, True) + '.')
+    text = ' '.join(parts)
+    vars['reading_text'] = text
+    vars['reading_kind'] = kind
+    multi = int(float(s('card_count') or 0)) > 1
+    em_ok = s('email_state') == 'ok'
+    if s('week_state') == 'changed':
+        vars['offer_text'] = 'Ekstrenizi kayıtlı mail adresinize gönderebilirim.' if em_ok else 'Başka hangi konuda yardımcı olabilirim?'
+    else:
+        vars['offer_text'] = 'Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.' if em_ok else 'Hesap kesim tarihinizi değiştirebilirim.'
+    vars['offer_lead'] = '' if multi else text
+    vars['next_step'] = 'other_card' if multi else ('no_debt_end' if kind == 'no_debt' else 'offer')
+except Exception:
+    vars['next_step'] = 'error'
+for k in ['offer_choice', 'other_card_answer', 'email_answer']:
+    vars[k] = 'none'
+vars['balance_rc'] = ''
+vars['select_prompt'] = s('select_question')
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "ask_other_card", "description": "Caller has more cards", "condition": {"logic": "or", "conditions": [{"variable": "next_step", "operator": "equals", "operand": "other_card"}]}}, {"target_node": "offer", "description": "Single card with debt", "condition": {"logic": "or", "conditions": [{"variable": "next_step", "operator": "equals", "operand": "offer"}]}}, {"target_node": "end_no_debt", "description": "Single card without statement debt", "condition": {"logic": "or", "conditions": [{"variable": "next_step", "operator": "equals", "operand": "no_debt_end"}]}}, {"target_node": "end_service_error", "description": "always: balance unusable", "condition": {"operator": "always"}}]
+
+### NODE ask_other_card
+
+on_enter: {"type": "tts", "text": "{{reading_text}} Başka bir kartınızın borcunu öğrenmek ister misiniz?"}
+task_message: "The debt reading and the question whether the caller wants another card's debt were just spoken. If the caller asks to repeat, repeat word for word: '{{reading_text}}' and then ask 'Başka bir kartınızın borcunu öğrenmek ister misiniz?'. If the answer is unclear, ask only: 'Başka bir kartınızın borcunu öğrenmek ister misiniz?'. Never give any other amount, date or card detail. Do not call any tool."
+extraction_schema: [{"name": "other_card_answer", "type": "string", "enum_values": ["yes", "no", "none"], "description": "Answer in the caller's LAST message to 'Başka bir kartınızın borcunu öğrenmek ister misiniz?': yes = wants another card's debt; no = does not (hayır, gerek yok, teşekkürler); none = unclear or other topic.", "min_confidence": 0.6}, {"name": "offer_choice", "type": "string", "enum_values": ["email", "week_change", "done", "none"], "description": "Request in the caller's LAST message: email = wants the statement sent by e-mail; week_change = wants to change the statement date or week; done = wants nothing else or says goodbye; none = otherwise.", "min_confidence": 0.6}]
+max_node_turns: 4
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "select_card", "description": "Caller wants another card", "condition": {"logic": "or", "conditions": [{"variable": "other_card_answer", "operator": "equals", "operand": "yes"}]}}, {"target_node": "end_main_menu", "description": "No more cards after a no-debt reading", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "other_card_answer", "operator": "equals", "operand": "no"}, {"variable": "reading_kind", "operator": "equals", "operand": "no_debt"}]}, {"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "done"}, {"variable": "reading_kind", "operator": "equals", "operand": "no_debt"}]}]}}, {"target_node": "email_confirm", "description": "Caller asks for the e-mail and an address is registered", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "email"}, {"variable": "email_state", "operator": "equals", "operand": "ok"}]}]}}, {"target_node": "load_week", "description": "Caller asks for the statement week change", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "week_change"}, {"variable": "week_state", "operator": "not_equals", "operand": "changed"}]}]}}, {"target_node": "offer", "description": "No more cards: make the offer", "condition": {"logic": "or", "conditions": [{"variable": "other_card_answer", "operator": "equals", "operand": "no"}, {"variable": "offer_choice", "operator": "equals", "operand": "done"}, {"variable": "offer_choice", "operator": "equals", "operand": "email"}]}}]
+
+### NODE offer
+
+on_enter: {"type": "tts", "text": "{{offer_lead}} {{offer_text}}"}
+task_message: "You just said: '{{offer_text}}'. Facts: registered e-mail state = {{email_state}} (ok = an address is registered, none = no address, error = could not be checked); statement week state = {{week_state}} (changed = already changed in this call). Rules: If the caller asks for the e-mail and the e-mail state is none, say exactly: 'Bankamızda kayıtlı bir e-posta adresiniz bulunmadığı için ekstrenizi gönderemiyorum.' and, if the week state is not changed, add 'Hesap kesim tarihinizi değiştirebilirim.'. If the caller asks to change the statement week again and the week state is changed, say exactly: 'Hesap kesim tarihinizi yılda bir kez değiştirebilirsiniz.'. If the caller asks for an older statement, a paper copy or another address, say: 'Yalnızca son kesilen ekstrenizi, bankamızda kayıtlı e-posta adresinize gönderebilirim.'. If the caller wants a change undone, say: 'Değişiklik gerçekleşti, geri alamıyorum.'. If the caller asks to repeat, repeat word for word: '{{offer_lead}} {{offer_text}}'. If unclear, repeat '{{offer_text}}' briefly. Never offer anything else, never give amounts or dates other than those in the texts above, never say that something was sent or changed unless it is in '{{offer_lead}}'. Do not call any tool."
+extraction_schema: [{"name": "offer_choice", "type": "string", "enum_values": ["email", "week_change", "other_card", "done", "none"], "description": "Request in the caller's LAST message: email = wants the statement by e-mail (also last month's statement or 'send it'); week_change = wants to change or move the statement date or week; other_card = wants the debt of another of their own cards; done = no, nothing else, thanks, goodbye; none = anything else or unclear.", "min_confidence": 0.6}]
+max_node_turns: 5
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "email_confirm", "description": "E-mail with a registered address", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "email"}, {"variable": "email_state", "operator": "equals", "operand": "ok"}, {"variable": "email_sent_count", "operator": "less_than", "operand": 3}]}]}}, {"target_node": "end_service_error", "description": "E-mail lookup had failed", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "email"}, {"variable": "email_state", "operator": "equals", "operand": "error"}]}]}}, {"target_node": "end_main_menu", "description": "Nothing else, or third send requested", "condition": {"logic": "or", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "done"}, {"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "email"}, {"variable": "email_sent_count", "operator": "greater_than", "operand": 2}]}]}}, {"target_node": "load_week", "description": "Statement week change", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "week_change"}, {"variable": "week_state", "operator": "not_equals", "operand": "changed"}]}]}}, {"target_node": "select_card", "description": "Another card", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "offer_choice", "operator": "equals", "operand": "other_card"}, {"variable": "card_count", "operator": "greater_than", "operand": 1}]}]}}]
+
+### NODE email_confirm
+
+on_enter: {"type": "llm", "prompt": "If the caller's last message asked for an older or last month's statement, a paper copy or a different e-mail address, first say exactly: 'Yalnızca son kesilen ekstrenizi, bankamızda kayıtlı e-posta adresinize gönderebilirim.' Then say exactly: '{{email_question}}'. Say nothing else and do not call any tool."}
+task_message: "You asked: '{{email_question}}'. Wait for a clear yes or no. If the caller dictates another address, do not repeat it and say: 'Ekstrenizi yalnızca bankamızda kayıtlı e-posta adresinize gönderebilirim.' then ask again '{{email_question}}'. If they ask for an older statement, say: 'Yalnızca son kesilen ekstrenizi gönderebilirim.' then ask again. If unclear, ask again only '{{email_question}}'. Never spell the address letter by letter and never say that the statement was sent. Do not call any tool."
+extraction_schema: [{"name": "email_answer", "type": "string", "enum_values": ["yes", "no", "wrong_address", "none"], "description": "Answer in the caller's LAST message to the send question: yes = clear yes (evet, gönder, evet lütfen); no = does not want it sent; wrong_address = says the address is wrong, not theirs or no longer used; none = unclear, hedged, another address dictated, or other topic.", "min_confidence": 0.7}]
+max_node_turns: 4
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "send_pdf", "description": "Clear yes", "condition": {"logic": "or", "conditions": [{"variable": "email_answer", "operator": "equals", "operand": "yes"}]}}, {"target_node": "end_address", "description": "Address wrong or no longer used", "condition": {"logic": "or", "conditions": [{"variable": "email_answer", "operator": "equals", "operand": "wrong_address"}]}}, {"target_node": "end_main_menu", "description": "No", "condition": {"logic": "or", "conditions": [{"variable": "email_answer", "operator": "equals", "operand": "no"}]}}]
+
+### NODE send_pdf
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 0}, "function": {"name": "send_pdf", "handler": "__function__:api_call", "description": "statement.pdf.send to the registered address.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/statement.pdf.send"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"customerNo": {"type": "string", "default": "{{customerNumber}}"}, "cardNumber": {"type": "string", "default": "{{selected_card_number}}"}, "currencyType": {"type": "string", "enum": ["TL", "USD", "EUR", "GBP"], "default": "TL"}, "statementDate": {"type": "string", "default": "{{stmt_date_raw}}"}, "emailAddress": {"type": "string", "default": "{{registered_email}}"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    c = vars.get('customerNumber')\n    n = vars.get('selected_card_number')\n    e = vars.get('registered_email')\n    if c and n and e:\n        config['body'] = dict(data=dict(customerNo=str(c), cardNumber=str(n), currencyType='TL', statementDate=str(vars.get('stmt_date_raw') or ''), emailAddress=str(e)), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "after_action", "description": "Statement sent", "condition": {"logic": "or", "conditions": [{"variable": "pdf_rc", "operator": "equals", "operand": "1"}]}}, {"target_node": "end_service_error", "description": "always: sending failed", "condition": {"operator": "always"}}]
+
+### NODE load_week
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 1}, "function": {"name": "load_week", "handler": "__function__:api_call", "description": "statement.week.get for the selected card.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/statement.week.get"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"cardNumber": {"type": "string", "default": "{{selected_card_number}}"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    v = vars.get('selected_card_number')\n    if v:\n        config['body'] = dict(data=dict(cardNumber=str(v)), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "prepare_week", "description": "statement.week.get succeeded", "condition": {"logic": "or", "conditions": [{"variable": "wk_rc", "operator": "equals", "operand": "1"}, {"variable": "load_week_response.data.result.returnCode", "operator": "equals", "operand": "1"}]}}, {"target_node": "end_week_error", "description": "always: service failed", "condition": {"operator": "always"}}]
+
+### NODE prepare_week
+
+import datetime
+MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+def pd(t):
+    try:
+        t = str(t or '').strip()
+        if len(t) >= 10 and t[2] == '.' and t[5] == '.':
+            return datetime.date(int(t[6:10]), int(t[3:5]), int(t[0:2]))
+    except Exception:
+        pass
+    return None
+def fd(t):
+    d = pd(t)
+    return '' if d is None else str(d.day) + ' ' + MONTHS[d.month - 1] + ' ' + str(d.year)
+def dg(x):
+    return ' '.join(list(str(x)))
+def digits(x):
+    return ''.join(ch for ch in str(x or '') if ch.isdigit())
+try:
+    w = int(float(s('wk_week') or s('load_week_response.data.data.statementWeek')))
+    day = int(float(s('wk_day') or s('load_week_response.data.data.statementDay')))
+    if w < 1 or w > 4:
+        raise ValueError('week')
+    vars['current_week'] = str(w)
+    vars['current_day'] = day
+    name = s('selected_card_name')
+    ref = 'Sonu ' + dg(s('selected_card_last4')) + ' ile biten ' + (name + ' ' if name else '') + 'kartınız'
+    rel = s('wk_rel').upper()
+    rn = s('wk_rel_name')
+    rl4 = digits(s('wk_rel_number'))[-4:]
+    rref = ('sonu ' + dg(rl4) + ' ile biten ' if rl4 else '') + (rn + ' ' if rn else '') + 'kartınızın'
+    if rel == 'M':
+        subj = ref + ' ile buna bağlı ' + rref
+    elif rel == 'C':
+        subj = ref + ' ile bu kartın bağlı olduğu ' + rref
+    else:
+        subj = ref + 'ın'
+        rel = ''
+    vars['rel_type'] = rel
+    vars['rel_name'] = rn
+    opts = [str(k) + '.' for k in range(1, 5) if k != w]
+    ot = 'Hesap kesim tarihinizi ayın ' + opts[0] + ', ' + opts[1] + ' ya da ' + opts[2] + ' haftasına alabilirim. Hangisini tercih edersiniz?'
+    t = subj + ' hesap kesim tarihi her ayın ' + str(w) + '. haftası olarak tanımlı.'
+    if fd(s('wk_next_stmt')) and fd(s('wk_next_due')):
+        t = t + ' Bir sonraki hesap kesim tarihiniz ' + fd(s('wk_next_stmt')) + ', son ödeme tarihiniz ' + fd(s('wk_next_due')) + '.'
+    vars['week_intro'] = t + ' Hesap kesim tarihinizi yılda bir kez değiştirebilirsiniz. ' + ot
+    vars['week_options_text'] = ot
+    vars['week_ready'] = 'ok'
+except Exception:
+    vars['week_ready'] = 'error'
+vars['wanted_week'] = 'none'
+vars['week_answer'] = 'none'
+vars['wk_rc'] = ''
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "week_choose", "description": "Week data ready", "condition": {"logic": "or", "conditions": [{"variable": "week_ready", "operator": "equals", "operand": "ok"}]}}, {"target_node": "end_week_error", "description": "always: week data unusable", "condition": {"operator": "always"}}]
+
+### NODE week_choose
+
+on_enter: {"type": "tts", "text": "{{week_intro}}"}
+task_message: "You read the card's current statement week ({{current_week}}) and offered the other weeks. Only the offered weeks can be chosen. If the caller names their current week, say: 'Hesap kesim tarihiniz zaten ayın {{current_week}}. haftasında, bir değişiklik gerekmiyor.' then '{{week_options_text}}'. If they name a day, a date or anything that is not an offered week, say that only these weeks are possible and repeat '{{week_options_text}}'. If they ask to repeat, repeat word for word: '{{week_intro}}'. If they insist on 'just do it', explain that you first read the new dates and ask for approval, then repeat '{{week_options_text}}'. Never state any new date yourself and never say that the change was made. Do not call any tool."
+extraction_schema: [{"name": "wanted_week", "type": "string", "enum_values": ["1", "2", "3", "4", "none"], "description": "The week of the month the caller wants for the statement date (birinci/ilk = 1, ikinci = 2, üçüncü = 3, dördüncü/son = 4), from the caller's recent messages. none if no week was chosen or they gave a day or date instead of a week.", "min_confidence": 0.7}, {"name": "week_answer", "type": "string", "enum_values": ["no_change", "none"], "description": "no_change = in the LAST message the caller says they do not want to change the statement date after all; otherwise none.", "min_confidence": 0.7}]
+max_node_turns: 4
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "week_preview", "description": "An offered week was chosen", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "wanted_week", "operator": "equals", "operand": "1"}, {"variable": "current_week", "operator": "not_equals", "operand": "1"}]}, {"logic": "and", "conditions": [{"variable": "wanted_week", "operator": "equals", "operand": "2"}, {"variable": "current_week", "operator": "not_equals", "operand": "2"}]}, {"logic": "and", "conditions": [{"variable": "wanted_week", "operator": "equals", "operand": "3"}, {"variable": "current_week", "operator": "not_equals", "operand": "3"}]}, {"logic": "and", "conditions": [{"variable": "wanted_week", "operator": "equals", "operand": "4"}, {"variable": "current_week", "operator": "not_equals", "operand": "4"}]}]}}, {"target_node": "end_main_menu", "description": "Caller does not want a change", "condition": {"logic": "or", "conditions": [{"variable": "week_answer", "operator": "equals", "operand": "no_change"}]}}]
+
+### NODE week_preview
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 1}, "function": {"name": "week_preview", "handler": "__function__:api_call", "description": "statement.week.decide: preview, changes nothing.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/statement.week.decide"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"cardNumber": {"type": "string", "default": "{{selected_card_number}}"}, "newStatementWeek": {"type": "integer", "default": "{{wanted_week:json}}"}, "statementDay": {"type": "integer", "default": "{{current_day:json}}"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    n = vars.get('selected_card_number')\n    w = vars.get('wanted_week')\n    d = vars.get('current_day')\n    if n and w and d is not None:\n        config['body'] = dict(data=dict(cardNumber=str(n), newStatementWeek=int(float(str(w))), statementDay=int(float(str(d)))), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "prepare_week_confirm", "description": "Preview succeeded", "condition": {"logic": "or", "conditions": [{"variable": "prev_rc", "operator": "equals", "operand": "1"}, {"variable": "week_preview_response.data.result.returnCode", "operator": "equals", "operand": "1"}]}}, {"target_node": "end_week_error", "description": "always: preview failed", "condition": {"operator": "always"}}]
+
+### NODE prepare_week_confirm
+
+import datetime
+MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+def pd(t):
+    try:
+        t = str(t or '').strip()
+        if len(t) >= 10 and t[2] == '.' and t[5] == '.':
+            return datetime.date(int(t[6:10]), int(t[3:5]), int(t[0:2]))
+    except Exception:
+        pass
+    return None
+def fd(t):
+    d = pd(t)
+    return '' if d is None else str(d.day) + ' ' + MONTHS[d.month - 1] + ' ' + str(d.year)
+def dg(x):
+    return ' '.join(list(str(x)))
+try:
+    w = int(float(s('wanted_week')))
+    d1 = fd(s('prev_stmt_raw') or s('week_preview_response.data.data.statementDate'))
+    d2 = fd(s('prev_due_raw') or s('week_preview_response.data.data.statementDueDate'))
+    if not d1 or not d2:
+        raise ValueError('preview')
+    vars['chosen_week'] = str(w)
+    rel = s('rel_type')
+    rn = s('rel_name')
+    t = 'Yeni hesap kesim haftanız her ayın ' + str(w) + '. haftası olacak. Yeni hesap kesim tarihiniz ' + d1 + ', son ödeme tarihiniz ' + d2 + ' olacak.'
+    if rel == 'M' and rn:
+        t = t + ' Bu değişiklik kartınıza bağlı ' + rn + ' kartınızı da etkileyecek.'
+    elif rel == 'C' and rn:
+        t = t + ' Bu değişiklik kartınızın bağlı olduğu ' + rn + ' kartınızı da etkileyecek.'
+    vars['week_confirm_text'] = t + ' Onaylıyor musunuz?'
+    name = s('selected_card_name')
+    vars['week_done_text'] = 'Sonu ' + dg(s('selected_card_last4')) + ' ile biten ' + (name + ' ' if name else '') + 'kartınızın hesap kesim haftası her ayın ' + str(w) + '. haftası olarak değiştirildi. Yeni hesap kesim tarihiniz ' + d1 + ', son ödeme tarihiniz ' + d2 + '.'
+    vars['confirm_ready'] = 'ok'
+except Exception:
+    vars['confirm_ready'] = 'error'
+vars['confirm_answer'] = 'none'
+vars['prev_rc'] = ''
+vars['prev_stmt_raw'] = ''
+vars['prev_due_raw'] = ''
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "week_confirm", "description": "Preview text ready", "condition": {"logic": "or", "conditions": [{"variable": "confirm_ready", "operator": "equals", "operand": "ok"}]}}, {"target_node": "end_week_error", "description": "always: preview unusable", "condition": {"operator": "always"}}]
+
+### NODE week_confirm
+
+on_enter: {"type": "tts", "text": "{{week_confirm_text}}"}
+task_message: "You read the new dates from the preview and asked for approval. The change is made only after a clear 'evet'. If the answer is hedged or unclear ('olur herhalde', 'sanırım', 'olabilir', 'galiba') or the caller says 'just do it' without a clear yes, say only: 'Değişikliği yapabilmem için açık onayınız gerekiyor. Onaylıyor musunuz?'. If they ask to repeat, repeat word for word: '{{week_confirm_text}}'. Never say that the change was made, and never give dates other than those in the text above. Do not call any tool."
+extraction_schema: [{"name": "confirm_answer", "type": "string", "enum_values": ["yes", "no", "unclear", "none"], "description": "Answer in the caller's LAST message to 'Onaylıyor musunuz?': yes ONLY for a clear explicit yes (evet, evet onaylıyorum, onaylıyorum); no = refuses or does not want the change; unclear = hedged or vague ('olur herhalde', 'sanırım', 'olabilir', 'galiba', 'tamam herhalde', 'sorma yap' without evet); none = other topic.", "min_confidence": 0.8}]
+max_node_turns: 4
+max_turn_transition: "end_tries"
+transitions: [{"target_node": "week_change_call", "description": "Clear yes", "condition": {"logic": "or", "conditions": [{"variable": "confirm_answer", "operator": "equals", "operand": "yes"}]}}, {"target_node": "end_main_menu", "description": "No change", "condition": {"logic": "or", "conditions": [{"variable": "confirm_answer", "operator": "equals", "operand": "no"}]}}, {"target_node": "prepare_week", "description": "Caller wants a different week", "condition": {"operator": "matches_intent", "description": "The caller wants a different statement week than the one just previewed."}}]
+
+### NODE week_change_call
+
+API {"type": "function", "config": {"timeoutMs": 20000, "maxRetries": 0}, "function": {"name": "week_change_call", "handler": "__function__:api_call", "description": "statement.week.change: makes the change.", "parameters": {"type": "object", "properties": {"url": {"type": "string", "default": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev/voice/v1/statement.week.change"}, "method": {"type": "string", "default": "POST"}, "headers": {"type": "object", "properties": {"Content-Type": {"type": "string", "default": "application/json"}, "Accept": {"type": "string", "default": "application/json"}}}, "body": {"type": "object", "properties": {"data": {"type": "object", "properties": {"cardNumber": {"type": "string", "default": "{{selected_card_number}}"}, "newStatementWeek": {"type": "integer", "default": "{{chosen_week:json}}"}, "statementDay": {"type": "integer", "default": "{{current_day:json}}"}}}, "call": {"type": "object", "properties": {"lang": {"type": "string", "default": "tr"}}}}, "required": ["data"]}}}}, "pre_process_code": "try:\n    n = vars.get('selected_card_number')\n    w = vars.get('chosen_week')\n    d = vars.get('current_day')\n    if n and w and d is not None:\n        config['body'] = dict(data=dict(cardNumber=str(n), newStatementWeek=int(float(str(w))), statementDay=int(float(str(d)))), call=dict(lang='tr'))\nexcept Exception:\n    pass\n"}
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "after_action", "description": "Change succeeded (returnCode 1, exitState OK)", "condition": {"logic": "or", "conditions": [{"logic": "and", "conditions": [{"variable": "wkchg_rc", "operator": "equals", "operand": "1"}, {"variable": "wkchg_exit", "operator": "equals", "operand": "OK"}]}]}}, {"target_node": "end_week_error", "description": "always: change failed", "condition": {"operator": "always"}}]
+
+### NODE after_action
+
+def s(k):
+    v = vars.get(k)
+    return '' if v is None else str(v).strip()
+try:
+    lead = ''
+    if s('wkchg_rc') == '1' and s('wkchg_exit').upper() == 'OK' and s('week_state') != 'changed':
+        lead = s('week_done_text')
+        vars['week_state'] = 'changed'
+    elif s('pdf_rc') == '1':
+        lead = 'Ekstreniz kayıtlı e-posta adresinize gönderildi.'
+        vars['email_sent_count'] = int(float(s('email_sent_count') or 0)) + 1
+    vars['offer_lead'] = lead
+except Exception:
+    vars['offer_lead'] = ''
+vars['offer_text'] = 'Başka hangi konuda yardımcı olabilirim?'
+vars['pdf_rc'] = ''
+vars['offer_choice'] = 'none'
+vars['email_answer'] = 'none'
+vars['confirm_answer'] = 'none'
+
+on_enter: {"type": "silent"}
+transitions: [{"target_node": "offer", "description": "always", "condition": {"operator": "always"}}]
+
+### NODE end_main_menu
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_done", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Sizi ana menüye yönlendiriyorum."}}}}}
+
+### NODE end_main_menu_transfer
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_transfer", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Sizi ana menüye aktarıyorum."}}}}}
+
+### NODE end_no_card
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_no_eligible_card", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Ekstre borcunu sorgulayabileceğiniz uygun bir kredi kartınız bulunmuyor. Sizi ana menüye aktarıyorum."}}}}}
+
+### NODE end_no_debt
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_no_statement_debt", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "{{reading_text}} Sizi ana menüye yönlendiriyorum."}}}}}
+
+### NODE end_tries
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_tries_exhausted", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Size şu anda yardımcı olamıyorum. Sizi ana menüye aktarıyorum."}}}}}
+
+### NODE end_service_error
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "agent_service_error", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Şu anda işleminizi gerçekleştiremiyorum, sizi müşteri temsilcimize aktarıyorum."}}}}}
+
+### NODE end_week_error
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "agent_statement_week_error", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Şu anda hesap kesim tarihinizi değiştiremiyorum, sizi müşteri temsilcimize aktarıyorum."}}}}}
+
+### NODE end_agent
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "agent_requested", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Sizi müşteri temsilcimize aktarıyorum."}}}}}
+
+### NODE end_pay
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "agent_payment", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Borç ödeme işleminiz için sizi müşteri temsilcimize aktarıyorum."}}}}}
+
+### NODE end_dispute
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "agent_dispute", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Bu konuda size müşteri temsilcimiz yardımcı olacak, sizi aktarıyorum."}}}}}
+
+### NODE end_security
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "ivr_login_third_party", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Güvenlik nedeniyle yalnızca kendi kartlarınız için yardımcı olabiliyorum. Kart sahibinin kendi kimliğiyle giriş yapabilmesi için sizi ana menüdeki giriş adımına aktarıyorum."}}}}}
+
+### NODE end_address
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "main_menu_address_not_changeable", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "E-posta adresinizi bu görüşmede değiştiremiyorum, ekstreniz gönderilmedi. Sizi ana menüye yönlendiriyorum."}}}}}
+
+### NODE end_silence
+
+on_enter: {"type": "silent"}
+transitions: []
+terminal: {"type": "function", "function": {"name": "closed_no_input", "handler": "__function__:end_call", "parameters": {"type": "object", "properties": {"message_mode": {"type": "string", "default": "custom"}, "spoken_message": {"type": "string", "default": "Sesinizi alamadığım için görüşmeyi sonlandırıyorum."}}}}}

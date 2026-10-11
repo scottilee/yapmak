@@ -1,0 +1,176 @@
+[
+  {
+    "time": "2026-10-11T17:45:05.345501+00:00",
+    "service": "cards.list",
+    "path": "/cards/list",
+    "request": {
+      "customerNo": "90000001"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/cards/list",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.400588+00:00",
+    "service": "cards.balance",
+    "path": "/cards/balance",
+    "request": {
+      "customerNo": "90000001",
+      "cardNumber": "540000******1234"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/cards/balance",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.451152+00:00",
+    "service": "statement.week.get",
+    "path": "/statement/week/get",
+    "request": {
+      "customerNo": "90000001",
+      "cardNumber": "540000******1234"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/statement/week/get",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.502749+00:00",
+    "service": "statement.week.decide",
+    "path": "/statement/week/decide",
+    "request": {
+      "customerNo": "90000001",
+      "cardNumber": "540000******1234",
+      "newStatementWeek": "2"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/statement/week/decide",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.573132+00:00",
+    "service": "statement.week.change",
+    "path": "/statement/week/change",
+    "request": {
+      "customerNo": "90000001",
+      "cardNumber": "540000******1234",
+      "newStatementWeek": "2"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/statement/week/change",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.651105+00:00",
+    "service": "contact.email.get",
+    "path": "/contact/email/get",
+    "request": {
+      "customerNo": "90000001"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/contact/email/get",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  },
+  {
+    "time": "2026-10-11T17:45:05.709753+00:00",
+    "service": "statement.pdf.send",
+    "path": "/statement/pdf/send",
+    "request": {
+      "customerNo": "90000001"
+    },
+    "expected_http": 200,
+    "actual_http": 404,
+    "actual_response": {
+      "error": "not found",
+      "path": "/statement/pdf/send",
+      "paths": [
+        "POST /voice/v1/cards.list",
+        "POST /voice/v1/cards.balance",
+        "POST /voice/v1/statement.week.get",
+        "POST /voice/v1/statement.week.decide",
+        "POST /voice/v1/statement.week.change",
+        "POST /voice/v1/contact.email.get",
+        "POST /voice/v1/statement.pdf.send"
+      ]
+    },
+    "match": false
+  }
+]

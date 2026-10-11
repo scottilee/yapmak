@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT))
 import freya  # noqa: E402
 import compile as C  # noqa: E402
 import extract as X  # noqa: E402
+import author as AU  # noqa: E402
 import policy as P  # noqa: E402
 from trace import Trace, git_head  # noqa: E402
 
@@ -56,6 +57,12 @@ def main():
     ap.add_argument("--policy", help="skip extraction and use this policy JSON (fixture path, '+'-joined overlays allowed)")
     ap.add_argument("--deadline", type=int, default=1800, help="seconds for the whole build")
     ap.add_argument("--no-smoke", action="store_true")
+    ap.add_argument("--mode", choices=["auto", "template", "author"], default="auto",
+                    help="template = the fixed collections template (policy extraction + compiler); author = the model writes the workflow from the documents; auto = template when the API has the seven collection tools, else author")
+    ap.add_argument("--resume-author", metavar="DRAFT", help="authoring mode: skip the model's authoring pass and continue (static check, repair, publish, export) from this "
+                    "draft workflow, e.g. out/final.workflow.json written by an earlier run whose later step failed; the earlier run's trace is referenced in the trace")
+    ap.add_argument("--repair-notes", metavar="FILE", help="with --resume-author: a file of observations from live checks of the draft (transcript excerpts, engine events); "
+                    "the authoring model revises the draft under the documents and the design rules before validation and publish")
     a = ap.parse_args()
     a.inputs = None
     if a.case_folder or a.mock_url:
@@ -111,29 +118,43 @@ def build(a):
                  deadline_s=a.deadline, builder_model=X.MODEL, agent_model=freya.AGENT_LLM)
         # 1. policy -----------------------------------------------------------------------------
         tools = C.parse_openapi(a.openapi)
-        if a.policy:
-            ir = P.PolicyIR.load_merged(a.policy.split("+"))
-            tr.event("policy_loaded", path=a.policy)
-        else:
-            ir, audit = X.extract(briefs, a.openapi, a.slot, tr)
-        problems = P.validate(ir, C.tool_enums(tools, ir.api_fields))
-        if problems:
-            raise SystemExit("policy invalid: " + "; ".join(problems))
-        X.check_artifact(ir.to_json())
-        (out / f"{a.slot}.policy.json").write_text(ir.to_json())
+        mode = getattr(a, "mode", "auto") or "auto"
+        if mode == "auto":
+            mode = "template" if (a.policy or AU.fits_template(tools)) else "author"
+        tr.event("build_mode", mode=mode, tools=sorted(tools))
+        ir = None
+        if mode == "template":
+            if a.policy:
+                ir = P.PolicyIR.load_merged(a.policy.split("+"))
+                tr.event("policy_loaded", path=a.policy)
+            else:
+                ir, audit = X.extract(briefs, a.openapi, a.slot, tr)
+            problems = P.validate(ir, C.tool_enums(tools, ir.api_fields))
+            if problems:
+                raise SystemExit("policy invalid: " + "; ".join(problems))
+            X.check_artifact(ir.to_json())
+            (out / f"{a.slot}.policy.json").write_text(ir.to_json())
 
-        # 2. compile ----------------------------------------------------------------------------
-        wf = C.compile_workflow(ir, tools)
-        errs = C.static_check(wf, tools)
-        tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs, compiler_notes=list(C.COMPILE_NOTES),
-                 api_mapping_notes=list(C.MAPPING_NOTES), unresolved=[u.get("topic") for u in ir.unresolved] if ir.unresolved else [],
-                 unknown_special_cases=P.unknown_special_cases(ir), defaulted_without_source=P.defaulted_operative_fields(ir))
+            # 2. compile ----------------------------------------------------------------------------
+            wf = C.compile_workflow(ir, tools)
+            errs = C.static_check(wf, tools)
+            tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs, compiler_notes=list(C.COMPILE_NOTES),
+                     api_mapping_notes=list(C.MAPPING_NOTES), unresolved=[u.get("topic") for u in ir.unresolved] if ir.unresolved else [],
+                     unknown_special_cases=P.unknown_special_cases(ir), defaulted_without_source=P.defaulted_operative_fields(ir))
+        else:
+            # 1b+2b. the model writes the workflow from the documents and the mock's API; the builder validates and repairs it
+            wf = AU.author(briefs, a.openapi, a.slot, tr, tools, a.mock_url or "", draft=getattr(a, "resume_author", None), repair_notes=getattr(a, "repair_notes", None))
+            errs = C.static_check(wf, tools)
+            tr.event("workflow_authored", nodes=len(wf.get("nodes", {})), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs,
+                     notes=str(wf.pop("notes", ""))[:2000])
         if errs:
             raise SystemExit("static check failed: " + "; ".join(errs))
         (out / f"{a.slot}.candidate.json").write_text(json.dumps(wf, indent=1))
         # offline behaviour check before publishing: the IR-parameterized scenarios against a mock bank (seconds). Informational —
         # a failing scenario is recorded for the operator, never blocks the publish (an unpublished agent scores zero).
         try:
+            if ir is None:
+                raise RuntimeError("authored workflow: no policy IR, offline invariants do not apply")
             sys.path.insert(0, str(ROOT / "tests"))
             import invariants as INV
             t0 = time.time()
@@ -170,7 +191,7 @@ def build(a):
 
         # 4. pre-bank chat self-test (identity start + third party); never a simulation, never fatal ------------
         checks = {}
-        if not a.no_smoke:
+        if not a.no_smoke and ir is not None:
             checks["selftest"] = selftest(ids, ir, tr, a.slot)
 
         # 5. one simulation (only with a case file and enough time) ------------------------------
@@ -201,7 +222,7 @@ def build(a):
         tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1),
                  ended_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
         print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "degraded": degraded,
-                          "unresolved": len(ir.unresolved), "api_mapping_notes": len(C.MAPPING_NOTES), "elapsed_s": round(time.monotonic() - t_start)}))
+                          "mode": mode, "unresolved": len(ir.unresolved) if ir is not None else None, "api_mapping_notes": len(C.MAPPING_NOTES), "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:
         tr.event("run_end", success=False, error=repr(e)[:500], elapsed_s=round(time.monotonic() - t_start, 1), exported=checkpoint_exported)
         if ids is not None:

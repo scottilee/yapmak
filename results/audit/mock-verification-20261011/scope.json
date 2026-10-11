@@ -1,0 +1,37 @@
+{
+  "checked_utc": "2026-10-11T16:45:57.688499+00:00",
+  "target": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev",
+  "status": "blocked",
+  "blockers": [
+    "Sandbox network approval required for target host",
+    "Authoritative final service contract and test-customer data not present in checkout"
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 403,
+      "reached_worker": false
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "status": 403,
+      "reached_worker": false
+    },
+    {
+      "method": "GET",
+      "path": "/openapi.json",
+      "status": 403,
+      "reached_worker": false
+    }
+  ],
+  "network_response": "Approval required for yapmak-bank-mock.winter-mountain-4405.workers.dev:443.",
+  "test_customers_available": 0,
+  "customer_endpoint_checks_completed": 0,
+  "local_source_sha256": {
+    "mock/src/index.js": "cf7e0c2ce702591eec4cf78c6e2a7474af29856435133a9393114fe2327e1e90",
+    "mock/src/contract.js": "a219da7fd52d61c50a58577c6bd29235449d580362096f8d08e998c52ecfe8f3",
+    "mock/wrangler.toml": "e69c84901b4b5e2cb7de4df4c6c1de06318d7f31649ff182ae21086da6a2c216"
+  }
+}

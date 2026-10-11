@@ -101,6 +101,17 @@ scripts/submit_final.sh hidden/final https://<name>.<subdomain>.workers.dev --pu
 ```
 `submit_final.sh` commits the inputs, runs `build.py hidden/final <mock_url>` (slot `final`; Word/PDF/Excel are converted to text under
 `hidden/final/_text/`), commits `out/final.workflow.json`, `traces/final.jsonl` and the policy/audit files, and writes `submission.json`
-(team, members, repo, commit, run_command, workflow, trace, mock_url) from `submission/config.json`. Send `submission.json` to the kit
-address before 20:00 UTC. The trace (JSON lines) records start/end time, every builder model call with its purpose, the Freya workflow
+(team, members, repo, commit, run_command, workflow, trace, mock_url) from `submission/config.json`; `run_command` is written in the
+organisers' placeholder form `python3 build.py {case_folder} {mock_url}` (the literal command of the run is in the trace's `run_start.argv`).
+With `--reuse` the script skips the build and commits the artifacts of the last `build.py` run exactly as reviewed. Send `submission.json`
+to the kit address before 20:00 UTC.
+
+What happened on 11 Oct: the mock (`mock/`, data-driven from `test-environment/test-customers.json`) was aligned with the service
+contract and checked with `scripts/verify_mock.py <mock_url>` (617/617 test entries, plus the contract's error codes). The authoring
+run (`build.py hidden/final <mock_url>`, mode `author`) read all 15 documents and wrote `out/final.workflow.json`; the builder's static
+check then crashed on a checker bug (nested `data`/`call` request bodies), fixed in `compiler_checks.py`. The build was resumed with
+`build.py hidden/final <mock_url> --resume-author out/final.workflow.json`, which skips only the model's authoring pass (the draft is used
+byte for byte; the trace event `authoring_resumed` names the authoring run and its archived trace) and ran validation, publish, export
+and read-back. Live check: `scripts/final_sim.py <agent_id>` (the six example scenarios as personas) and
+`--scenarios results/final-extra-scenarios.json` (15 edge cases written by a teammate). The trace (JSON lines) records start/end time, every builder model call with its purpose, the Freya workflow
 and agent IDs with step and tool counts, and the self-test results.

@@ -1,0 +1,68 @@
+
+=== Example 7 (92030487): fail
+  assistant: Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Pratik veya Yıldız Tasarım diyebilirsiniz.
+  user     : Yıldız Pratik kartımın borcunu sö
+  assistant: Yıldız Pratik isimli birden fazla kartınız var. Kartınızın son dört hanesini söyler misiniz?
+  user     : dört iki beş üç
+  assistant: Son dört hanesi 4 2 5 3 olan birden fazla kartınız var. Kartınızın son altı hanesini söyler misiniz?
+  user     : kartımın başındaki altı hane
+  assistant: Güvenliğiniz için kartınızın yalnızca son dört hanesini paylaşabiliyorum. Kartınızın son altı hanesini söyler misiniz?
+  user     : kartımın başındaki altı hane 545
+  assistant: Söylediğiniz bilgiyle eşleşen bir kartınız bulunmuyor. Kartlarınız: Yıldız Pratik ve Yıldız Tasarım. Hangisinin borcunu öğrenmek istersiniz?
+  user     : kartımın başındaki altı hane 54
+  assistant: Söylediğiniz bilgiyle eşleşen bir kartınız bulunmuyor. Kartlarınız: Yıldız Pratik ve Yıldız Tasarım. Hangisinin borcunu öğrenmek istersiniz?
+  user     : kartımın başındaki altı hane 545000, sonu da 4253
+  assistant: Size şu anda yardımcı olamıyorum. Sizi ana menüye aktarıyorum.
+  JUDGE: The assistant failed on multiple success criteria: - It repeated the caller's digits ('4 2 5 3') back to the user in Message 4, which was explicitly forbidden. - It failed to provide the required debt information for the card ending 4253 (12.500 TL statement debt, dates, and foreign currency information). Instead, it ended the call in Message 12 with a message stating it could not help.
+
+=== Example 16 (95813998): pass
+  assistant: Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Platinum veya Yıldız Fly diyebilirsiniz.
+  user     : Prestij kartımın borcunu söyler misin?
+  assistant: Yıldız Prestij kartınız için ekstre borcu sorgulanamıyor. Lütfen başka bir kartınızı seçin. Hangi kartınızın borcunu öğrenmek istersiniz? Örneğin, Yıldız Platinum veya Yıldız Fly diyebilirsiniz.
+  user     : Peki Yıldız Platinum kartımın borcunu söyle.
+  assistant: Bilgilerinizi kontrol ediyorum.
+  assistant: Sonu 1 8 0 1 ile biten Yıldız Platinum kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 8.100 Türk Lirası, ödenmesi gereken minimum tutar 3.240 Türk Lirası'dır. Dolar, Euro ve İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarınız için s
+  assistant: Başka bir kartınızın borcunu öğrenmek ister misiniz?
+  user     : Anladım, peki bu borcu şimdi nasıl ödeyebilirim?
+  assistant: Borç ödeme işleminiz için sizi müşteri temsilcimize aktarıyorum.
+
+=== Example 18 (94896459): fail
+  assistant: Bilgilerinizi kontrol ediyorum.
+  assistant: Sonu 7 0 0 7 ile biten Yıldız Platinum kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 14.250 lira 35 kuruş, ödenmesi gereken minimum tutar 5.700 lira 14 kuruştur. Dolar borcunuz 812 Dolar 45 sent, kalan toplam borcunuz 812 Dolar 45 sen
+  user     : Anlıyorum, bekliyorum. Ama şunu söyle
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : Bakın, bu rakamlar
+  assistant: Bu konuda size müşteri temsilcimiz yardımcı olacak, sizi aktarıyorum.
+  JUDGE: The conversation failed to meet the success criteria for the following reasons: - In [Message 1], the assistant failed to read the 'remaining total' (kalan toplam borç) and 'remaining minimum' (kalan asgari tutar) for the TL currency, providing only the statement debt and the minimum payment. The criteria explicitly required all four values to be read for TL. - The assistant repeated the same service offer in [Message 3] and [Message 4] without any intervening user input or change in context. - All other criteria were met: the transfer phrase in [Message 6] was exact and followed the dispute, 
+
+=== Example 19 (97917292): pass
+  assistant: Bilgilerinizi kontrol ediyorum.
+  assistant: Sonu 9 0 0 9 ile biten Yıldız Platinum kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 9.600 Türk Lirası, ödenmesi gereken minimum tutar 3.840 Türk Lirası, kalan toplam borcunuz 7.100 Türk Lirası, kalan minimum ödeme tutarınız 1.340 Tür
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : Bugün bu üçüncü arayışım, sizin
+  assistant: Yaşadığınız durum için üzgünüm, size yardımcı olmak istiyorum. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : Bugün bu üçüncü arayışım, sizin sistem
+  assistant: Yaşadığınız durum için üzgünüm, size yardımcı olmak istiyorum. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : Bugün bu üçüncü arayışım, sizin sistem
+  assistant: Yaşadığınız durum için üzgünüm, size yardımcı olmak istiyorum. Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : Bugün bu üçüncü arayışım, sizin
+  assistant: Sizi müşteri temsilcimize aktarıyorum.
+
+=== Example 20 (92122831): fail
+  assistant: Bilgilerinizi kontrol ediyorum.
+  assistant: Sonu 0 4 1 1 ile biten Yıldız Miles kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Dolar borcunuz 120 Dolar, kalan toplam borcunuz 120 Dolar, ödenmesi gereken minimum tutar 48 Dolar'dır. Euro borcunuz 240 Euro 50 sent, kalan toplam borcunuz 240 Euro 50 sen
+  user     : Tamam, bekliyorum. Sesiniz biraz gidip
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : ... ...
+  JUDGE: The assistant failed to meet the silence handling criteria. Specifically, on the first silence (detected between Message 3 and Message 4), the assistant repeated the question in an identical form rather than a shorter version as required. Additionally, the call ended because the customer hung up (Message 5), so the third silence termination logic was not reached. Debt figures and currency names provided in Message 1 were accurate and consistent with the API data.
+
+=== Example 21 (90000001): pass
+  assistant: Bilgilerinizi kontrol ediyorum.
+  assistant: Sonu 1 2 3 4 ile biten Yıldız Pratik Classic kartınıza ait 5 Ekim 2026 tarihinde kesilen ekstre Türk Lirası borcunuz 5.000 lira 13 kuruş, ödenmesi gereken minimum tutar 2.000 lira 5 kuruştur. Dolar, Euro ve İngiliz Sterlini borcunuz bulunmamaktadır. Borçlarını
+  assistant: Hesap kesim tarihinizi değiştirebilirim ya da ekstrenizi kayıtlı mail adresinize gönderebilirim.
+  user     : I'm sorry, I don't understand Turkish.
+  assistant: Sizi ana menüye aktarıyorum.
+
+-- rep 1: 3/6 passed, 117 s, simulation 558734a3-eec8-4d14-99b6-4cba3f7c0a76

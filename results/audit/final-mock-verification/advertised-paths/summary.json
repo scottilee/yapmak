@@ -1,0 +1,31 @@
+{
+  "base_url": "https://yapmak-bank-mock.winter-mountain-4405.workers.dev",
+  "source": "hidden/final/test-environment/test-customers.json",
+  "source_sha256": "009d3609d33a3b001ce04861822cd2592cb5482a7a5b0a5cb69442592889aa65",
+  "source_unchanged": true,
+  "started_utc": "2026-10-11T17:40:54.709052+00:00",
+  "ended_utc": "2026-10-11T17:42:40.246443+00:00",
+  "customers": 34,
+  "cards": 62,
+  "cases": 617,
+  "matched": 617,
+  "mismatches": 0,
+  "by_service": {
+    "cards.list": 34,
+    "cards.balance": 65,
+    "statement.week.get": 65,
+    "statement.week.decide": 195,
+    "statement.week.change": 195,
+    "contact.email.get": 34,
+    "statement.pdf.send": 29
+  },
+  "expected_non_200": 8,
+  "delayed": [
+    {
+      "case": 273,
+      "expected_seconds": 12,
+      "observed_seconds": 12.039
+    }
+  ],
+  "failed_cases": []
+}

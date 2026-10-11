@@ -196,3 +196,36 @@ Another agent's packages Orrery/Palisade/Tessel/Kurilian/Grunthal/Fenbrook and 2
 
 - Fresh-clone rehearsal of eb329ea by another agent: builds 184 s / 221 s, `degraded: []`, exports and form produced. From its findings: `third_party.callback.weekdays` (named-weekday callbacks, e.g. Tuesday/Thursday only — the clean spec marked it unsupported) honoured in `st_cb_route` and named in the window sentence; `workflow_compiled` trace event now carries compile-time `api_mapping_notes`, `unresolved`, `unknown_special_cases`, `defaulted_without_source`; build summary prints `unresolved` and `api_mapping_notes` counts; SUBMISSION.md states the FAQ input shape. Three small fixes from a 40-point read-only review (read-back clarification prefix always applied, product loop bound by `max_products`, "ask once for the exact day" reset per product); the rest judged cosmetic or not bugs (the `}}` newline loop is valid JSON; overlay tuples load as lists).
 - Live gate for v25i could not run: from ~15:20 UTC the platform's model path returns 504 on `/api/v2/chat/message` and simulations end with the customer hanging up after the first reply with no agent turn generated (A 0/10 ×2, B 0/3). Batch stopped at 15:38 UTC, running simulations deleted, so the slot is free for 17:00. Offline gates on v25j: 173 tests, probes 14/14, invariants A / A+B / clean spec, permutations 40/40.
+
+## v27 (11 Oct 17:30–18:10 UTC): final case, authoring mode live
+
+- **Service contract arrived 17:35.** `mock/src/contract.js` and `index.js` rewritten to it: `/voice/v1/<service>` routes, `{data, call}` in,
+  `{data, result}` out, per-service not-found errors (404 FB_IVR_CHANNEL_102/120/121/107 WARNING; 400 INVALID_ARGUMENTS_ERROR for
+  decide/change/contact and for empty required fields; 500 FBE00099 from the data), OpenAPI with the contract's request fields
+  (`aiFlow`, `statementDay`, `intAddressInfoType`, `currencyType`, `statementDate`, `emailAddress`), `relationType` ''/M/C, string-typed
+  change answer. `scripts/verify_mock.py <url>`: 617/617 entries identical (two teammates reproduced it independently).
+- **Builder bug (fixed):** `compiler_checks.static_check` indexed `prop["default"]` after reporting it missing (KeyError) and required a
+  baked default on envelope objects (`data`, `call`); it now recurses into nested object properties and seeds reachability with the
+  global nodes' targets (six end nodes reachable only from globals were "unreachable"). 173 tests still pass.
+- **Resume path:** `build.py --resume-author DRAFT` continues from a model-written draft (static check, repair loop, publish, export,
+  read-back) without a second authoring pass; the trace records `authoring_resumed` (draft sha, authoring run id, archived trace file).
+  Used once, because the first authored draft was complete and the crash was in the checker, not the draft.
+- **Submission script:** `--reuse` commits the reviewed run's artifacts instead of rebuilding; `run_command` in the organisers'
+  placeholder form.
+- **Authored workflow (agent a84cafc2…, 33 nodes, 8 globals):** all dictated sentences from the 8 Oct analysis / 9 Oct recap present
+  except the optional "Hesap kesim tarihinizi değiştirmek ister misiniz?" (the week intro goes straight to the options; the caller can
+  still decline) and the optional "Bilgilerinizi kontrol ediyorum." filler. No test data in the workflow (the only digit string is the
+  documents' own example 4253 in an extraction description). Live: six example personas 6/6 (sim 52ab386b). Observed deviations: a
+  goodbye right after a multi-card reading gets the offer once before the main-menu line; a confirmation combined with a third-party
+  request in one message ends at the security sentence before the change result is spoken (the change itself is made once).
+- **v27b (18:10–18:30 UTC): live-findings repair pass.** 15 extra edge personas (teammate's `results/final-extra-scenarios.json`) on v1: 8/15.
+  Defects observed (`results/audit/final-live-findings.md`): the `out_of_scope` global hijacked in-flow requests (e-mail, week change, English);
+  stale `card_digits_said` made `select_card`→`resolve_card`→reading loop for 160+ turns on a spouse-card request; `wanted_week` not extracted
+  from "İkinci haftayı seçiyorum"; angry transfer after one calming reply; reading repeated from `{{offer_lead}}`; offer spoken after a goodbye.
+  `build.py --resume-author out/final.candidate.json --repair-notes results/audit/final-live-findings.md` (new, generic: the model revises its
+  draft from recorded observations under the documents) → v2: 41 nodes, 9 added (`to_select` resets selection variables, `say_reading`,
+  `check_week` parses the week in code, `confirm_retry` counter, `pdf_done`/`week_done` speak the result before anything else, `end_no_email`,
+  `prepare_offer`), angry handler counts in code, "Bilgilerinizi kontrol ediyorum." before every balance call. Published as version 2 of the
+  same agent. Live: examples 6/6 again and the seven previously failed extras 5/7 (sim 7c7d9e1b); the two remaining are the silence case
+  (persona disconnected after one silence, inconclusive) and an angry case whose persona/criteria were mixed up by a renumbering of the
+  scenarios file between runs (the cached persona was the old #20). v2 is the submission; v1 kept under `results/final-v1/`.
