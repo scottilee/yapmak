@@ -82,7 +82,7 @@ for i in 1 2; do
   if [ "$fast" = "1" ]; then
     cmd="source .env && $PY build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-$i"   # mechanics only: practice policy + practice API
   else
-    cmd="source .env && $PY build.py --briefs $briefs --openapi $openapi --slot hidden-$i --deadline $deadline"
+    cmd="source .env && $PY build.py --briefs '$briefs' --openapi '$openapi' --slot hidden-$i --deadline $deadline"
   fi
   cmds+=("$cmd")
   log "build $i: $cmd"
@@ -107,7 +107,7 @@ import json, sys
 commit, c1, c2 = sys.argv[1:4]
 cfg = json.load(open("submission/config.json"))
 form = {"team": cfg["team"], "repo": cfg["repo"], "commit": commit,
-        "run_command": c1.replace(".venv/bin/python", ".venv/bin/python") + " && " + c2,
+        "run_command": c1 + " && " + c2,
         "workflows": {"hidden-1": "out/hidden-1.workflow.json", "hidden-2": "out/hidden-2.workflow.json"},
         "traces": {"hidden-1": "traces/hidden-1.jsonl", "hidden-2": "traces/hidden-2.jsonl"}}
 json.dump(form, open("submission/form.json", "w"), indent=2); open("submission/form.json", "a").write("\n")
@@ -120,7 +120,12 @@ log "form committed: $(git rev-parse --short HEAD) (form.commit = $commit, the a
 # 5. push
 cur=$(git rev-parse --abbrev-ref HEAD)
 if [ "$push" = "1" ]; then
-  if git push -u origin "$cur"; then log "pushed $cur"; else log "PUSH FAILED (authentication or remote); the commits exist locally — fix the remote/credentials and run: git push -u origin $cur"; exit 1; fi
+  pushed=0
+  for attempt in 1 2 3; do
+    if git push -u origin "$cur"; then log "pushed $cur"; pushed=1; break; fi
+    log "push attempt $attempt failed; retrying in 30 s"; sleep 30
+  done
+  if [ "$pushed" != "1" ]; then log "PUSH FAILED (authentication or remote); the commits exist locally — fix the remote/credentials and run: git push -u origin $cur"; exit 1; fi
 else
   log "not pushed; run: git push -u origin $cur"
 fi

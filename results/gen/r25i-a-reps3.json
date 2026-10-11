@@ -1,0 +1,759 @@
+{
+ "agent_id": "82d0876d-b628-4bb3-98d8-4033740b7b53",
+ "simulation_id": "c5f16036-00cb-452a-ab0f-654a1828e238",
+ "iteration_id": "9be1603e-363b-4ba2-8df2-99b162bfb6af",
+ "seconds": 457,
+ "passed": 0,
+ "total": 10,
+ "runs": 3,
+ "final": [
+  {
+   "id": "PUB-01",
+   "family": "Happy path",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-02",
+   "family": "Third party",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-03",
+   "family": "Identity",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-04",
+   "family": "Dates",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-05",
+   "family": "Hardship",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-06",
+   "family": "Amounts",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-07",
+   "family": "Dates",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-08",
+   "family": "Already paid",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-09",
+   "family": "Restructuring",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  },
+  {
+   "id": "PUB-10",
+   "family": "Tool failure",
+   "passes": 0,
+   "runs": 3,
+   "pass": false
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-01",
+   "level": "easy",
+   "family": "Happy path",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 420.0, '2026-10-14')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation ended prematurely before the assistant could perform any of the required tasks. Specifically: 1) No security questions were asked or passed. 2) The tool 'get_account' was never called. 3) The 'create_promise' tool was never called. 4) The required sentence regarding a text message was never spoken. The transcript ends after the initial greeting and identity confirmation."
+   ],
+   "call_id": "e0e4b45b-23b7-457e-9fac-e447cadf5a04",
+   "tools": [],
+   "customer_id": "c_247a3c58-68c",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-02",
+   "level": "medium",
+   "family": "Third party",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('not_reached', 'callback')",
+    "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+    "the call was not closed with close_call",
+    "conversation: The success criteria required a callback to be scheduled for the next business day at 11:00, but no such callback was scheduled before the customer ended the call. While the agent did successfully avoid mentioning the reason for the call, products, or debt, and did not call the forbidden functions, the final mandatory criterion was not met."
+   ],
+   "call_id": "4366a403-66de-49fe-bff6-3b9ec0ad3031",
+   "tools": [],
+   "customer_id": "c_9d457c85-f65",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-03",
+   "level": "medium",
+   "family": "Identity",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('not_verified', 'failed')",
+    "the call was not closed with close_call",
+    "conversation: The call ended prematurely after only two messages. The assistant did not reach the point of telling the customer to use the app or a branch, and no security check was conducted to trigger the 'third wrong answer' condition. Therefore, the required success criteria were not met."
+   ],
+   "call_id": "1953f9f7-58eb-4fb5-bfa4-c3c9aa5e5d10",
+   "tools": [],
+   "customer_id": "c_9e5a53c0-c31",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-04",
+   "level": "medium",
+   "family": "Dates",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+    "the call was not closed with close_call",
+    "conversation: The call ended prematurely after the identification phase. The success criteria required a promise date of 23 October to be established, which did not occur. Additionally, although the agent identified as a digital assistant in the greeting [Message 0], the specific condition of doing so 'when asked' was not met because the user never asked the question."
+   ],
+   "call_id": "43992433-6e76-4e9e-8e47-d59d372a20db",
+   "tools": [],
+   "customer_id": "c_9987ef62-34a",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-05",
+   "level": "medium",
+   "family": "Hardship",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('no_promise', 'hardship')",
+    "the call was not closed with close_call",
+    "conversation: The conversation ended prematurely after the initial introduction. As a result: 1) No sentence of sympathy was provided. 2) The support team was never offered. While there were no persuasion attempts and no discounts/waivers offered, the missing positive requirements lead to a failure."
+   ],
+   "call_id": "58c192d9-243b-4fc1-be62-6907792abfd6",
+   "tools": [],
+   "customer_id": "c_5065080f-c01",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-06",
+   "level": "hard",
+   "family": "Amounts",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 637.5, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The call ended prematurely after the customer confirmed her identity. As a result, several success criteria were not met: 1. The agent never offered the minimum payment (with the note about the remainder staying overdue). 2. No promise for a payment of 637.50 on Friday 16 October was established."
+   ],
+   "call_id": "5363981d-2041-4543-971f-e2500d6bf0e3",
+   "tools": [],
+   "customer_id": "c_8a4fa4c9-5cf",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-07",
+   "level": "hard",
+   "family": "Dates",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 540.0, '2026-10-27')]",
+    "the call was not closed with close_call",
+    "conversation: The conversation ended prematurely. The agent only completed the identification phase and did not ask for a specific day, address the date October 26, or record a payment promise for October 27 as required by the success criteria."
+   ],
+   "call_id": "89fd3308-adc8-49ee-ba85-533043c8cf4d",
+   "tools": [],
+   "customer_id": "c_bec58cf8-bf3",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-08",
+   "level": "medium",
+   "family": "Already paid",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('paid', None)",
+    "the call was not closed with close_call",
+    "conversation: The agent failed to mention that payments can take one business day to appear. The conversation ended abruptly after the user confirmed their identity and before any information regarding payments could be shared."
+   ],
+   "call_id": "3e07317c-2421-4647-9fb3-2e2acea4325c",
+   "tools": [],
+   "customer_id": "c_4eaa660d-be5",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-09",
+   "level": "medium",
+   "family": "Restructuring",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('transferred', 'restructuring')",
+    "transfers [], expected [{'queue': 'restructuring'}]",
+    "the call was not closed with close_call",
+    "conversation: The evaluation failed because the success criterion requiring the 'transfer_to_agent' tool to be called with the 'restructuring' queue was not met. System events indicate that only 'code_exec' was initiated, and the call ended immediately after the user confirmed their identity, before any transfer could take place. While the agent did not describe a plan and no promise was recorded, the absence o"
+   ],
+   "call_id": "cbfbb974-93dc-4e4b-8e5d-c33707dcb889",
+   "tools": [],
+   "customer_id": "c_39169229-f8e",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  },
+  {
+   "id": "PUB-10",
+   "level": "hard",
+   "family": "Tool failure",
+   "pass": false,
+   "failed": [
+    "outcome (None, None), expected ('promise', None)",
+    "promises [], expected [('p1', 365.0, '2026-10-16')]",
+    "the call was not closed with close_call",
+    "conversation: The success criteria were not met for the following reasons: - There is no evidence in the transcript or system events that a promise was made or added to a ledger, nor was there any 'retry' process as required by the first criterion. - Although the agent correctly avoided using the specific word 'recorded' (saying 'record' instead), the failure to achieve the ledger requirement results in an over"
+   ],
+   "call_id": "6a4308d4-eeb5-44ab-95cf-ff4a37d570a1",
+   "tools": [],
+   "customer_id": "c_4bba878e-69c",
+   "slowest_turn_s": 0.0,
+   "ended": "customer-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely after the initial introduction. None of the success criteria were met: security questions were not asked or passed, the 'get_account' tool was not called, the 'create_promise' tool was not called, and the mandatory text-message sentence was not spoken."
+    ],
+    "call_id": "c05bc653-d881-4703-9cc4-85d1aed49e5d",
+    "tools": [],
+    "customer_id": "c_1636daf8-8cf",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_reached', 'callback')",
+     "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to meet the success criteria because no callback was scheduled for the next business day at 11:00. While the agent did not disclose the purpose of the call or mention any debt, and did not call the prohibited tools, the call ended prematurely when the customer hung up after asking why the agent was calling."
+    ],
+    "call_id": "ee1006eb-5af2-4316-94a2-d23e5cb4cd41",
+    "tools": [],
+    "customer_id": "c_a1510fab-ff2",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_verified', 'failed')",
+     "the call was not closed with close_call",
+     "conversation: The conversation was too short to satisfy the success criteria. The customer ended the call immediately after confirming their identity. As a result, the assistant did not have the opportunity to provide instructions to use the app or a branch, nor did the security check logic involving wrong answers occur."
+    ],
+    "call_id": "cd20cc25-3ea6-404d-97b0-5265eba8a6b0",
+    "tools": [],
+    "customer_id": "c_94634fb8-581",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the user confirmed their identity. Consequently, the agent did not discuss the promise date of 23 October, nor did it handle a refusal date, which were both required by the success criteria."
+    ],
+    "call_id": "b2890f16-43e0-44c0-b49f-031296089f89",
+    "tools": [],
+    "customer_id": "c_2dbb0a0f-95c",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('no_promise', 'hardship')",
+     "the call was not closed with close_call",
+     "conversation: The success criteria were not met because the call ended prematurely. Specifically, the agent did not provide a sentence of sympathy and did not offer the support team as required by the criteria. The user hung up immediately after confirming their identity."
+    ],
+    "call_id": "058bcbd7-bff6-4117-a538-bdbd7f37daeb",
+    "tools": [],
+    "customer_id": "c_71a53249-3c9",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely after the identification phase. As a result, the agent did not offer the minimum payment with the required disclaimer, nor was a promise for $637.50 on October 16th secured. Only the criterion regarding not asking how much the user can pay was technically met because the topic was never reached."
+    ],
+    "call_id": "d46ebfc6-e17d-4d8d-a038-801697d40ad6",
+    "tools": [],
+    "customer_id": "c_6adaa5e0-5a7",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 540.0, '2026-10-27')]",
+     "the call was not closed with close_call",
+     "conversation: - agent asks once for the exact day: Not met. The conversation ended after identification. - the agent does not accept 26 October and offers the next business day: Not met. This part of the script was never reached. - promise recorded for Tuesday 27 October, inside the early-band deadline: Not met. No promise was discussed or recorded."
+    ],
+    "call_id": "d0c8d3aa-af3a-4fe3-884e-1b0d775c2028",
+    "tools": [],
+    "customer_id": "c_d4a83884-442",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('paid', None)",
+     "the call was not closed with close_call",
+     "conversation: - The agent failed to state that payments can take one business day to appear. - The conversation ended abruptly after the user's identification, so no information regarding payment processing was provided."
+    ],
+    "call_id": "5d9eb50f-41a5-4868-a545-c8e43c2ddd33",
+    "tools": [],
+    "customer_id": "c_4b7eecf1-a93",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('transferred', 'restructuring')",
+     "transfers [], expected [{'queue': 'restructuring'}]",
+     "the call was not closed with close_call",
+     "conversation: The call did not meet all success criteria. Specifically, the agent failed to call the 'transfer_to_agent' tool with the 'restructuring' queue. The conversation ended abruptly after the user confirmed their identity, and no transfer or plan description occurred."
+    ],
+    "call_id": "2a5b3233-5465-46f3-adad-9ce331f4b76b",
+    "tools": [],
+    "customer_id": "c_6c964466-562",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the initial identity verification. The success criterion requiring exactly one promise in the ledger after a retry was not met because no promise or retry occurred during the brief exchange. Additionally, while the agent used the word 'record', it did not say 'recorded', but the failure to reach the ledger/promise state results in an unsuccessful evaluation."
+    ],
+    "call_id": "775a3d43-021c-45e0-962b-e909d0c9c1a8",
+    "tools": [],
+    "customer_id": "c_d5e86714-eb9",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the user identified himself. Multiple success criteria were not met: 1) Security questions were never asked or passed. 2) The `create_promise` tool was never called. 3) The required sentence regarding a text-message was never spoken because the call did not reach the promise stage."
+    ],
+    "call_id": "4ccc253a-75dd-4395-85d5-dbe8421fa4b1",
+    "tools": [],
+    "customer_id": "c_e8276439-9b6",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_reached', 'callback')",
+     "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+     "the call was not closed with close_call",
+     "conversation: The assistant failed to schedule a callback for the next business day at 11:00. While the agent correctly avoided disclosing the purpose of the call or any debt information to a third party, and did not call verify_identity or get_account, the final success criterion regarding the scheduled callback was not met before the call ended."
+    ],
+    "call_id": "ae7a5bfe-2b71-4fad-8332-eafd3d4a8682",
+    "tools": [],
+    "customer_id": "c_52a18912-964",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_verified', 'failed')",
+     "the call was not closed with close_call",
+     "conversation: The success criteria were not met because the assistant failed to tell the customer to use the app or visit a branch. The conversation ended prematurely after the user confirmed their identity, and none of the required instructions or the security check logic were executed."
+    ],
+    "call_id": "0b5ab870-9797-4a74-a37b-03f3ab2757de",
+    "tools": [],
+    "customer_id": "c_53422bf3-762",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended immediately after the user confirmed their identity. As a result, several success criteria were not met: no promise date was discussed or set to October 23, and there was no discussion regarding payment dates or refusals. Additionally, while the agent identified as a digital assistant in the opening, the specific criterion of doing so 'when asked' was not triggered as the user never"
+    ],
+    "call_id": "08b9a8f0-720e-4997-a896-fc6cb0f0fdda",
+    "tools": [],
+    "customer_id": "c_142f15ca-4bf",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('no_promise', 'hardship')",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to meet several success criteria because the call ended immediately after the user confirmed their identity. Specifically: 1) No sentence of sympathy was provided. 2) The support team was not offered. While no persuasion or discounts were offered, the required positive actions did not occur."
+    ],
+    "call_id": "5f8eb1ca-8301-4c6f-9d79-56665af9dd04",
+    "tools": [],
+    "customer_id": "c_02bd18e5-3c2",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the user confirmed their identity. As a result, the agent did not have the opportunity to offer the minimum payment (Criterion 2) or secure a promise for 637.50 on Friday 16 October (Criterion 3)."
+    ],
+    "call_id": "9283dd6d-dd97-4359-97b3-92e64b6502f7",
+    "tools": [],
+    "customer_id": "c_117d9839-772",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 540.0, '2026-10-27')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the identity verification step. None of the success criteria were met: the agent never asked for a specific payment day, never handled the rejection of 26 October, and no promise was recorded for 27 October."
+    ],
+    "call_id": "7057518a-9cea-45e4-b9ba-d34fc05ecb33",
+    "tools": [],
+    "customer_id": "c_3f111996-29e",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('paid', None)",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to state that payments can take one business day to appear, as the conversation ended prematurely after the initial identification. While no promise was recorded, the first criterion was not met."
+    ],
+    "call_id": "35df4f9f-e4f2-4cd5-b557-11b873b8e0de",
+    "tools": [],
+    "customer_id": "c_c47c80c4-967",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('transferred', 'restructuring')",
+     "transfers [], expected [{'queue': 'restructuring'}]",
+     "the call was not closed with close_call",
+     "conversation: The success criteria required the `transfer_to_agent` function to be called with the queue 'restructuring'. Based on the system events, only `code_exec` was called, and the conversation ended without the transfer ever occurring."
+    ],
+    "call_id": "e5b78956-2616-4e37-af0a-aa72a25118ec",
+    "tools": [],
+    "customer_id": "c_befa191d-a85",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The call failed the success criteria because there was no promise recorded in the ledger, which was a requirement ('exactly one promise'). The conversation ended prematurely after the user identified themselves, meaning no promise-related actions or retries occurred. While the agent did not use the specific word 'recorded', the lack of the required promise results in a failure."
+    ],
+    "call_id": "d036e915-9d62-448a-8c04-e6f36e68aa8f",
+    "tools": [],
+    "customer_id": "c_a26ee027-c21",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   }
+  ],
+  [
+   {
+    "id": "PUB-01",
+    "level": "easy",
+    "family": "Happy path",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 420.0, '2026-10-14')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely before the assistant could perform any of the required tasks. Specifically: 1) No security questions were asked or passed. 2) The tool 'get_account' was never called. 3) The 'create_promise' tool was never called. 4) The required sentence regarding a text message was never spoken. The transcript ends after the initial greeting and identity confirmation."
+    ],
+    "call_id": "e0e4b45b-23b7-457e-9fac-e447cadf5a04",
+    "tools": [],
+    "customer_id": "c_247a3c58-68c",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-02",
+    "level": "medium",
+    "family": "Third party",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_reached', 'callback')",
+     "callbacks [], expected [{'date': '2026-10-15', 'time': '11:00'}]",
+     "the call was not closed with close_call",
+     "conversation: The success criteria required a callback to be scheduled for the next business day at 11:00, but no such callback was scheduled before the customer ended the call. While the agent did successfully avoid mentioning the reason for the call, products, or debt, and did not call the forbidden functions, the final mandatory criterion was not met."
+    ],
+    "call_id": "4366a403-66de-49fe-bff6-3b9ec0ad3031",
+    "tools": [],
+    "customer_id": "c_9d457c85-f65",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-03",
+    "level": "medium",
+    "family": "Identity",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('not_verified', 'failed')",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after only two messages. The assistant did not reach the point of telling the customer to use the app or a branch, and no security check was conducted to trigger the 'third wrong answer' condition. Therefore, the required success criteria were not met."
+    ],
+    "call_id": "1953f9f7-58eb-4fb5-bfa4-c3c9aa5e5d10",
+    "tools": [],
+    "customer_id": "c_9e5a53c0-c31",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-04",
+    "level": "medium",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 1250.0, '2026-10-23')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the identification phase. The success criteria required a promise date of 23 October to be established, which did not occur. Additionally, although the agent identified as a digital assistant in the greeting [Message 0], the specific condition of doing so 'when asked' was not met because the user never asked the question."
+    ],
+    "call_id": "43992433-6e76-4e9e-8e47-d59d372a20db",
+    "tools": [],
+    "customer_id": "c_9987ef62-34a",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-05",
+    "level": "medium",
+    "family": "Hardship",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('no_promise', 'hardship')",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely after the initial introduction. As a result: 1) No sentence of sympathy was provided. 2) The support team was never offered. While there were no persuasion attempts and no discounts/waivers offered, the missing positive requirements lead to a failure."
+    ],
+    "call_id": "58c192d9-243b-4fc1-be62-6907792abfd6",
+    "tools": [],
+    "customer_id": "c_5065080f-c01",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-06",
+    "level": "hard",
+    "family": "Amounts",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 637.5, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The call ended prematurely after the customer confirmed her identity. As a result, several success criteria were not met: 1. The agent never offered the minimum payment (with the note about the remainder staying overdue). 2. No promise for a payment of 637.50 on Friday 16 October was established."
+    ],
+    "call_id": "5363981d-2041-4543-971f-e2500d6bf0e3",
+    "tools": [],
+    "customer_id": "c_8a4fa4c9-5cf",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-07",
+    "level": "hard",
+    "family": "Dates",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 540.0, '2026-10-27')]",
+     "the call was not closed with close_call",
+     "conversation: The conversation ended prematurely. The agent only completed the identification phase and did not ask for a specific day, address the date October 26, or record a payment promise for October 27 as required by the success criteria."
+    ],
+    "call_id": "89fd3308-adc8-49ee-ba85-533043c8cf4d",
+    "tools": [],
+    "customer_id": "c_bec58cf8-bf3",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-08",
+    "level": "medium",
+    "family": "Already paid",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('paid', None)",
+     "the call was not closed with close_call",
+     "conversation: The agent failed to mention that payments can take one business day to appear. The conversation ended abruptly after the user confirmed their identity and before any information regarding payments could be shared."
+    ],
+    "call_id": "3e07317c-2421-4647-9fb3-2e2acea4325c",
+    "tools": [],
+    "customer_id": "c_4eaa660d-be5",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-09",
+    "level": "medium",
+    "family": "Restructuring",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('transferred', 'restructuring')",
+     "transfers [], expected [{'queue': 'restructuring'}]",
+     "the call was not closed with close_call",
+     "conversation: The evaluation failed because the success criterion requiring the 'transfer_to_agent' tool to be called with the 'restructuring' queue was not met. System events indicate that only 'code_exec' was initiated, and the call ended immediately after the user confirmed their identity, before any transfer could take place. While the agent did not describe a plan and no promise was recorded, the absence o"
+    ],
+    "call_id": "cbfbb974-93dc-4e4b-8e5d-c33707dcb889",
+    "tools": [],
+    "customer_id": "c_39169229-f8e",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   },
+   {
+    "id": "PUB-10",
+    "level": "hard",
+    "family": "Tool failure",
+    "pass": false,
+    "failed": [
+     "outcome (None, None), expected ('promise', None)",
+     "promises [], expected [('p1', 365.0, '2026-10-16')]",
+     "the call was not closed with close_call",
+     "conversation: The success criteria were not met for the following reasons: - There is no evidence in the transcript or system events that a promise was made or added to a ledger, nor was there any 'retry' process as required by the first criterion. - Although the agent correctly avoided using the specific word 'recorded' (saying 'record' instead), the failure to achieve the ledger requirement results in an over"
+    ],
+    "call_id": "6a4308d4-eeb5-44ab-95cf-ff4a37d570a1",
+    "tools": [],
+    "customer_id": "c_4bba878e-69c",
+    "slowest_turn_s": 0.0,
+    "ended": "customer-ended-call"
+   }
+  ]
+ ]
+}

@@ -2,6 +2,17 @@
 
 Based on `eb329ea`, `scripts/preflight.sh` and `scripts/submit.sh`. Briefs open **17:00**; submission closes **20:00**. Keep builds sequential. Never write hidden-brief rules, names or values into code or prompts, hand-edit extracted policy or exports, or use `--fast` for the submission. A builder rerun is allowed; general bug fixes must be independent of hidden content and separately committed.
 
+**16:00 — platform timeline (already scheduled)**
+
+The detached `results/audit/platform_watch.py` logs every minute from 16:00 to 20:05 UTC in `results/platform-watch-20261011.jsonl`. An initial precheck returned HTTP 200 for both services. It probes Freya workspaces and creates a bank practice session (no simulation); records UTC time, status, latency and errors; and never logs response bodies or credentials. The process requires this machine/sandbox to remain running. Check it at 16:30 and again just before building:
+
+```bash
+ps -p "$(cat results/platform-watch-20261011.pid)" -o pid,etime,command
+tail -n 3 results/platform-watch-20261011.jsonl
+```
+
+After 16:00, require a recent `sample` (not just `watch_scheduled`) with both checks healthy. A stale log is unknown health. To restart if the process is dead: `set -a; source .env; set +a; nohup .venv/bin/python -u results/audit/platform_watch.py >> results/platform-watch-20261011.stderr.log 2>&1 < /dev/null &`. A file lock prevents duplicate loops. Compare sample timestamps with build `platform_retry` timestamps. See [unsupported-rule inventory](unsupported-rules-inventory.md) for known unresolved families; familiar findings still need review.
+
 **16:30 — preflight in the intended submission checkout**
 
 ```bash
@@ -26,17 +37,39 @@ This commits inputs, extracts/builds sequentially (30-minute deadline each), sca
 ```bash
 .venv/bin/python - <<'PYCODE'
 import json
+from pathlib import Path
+fields = {
+    'policy_compiled': ('api_mapping_notes', 'unresolved', 'audit_unresolved',
+                        'unknown_special_cases', 'defaulted_without_source'),
+    'workflow_compiled': ('api_mapping_notes', 'unresolved', 'unknown_special_cases',
+                          'defaulted_without_source', 'compiler_notes', 'static_errors'),
+    'api_mapping_incomplete': ('unmapped',),
+    'offline_invariants': ('failing', 'error'),
+    'platform_retry': ('step', 'attempt', 'error'),
+    'run_end': ('success', 'checks_passed', 'degraded', 'error'),
+}
 for slot in ('hidden-1', 'hidden-2'):
-    print(slot)
-    for line in open(f'traces/{slot}.jsonl'):
-        e = json.loads(line)
-        if e.get('event') in ('policy_compiled', 'api_mapping_incomplete',
-                              'offline_invariants', 'platform_retry', 'run_end'):
-            print(json.dumps(e, ensure_ascii=False))
+    path = Path(f'traces/{slot}.jsonl')
+    print(f'\n{path}')
+    if not path.exists():
+        print('MISSING TRACE'); continue
+    seen = set()
+    for number, line in enumerate(path.read_text().splitlines(), 1):
+        try:
+            e = json.loads(line)
+        except ValueError:
+            print(f'line {number}: incomplete/invalid JSON'); continue
+        event = e.get('event')
+        if event in fields:
+            seen.add(event)
+            print(number, event, json.dumps(
+                {k: e.get(k, '<not emitted>') for k in fields[event]},
+                ensure_ascii=False))
+    print('Events not emitted:', ', '.join(sorted(set(fields) - seen)) or 'none')
 PYCODE
 ```
 
-Check `policy_compiled.api_mapping_notes`, `unknown_special_cases`, `defaulted_without_source`, `unresolved` and `audit_unresolved`; `offline_invariants.failing`; any `api_mapping_incomplete` or `platform_retry`; and `run_end.success`, `checks_passed`, `degraded`. Empty degraded does **not** certify the audit or invariants. Missing retry/incomplete events means none emitted, not an explicit clean check. Failed `run_end` may omit degraded entirely. Compiler-stage mapping notes are not fully surfaced in the trace.
+Read both compilation events: `policy_compiled` carries extraction/audit diagnostics; current `workflow_compiled` also carries final compiler mapping notes and unresolved topics. The older eb329ea rehearsal lacks those extra workflow fields, shown as `<not emitted>` rather than an empty list. This snippet was executed against both real rehearsal traces: it prints mapping notes, unresolved entries, unknown special cases and `run_end.degraded`. Empty degraded does **not** certify audit or invariant coverage. Missing retry/incomplete events means none emitted, not an explicit clean check. Failed `run_end` may omit degraded. Verification evidence: `results/audit/runbook-trace-verification.txt`.
 
 **Failure or degradation**
 

@@ -52,6 +52,9 @@ before Sunday; without `--push` the script prints the push command. Rehearsed 10
    `.venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot rehearsal-a` green (~10 s),
    no simulation running in the workspace.
 2. Save the hidden brief files and tool API files into the repo (e.g. `hidden/hidden-1/`), **commit them unchanged**.
+   Per the organisers' FAQ each hidden brief is one Markdown file with its tool API file next to it; `scripts/submit.sh <dir1> <dir2>` takes
+   a directory per brief (every non-API file is a brief document, read in file-name order; the API file is the JSON or YAML with `paths`) and
+   writes the exact per-brief command it ran into `submission/form.json` as `run_command`.
 3. Run build 1, then build 2 (commands above). Do not edit the exported workflows. Do not add any value from a hidden brief to code or prompts; a parser crash fix is the only permitted code change — commit it separately with a message that says what crashed.
 4. Scan generated artifacts before staging (the builder also gates policy/audit and workflow artifacts):
    `.venv/bin/python scripts/check_artifacts.py out/hidden-1.workflow.json out/hidden-2.workflow.json out/hidden-*.policy.json out/hidden-*.audit.json traces/hidden-1.jsonl traces/hidden-2.jsonl`.

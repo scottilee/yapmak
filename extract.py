@@ -52,6 +52,7 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
   close_call.outcome / reason, <tool>.customer_id. Leave it empty when the names are self-explanatory.
 - `dates.promise_today_allowed`: false when the documents say no promise may be taken for today / the earliest promise date is the next business day.
   `calendar.next_weekday`: "following_week" when the documents define "next <weekday>" as the weekday of the following calendar week; otherwise leave the default.
+- `third_party.callback.weekdays`: the weekday numbers (Monday=0 … Sunday=6) when callbacks may only be booked on named weekdays ("Tuesday or Thursday only" -> [1, 3]); leave empty otherwise.
 - `promise_write.confirm_phrase`: the documents' confirmation question verbatim. When they dictate the whole read-back sentence, keep its placeholders
   as {{amount}} and {{date}} (and {{product}}); the agent fills them in.
 - `amounts.floor_offered_once`: false when the documents forbid counter-offers ("zero persuasion", "no counter offer", "one no and the call is over").

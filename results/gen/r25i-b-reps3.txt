@@ -1,0 +1,40 @@
+FAIL PUB-11 medium Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended prematurely after the user confirmed their identity. As a result, the agent did not state any products, perform any read-backs or confirmations, or execute any 'create_promise' tool calls. Therefore, none of the success cri
+FAIL PUB-12 hard   Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 510.0, '2026-10-15')]
+       - notes [], expected [('p2', 'refused'), ('p3', 'refused')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended prematurely after the identification step. None of the success criteria were met: 1) The phone question was not asked again. 2) No promise was made on the credit card. 3) No 'refused' notes were entered for other products. 
+FAIL PUB-13 hard   Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended after the initial identification. None of the success criteria were met: no dates were recorded for the credit card or the loan, and no read-back occurred.
+
+slowest agent turn per call: median 0 s, worst 0 s. Failed calls where the customer hung up: 3.
+-- run 1 of 3: 0 / 3 passed, 75 s
+
+FAIL PUB-11 medium Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended prematurely after the identification phase. None of the success criteria were met: the agent did not state any products, did not perform read-backs or confirmations, and did not execute the `create_promise` tool for any pro
+FAIL PUB-12 hard   Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 510.0, '2026-10-15')]
+       - notes [], expected [('p2', 'refused'), ('p3', 'refused')]
+       - the call was not closed with close_call
+       - conversation: The conversation ended after the initial identification of the user. None of the specific success criteria were met: the phone question was never asked, no promises were recorded for the credit card, no refusal notes were made for other products,
+FAIL PUB-13 hard   Multi-product  | (no tool calls)
+       - outcome (None, None), expected ('promise', None)
+       - promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - the call was not closed with close_call
+       - conversation: The call was terminated by the customer immediately after identifying themselves. As a result, none of the success criteria were met: no payment arrangements were discussed or recorded for the credit card or the loan, and no read-back of dates oc
+
+slowest agent turn per call: median 0 s, worst 0 s. Failed calls where the customer hung up: 3.
+-- run 2 of 3: 0 / 3 passed, 85 s
+

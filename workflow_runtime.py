@@ -273,7 +273,7 @@ def _products_from_vars():
     if not isinstance(prods, list) or not prods:
         prods = []
         A = SLOTS['account']
-        for i in range(8):
+        for i in range(max(8, int((POLICY.get('multi_product') or dict()).get('max_products') or 0))):
             p = dict()
             for k in (A['id'], A['type'], A['card_last4'], A['past_due'], A['days_late']) + tuple(sorted(_floor_fields())):
                 for key in ('get_account_response.data.' + A['list'] + '.' + str(i) + '.' + k, 'products_raw.' + str(i) + '.' + k, A['list'] + '.' + str(i) + '.' + k):
@@ -400,7 +400,9 @@ def st_cb_route():
     if status == 'none' and t and S.get('cb_date'):
         status, date = 'ok', S['cb_date']          # the day came in the previous turn, the time now
     ok = False
-    if status == 'ok' and t:
+    wdays = [int(x) for x in (CB.get('weekdays') or []) if str(x).lstrip('-').isdigit() and 0 <= int(x) <= 6]
+    bad_day = bool(status == 'ok' and wdays and datetime.date.fromisoformat(date).weekday() not in wdays)   # the documents allow named weekdays only
+    if status == 'ok' and t and not bad_day:
         pol = dict(start=CB['start'], end=CB['end'], days=CB['days'], must_be_after_now=bool(CB.get('must_be_after_now', True)), holidays=_cal()[0], business_days=_cal()[1])
         ok = callback_ok(S['today'] + 'T' + S['now_time'], date, t, pol)
     if ok:
@@ -408,7 +410,7 @@ def st_cb_route():
         vars['cb_time'] = t
         _save(S)
         return _set_next('schedule_callback')
-    if status == 'ok' and not t and intent not in ('cannot_say', 'refuses'):
+    if status == 'ok' and not t and not bad_day and intent not in ('cannot_say', 'refuses'):
         S['cb_date'] = date
         vars['neg_instruction'] = 'They named a day but no time. Ask at what time ' + _fmt(date) + ' would suit; do not propose a time yourself.'
         _save(S)
@@ -423,7 +425,9 @@ def st_cb_route():
             window = 'the next business day between ' + CB['start'] + ' and ' + CB['end']
         else:
             window = 'today until ' + CB['end'] + ' or the next business day between ' + CB['start'] + ' and ' + CB['end']
-        outside = 'That time is outside the window I can offer. ' if status == 'ok' and t else ''
+        if wdays:
+            window += ', on ' + ' or '.join(WEEKDAYS[i].capitalize() for i in sorted(set(wdays))) + ' only'
+        outside = 'That day is not one I can offer. ' if bad_day else ('That time is outside the window I can offer. ' if status == 'ok' and t else '')
         vars['neg_instruction'] = outside + 'Ask once more for another day and time: ' + window + '.'
         _save(S)
         return _set_next('third_party')
@@ -748,6 +752,7 @@ def _enter_product(S, k, lead=None):
     S['phase'] = 'product'
     S['pi'] = k
     S['vague_asked'] = False
+    S['vague_asked_done'] = False          # "ask once for the exact day" is per product
     p = S['products'][k]
     if not _start_attempt(S, p, 1):
         p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
@@ -849,8 +854,10 @@ def _readback_after_change(S, before):
         return _advance(S)
     _readback(S)
     if S['rb_same'] >= 2:
+        txt = _str(vars['readback_text'])
+        rest = txt[len('To confirm: '):] if txt.startswith('To confirm: ') else txt
         vars['readback_text'] = ('I may have misunderstood the change. Please tell me one change at a time: which product, and the new amount or the new date. '
-                                 'Currently: ' + vars['readback_text'][len('To confirm: '):] if vars['readback_text'].startswith('To confirm: ') else vars['readback_text'])
+                                 'Currently: ' + rest)
 
 def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
     """Validate a customer proposal for one product. Returns 'done' or an instruction string (and sets S['offer'])."""

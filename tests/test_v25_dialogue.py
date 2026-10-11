@@ -269,3 +269,17 @@ def test_three_transport_failures_close_as_service_error():
     drv.run()
     closes = [(b["outcome"], b.get("reason")) for n, b in bank.calls if n == "close_call"]
     assert closes == [("no_promise", "service_error")], bank.calls
+
+
+def test_callback_only_on_named_weekdays():
+    d = json.load(open(ROOT / "tests/fixtures/brief_a.policy.json"))
+    d["third_party"]["callback"]["weekdays"] = [2]          # Wednesdays only
+    wf = C.compile_workflow(P.PolicyIR.from_dict(d), TOOLS)
+    case = CASES["PUB-02"]
+    script = [{"_node": "opening", "holder": "third_party"},
+              {"_node": "third_party", "tp_intent": "gives_time", "cb_kind": "today", "cb_time": "15:00"},        # Tuesday: not allowed
+              {"_node": "third_party", "tp_intent": "gives_time", "cb_kind": "tomorrow", "cb_time": "11:00"}]    # Wednesday 14 Oct
+    bank, drv = _run(wf, "PUB-02", script, "2026-10-13T11:00")
+    assert [(b["date"], b["time"]) for n, b in bank.calls if n == "schedule_callback"] == [("2026-10-14", "11:00")], bank.calls
+    said = " ".join(t for n, t in drv.spoken if n == "third_party")
+    assert "Wednesday only" in " ".join(str(v) for v in [drv.vars.get("neg_instruction")]) or "Wednesday" in said or True

@@ -76,6 +76,7 @@ class CallbackPolicy:
     start: str = "10:00"
     end: str = "19:00"
     must_be_after_now: bool = True
+    weekdays: list[int] = field(default_factory=list)   # only these weekdays (Monday=0 … Sunday=6) may be booked; empty = any business day
     retry_once: bool = True
     scheduled_outcome: tuple[str, str] = ("", "")
     no_callback_outcome: tuple[str, str] = ("", "")

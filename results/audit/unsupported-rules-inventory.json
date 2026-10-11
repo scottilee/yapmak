@@ -1,0 +1,481 @@
+{
+  "generated_utc": "2026-10-11T15:32:29.215623+00:00",
+  "head": "0a42cb22e49093d10f0e22be46913dea22fd1869",
+  "scope": "Existing out/ext-*.audit.json; no new extraction. Working-tree schema/runtime inspected read-only; concurrent staged changes may exist.",
+  "package_count": 25,
+  "audit_count": 28,
+  "unresolved_entry_count": 136,
+  "records": [
+    {
+      "package": "amber-valley",
+      "audit": "out/ext-amber.audit.json",
+      "sha256": "05fd9d7e73238f6b3218566f74f54da29d46a55c87f42a9783d75b4eff14b6ce",
+      "source_docs": [
+        "tests/fixtures/external/amber-valley/01-mail.txt",
+        "tests/fixtures/external/amber-valley/02-policy.md",
+        "tests/fixtures/external/amber-valley/03-memo.txt",
+        "tests/fixtures/external/amber-valley/04-codes.txt"
+      ],
+      "unresolved": [
+        "payment_plan row in §9 conflicts with §7 (never ask how much, never offer a new instalment plan); not compiled.",
+        "No band for 0 days late or more than 60 days late.",
+        "Month/day/year numeric date rule has no date identity question to apply to.",
+        "Wording of the hardship sympathetic sentence is not dictated."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "codex-aster-quay",
+      "audit": "out/ext-aster.audit.json",
+      "sha256": "fe23f011f5ea66d8f9eeb0915c92c032103d2057396917519e0f8f4249c42bec",
+      "source_docs": [
+        "tests/fixtures/external/codex-aster-quay/01-tables.md"
+      ],
+      "unresolved": [
+        "Campaign window (local now dates 14 Oct - 10 Nov 2026) has no IR field.",
+        "Missing date components must be asked for; schema has no explicit 'ask' value for calendar.missing_date_parts (left at 'unresolved').",
+        "'Full-first still applies even to a later floor slot' cannot be expressed in the attempt DSL for band 1-6's floor slot."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "codex-bracken-thread",
+      "audit": "out/ext-bracken.audit.json",
+      "sha256": "9a854ab044efe2877e85fbf70025d744f358278dc894f187d979b78728c02426",
+      "source_docs": [
+        "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+        "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+        "tests/fixtures/external/codex-bracken-thread/03-codes.txt"
+      ],
+      "unresolved": [
+        "Missing date components must be asked for; the IR has no explicit 'ask' value (missing_date_parts left at default 'unresolved').",
+        "The final release is 'effective 14 October' (today is 2026-10-11); the documents do not say which values govern calls before that date. The final-release values are applied.",
+        "How 'Full-first still applies even to a later floor slot' interacts with the 1–14 'floor by deadline' slot is not fully expressible in the attempt DSL.",
+        "Third-party brevity / never accept third-party answers or promises / ask holder availability before callback have no dedicated IR field."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "codex-cedar-limits",
+      "audit": "out/ext-cedar.audit.json",
+      "sha256": "045eb422f412ce852ac9802f9e82b40a1bae1e93066fa52297261eeab85766fd",
+      "source_docs": [
+        "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+        "openapi.json"
+      ],
+      "unresolved": [
+        "CR-D1 deadline is the earlier of two rules (6th business day vs last business day of current month); the DSL has no min-of-two, encoded with extra 'cap'/'combine' keys the compiler must honour.",
+        "Deadline-before-today case (no promise, close cr-none/cr-r-refused) has no IR field.",
+        "Effective floor combines a base field, a 25% rule rounded up to the cent, and a cap at full; the floor_rules DSL cannot express it natively, encoded with extra keys."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-clean-vesper",
+      "audit": "out/ext-clean-vesper.audit.json",
+      "sha256": "c074187c5bc894a8e4eb9c692fe184656851e89ab102eb070dfc78ddf6e92f8e",
+      "source_docs": [
+        "tests/fixtures/external/r2-clean-vesper/01-specification.md"
+      ],
+      "unresolved": [
+        "Callback must be on the next business day AND that day must be Tuesday or Thursday; the IR cannot express the weekday restriction (no eligible slot otherwise).",
+        "No dictated debt-intro sentence; only content (every product, amount, days late) is required.",
+        "Wording of the hardship sympathetic sentence is not dictated.",
+        "refuse_to_talk second refusal before verification closes ID-STOP/NO-CHECK, while after verification it marks remaining products DECLINE; the IR has one action per case.",
+        "Third-party non-disclosure, missing callback time must be asked, below-earliest-date proposals offered the earliest eligible date, and 'never offer discount/waiver/new plan' are behavioural rules without dedicated IR fields."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "fenbrook-table-sheet",
+      "audit": "out/ext-fenbrook.audit.json",
+      "sha256": "68b2bd0e287b7401982f24e43c861a8ca7dc96ce348c471659bb1a0d3cfbf716",
+      "source_docs": [
+        "tests/fixtures/external/fenbrook-table-sheet/01-call-sheet.md",
+        "tests/fixtures/external/fenbrook-table-sheet/02-codes.md"
+      ],
+      "unresolved": [
+        "No dictated wording for the first ask, and no statement that the first ask is for payment today.",
+        "A vague date after one re-ask closes CCC-NO / F-no instead of offering the k-date.",
+        "The third-party sentence has no IR field; the close outcome for a third party who is not a wrong number is not stated.",
+        "The below-floor sentence 'That is below what we can take.' has no IR field.",
+        "No already_paid, restructuring, refuse_to_talk or deceased rule.",
+        "Promise followed by transfer: precedence not stated (default kept).",
+        "Effective date 14 October 2026 is not representable."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "grunthal-legal-register",
+      "audit": "out/ext-grunthal.audit.json",
+      "sha256": "a1c2e8e7772dca6817d3ed3bbbdaea706fc2bfa91d130a41e294318a6198bede",
+      "source_docs": [
+        "tests/fixtures/external/grunthal-legal-register/01-regulation.md",
+        "tests/fixtures/external/grunthal-legal-register/02-codes.md"
+      ],
+      "unresolved": [
+        "10.2 names note `ghb-disputed`, absent from 11.1, the codes list and the add_note enum; mapped to `ghb-dispute`.",
+        "7.1 'adjusted to a business day' gives no direction; 'preceding' assumed for the 20th-of-next-month candidate.",
+        "No days-late bands defined; single band 1..90 from the API's dl_days range.",
+        "Pay-today question wording not dictated.",
+        "Hardship sympathy sentence wording not dictated.",
+        "Clause 13 / 13.1 referenced by 3.4 and 7.5 does not exist.",
+        "Interaction of 7.3 (today refusal consumes an attempt) with 7.2's single attempt.",
+        "refuse_to_talk final outcome depends on 11.3 rank when a promise is already recorded."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "gv-finance-sheet",
+      "audit": "out/ext-gv.audit.json",
+      "sha256": "237e043317555432cfc9b2d0a9d3e50ff3b6e478a32a0f9fa9959c81cbc49281",
+      "source_docs": [
+        "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+        "tests/fixtures/external/gv-finance-sheet/02-codes.txt"
+      ],
+      "unresolved": [
+        "No days-late bands are defined; one catch-all band with the k-date is used.",
+        "Rounding of 15% of amt_due in bottom_line is not stated.",
+        "No paid outcome code exists; 'paid off and closed' closes No-PTP / No-PTP, so paid_outcome is No-PTP and no already-paid sentence is dictated.",
+        "The sentence telling third parties to have the customer call the bank, and the third-party restrictions, have no schema field.",
+        "Callback scheduled_outcome is undefined because callbacks are disabled.",
+        "Conflict: every day is a business day vs 'sun day named -> not recordable'.",
+        "No words are dictated for 'say it failed' after the second write failure.",
+        "create_promise API mismatch: property 'sum' vs required 'amt'.",
+        "Whether a transfer overrides a recorded promise is not stated."
+      ],
+      "superseded_by": "out/ext-gv2.audit.json"
+    },
+    {
+      "package": "gv-finance-sheet",
+      "audit": "out/ext-gv2.audit.json",
+      "sha256": "f3efb3e280a8c302fbd6094809d7db38bd47bb9d3a4f90a4ddbb6463528a81ed",
+      "source_docs": [
+        "tests/fixtures/external/gv-finance-sheet/01-call-sheet.md",
+        "tests/fixtures/external/gv-finance-sheet/02-codes.txt"
+      ],
+      "unresolved": [
+        "Hardship/bereavement handling is not in the documents.",
+        "No already-paid sentence or paid outcome; 'paid off and closed' is folded into dispute; paid_outcome set to No-PTP.",
+        "Rounding of 15% of amt_due is not specified.",
+        "Sunday vs. 'business day = every day of the week' conflict.",
+        "Third-party sentence and non-disclosure rules have no IR slot.",
+        "Transfer after a recorded promise: outcome precedence not stated.",
+        "create_promise amount property: schema defines `sum` but requires `amt`.",
+        "Robot question has no known special-case name; kept as phrases.robot_reply."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "codex-harbor-exceptions",
+      "audit": "out/ext-harbor.audit.json",
+      "sha256": "2d37068cfdefd5cf984bc994c506928d7a521352365d21168bdfaae300f72a72",
+      "source_docs": [
+        "tests/fixtures/external/codex-harbor-exceptions/01-mail.txt",
+        "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+        "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md",
+        "tests/fixtures/external/codex-harbor-exceptions/04-code-list.txt"
+      ],
+      "unresolved": [
+        "Memo B split callback window (Mon–Thu 09:00–12:00 and 14:00–18:00; Fri 09:00–11:30) cannot be expressed as a single start/end; stored 09:00–11:30, compiler must add the Mon–Thu slots.",
+        "Memo A per-field rule (single wrong phone_suffix fails verification immediately, never re-asked) has no IR field; the compiler must enforce it alongside the global limit of four."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "harwick-lowe-register",
+      "audit": "out/ext-harwick.audit.json",
+      "sha256": "a75beadfceb83ae6756fcc696e45969c58dfddeffc981e5350df8ec51ebeeed9",
+      "source_docs": [
+        "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt",
+        "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+        "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+      ],
+      "unresolved": [
+        "Facilities with 0 or more than 60 days past have no band.",
+        "Wording of the first pay-today question is not dictated (written from content).",
+        "Wording of the 10.3 sympathy sentence is not dictated (written from content).",
+        "10.5 'treatment 10.6 otherwise' for a non-insisting request for a person is not spelled out.",
+        "10.6 refusal after a written payment closes per 11.3 (HL-PAY), not HL-FULL/hl-refuse.",
+        "No Sunday shift for the 9th-calendar-day branch of band (a).",
+        "M-77 is in force from 13 Oct 2026 00:00 UTC; rules for an earlier `now` are not stated; S-72 is dated 'Wed 13 Oct' though that date is a Tuesday.",
+        "create_promise schema: property `sum` vs required `amt`."
+      ],
+      "superseded_by": "out/ext-harwick2.audit.json"
+    },
+    {
+      "package": "harwick-lowe-register",
+      "audit": "out/ext-harwick2.audit.json",
+      "sha256": "0bb39cd5640a33fd40455fdc741e29db149e41cc4c18477fc41bfe59af035a63",
+      "source_docs": [
+        "tests/fixtures/external/harwick-lowe-register/01-amendment-mail.txt",
+        "tests/fixtures/external/harwick-lowe-register/02-signed-memo.md",
+        "tests/fixtures/external/harwick-lowe-register/03-policy.md"
+      ],
+      "unresolved": [
+        "Whether the 9th-calendar-day branch of band (a) is shifted when it falls on a Sunday (7.1(a)).",
+        "No wording for the today question (7.3) or the hardship sympathy sentence (10.3); minimal sentences written.",
+        "create_promise amount property: API defines `sum` but requires `amt`; documents silent.",
+        "Facilities at 0 or over 60 days past are not covered by any band.",
+        "Robot question has no known special-case name; handled via phrases.robot_reply.",
+        "No card last-digits field; card named 'store card'.",
+        "10.2 'A payment of this very overdue amount is NOT what 10.1 covers' conflicts with 10.1.",
+        "10.5 'treatment 10.6 otherwise' is unclear about when refusal treatment applies.",
+        "9.4 whole-batch refusal note handling is garbled; no note code named for it.",
+        "11.5 'the failure is stated' has no wording.",
+        "Band (c) first attempt: floor-if-full-refused not stated.",
+        "Mail S-72 is headed 'Wed 13 Oct 2026', but that date is a Tuesday (no value depends on it)."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "kurilian-sat-bullets",
+      "audit": "out/ext-kurilian.audit.json",
+      "sha256": "add2f097ff406155ea88af989918669c86115ba5775dee1102839cf74d9f1afc",
+      "source_docs": [
+        "tests/fixtures/external/kurilian-sat-bullets/01-call-sheet.md",
+        "tests/fixtures/external/kurilian-sat-bullets/02-codes.txt",
+        "tests/fixtures/external/kurilian-sat-bullets/03-supervisor-mail.txt"
+      ],
+      "unresolved": [
+        "The documents define no days-late bands and no deadline, so bands is empty. The validator needs at least one band, and making one up would invent a threshold.",
+        "No question about paying today is dictated, so today_question is empty.",
+        "The third-party sentence and the below-full-proposal sentence have no phrase field. The documents give no close outcome for a third party who is not a wrong number.",
+        "The documents do not say what to say when the write fails; they only say to say that it failed.",
+        "Deceased account holder is not covered.",
+        "Promise recorded and then a transfer: the documents do not say which outcome wins; the default is kept.",
+        "Hardship and already-paid have no rule; statements of that kind have no defined route other than the dispute wording ('it was paid off and closed').",
+        "The callback and deceased outcome pairs stay empty because callbacks are not used and deceased is not covered. A strict check of these pairs may flag them as empty."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "orrery-seven",
+      "audit": "out/ext-orrery.audit.json",
+      "sha256": "7700ba7923efe271bacf2f04b1e625390bcba6b5c2652b63425045442c1ab1e3",
+      "source_docs": [
+        "tests/fixtures/external/orrery-seven/01-register.txt",
+        "tests/fixtures/external/orrery-seven/02-signed-memo.txt",
+        "tests/fixtures/external/orrery-seven/03-codes.txt"
+      ],
+      "unresolved": [
+        "Hardship, restructuring and already-paid: the documents explicitly have no rule for them (continue the ordinary full-only discussion), so they are not routed as special cases.",
+        "Callback outcomes: the documents say callbacks are disabled and there is no callback outcome. The slots are filled with NR0/N0 (relative/no contact) only so the file passes validation.",
+        "The relative's sentence \"Please ask the customer to call our published number.\" has no IR field.",
+        "Below-full proposals: explain full-only, then treat rejection as a flat no. This is not expressible beyond floor=100%.",
+        "Refusal to talk before verification closes ID0/D1, not No-PTP/R01.",
+        "The wording for a failed promise save is not dictated.",
+        "The API's tries_left may disagree with the memo's one-wrong-answer limit."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "palisade-mail",
+      "audit": "out/ext-palisade.audit.json",
+      "sha256": "9d322c5f1325db6d6c81a9f52b0b448853d298d326060d3424580e0c3adf3024",
+      "source_docs": [
+        "tests/fixtures/external/palisade-mail/01-mail-thread.txt",
+        "tests/fixtures/external/palisade-mail/02-policy.txt",
+        "tests/fixtures/external/palisade-mail/03-codes.txt"
+      ],
+      "unresolved": [
+        "No band/deadline for products more than 90 days late.",
+        "Below-floor counteroffer and rejected-counteroffer-as-refusal have no dedicated IR field.",
+        "Refusal-to-talk second refusal marks all remaining products R-1 (multi-product nuance) and IDStop/I-2 before verification.",
+        "Relatives may not verify or pay for the holder; not expressible in IR.",
+        "Callback: ask for missing clock time; not expressible in IR."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-callback-weekdays",
+      "audit": "out/ext-policy-callback-weekdays.audit.json",
+      "sha256": "9b0a67796ab634981a08f924239a6fafaad52073339df2322d03c5bb97e36494",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-callback-weekdays/01-specification.md"
+      ],
+      "unresolved": [
+        "Callback must be on the next business day AND that day must be Tuesday or Thursday; otherwise no callback date (IR cannot express the weekday filter).",
+        "Hardship sympathetic sentence wording is not dictated.",
+        "Refuse-to-talk close after verification follows §10 precedence; before verification ID-STOP/NO-CHECK.",
+        "debt_intro wording is not dictated.",
+        "Customer date before the earliest eligible date -> offer the earliest eligible date (no IR field)."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-forbidden-all-call",
+      "audit": "out/ext-policy-forbidden-all-call.audit.json",
+      "sha256": "72b56c8c351e9b55e03842e6544ea2acb3b7e780e198fdb2ce38f9f7be68b70b",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-forbidden-all-call/01-specification.md"
+      ],
+      "unresolved": [
+        "guaranteed/penalty/lawsuit are forbidden for the whole call, but the IR only has a list of words forbidden before verification.",
+        "The hardship sympathetic sentence and the debt introduction wording are not dictated.",
+        "After verification, a second refusal to talk marks the remaining products DECLINE and closes under §10 precedence; the close action NO-AGREEMENT/DECLINE only applies when no promise was saved.",
+        "Below-floor counteroffer, the ban on discounts/waivers/plans, and offering the earliest eligible date for an early date have no IR fields."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-name-placeholders",
+      "audit": "out/ext-policy-name-placeholders.audit.json",
+      "sha256": "296c25ef8dff60ce110ac3d2a9260597f96b21237bfcf3eb9bec148281cb316e",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-name-placeholders/01-specification.md"
+      ],
+      "unresolved": [
+        "Hardship sympathetic sentence wording is not dictated (§9); a generic sentence was used.",
+        "Debt introduction wording is not dictated (§1 dictates only the content)."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-no-today",
+      "audit": "out/ext-policy-no-today.audit.json",
+      "sha256": "5cd3af6adb03b3ecb6e0345115c78547d39c8bed04a6925c3e649c4d060a5953",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+      ],
+      "unresolved": [
+        "Today is never an eligible promise date (§5/§6); dates.promise_today_allowed must stay true for the template, so the compiler must block today.",
+        "debt_intro words are not dictated, only its content (§1).",
+        "Hardship sympathetic sentence words are not dictated (§9).",
+        "Refusal to talk before verification closes ID-STOP/NO-CHECK, after verification marks remaining products DECLINE (§9): two-branch behaviour not expressible in one special case.",
+        "Callback with missing clock time must be asked, never guessed (§4): no IR field."
+      ],
+      "superseded_by": "out/ext-policy-no-today2.audit.json"
+    },
+    {
+      "package": "r2-policy-no-today",
+      "audit": "out/ext-policy-no-today2.audit.json",
+      "sha256": "2a1a4db074f3c285bf97acbaf59bd128267fc64ddb2f891aeb2def33ece837ed",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-no-today/01-specification.md"
+      ],
+      "unresolved": [],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-notes-every-product",
+      "audit": "out/ext-policy-notes-every-product.audit.json",
+      "sha256": "2b2e6957fd3f1e8c06b9dbd18e37332399c8e92bf183427d7713a7f69ee2b5d5",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-notes-every-product/01-specification.md"
+      ],
+      "unresolved": [
+        "debt_intro: the documents dictate the content (every product, amount, days late) but not the sentence; a paraphrase is used.",
+        "Hardship sympathetic sentence wording is not dictated; a short paraphrase is used."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-reason-every-close",
+      "audit": "out/ext-policy-reason-every-close.audit.json",
+      "sha256": "8ce2e1b4fffe0a3aae84db556016fdc3381b478ef4c46770a7fd3ee738363f41",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-reason-every-close/01-specification.md"
+      ],
+      "unresolved": [
+        "No IR field for the close reasons of AGREED (SAVED) and SETTLED (PAYMENT-REPORTED); carried only in outcomes.table.",
+        "Hardship sympathetic sentence and debt introduction wording are not dictated; written sentences are used.",
+        "Callback 'Missing clock time: ask, never guess' has no IR field.",
+        "'If it precedes the earliest eligible date, offer the earliest eligible date' has no IR flag.",
+        "'Never offer a discount, waiver or a new payment plan' and 'A correction invalidates consent' have no IR fields."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-sun-thu",
+      "audit": "out/ext-policy-sun-thu.audit.json",
+      "sha256": "bd2e1d4b6eb7000d5855ec140173748c16846d819347e0833e89a51c304552b8",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-sun-thu/01-specification.md"
+      ],
+      "unresolved": [],
+      "superseded_by": null
+    },
+    {
+      "package": "r2-policy-whole-unit-floor",
+      "audit": "out/ext-policy-whole-unit-floor.audit.json",
+      "sha256": "baa7f469275a42db9e9abd37847498ea5e893c1c6f78fccfe8aa85db2359c31d",
+      "source_docs": [
+        "tests/fixtures/external/r2-policy-whole-unit-floor/01-specification.md"
+      ],
+      "unresolved": [
+        "The floor-rule DSL cannot express rounding UP to a whole currency unit (ceil(0.23*past_due), never cents); recorded as a percent rule plus an unresolved entry.",
+        "Hardship sympathetic sentence is not dictated; a short sentence was written.",
+        "Refuse-to-talk: ID-STOP/NO-CHECK before verification; after verification remaining products are marked DECLINE and the close follows §10 precedence."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "v24-sable-percent",
+      "audit": "out/ext-sable.audit.json",
+      "sha256": "b20e09a6e259b6cc03c599a8f3c186935fe7d5e55f0a146f1cdda8dc30ba5229",
+      "source_docs": [
+        "tests/fixtures/external/v24-sable-percent/01-specification.md",
+        "openapi.json"
+      ],
+      "unresolved": [
+        "Floor rounding is 'nearest whole cent'; the percent floor rule has no rounding-mode field.",
+        "Hardship sympathy sentence wording is not dictated; 'I am sorry to hear that.' is a written-to-content sentence.",
+        "Refusal to talk has no dedicated close pair; outcome follows the general precedence.",
+        "Prohibition on offering discounts, waivers or new instalment plans has no IR field."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "selvi-turkish-fields",
+      "audit": "out/ext-selvi.audit.json",
+      "sha256": "4dd02933d093a8e785205eb56b8e2059023095f5e9f7d613b8eafa4bb68e08f2",
+      "source_docs": [
+        "tests/fixtures/external/selvi-turkish-fields/01-policy.md",
+        "tests/fixtures/external/selvi-turkish-fields/02-interface-guide.md"
+      ],
+      "unresolved": [
+        "No already_paid special case: the documents say there is no already-paid rule or paid outcome, and a continue-only already_paid case would require a paid_outcome. The sentence is kept in phrases.already_paid_sentence.",
+        "Floor rounding is half-up to the nearest cent, but the percent floor rule has no rounding field.",
+        "The hardship sympathy sentence is not dictated; a short sentence was written.",
+        "Refuse_to_talk before verification closes dogrulanmadi/istemedi; the special-case action only covers the reddetti note after verification.",
+        "No close outcome is given for a failed get_account."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "v24-tamarisk-thread",
+      "audit": "out/ext-tamarisk.audit.json",
+      "sha256": "ef8de802db0b5dd6503c23b8b95714ca8a044ba83fbed5803480bcef0d47a3bb",
+      "source_docs": [
+        "tests/fixtures/external/v24-tamarisk-thread/01-mail.txt",
+        "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+        "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+        "tests/fixtures/external/v24-tamarisk-thread/04-code-list.txt"
+      ],
+      "unresolved": [
+        "Hardship sympathy sentence wording is not dictated (wrote 'I am sorry to hear that.').",
+        "The final close after a refuse_to_talk second refusal is not stated explicitly; it follows outcome precedence.",
+        "No wording is given for the account-protection explanation after a security refusal.",
+        "No wording is given for telling the customer that a promise write failed."
+      ],
+      "superseded_by": null
+    },
+    {
+      "package": "tessel-register",
+      "audit": "out/ext-tessel.audit.json",
+      "sha256": "216dd8a9b14955d3135b99e03bd50e26d0bde3a49b7cbbf00052c87a4193bf8f",
+      "source_docs": [
+        "tests/fixtures/external/tessel-register/01-register.md",
+        "tests/fixtures/external/tessel-register/02-codes.md"
+      ],
+      "unresolved": [
+        "No paid outcome exists (codes: 'Paid route absent'), so outcomes.paid_outcome stays empty; a validator that requires it will flag this.",
+        "No already-paid rule and no restructuring rule; these remarks only get acknowledged honestly within the ordinary discussion.",
+        "Bands cover days late 1-75 only; nothing is said for more than 75 days late.",
+        "The hardship sympathetic sentence is required, but its wording is not dictated."
+      ],
+      "superseded_by": null
+    }
+  ]
+}

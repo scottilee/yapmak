@@ -104,7 +104,9 @@ def build(a):
         # 2. compile ----------------------------------------------------------------------------
         wf = C.compile_workflow(ir, tools)
         errs = C.static_check(wf, tools)
-        tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs, compiler_notes=list(C.COMPILE_NOTES))
+        tr.event("workflow_compiled", nodes=len(wf["nodes"]), size_kb=len(json.dumps(wf)) // 1024, static_errors=errs, compiler_notes=list(C.COMPILE_NOTES),
+                 api_mapping_notes=list(C.MAPPING_NOTES), unresolved=[u.get("topic") for u in ir.unresolved] if ir.unresolved else [],
+                 unknown_special_cases=P.unknown_special_cases(ir), defaulted_without_source=P.defaulted_operative_fields(ir))
         if errs:
             raise SystemExit("static check failed: " + "; ".join(errs))
         (out / f"{a.slot}.candidate.json").write_text(json.dumps(wf, indent=1))
@@ -176,7 +178,8 @@ def build(a):
         tr.event("export", path=str(export_path.relative_to(ROOT)), workflow_id=ids["workflow_id"], agent_id=ids["agent_id"], version=ids.get("version"))
         degraded = list(X.DEGRADED) + ([] if all(v is True for v in checks.values()) else [f"check failed: {k}" for k, v in checks.items() if v is not True])
         tr.event("run_end", success=True, checks=checks, checks_passed=all(v is True for v in checks.values()), degraded=degraded, elapsed_s=round(time.monotonic() - t_start, 1))
-        print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "degraded": degraded, "elapsed_s": round(time.monotonic() - t_start)}))
+        print(json.dumps({"slot": a.slot, **ids, "workflow": str(export_path), "trace": str(tr.path), "degraded": degraded,
+                          "unresolved": len(ir.unresolved), "api_mapping_notes": len(C.MAPPING_NOTES), "elapsed_s": round(time.monotonic() - t_start)}))
     except BaseException as e:
         tr.event("run_end", success=False, error=repr(e)[:500], elapsed_s=round(time.monotonic() - t_start, 1), exported=checkpoint_exported)
         if ids is not None:
