@@ -1,0 +1,702 @@
+{
+  "fixture": "codex-harbor-exceptions",
+  "brief": "01-mail.txt",
+  "briefs": [
+    "01-mail.txt",
+    "02-policy.md",
+    "03-signed-memo.md",
+    "04-code-list.txt"
+  ],
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Harbor Glass Cooperative",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "passphrase",
+        "enrolment_year",
+        "phone_suffix",
+        "signatory_dob"
+      ],
+      "source": "02-policy.md"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "text",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 0,
+      "source": "02-policy.md"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.0.hint_reply": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "year",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "02-policy.md"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.1.hint_reply": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "digits",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 5,
+      "source": "02-policy.md"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.2.hint_reply": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.3.answer_format": {
+      "expected": "date",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.3.digits": {
+      "expected": 0,
+      "source": "02-policy.md"
+    },
+    "identity.requirements.3.numeric_date_order": {
+      "expected": "dmy",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.3.hint_field": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.requirements.3.hint_reply": {
+      "expected": "",
+      "source": "02-policy.md"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 4,
+      "source": "02-policy.md"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "02-policy.md"
+    },
+    "identity.remaining_slot": {
+      "expected": "attempts_available",
+      "source": "02-policy.md"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "02-policy.md"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "hg-unverified",
+        "hg-r-failed"
+      ],
+      "source": "02-policy.md"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "hg-unverified",
+        "hg-r-declined"
+      ],
+      "source": "02-policy.md"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "hg-unreached",
+        "hg-r-unclear"
+      ],
+      "source": "02-policy.md"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please use the verification desk before another call.",
+      "source": "02-policy.md"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "third_party.callback.days": {
+      "expected": "today_or_next_business_day",
+      "source": "02-policy.md"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "hg-unreached",
+        "hg-r-callback"
+      ],
+      "source": "02-policy.md"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "hg-unreached",
+        "hg-r-no-callback"
+      ],
+      "source": "02-policy.md"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "hg-unreached",
+        "hg-r-wrong-number"
+      ],
+      "source": "02-policy.md"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "hg-unreached",
+        "hg-r-deceased"
+      ],
+      "source": "02-policy.md"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "We are sorry for your loss.",
+      "source": "02-policy.md"
+    },
+    "calendar.holidays": {
+      "expected": [
+        "2026-10-26",
+        "2026-11-11",
+        "2026-12-24"
+      ],
+      "source": "02-policy.md"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "02-policy.md"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "unresolved",
+      "source": "02-policy.md"
+    },
+    "amounts.floors": {
+      "expected": {
+        "hg-cycle": "cycle_min",
+        "hg-tool": "tool_min",
+        "hg-trade": "trade_min"
+      },
+      "source": "02-policy.md"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "amounts.floor_wording": {
+      "expected": "The unpaid remainder stays overdue.",
+      "source": "02-policy.md"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "hg-promised",
+      "source": "02-policy.md"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "hg-settled",
+      "source": "02-policy.md"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "hg-routed",
+      "source": "02-policy.md"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "hg-unarranged",
+      "source": "02-policy.md"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "hg-r-service",
+      "source": "02-policy.md"
+    },
+    "outcomes.refused_reason": {
+      "expected": "hg-r-refused",
+      "source": "02-policy.md"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "notes.reasons": {
+      "expected": [
+        "hg-r-refused",
+        "hg-r-distress",
+        "hg-r-disputed",
+        "hg-r-settled",
+        "hg-r-service"
+      ],
+      "source": "02-policy.md"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.max_products": {
+      "expected": 3,
+      "source": "02-policy.md"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "phrases.opening": {
+      "expected": "Hello, this is Harbor Glass Cooperative's automated assistant. We record this call.",
+      "source": "02-policy.md"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "02-policy.md"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue holdings.",
+      "source": "02-policy.md"
+    },
+    "phrases.today_question": {
+      "expected": "Can you pay this amount today?",
+      "source": "02-policy.md"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you pay all these amounts today?",
+      "source": "02-policy.md"
+    },
+    "phrases.robot_reply": {
+      "expected": "I am the automated assistant of Harbor Glass Cooperative.",
+      "source": "02-policy.md"
+    },
+    "phrases.scam_reply": {
+      "expected": "You may verify this call using the contact number printed on your statement.",
+      "source": "02-policy.md"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "arrears",
+        "overdue",
+        "balance",
+        "payment"
+      ],
+      "source": "02-policy.md"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "Your saved agreement will appear in the cooperative portal.",
+      "source": "02-policy.md"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Payments may take three business days to reach our account view.",
+      "source": "02-policy.md"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our account desk can explain that.",
+      "source": "02-policy.md"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Please contact our service desk to change a saved agreement.",
+      "source": "02-policy.md"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "hg-cycle": "cycle account",
+        "hg-tool": "equipment advance",
+        "hg-trade": "trade account"
+      },
+      "source": "02-policy.md"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "02-policy.md"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I save these arrangements together?",
+      "source": "02-policy.md"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "hg-promised": [],
+        "hg-settled": [],
+        "hg-routed": [
+          "hg-r-replan",
+          "hg-r-person",
+          "hg-r-care"
+        ],
+        "hg-unarranged": [
+          "hg-r-refused",
+          "hg-r-distress",
+          "hg-r-disputed",
+          "hg-r-service"
+        ],
+        "hg-unverified": [
+          "hg-r-failed",
+          "hg-r-declined"
+        ],
+        "hg-unreached": [
+          "hg-r-callback",
+          "hg-r-no-callback",
+          "hg-r-wrong-number",
+          "hg-r-deceased",
+          "hg-r-unclear"
+        ]
+      },
+      "source": "04-code-list.txt"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 12,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 8
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 13,
+          "days_late_max": 70,
+          "deadline": {
+            "kind": "calendar_days",
+            "n": 5,
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hg-r-settled"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.already_paid.say": {
+      "expected": "Payments may take three business days to reach our account view.",
+      "source": "02-policy.md"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hg-r-disputed"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.dispute.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hg-r-distress"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.say": {
+      "expected": "I am sorry you are facing this difficulty.",
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "hg-care-desk",
+      "source": "02-policy.md"
+    },
+    "special_cases.hardship.offer_outcome": {
+      "expected": [
+        "hg-routed",
+        "hg-r-care"
+      ],
+      "source": "02-policy.md"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "hg-plan-desk",
+        "outcome": "hg-routed",
+        "reason": "hg-r-replan"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.restructuring.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.restructuring.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "hg-human-desk",
+        "outcome": "hg-routed",
+        "reason": "hg-r-person"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.ask_once_first": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.scam.say": {
+      "expected": "You may verify this call using the contact number printed on your statement.",
+      "source": "02-policy.md"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hg-r-refused"
+      },
+      "source": "02-policy.md"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "02-policy.md"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "02-policy.md"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "02-policy.md"
+    }
+  },
+  "unsupported_rules": [
+    {
+      "id": "HG-I1",
+      "source": "03-signed-memo.md item A",
+      "rule": "Keep the global four-wrong-answer ceiling, but a single wrong phone_suffix locks the identity check immediately; a successfully verified field is never requested again.",
+      "schema_gap": "IdentityPolicy has only a global wrong limit; IdentityRequirement has no local limit or stop-after-first-wrong override.",
+      "required_v24": "Enforce both global and per-field budgets, using failed identity outcome for either ceiling."
+    },
+    {
+      "id": "HG-C1",
+      "source": "03-signed-memo.md item B",
+      "rule": "Callback today or next business day: Monday through Thursday 09:00\u201312:00 or 14:00\u201318:00; Friday 09:00\u201311:30 only; all endpoints inclusive and strictly after now.",
+      "schema_gap": "CallbackPolicy has a single contiguous start/end interval, no weekday windows or lunch closure.",
+      "required_v24": "Select windows by the callback date weekday and reject lunch gaps, Friday afternoon and closed days."
+    }
+  ],
+  "comparison_notes": [
+    "This is a deliberately not-fully-expressible v23 fixture. Matching the supported checks alone is NOT a pass.",
+    "Under v23 the missing capabilities should be explicitly reported unresolved; silently using a wider date window or a lower floor is wrong. Under v24 every unsupported-rule behavioral probe must pass.",
+    "Omitted paths are deliberately not assigned an incorrect representable approximation: Cedar omits bands.$rules and amounts.floors; Harbor omits callback.start/end. See unsupported_rules and rule-probes.json.",
+    "Source spans, arbitrary band labels and paraphrasable identity questions are semantic-review fields. Do not feed oracle files or READMEs to the builder."
+  ]
+}

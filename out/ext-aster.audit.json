@@ -1,0 +1,186 @@
+{
+ "covered": [
+  {
+   "rule": "Security order 1-3: member_birthdate (date, MDY), member_pin (6 digits), postal_token (text)",
+   "where": "identity.requirements[0..2]"
+  },
+  {
+   "rule": "Wrong answers: two globally, counted locally by agent code; no remaining-attempts property",
+   "where": "identity.wrong_answer_limit=2, identity.wrong_count_source=code, identity.remaining_slot=\"\""
+  },
+  {
+   "rule": "Holder asks: three total",
+   "where": "identity.holder_confirmation_asks=3"
+  },
+  {
+   "rule": "Explain purpose once; second refusal closes aq-unverified/aq-r-declined",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "Merely asking why we need security is not refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "Exhausted wrong answers close aq-unverified/aq-r-failed after \"Please contact our member desk.\"",
+   "where": "identity.failed_outcome, identity.failed_instruction"
+  },
+  {
+   "rule": "Unclear holder status closes aq-unreached/aq-r-unclear",
+   "where": "identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "No formatting-hint response exists",
+   "where": "identity.requirements[*].hint_field empty"
+  },
+  {
+   "rule": "Callback: today only, 12:20-18:10 inclusive, strictly later than now",
+   "where": "third_party.callback.days/start/end/must_be_after_now"
+  },
+  {
+   "rule": "Invalid callback: no retry; aq-unreached/aq-r-no-callback",
+   "where": "third_party.callback.retry_once=false, no_callback_outcome"
+  },
+  {
+   "rule": "Valid callback: schedule, close aq-unreached/aq-r-callback",
+   "where": "third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "No callback supplied: aq-unreached/aq-r-no-callback",
+   "where": "third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "Wrong number aq-unreached/aq-r-wrong-number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "Deceased: \"Please accept our sympathy.\" aq-unreached/aq-r-deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "Maximum products: One",
+   "where": "multi_product.max_products=1"
+  },
+  {
+   "rule": "Promise write retries: zero",
+   "where": "promise_write.retry_on_failure=0"
+  },
+  {
+   "rule": "Notes: Disabled; never call add_note",
+   "where": "notes.enabled=false, notes.reasons=[]"
+  },
+  {
+   "rule": "Business days Tue-Sat; holidays 2026-10-24, 2026-11-03, 2026-11-21, 2026-12-26",
+   "where": "calendar.business_days=[1..5], calendar.holidays"
+  },
+  {
+   "rule": "\"Next [weekday]\" means following Monday-to-Sunday week",
+   "where": "calendar.next_weekday_means_following_week=true"
+  },
+  {
+   "rule": "Band 1-6: fifth business day strictly after today; full by week-end, then floor by deadline",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "Band 7-20: today+9 calendar days, preceding; one full-by-deadline offer, floor if full refused",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "Band 21-50: fixed 2026-11-21, preceding; one full-by-deadline offer, floor if full refused",
+   "where": "bands[2]"
+  },
+  {
+   "rule": "Exhaustion gives aq-none/aq-r-refused",
+   "where": "outcomes.refused_reason, outcomes.no_promise_outcome"
+  },
+  {
+   "rule": "Forbidden pre-verification tokens arrears/overdue/balance/payment",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "Full first, never ask how much, floor once, \"The unpaid remainder stays overdue.\", accept floor..full",
+   "where": "amounts"
+  },
+  {
+   "rule": "Floor fields aq-flex->flex_minimum, aq-term->term_instalment",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "Today allowed if business day; roll forward; cap at deadline; vague date ask once",
+   "where": "dates"
+  },
+  {
+   "rule": "Do not silently assume missing date components",
+   "where": "calendar.missing_date_parts + unresolved[1]"
+  },
+  {
+   "rule": "Batch confirmation \"May I save this arrangement?\"; one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product, multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "State products before asking; attempt counters per product; common date capped per product",
+   "where": "multi_product.*"
+  },
+  {
+   "rule": "Transfer overrides result; saved promises survive; no notes on transfer",
+   "where": "outcomes.transfer_overrides_promise, multi_product.recorded_promises_survive_transfer, notes.none_on_transfer"
+  },
+  {
+   "rule": "aq-promised / aq-paid / aq-none with first non-paid product's reason; aq-r-service; aq-r-refused; goodbye before close",
+   "where": "outcomes.*"
+  },
+  {
+   "rule": "Already paid exception",
+   "where": "special_cases[already_paid]"
+  },
+  {
+   "rule": "Dispute exception (incl. historical payoff + denial)",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "Hardship: sympathy sentence, offer aq-care-desk, aq-routed/aq-r-care, declined aq-none/aq-r-distress, no promise",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "Restructuring without hardship -> aq-plan-desk, aq-routed/aq-r-replan",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "Human request -> aq-human-desk immediately, aq-routed/aq-r-person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "Scam concern: scam_reply then continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "Refusal to talk: ask once, then aq-none/aq-r-refused",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "Exact language table (opening ... recorded_promise_change_reply), opening verbatim",
+   "where": "phrases.*, phrases.opening_verbatim=true"
+  },
+  {
+   "rule": "Spoken names flexible credit / term advance",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "Disposition table and queues",
+   "where": "outcomes.table, special_cases[*].action.queue"
+  },
+  {
+   "rule": "Campaign date window 14 Oct - 10 Nov 2026",
+   "where": "unresolved[0]"
+  }
+ ],
+ "fixed": [
+  "bands[0].attempts[0].floor_if_full_refused false -> true: the general ladder rule 'Each ladder slot has its own date; if full was already refused, substitute the floor' applies to every slot, including the first 1-6 slot (the initial full-today question may already have been refused).",
+  "bands[0].source extended with the general slot rule; outcomes/notes/multi_product/promise_write source texts extended with supporting sentences (exhaustion -> aq-none/aq-r-refused, Notes Disabled, facilities maxItems 1, one promise per product).",
+  "Added unresolved entry for 'Full-first still applies even to a later floor slot', which the attempt DSL cannot express."
+ ],
+ "unresolved": [
+  "Campaign window (local now dates 14 Oct - 10 Nov 2026) has no IR field.",
+  "Missing date components must be asked for; schema has no explicit 'ask' value for calendar.missing_date_parts (left at 'unresolved').",
+  "'Full-first still applies even to a later floor slot' cannot be expressed in the attempt DSL for band 1-6's floor slot."
+ ]
+}

@@ -112,7 +112,7 @@ log "form committed: $(git rev-parse --short HEAD) (form.commit = $commit, the a
 # 5. push
 cur=$(git rev-parse --abbrev-ref HEAD)
 if [ "$push" = "1" ]; then
-  git push -u origin "$cur" && log "pushed $cur"
+  if git push -u origin "$cur"; then log "pushed $cur"; else log "PUSH FAILED (authentication or remote); the commits exist locally — fix the remote/credentials and run: git push -u origin $cur"; exit 1; fi
 else
   log "not pushed; run: git push -u origin $cur"
 fi

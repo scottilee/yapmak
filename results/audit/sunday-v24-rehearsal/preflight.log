@@ -1,0 +1,17 @@
+Pre-flight at 04:16 UTC (briefs open 17:00 UTC, submission closes 20:00 UTC)
+PASS  git tree clean at bc58900
+WARN  git identity incomplete (user.name='', email missing): commits fail with 'Author identity unknown'; submit.sh falls back to the team name, or run git config --global user.name 'Your Name'
+WARN  no git remote 'origin': submit.sh can commit but not push; add the GitHub remote
+PASS  venv imports (pipeline + claude_agent_sdk)
+PASS  FREYA_API_KEY set
+PASS  FREYA_BANK_TEAM_KEY set
+PASS  claude -p answers (OK)
+PASS  pytest: 133 passed in 16.72s
+PASS  Freya API reachable (workspace 63eff5de…)
+WARN  1 simulation(s) still running: ['8b49ceea-c43f-460a-8800-4ec4288f060d'] (wait or DELETE /api/v2/simulations/<id>)
+PASS  bank mock healthy (practice session created)
+PASS  .freya-agents.json present (audit-eom,audit-rev,baseline-base,brief-a,brief-b,e2e-a,e2e-ab,gen-a,gen-ab,generalization-check,hidden-1,hidden-2,perm-)
+PASS  submission/config.json has team and repo
+PASS  rehearsal build (policy fixture, slot rehearsal-a) green
+
+3 warning(s), 0 failure(s)

@@ -108,6 +108,14 @@ def last_business_day_of_week(day, holidays, business_days):
     return None
 
 
+def _shift_month(d, offset):
+    """The first day of the month `offset` months after d's month (offset 0 = this month); None for a bad offset."""
+    if type(offset) is not int or not 0 <= offset <= 12:
+        return None
+    y, m = d.year + (d.month - 1 + offset) // 12, (d.month - 1 + offset) % 12 + 1
+    return datetime.date(y, m, 1)
+
+
 def _month_end(d):
     if d.month == 12:
         return datetime.date(d.year, 12, 31)
@@ -139,6 +147,11 @@ def deadline(today, rule, holidays, business_days):
         if d is None or not isinstance(rule, dict) or _calendar(holidays, business_days) is None:
             return None
         kind = rule.get('kind')
+        if kind in ('earliest', 'latest'):
+            parts = [deadline(today, r, holidays, business_days) for r in (rule.get('rules') or [])]
+            if not parts or any(x is None for x in parts):
+                return None
+            return min(parts) if kind == 'earliest' else max(parts)
         if kind == 'nth_business_day':
             return nth_business_day_after(today, rule.get('n'), holidays, business_days)
         adjustment = rule.get('adjustment')
@@ -152,12 +165,21 @@ def deadline(today, rule, holidays, business_days):
         elif kind == 'fixed_date':
             target = rule.get('date')
         elif kind == 'end_of_month':
+            base = _shift_month(d, rule.get('month_offset', 0))
+            if base is None:
+                return None
             if rule.get('basis') == 'business':
-                target = last_business_day_of_month(today, holidays, business_days)
+                target = last_business_day_of_month(base.isoformat(), holidays, business_days)
             elif rule.get('basis') == 'calendar':
-                target = _month_end(d).isoformat()
+                target = _month_end(base).isoformat()
             else:
                 return None
+        elif kind == 'day_of_month':
+            base = _shift_month(d, rule.get('month_offset', 0))
+            day_no = rule.get('day')
+            if base is None or type(day_no) is not int or not 1 <= day_no <= 31:
+                return None
+            target = base.replace(day=min(day_no, _month_end(base).day)).isoformat()
         else:
             return None
         target_day = _date(target)

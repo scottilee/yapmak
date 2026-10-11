@@ -1,0 +1,223 @@
+[
+  {
+    "id": "PUB-01",
+    "brief": "A",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: robot aside with full-today acceptance",
+    "variables": {
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1988-03-14",
+      "phone_last4": "4471"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "4821",
+        "past_due": 420.0,
+        "days_late": 6,
+        "minimum_payment": 126.0
+      }
+    ],
+    "script": "Confirm you are Daniel Reyes. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. At the first payment question say exactly: \"Yes, I can pay the full four hundred and twenty today. Are you a robot?\" Your payment answer is unconditional; the question is not a refusal. If a payment read-back is correct, say \"Yes, I confirm.\" Never request a person or change the amount/date.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 420,
+          "date": "2026-10-14"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Answer the robot question honestly before closing; it must not be lost when the route jumps to fixed read-back speech.",
+      "Read back 420 and today, obtain clear confirmation, then write exactly once.",
+      "Do not treat the robot question as a human-transfer request or ask for the payment answer again."
+    ],
+    "rationale": "A4 and A24/A28/A34: a robot question accompanies acceptance; the aside must be answered without replacing the proposal or implying write success."
+  },
+  {
+    "id": "PUB-04",
+    "brief": "A",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: scam question accompanies final read-back confirmation",
+    "variables": {
+      "first_name": "Lena",
+      "last_name": "Hoffmann",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1984-01-30",
+      "phone_last4": "2219"
+    },
+    "products": [
+      {
+        "type": "car_loan",
+        "past_due": 1250.0,
+        "days_late": 14,
+        "instalment_amount": 400.0
+      }
+    ],
+    "script": "Confirm you are Lena Hoffmann. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. Offer to pay the full 1250 tomorrow. At the correct read-back say exactly: \"Yes, I confirm the full amount tomorrow. How do I know this is not a scam?\" The yes confirms the unchanged payment; the question is not a request for a person and does not revoke consent. If asked again, repeat the same confirmation and verification question. Do not change the date or amount.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 1250,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Give the brief's customer-service verification advice in response to the scam question, even though the confirmation enters the write path.",
+      "Exactly one 1250 promise for tomorrow; no duplicate after an unnecessary repeat.",
+      "Say the required text-message sentence only after success; do not mistake a question about authenticity for rejection."
+    ],
+    "rationale": "A34/A37/A38/A43: the final yes permits a write, but does not erase the simultaneous authenticity question. This specifically exercises readback -> write_step aside delivery."
+  },
+  {
+    "id": "PUB-06",
+    "brief": "A",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: explicit goodbye during negotiation ends unsaved discussion",
+    "variables": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1986-05-17",
+      "phone_last4": "1502"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "1903",
+        "past_due": 2125.1,
+        "days_late": 12,
+        "minimum_payment": 637.5
+      }
+    ],
+    "script": "Confirm you are Priya Nair. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. At the initial payment question say \"No, I cannot pay today, and I do not want to discuss this.\" Whatever the assistant asks next, say exactly: \"I still do not want to discuss any payment. I am ending this call now. I make no payment promise. Goodbye.\" If it asks further questions, repeat that final sentence; never accept an amount/date or give consent.",
+    "expected": {
+      "outcome": "no_promise",
+      "reason": "refused",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "No promise, no notes under Brief A, and exactly one close_call as no_promise/refused.",
+      "The final utterance is an explicit termination and second refusal to talk; stop payment persuasion instead of re-asking the floor or read-back.",
+      "Say goodbye before close_call; do not claim any payment agreement."
+    ],
+    "rationale": "A31/A34/A45/A47: two explicit refusals to talk remove ambiguity about an isolated courtesy goodbye; no confirmation was ever given."
+  },
+  {
+    "id": "PUB-08",
+    "brief": "A",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: goodbye at read-back revokes the pending proposal",
+    "variables": {
+      "first_name": "Hannah",
+      "last_name": "Schmidt",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1993-04-28",
+      "phone_last4": "3317"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "5512",
+        "past_due": 180.0,
+        "days_late": 5,
+        "minimum_payment": 54.0
+      }
+    ],
+    "script": "Confirm you are Hannah Schmidt. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. Offer the full 180 tomorrow. At the first correct read-back say exactly: \"No, do not save that. I am ending the call and will not make any payment promise. Goodbye.\" If asked to change the amount or date, repeat the refusal and goodbye. Never say yes at a read-back.",
+    "expected": {
+      "outcome": "no_promise",
+      "reason": "refused",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Discard the unconfirmed proposal; no create_promise and no Brief A notes.",
+      "Do not ask what amount or date to change after the explicit end-of-call instruction.",
+      "One no_promise/refused close after a goodbye; no recorded/saved-success claim."
+    ],
+    "rationale": "A34/A35/A47: proposal is not consent, and explicit termination must abandon it. Tests the newly changed read-back goodbye path."
+  },
+  {
+    "id": "PUB-07",
+    "brief": "A",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: Monday the 26th with month omitted in a complete offer",
+    "variables": {
+      "first_name": "Samuel",
+      "last_name": "Ortiz",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1975-12-05",
+      "phone_last4": "7093"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 540.0,
+        "days_late": 5,
+        "instalment_amount": 180.0
+      }
+    ],
+    "script": "Confirm you are Samuel Ortiz. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. At the payment question say exactly: \"I will pay the full five hundred and forty on Monday the twenty-sixth.\" If the month or year is clarified, say October 2026. Accept the next business day offered because that Monday is a bank holiday. Confirm only the correct full-amount read-back for that next business day.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 540,
+          "date": "2026-10-27"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Resolve Monday the 26th to 2026-10-26, not an earlier Monday; offer 2026-10-27 for the holiday.",
+      "Retain the full 540 amount through date clarification and holiday rollover.",
+      "Obtain consent to the adjusted date before the one successful write."
+    ],
+    "rationale": "A19/A20/A22/A29/A34: day number plus weekday identifies a later date despite a default this-week reading; early-band deadline permits the roll."
+  }
+]

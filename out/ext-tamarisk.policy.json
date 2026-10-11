@@ -1,0 +1,601 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/v24-tamarisk-thread/01-mail.txt",
+  "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+  "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+  "tests/fixtures/external/v24-tamarisk-thread/04-code-list.txt"
+ ],
+ "bank_name": "Tamarisk Quay Business Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "What is the registered business postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+     "text": "1. `postcode`: \"What is the registered business postcode?\" Answer format: text; letters and digits only; strip spaces."
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "In what year were you born?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+     "text": "2. `birth_year`: \"In what year were you born?\" Answer format: year; four-digit year."
+    }
+   },
+   {
+    "field": "company_number",
+    "ask_text": "What is the eight-digit company registration number?",
+    "answer_format": "digits",
+    "digits": 8,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+     "text": "3. `company_number`: \"What is the eight-digit company registration number?\" Answer format: digits; exactly eight digits, preserving leading zeros."
+    }
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "In what year was the company founded?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+     "text": "4. `founded_year`: \"In what year was the company founded?\" Answer format: year; four-digit year."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "security_remaining",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "tamarisk_unverified",
+   "tamarisk_failed"
+  ],
+  "declined_outcome": [
+   "tamarisk_unverified",
+   "tamarisk_declined"
+  ],
+  "unclear_holder_outcome": [
+   "tamarisk_unreached",
+   "tamarisk_unclear"
+  ],
+  "failed_instruction": "Please contact our business desk.",
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Maximum wrong answers across the entire check: 4. Use the API's security_remaining, not a separate per-question allowance. On exhaustion say exactly \"Please contact our business desk.\" and close `tamarisk_unverified` / `tamarisk_failed`. Explain account protection once after a refusal; a second refusal closes `tamarisk_unverified` / `tamarisk_declined`. A question about why security is needed does NOT count as a refusal; answer and ask again. The API provides no recoverable-format hint, so no hint rule applies. Ask at most twice in total; if still unclear close `tamarisk_unreached` / `tamarisk_unclear`."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "08:30",
+   "end": "16:15",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "tamarisk_unreached",
+    "tamarisk_callback"
+   ],
+   "no_callback_outcome": [
+    "tamarisk_unreached",
+    "tamarisk_no_callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "Callbacks are on the next business day only, between 08:30 and 16:15 inclusive, strictly after now. A missing hour must be clarified, never guessed. For an invalid slot ask once for another; a second failure or refusal closes `tamarisk_unreached` / `tamarisk_no_callback`. A successfully scheduled callback closes `tamarisk_unreached` / `tamarisk_callback`."
+   }
+  },
+  "wrong_number_outcome": [
+   "tamarisk_unreached",
+   "tamarisk_wrong_number"
+  ],
+  "deceased_outcome": [
+   "tamarisk_unreached",
+   "tamarisk_deceased"
+  ],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Wrong number: `tamarisk_unreached` / `tamarisk_wrong_number`. Deceased holder: say exactly \"Please accept our condolences.\" and close `tamarisk_unreached` / `tamarisk_deceased`."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-30",
+   "2026-11-02",
+   "2026-11-16",
+   "2026-12-25",
+   "2027-01-01"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Business days are Monday through Friday except 2026-10-30, 2026-11-02, 2026-11-16, 2026-12-25, 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; \"this Friday\" means the current week's Friday. For a missing month/year choose the next occurrence of the named day/date on or after today. No other holidays apply."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-15",
+   "days_late_min": 1,
+   "days_late_max": 15,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 15,
+    "month_offset": 1,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+    "text": "Days late 1\u201315 inclusive: the deadline is the 15th of next month, moved forward to the first business day on or after that date."
+   }
+  },
+  {
+   "name": "16-45",
+   "days_late_min": 16,
+   "days_late_max": 45,
+   "deadline": {
+    "kind": "earliest",
+    "rules": [
+     {
+      "kind": "nth_business_day",
+      "n": 6
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "preceding",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+    "text": "Days late 16\u201345 inclusive: use the sixth business day after today or the last business day of this month, whichever comes first. Adjust each candidate before comparing them."
+   }
+  },
+  {
+   "name": "46-90",
+   "days_late_min": 46,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "preceding",
+    "month_offset": 1
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+    "text": "Days late 46\u201390 inclusive: use the last business day of next month. Keep the existing single persuasion attempt: full arrears on the deadline, substituting the minimum only if full has already been refused."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "tamarisk_revolver": {
+    "kind": "max_of",
+    "field": "revolver_base",
+    "percent": 25,
+    "round": "up_cent"
+   },
+   "tamarisk_equipment": {
+    "kind": "max_of",
+    "field": "equipment_base",
+    "percent": 40,
+    "round": "up_cent"
+   },
+   "tamarisk_merchant": {
+    "kind": "max_of",
+    "field": "merchant_base",
+    "percent": 20,
+    "round": "up_cent"
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+   "text": "For tamarisk_revolver use the greater of revolver_base and 25% of the full arrears; for tamarisk_equipment use the greater of equipment_base and 40% of the full arrears; for tamarisk_merchant use the greater of merchant_base and 20% of the full arrears. Round the percentage component UP to the next whole cent before comparing it with the base. In all cases cap the resulting minimum at the full arrears."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/03-signed-memo.md",
+   "text": "There is no promise once the deadline has passed: when the calculated date is earlier than today, do not extend the window, do not accept even a payment promise for today, and mark that product tamarisk_refused while continuing other products. The deadline itself remains eligible."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this product.",
+   "action": {
+    "type": "note",
+    "reason": "tamarisk_settled"
+   },
+   "say": "Payments can take two business days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "Already paid: say exactly \"Payments can take two business days to appear.\", take no new promise for that product, mark `tamarisk_settled` and continue other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs, they never held the product, or it was closed or paid off earlier.",
+   "action": {
+    "type": "note",
+    "reason": "tamarisk_disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "Dispute (not their debt, never held it, or it was closed/paid off earlier): do not argue or take a promise for it; mark `tamarisk_disputed` and continue."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "tamarisk_distress"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "tamarisk_care",
+   "offer_outcome": [
+    "tamarisk_transferred",
+    "tamarisk_care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "Hardship means illness, bereavement or job loss: one short sentence of sympathy, no persuasion and no promise for the affected product. Offer queue `tamarisk_care`; if accepted transfer and close `tamarisk_transferred` / `tamarisk_care`, otherwise mark `tamarisk_distress` and continue other products."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to restructure the debt or reduce instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "tamarisk_restructure",
+    "outcome": "tamarisk_transferred",
+    "reason": "tamarisk_restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "A request to restructure or reduce instalments transfers immediately to `tamarisk_restructure` and closes `tamarisk_transferred` / `tamarisk_restructure`."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human or a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "tamarisk_desk",
+    "outcome": "tamarisk_transferred",
+    "reason": "tamarisk_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "A request for a human: ask once if this assistant can help; if they insist, transfer to `tamarisk_desk` and close `tamarisk_transferred` / `tamarisk_person`."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or wants to end the conversation.",
+   "action": {
+    "type": "close",
+    "outcome": "tamarisk_no_deal",
+    "reason": "tamarisk_refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "A refusal to talk: ask once if you may continue; a second refusal ends the call and marks all remaining products `tamarisk_refused`."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether this is a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Tamarisk Quay Business Bank's automated assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "If asked whether this is a robot say exactly \"I am Tamarisk Quay Business Bank's automated assistant.\""
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can call the number on your bank statement to verify us.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+    "text": "If asked about a scam say exactly \"You can call the number on your bank statement to verify us.\" and continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "tamarisk_arranged",
+    "reasons": [],
+    "when": "at least one recorded promise and no transfer"
+   },
+   {
+    "outcome": "tamarisk_settled",
+    "reasons": [],
+    "when": "all products settled"
+   },
+   {
+    "outcome": "tamarisk_transferred",
+    "reasons": [
+     "tamarisk_restructure",
+     "tamarisk_person",
+     "tamarisk_care"
+    ],
+    "when": "call transferred to a queue"
+   },
+   {
+    "outcome": "tamarisk_no_deal",
+    "reasons": [
+     "tamarisk_refused",
+     "tamarisk_distress",
+     "tamarisk_disputed",
+     "tamarisk_service_error"
+    ],
+    "when": "no promise; reason of first non-settled product's note in get_account order"
+   },
+   {
+    "outcome": "tamarisk_unverified",
+    "reasons": [
+     "tamarisk_failed",
+     "tamarisk_declined"
+    ],
+    "when": "security check failed or declined"
+   },
+   {
+    "outcome": "tamarisk_unreached",
+    "reasons": [
+     "tamarisk_callback",
+     "tamarisk_no_callback",
+     "tamarisk_wrong_number",
+     "tamarisk_deceased",
+     "tamarisk_unclear"
+    ],
+    "when": "holder not reached"
+   }
+  ],
+  "promise_outcome": "tamarisk_arranged",
+  "paid_outcome": "tamarisk_settled",
+  "transfer_outcome": "tamarisk_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "tamarisk_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "tamarisk_service_error",
+  "refused_reason": "tamarisk_refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Outcome precedence: transfer overrides any promise; otherwise at least one recorded promise gives `tamarisk_arranged`; otherwise all products settled gives `tamarisk_settled`; otherwise `tamarisk_no_deal` with the first non-settled product's note reason in get_account order. Exactly one close_call is the last bank action. Thank the customer and say goodbye before calling it."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "tamarisk_refused",
+   "tamarisk_distress",
+   "tamarisk_disputed",
+   "tamarisk_settled",
+   "tamarisk_service_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "On a non-transfer call, after processing all products, add exactly one note per unpromised product, using only tamarisk_refused, tamarisk_distress, tamarisk_disputed, tamarisk_settled, tamarisk_service_error. Never add notes on a transferred call, including before transfer; defer notes until the non-transfer outcome is known."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Up to 3 products may be returned in facilities. ... State all products and their amounts/days late before asking anything. ... Process products in get_account order with separate attempt counters. ... A common date after a product's deadline is clamped to that product's own deadline and explained in the read-back. ... A transfer cancels unrecorded proposals but keeps already recorded promises."
+  }
+ },
+ "phrases": {
+  "opening": "Good day, this is Tamarisk Quay Business Bank's automated assistant. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue business products.",
+  "today_question": "Can you settle this today?",
+  "all_today_question": "Can you settle all these products today?",
+  "robot_reply": "I am Tamarisk Quay Business Bank's automated assistant.",
+  "scam_reply": "You can call the number on your bank statement to verify us.",
+  "prohibited_before_verification": [
+   "arrears",
+   "overdue",
+   "facility",
+   "payment"
+  ],
+  "after_promise_sentence": "We will email confirmation to your registered address.",
+  "already_paid_sentence": "Payments can take two business days to appear.",
+  "cannot_answer_sentence": "Our business desk can answer that question.",
+  "recorded_promise_change_reply": "Please contact our business desk to change a recorded promise.",
+  "product_naming": {
+   "tamarisk_revolver": "working capital line",
+   "tamarisk_equipment": "asset finance loan",
+   "tamarisk_merchant": "merchant advance"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Start exactly: \"Good day, this is Tamarisk Quay Business Bank's automated assistant. We record this call.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\" ... Before ALL verification answers pass, never say these words or disclose their associated information: arrears, overdue, facility, payment. ... Call tamarisk_revolver a working capital line, tamarisk_equipment an asset finance loan and tamarisk_merchant a merchant advance."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I record these promises?",
+  "source": {
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md",
+   "text": "Ask exactly \"May I record these promises?\" ... One create_promise per product, at most one successful promise per product. If a write fails, retry it once; a second failure marks only that product `tamarisk_service_error`, says it failed, and continues the other products."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The policy requires one short sentence of sympathy but does not dictate the words; a generic sentence was written.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "refuse_to_talk final outcome",
+   "text": "A second refusal 'ends the call and marks all remaining products tamarisk_refused'; the documents do not give a separate close pair, so the close follows the general precedence (a promise recorded earlier gives tamarisk_arranged; otherwise tamarisk_no_deal with the first non-settled note reason). The action records tamarisk_no_deal / tamarisk_refused as the usual result.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "account protection explanation wording",
+   "text": "'Explain account protection once after a refusal' gives no words for the explanation.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "failed write sentence",
+   "text": "After a second create_promise failure the agent 'says it failed'; no wording is dictated.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  }
+ ]
+}

@@ -1,0 +1,575 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/amber-valley/01-mail.txt",
+  "tests/fixtures/external/amber-valley/02-policy.md",
+  "tests/fixtures/external/amber-valley/03-memo.txt",
+  "tests/fixtures/external/amber-valley/04-codes.txt"
+ ],
+ "bank_name": "Amber Valley Savings",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "What is your registered postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/amber-valley/03-memo.txt",
+     "text": "A. Identity question order is changed to: postcode FIRST, client_reference SECOND, birth_year THIRD, account_pin FOURTH. Retain the exact P-AVS-2026 question sentences and formats."
+    }
+   },
+   {
+    "field": "client_reference",
+    "ask_text": "What is your six-digit client reference number?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+     "text": "| 1 | client_reference | \"What is your six-digit client reference number?\" | digits, exactly 6, leading zeros preserved |"
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "In which year were you born?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+     "text": "| 3 | birth_year | \"In which year were you born?\" | year, four digits |"
+    }
+   },
+   {
+    "field": "account_pin",
+    "ask_text": "What is your four-digit account PIN?",
+    "answer_format": "digits",
+    "digits": 4,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+     "text": "| 4 | account_pin | \"What is your four-digit account PIN?\" | digits, exactly 4 |"
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "remaining_attempts",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "avs_unverified",
+   "avs_failed"
+  ],
+  "declined_outcome": [
+   "avs_unverified",
+   "avs_declined"
+  ],
+  "unclear_holder_outcome": [
+   "avs_unreached",
+   "avs_unclear"
+  ],
+  "failed_instruction": "Please contact our identity desk.",
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/03-memo.txt",
+   "text": "B. Wrong-answer limit is 4 total, not 3. The API slot `remaining_attempts` remains authoritative."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:00",
+   "end": "17:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "avs_unreached",
+    "avs_callback"
+   ],
+   "no_callback_outcome": [
+    "avs_unreached",
+    "avs_no_callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "Callbacks are on the next business day only, between 09:00 and 17:30 inclusive, strictly after `now`. ... On an invalid slot ask once for another."
+   }
+  },
+  "wrong_number_outcome": [
+   "avs_unreached",
+   "avs_wrong_number"
+  ],
+  "deceased_outcome": [
+   "avs_unreached",
+   "avs_deceased"
+  ],
+  "deceased_sentence": "Please accept my condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "If someone else answers, disclose nothing about the purpose or accounts. Ask when the holder can be reached."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-30",
+   "2026-11-11",
+   "2026-12-25",
+   "2027-01-01"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "Business days are Monday through Friday excluding 2026-10-30, 2026-11-11, 2026-12-25 and 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; ... For missing date parts use the next occurrence on or after today."
+  }
+ },
+ "bands": [
+  {
+   "name": "early",
+   "days_late_min": 1,
+   "days_late_max": 20,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 10
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| 1\u201320 | 10th business day after today | 1: full amount on deadline; floor if full refused |"
+   }
+  },
+  {
+   "name": "late",
+   "days_late_min": 21,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "preceding",
+    "month_offset": 0
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/03-memo.txt",
+    "text": "C. For days late 21\u201360 only, replace the 15th business day after today (historical forwarding) with the LAST BUSINESS DAY OF THE CURRENT CALENDAR MONTH: end_of_month, basis=business, adjustment=preceding."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "revolve_card": "minimum_due",
+   "term_loan": "instalment_due",
+   "auto_lease": "lease_due"
+  },
+  "floor_rules": {},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "Offer the full balance_due first. Never ask the customer how much they can pay. If full is too much, offer the floor once per product and say exactly \"The unpaid remainder stays overdue.\" Accept any amount from floor to full inclusive"
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "A promise date may be today, must be a business day and must not exceed the deadline. Roll weekends/holidays forward only within the deadline; otherwise offer the deadline. Ask once to clarify a vague period, then offer the deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this amount.",
+   "action": {
+    "type": "note",
+    "reason": "avs_settled"
+   },
+   "say": "A received payment may take two working days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| already_paid | already paid this amount | say \"A received payment may take two working days to appear.\"; no promise; mark `avs_settled`; continue |"
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never held it, or it was previously paid off and closed.",
+   "action": {
+    "type": "note",
+    "reason": "avs_disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| dispute | not their debt, never held it, or previously paid off and closed | no argument or promise; mark `avs_disputed`; continue |"
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "avs_distress"
+   },
+   "say": "I am sorry to hear about your situation.",
+   "offer_transfer_queue": "avs_support",
+   "offer_outcome": [
+    "avs_transferred",
+    "avs_support"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| hardship | illness, bereavement or job loss | one short sympathetic sentence; no persuasion; offer queue `avs_support`; accepted transfer closes `avs_transferred` / `avs_support`; declined marks only this product `avs_distress` and continues |"
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer wants lower instalments or to restructure the debt.",
+   "action": {
+    "type": "transfer",
+    "queue": "avs_restructure",
+    "outcome": "avs_transferred",
+    "reason": "avs_restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| restructuring | wants lower instalments or restructure | immediate transfer to `avs_restructure`; close `avs_transferred` / `avs_restructure` |"
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human agent.",
+   "action": {
+    "type": "transfer",
+    "queue": "avs_desk",
+    "outcome": "avs_transferred",
+    "reason": "avs_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/03-memo.txt",
+    "text": "D. Human requests transfer immediately to `avs_desk`, without asking whether the assistant can help first."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer says they do not want to talk.",
+   "action": {
+    "type": "note",
+    "reason": "avs_refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| refuse_to_talk | says they do not want to talk | ask once to continue; a second refusal ends persuasion, marks all remaining products `avs_refused` and finalizes |"
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether this is a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Amber Valley Savings' automated assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| robot | asks if this is a robot | say exactly \"I am Amber Valley Savings' automated assistant.\" |"
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can verify this call using the number on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| scam | asks if this is a scam | say exactly \"You can verify this call using the number on your statement.\" and continue |"
+   }
+  },
+  {
+   "name": "other_question",
+   "trigger": "The customer asks something the assistant cannot answer.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Our service desk can answer that question.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+    "text": "| other_question | asks something the assistant cannot answer | say exactly \"Our service desk can answer that question.\" and invent nothing |"
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "avs_arranged",
+    "reasons": [],
+    "when": "at least one promise saved on a non-transfer call"
+   },
+   {
+    "outcome": "avs_settled",
+    "reasons": [],
+    "when": "no promise saved and all products marked settled"
+   },
+   {
+    "outcome": "avs_transferred",
+    "reasons": [
+     "avs_restructure",
+     "avs_person",
+     "avs_support"
+    ],
+    "when": "call transferred"
+   },
+   {
+    "outcome": "avs_no_deal",
+    "reasons": [
+     "avs_refused",
+     "avs_distress",
+     "avs_disputed",
+     "avs_service_error"
+    ],
+    "when": "no promise; reason from first non-settled product's note in API order"
+   },
+   {
+    "outcome": "avs_unverified",
+    "reasons": [
+     "avs_failed",
+     "avs_declined"
+    ],
+    "when": "identity not verified"
+   },
+   {
+    "outcome": "avs_unreached",
+    "reasons": [
+     "avs_callback",
+     "avs_no_callback",
+     "avs_wrong_number",
+     "avs_deceased",
+     "avs_unclear"
+    ],
+    "when": "holder not reached or not confirmed"
+   }
+  ],
+  "promise_outcome": "avs_arranged",
+  "paid_outcome": "avs_settled",
+  "transfer_outcome": "avs_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "avs_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "avs_service_error",
+  "refused_reason": "avs_refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/04-codes.txt",
+   "text": "CODE LIST C-AVS-2026 \u2014 authoritative enum combinations; P-AVS-2026 \u00a710: A transfer preserves saved promises but cancels unsaved proposals and overrides every other outcome. Otherwise any saved promise yields `avs_arranged`; with none saved and all products marked settled use `avs_settled`; otherwise `avs_no_deal` with the first non-settled product's note reason in API order."
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "avs_refused",
+   "avs_distress",
+   "avs_disputed",
+   "avs_settled",
+   "avs_service_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "On a non-transfer call, after processing all products, add exactly one note per unpromised product using only `avs_refused`, `avs_distress`, `avs_disputed`, `avs_settled`, `avs_service_error`. ... No notes at all on a transfer, including before it."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "After verification call `get_account`. It returns up to 3 obligations."
+  }
+ },
+ "phrases": {
+  "opening": "Good afternoon, this is Amber Valley Savings' automated assistant. This call is recorded.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about overdue commitments.",
+  "today_question": "Can you settle this commitment today?",
+  "all_today_question": "Can you settle every listed commitment today?",
+  "robot_reply": "I am Amber Valley Savings' automated assistant.",
+  "scam_reply": "You can verify this call using the number on your statement.",
+  "prohibited_before_verification": [
+   "overdue",
+   "arrears",
+   "balance",
+   "commitment",
+   "payment",
+   "card",
+   "loan",
+   "lease"
+  ],
+  "after_promise_sentence": "A confirmation will be sent to your secure mailbox.",
+  "already_paid_sentence": "A received payment may take two working days to appear.",
+  "cannot_answer_sentence": "Our service desk can answer that question.",
+  "recorded_promise_change_reply": "Please use your secure mailbox to request a change.",
+  "product_naming": {
+   "revolve_card": "revolving charge card",
+   "term_loan": "term loan",
+   "auto_lease": "auto lease"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md",
+   "text": "Say exactly: \"Good afternoon, this is Amber Valley Savings' automated assistant. This call is recorded.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I record these payment arrangements?",
+  "source": {
+   "doc": "tests/fixtures/external/amber-valley/03-memo.txt",
+   "text": "F. Failed `create_promise` attempts: restore one retry after a first failure, so a total of two attempts are permitted per product."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "payment_plan special case",
+   "text": "P-AVS-2026 \u00a79 row payment_plan says to ask how much they can pay each month, propose a 3-month plan, record it and close `avs_arranged`; this contradicts \u00a77 (\"Never ask the customer how much they can pay\", \"Never offer a discount, waiver or new instalment plan\") and overlaps the restructuring rule (\"wants lower instalments\"); create_promise records one amount and date only. Not compiled as a special case.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "days late outside bands",
+   "text": "Bands cover only 1\u201320 and 21\u201360 days late; the documents do not say how to handle 0 or more than 60 days late.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "numeric date order",
+   "text": "P-AVS-2026 says purely numeric dates use month/day/year, but no identity question is a date; no requirement uses numeric_date_order.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "P-AVS-2026 \u00a79 requires 'one short sympathetic sentence' for hardship but does not dictate its words; special_cases[hardship].say holds a short sentence written to match that content.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  }
+ ]
+}

@@ -6,16 +6,16 @@
  "identity": {
   "requirements": [
    {
-    "field": "company_number",
-    "ask_text": "your company number",
+    "field": "phone_last4",
+    "ask_text": "your phone last4",
     "answer_format": "digits",
     "digits": 4,
-    "numeric_date_order": "dmy"
+    "numeric_date_order": "mdy"
    },
    {
-    "field": "founded_year",
-    "ask_text": "your founded year",
-    "answer_format": "year",
+    "field": "date_of_birth",
+    "ask_text": "your date of birth",
+    "answer_format": "date",
     "digits": 0,
     "numeric_date_order": "mdy"
    },
@@ -24,7 +24,14 @@
     "ask_text": "your postcode",
     "answer_format": "text",
     "digits": 0,
-    "numeric_date_order": "mdy"
+    "numeric_date_order": "dmy"
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "your birth year",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy"
    }
   ],
   "wrong_answer_limit": 5,
@@ -34,15 +41,15 @@
   "decline_explain_once": true,
   "asking_purpose_counts_as_decline": true,
   "failed_outcome": [
-   "id-fail",
-   "exhausted"
+   "unverified",
+   "failed"
   ],
   "declined_outcome": [
-   "id-fail",
-   "would-not-answer"
+   "unverified",
+   "declined"
   ],
   "unclear_holder_outcome": [
-   "no-contact",
+   "unreached",
    "unclear"
   ],
   "failed_instruction": "Please use the mobile app or visit a branch.",
@@ -54,18 +61,18 @@
  "third_party": {
   "callback": {
    "enabled": true,
-   "days": "today_or_next_business_day",
-   "start": "09:00",
-   "end": "17:30",
+   "days": "next_business_day",
+   "start": "12:00",
+   "end": "19:00",
    "must_be_after_now": true,
    "retry_once": true,
    "scheduled_outcome": [
-    "no-contact",
-    "cb-set"
+    "unreached",
+    "callback"
    ],
    "no_callback_outcome": [
-    "no-contact",
-    "cb-none"
+    "unreached",
+    "no_callback"
    ],
    "source": {
     "doc": "briefs/brief-a.md",
@@ -73,11 +80,11 @@
    }
   },
   "wrong_number_outcome": [
-   "no-contact",
-   "wrong-no"
+   "unreached",
+   "wrong_number"
   ],
   "deceased_outcome": [
-   "no-contact",
+   "unreached",
    "deceased"
   ],
   "deceased_sentence": "I am sorry for your loss.",
@@ -87,12 +94,17 @@
   }
  },
  "calendar": {
-  "holidays": [],
+  "holidays": [
+   "2026-10-14",
+   "2026-10-15"
+  ],
   "business_days": [
    0,
    1,
    2,
-   3
+   3,
+   4,
+   5
   ],
   "next_weekday_means_following_week": true,
   "source": {
@@ -104,32 +116,45 @@
   {
    "name": "band1",
    "days_late_min": 1,
-   "days_late_max": 7,
+   "days_late_max": 21,
    "deadline": {
-    "kind": "end_of_month",
-    "basis": "calendar",
+    "kind": "day_of_month",
+    "day": 15,
+    "month_offset": 1,
     "adjustment": "following"
    },
    "attempts": [
     {
      "amount": "full",
      "date": "last_business_day_this_week_or_next",
-     "floor_if_full_refused": true
-    },
-    {
-     "amount": "floor",
-     "date": "deadline",
      "floor_if_full_refused": true
     }
    ]
   },
   {
    "name": "band2",
-   "days_late_min": 8,
-   "days_late_max": 45,
+   "days_late_min": 22,
+   "days_late_max": 37,
    "deadline": {
-    "kind": "calendar_days",
-    "n": 14,
+    "kind": "nth_business_day",
+    "n": 12
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    }
+   ]
+  },
+  {
+   "name": "band3",
+   "days_late_min": 38,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 15,
+    "month_offset": 1,
     "adjustment": "following"
    },
    "attempts": [
@@ -137,20 +162,12 @@
      "amount": "full",
      "date": "last_business_day_this_week_or_next",
      "floor_if_full_refused": true
-    },
-    {
-     "amount": "floor",
-     "date": "deadline",
-     "floor_if_full_refused": true
     }
    ]
   }
  ],
  "amounts": {
-  "floors": {
-   "business_overdraft": "minimum_due",
-   "equipment_loan": "scheduled_repayment"
-  },
+  "floors": {},
   "full_first": true,
   "never_ask_how_much": true,
   "floor_offered_once": true,
@@ -159,6 +176,18 @@
   "source": {
    "doc": "briefs/brief-a.md",
    "text": "rules 24-27"
+  },
+  "floor_rules": {
+   "business_overdraft": {
+    "kind": "percent",
+    "percent": 20,
+    "min_amount": 50
+   },
+   "equipment_loan": {
+    "kind": "percent",
+    "percent": 20,
+    "min_amount": 50
+   }
   }
  },
  "dates": {
@@ -177,7 +206,7 @@
    "trigger": "The customer says they already paid this past-due amount",
    "action": {
     "type": "note",
-    "reason": "already-paid"
+    "reason": "settled"
    },
    "say": "Payments can take one business day to appear.",
    "takes_promise": false,
@@ -197,7 +226,7 @@
    "trigger": "The customer says the debt is not theirs, they never had the product, or the product was closed or paid off in the past",
    "action": {
     "type": "note",
-    "reason": "disputes"
+    "reason": "disputed"
    },
    "takes_promise": false,
    "ends_call": false,
@@ -216,14 +245,14 @@
    "trigger": "The customer mentions illness, a death in the family or job loss",
    "action": {
     "type": "close",
-    "outcome": "no-ptp",
-    "reason": "vulnerable"
+    "outcome": "no_arrangement",
+    "reason": "distress"
    },
    "say": "one short sentence of sympathy",
-   "offer_transfer_queue": "welfare",
+   "offer_transfer_queue": "care",
    "offer_outcome": [
-    "escalated",
-    "welfare"
+    "handed_over",
+    "care"
    ],
    "before_persuasion": true,
    "takes_promise": true,
@@ -238,9 +267,9 @@
    "trigger": "The customer asks for a new payment plan or lower instalments",
    "action": {
     "type": "transfer",
-    "queue": "plans",
-    "outcome": "escalated",
-    "reason": "plans"
+    "queue": "restructure",
+    "outcome": "handed_over",
+    "reason": "restructure"
    },
    "takes_promise": false,
    "ends_call": true,
@@ -259,9 +288,9 @@
    "trigger": "The customer asks for a human agent",
    "action": {
     "type": "transfer",
-    "queue": "front-desk",
-    "outcome": "escalated",
-    "reason": "agent"
+    "queue": "desk",
+    "outcome": "handed_over",
+    "reason": "person"
    },
    "ask_once_first": true,
    "takes_promise": false,
@@ -299,8 +328,8 @@
    "trigger": "The customer says, for the second time, that they do not want to talk",
    "action": {
     "type": "close",
-    "outcome": "no-ptp",
-    "reason": "refuses"
+    "outcome": "no_arrangement",
+    "reason": "declined_payment"
    },
    "takes_promise": false,
    "ends_call": true,
@@ -318,57 +347,57 @@
  "outcomes": {
   "table": [
    {
-    "outcome": "ptp-recorded",
+    "outcome": "arrangement",
     "reasons": []
    },
    {
-    "outcome": "already-paid",
+    "outcome": "settled",
     "reasons": []
    },
    {
-    "outcome": "escalated",
+    "outcome": "handed_over",
     "reasons": [
-     "plans",
-     "agent",
-     "welfare"
+     "restructure",
+     "person",
+     "care"
     ]
    },
    {
-    "outcome": "no-ptp",
+    "outcome": "no_arrangement",
     "reasons": [
-     "refuses",
-     "vulnerable",
-     "disputes",
-     "tool-error"
+     "declined_payment",
+     "distress",
+     "disputed",
+     "system_error"
     ]
    },
    {
-    "outcome": "id-fail",
+    "outcome": "unverified",
     "reasons": [
-     "exhausted",
-     "would-not-answer"
+     "failed",
+     "declined"
     ]
    },
    {
-    "outcome": "no-contact",
+    "outcome": "unreached",
     "reasons": [
-     "cb-set",
-     "cb-none",
-     "wrong-no",
+     "callback",
+     "no_callback",
+     "wrong_number",
      "deceased",
      "unclear"
     ]
    }
   ],
-  "promise_outcome": "ptp-recorded",
-  "paid_outcome": "already-paid",
-  "transfer_outcome": "escalated",
+  "promise_outcome": "arrangement",
+  "paid_outcome": "settled",
+  "transfer_outcome": "handed_over",
   "transfer_overrides_promise": true,
-  "no_promise_outcome": "no-ptp",
+  "no_promise_outcome": "no_arrangement",
   "all_paid_closes_as_paid": true,
   "no_promise_reason_from_first_non_paid_note": true,
-  "service_error_reason": "tool-error",
-  "refused_reason": "refuses",
+  "service_error_reason": "system_error",
+  "refused_reason": "declined_payment",
   "goodbye_before_close": true,
   "source": {
    "doc": "briefs/brief-a.md",
@@ -378,11 +407,11 @@
  "notes": {
   "enabled": true,
   "reasons": [
-   "refuses",
-   "vulnerable",
-   "disputes",
-   "already-paid",
-   "tool-error"
+   "declined_payment",
+   "distress",
+   "disputed",
+   "settled",
+   "system_error"
   ],
   "source": {
    "doc": "briefs/brief-b.md",
@@ -392,7 +421,7 @@
   "none_on_transfer": true
  },
  "multi_product": {
-  "max_products": 2,
+  "max_products": 4,
   "state_all_before_asking": true,
   "ask_all_today_once": true,
   "per_product_attempts": true,
@@ -430,7 +459,7 @@
   }
  },
  "promise_write": {
-  "retry_on_failure": 2,
+  "retry_on_failure": 0,
   "one_promise_per_product": true,
   "confirm_phrase": "Do you confirm?",
   "source": {

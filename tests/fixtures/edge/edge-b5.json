@@ -1,0 +1,198 @@
+[
+ {
+  "id": "PUB-11",
+  "brief": "B",
+  "family": "Multi-product",
+  "level": "hard",
+  "title": "At the batch read-back the card drops to its minimum",
+  "variables": {
+   "first_name": "Sofia",
+   "last_name": "Almeida",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1987-06-03",
+   "phone_last4": "2288"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "2288",
+    "past_due": 220.0,
+    "days_late": 9,
+    "minimum_payment": 66.0
+   },
+   {
+    "type": "personal_loan",
+    "past_due": 640.0,
+    "days_late": 9,
+    "instalment_amount": 213.0
+   },
+   {
+    "type": "car_loan",
+    "past_due": 75.0,
+    "days_late": 3,
+    "instalment_amount": 25.0
+   }
+  ],
+  "script": "Confirm you are Sofia Almeida and give the correct security answers. When asked whether you can pay all of it today, say not today, but all three this Friday. At the batch read-back say: yes for the two loans, but only the minimum for the card, sixty-six dollars. Confirm the revised read-back showing 66, 640 and 75 for Friday.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 66,
+     "date": "2026-10-16"
+    },
+    {
+     "product_id": "p2",
+     "amount": 640,
+     "date": "2026-10-16"
+    },
+    {
+     "product_id": "p3",
+     "amount": 75,
+     "date": "2026-10-16"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The correction invalidates the first consent; no promise is written before the second read-back",
+   "66 exactly equals the card floor, so it is accepted; the loans keep 640 and 75 on the same Friday",
+   "Three create_promise calls, one per product; outcome promise"
+  ],
+  "rationale": "A35 and B4, B7: a single-item amount change revalidates only that item inside a batch. Codex-1 PUB-06 is the single-product analogue; no B fixture changes one amount at read-back. 66 = minimum_payment (floor); 2026-10-16 is Friday."
+ },
+ {
+  "id": "PUB-12",
+  "brief": "B",
+  "family": "Multi-product",
+  "level": "hard",
+  "title": "Refuses two, then a mid-band amount on the last product",
+  "variables": {
+   "first_name": "Marcus",
+   "last_name": "Bell",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1983-10-19",
+   "phone_last4": "4410"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "9015",
+    "past_due": 510.0,
+    "days_late": 16,
+    "minimum_payment": 153.0
+   },
+   {
+    "type": "personal_loan",
+    "past_due": 1320.0,
+    "days_late": 16,
+    "instalment_amount": 440.0
+   },
+   {
+    "type": "car_loan",
+    "past_due": 140.0,
+    "days_late": 7,
+    "instalment_amount": 46.0
+   }
+  ],
+  "script": "Confirm you are Marcus Bell and give the correct security answers. When asked whether you can pay all of it today, say no. When the agent works through the products, refuse the credit card flatly whatever it proposes, refuse the personal loan flatly whatever it proposes, and for the car loan say you can do one hundred dollars this Friday. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p3",
+     "amount": 100,
+     "date": "2026-10-16"
+    }
+   ],
+   "notes": [
+    {
+     "product_id": "p1",
+     "reason": "refused"
+    },
+    {
+     "product_id": "p2",
+     "reason": "refused"
+    }
+   ],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The car loan is the early band with one persuasion attempt; the agent must not give it two",
+   "The two late-band products each exhaust their two attempts before their refused notes",
+   "100 for the car loan sits between its floor 46 and 140, so it is recorded as on 16 October",
+   "Outcome promise with exactly two refused notes"
+  ],
+  "rationale": "A31, A27 and B4-B6, B8: public PUB-12 promises p1 and codex-1 PUB-12 volunteers p3 facts; here the customer refuses the first two outright and proposes a mid-band amount on the early-band product, which stresses both the attempt-quota asymmetry and the between-floor-and-full acceptance in one call."
+ },
+ {
+  "id": "PUB-13",
+  "brief": "B",
+  "family": "Multi-product",
+  "level": "hard",
+  "title": "Card today, loan on next Wednesday",
+  "variables": {
+   "first_name": "Elena",
+   "last_name": "Rossi",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1991-01-08",
+   "phone_last4": "6604"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "6604",
+    "past_due": 300.0,
+    "days_late": 4,
+    "minimum_payment": 90.0
+   },
+   {
+    "type": "personal_loan",
+    "past_due": 900.0,
+    "days_late": 20,
+    "instalment_amount": 300.0
+   }
+  ],
+  "script": "Confirm you are Elena Rossi and give the correct security answers. When asked for payment, say you can pay the credit card in full today but for the loan you want to look at your payslips, some time next week. When asked for the exact day, say the Wednesday of next week. Accept that for the loan and confirm the read-back naming both dates.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 300,
+     "date": "2026-10-14"
+    },
+    {
+     "product_id": "p2",
+     "amount": 900,
+     "date": "2026-10-21"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The card is recorded for today, 14 October, a business day",
+   "Next Wednesday resolves to 21 October, one business day inside the loan's 23 October deadline; it is not clamped and not shifted to the deadline",
+   "The read-back names both dates and one batch confirmation is enough"
+  ],
+  "rationale": "A22 and B2-B3, B6: a vague answer for one product while the other is settled today. codex-1 PUB-13 and edge-b3 PUB-13 clamp a shared date; here the per-product date resolves to a valid weekday inside the deadline, so the correct behaviour is plain acceptance. Next Wednesday = 2026-10-21; loan deadline = 2026-10-23; both via bankcal."
+ }
+]

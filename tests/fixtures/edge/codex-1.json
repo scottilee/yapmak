@@ -1,0 +1,641 @@
+[
+  {
+    "id": "PUB-01",
+    "brief": "A",
+    "family": "Happy path",
+    "level": "easy",
+    "title": "Unsolicited identity facts are not permission to skip verification",
+    "variables": {
+      "first_name": "Daniel",
+      "last_name": "Reyes",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1988-03-14",
+      "phone_last4": "4471"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "4821",
+        "past_due": 420.0,
+        "days_late": 6,
+        "minimum_payment": 126.0
+      }
+    ],
+    "script": "At the holder question say exactly: \"Yes, Daniel Reyes speaking. My birthday is fourteen March nineteen eighty-eight, and the phone ends four four seven one.\" If asked either security question afterwards, repeat its correct answer; never refuse. Once the agent has completed verification and stated the debt, offer the full four hundred and twenty dollars tomorrow. At a correct read-back of that amount and date say \"Yes, I confirm.\" Do not offer another date or amount.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 420.0,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Both required identity fields must be verified successfully before get_account, even though the opening supplied both facts.",
+      "An early phone-number answer does not count as payment consent.",
+      "Exactly one promise for 420 on 2026-10-15, only after payment read-back confirmation."
+    ],
+    "rationale": "A11, A16 require both checks; A19, A24, A34 and A38 govern the volunteered full-amount proposal. Differs from a normal happy path by giving both answers in the opening before either question."
+  },
+  {
+    "id": "PUB-02",
+    "brief": "A",
+    "family": "Third party",
+    "level": "medium",
+    "title": "Talkative relative mixes payment offers with callback boundary answers",
+    "variables": {
+      "first_name": "Maria",
+      "last_name": "Costa",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1979-11-02",
+      "phone_last4": "0358"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 310.5,
+        "days_late": 11,
+        "instalment_amount": 103.5
+      }
+    ],
+    "script": "You are Maria Costa's husband, never Maria. Say she is unavailable. In response to the callback question say: \"Try today at eleven. I know her birthday and can pay her three hundred and ten dollars fifty myself; is this about her loan?\" That time equals the call time. If the agent asks for another slot, say: \"Tomorrow at seven in the evening, and I can still pay for her; just tell me what she owes.\" Repeat tomorrow at nineteen hundred if the day or hour is clarified. Never impersonate Maria, take over the security check, or offer a different time. Keep mentioning your willingness to pay, but do not withdraw the callback.",
+    "expected": {
+      "outcome": "not_reached",
+      "reason": "callback",
+      "promises": [],
+      "notes": [],
+      "callbacks": [
+        {
+          "date": "2026-10-15",
+          "time": "19:00"
+        }
+      ],
+      "transfers": []
+    },
+    "checks": [
+      "The first slot is rejected because 11:00 today is not later than now; 19:00 is an inclusive upper boundary.",
+      "No verify_identity, get_account or create_promise calls; the relative volunteering details does not authorize disclosure.",
+      "Exactly one callback for 2026-10-15 19:00; no account details confirmed back to the relative."
+    ],
+    "rationale": "A5\u20137 and A10: third-party secrecy persists despite offered security/payment facts; callback must be strictly future and the window includes 19:00."
+  },
+  {
+    "id": "PUB-03",
+    "brief": "A",
+    "family": "Identity",
+    "level": "medium",
+    "title": "Two wrong birth dates followed by one wrong phone answer exhaust the global budget",
+    "variables": {
+      "first_name": "Owen",
+      "last_name": "Park",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1992-07-21",
+      "phone_last4": "6630"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "0377",
+        "past_due": 95.0,
+        "days_late": 4,
+        "minimum_payment": 28.5
+      }
+    ],
+    "script": "Confirm you are Owen Park. At the first birth-date question give 21 July 1990. On the next birth-date question give 21 July 1991. On the third give the correct 21 July 1992. Then, when asked the phone digits, give 6603, which is wrong. Do not correct that phone answer. If anything else is asked, ask what amount is owed, without supplying more identity answers.",
+    "expected": {
+      "outcome": "not_verified",
+      "reason": "failed",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The two wrong birth dates plus the wrong phone digits total three wrong answers; passing the birth-date question does not reset the allowance.",
+      "No get_account and no debt/product/amount disclosure.",
+      "Customer is directed to the app or a branch; close exactly once as not_verified/failed."
+    ],
+    "rationale": "A11\u201314: wrong answers accumulate across questions. Unlike PUB-03 and the existing one-error recovery edge, exhaustion occurs on the second identity field."
+  },
+  {
+    "id": "PUB-04",
+    "brief": "A",
+    "family": "Dates",
+    "level": "medium",
+    "title": "Amount in words and an after-deadline date in the same proposal",
+    "variables": {
+      "first_name": "Lena",
+      "last_name": "Hoffmann",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1984-01-30",
+      "phone_last4": "2219"
+    },
+    "products": [
+      {
+        "type": "car_loan",
+        "past_due": 1250.0,
+        "days_late": 14,
+        "instalment_amount": 400.0
+      }
+    ],
+    "script": "Confirm you are Lena Hoffmann and answer both security questions correctly. At the first payment question say: \"I can pay six hundred and fifty dollars on the sixth of November 2026.\" When the agent offers the latest permissible date, accept that date but keep the amount at six hundred and fifty. If it restates a different amount, correct it to 650. Confirm only a read-back of 650 on the offered deadline, saying \"Yes, I confirm that amount and date.\"",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 650.0,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "650 is between the 400 floor and 1250 full amount; retain the customer amount when capping the date.",
+      "The only promise is 650 on 2026-10-23; never 1250, 400, or a November date.",
+      "A customer proposal is not a refusal and does not by itself consume an attempt."
+    ],
+    "rationale": "A18, A23, A27, A29 and A34: amount acceptance and date rejection must be processed independently in one utterance."
+  },
+  {
+    "id": "PUB-05",
+    "brief": "A",
+    "family": "Hardship",
+    "level": "medium",
+    "title": "Hardship takes precedence over a restructuring request in the same sentence",
+    "variables": {
+      "first_name": "Tomas",
+      "last_name": "Novak",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1990-09-09",
+      "phone_last4": "8846"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 780.0,
+        "days_late": 21,
+        "instalment_amount": 260.0
+      }
+    ],
+    "script": "Confirm you are Tomas Novak and verify correctly. At the payment question say: \"I lost my job last month and cannot pay anything; can you lower my instalments?\" If offered the support team, say \"Yes, please connect me to support.\" If asked which team, repeat support. Do not offer any payment amount or date and do not request the restructuring team separately.",
+    "expected": {
+      "outcome": "transferred",
+      "reason": "support",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": [
+        {
+          "queue": "support"
+        }
+      ]
+    },
+    "checks": [
+      "Recognize job loss as hardship even though the same sentence asks for lower instalments.",
+      "Give one short sympathetic sentence and no persuasion or new plan.",
+      "Transfer to support, not restructuring or general; no promise or note."
+    ],
+    "rationale": "A32 explicitly precedes A41; A46 requires transferred/support. Existing support-transfer edge has no competing restructuring signal."
+  },
+  {
+    "id": "PUB-06",
+    "brief": "A",
+    "family": "Amounts",
+    "level": "hard",
+    "title": "Hedged yes is explicitly revoked by an amount-and-date correction",
+    "variables": {
+      "first_name": "Priya",
+      "last_name": "Nair",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1986-05-17",
+      "phone_last4": "1502"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "1903",
+        "past_due": 2125.1,
+        "days_late": 12,
+        "minimum_payment": 637.5
+      }
+    ],
+    "script": "Confirm you are Priya Nair and verify correctly. Say the full amount is too much, then accept the offered minimum of 637.50 for this Friday. At the first read-back say exactly: \"I suppose so\u2014no, wait, do not record that. Make it eight hundred dollars on Monday the nineteenth of October 2026 instead.\" Repeat the corrected amount/date if clarification is needed. Only after a fresh read-back of 800 on that Monday say \"Yes, I confirm eight hundred on Monday.\" Never confirm the original Friday proposal.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 800.0,
+          "date": "2026-10-19"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The first read-back reply explicitly revokes consent; the leading hedge cannot authorize a write.",
+      "Revalidate both the new amount and new date, then obtain fresh confirmation.",
+      "Exactly one promise: 800 on 2026-10-19; none for 637.50 or 2026-10-16."
+    ],
+    "rationale": "A27 and A34\u201336: simultaneous corrections replace the pending proposal. The explicit retraction removes ambiguity about whether \u201cI suppose so\u201d alone would count."
+  },
+  {
+    "id": "PUB-07",
+    "brief": "A",
+    "family": "Dates",
+    "level": "hard",
+    "title": "Acceptance plus a question is followed by explicit withheld read-back consent",
+    "variables": {
+      "first_name": "Samuel",
+      "last_name": "Ortiz",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1975-12-05",
+      "phone_last4": "7093"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 540.0,
+        "days_late": 5,
+        "instalment_amount": 180.0
+      }
+    ],
+    "script": "Confirm you are Samuel Ortiz and verify correctly. When asked about today say \"Not today; propose Friday instead.\" When offered the full amount this Friday say \"Yes, five hundred and forty on Friday works. Are you a robot?\" At the first payment read-back say \"Before I confirm, what interest rate am I paying? I have not confirmed yet.\" After the agent says it lacks that information and asks for confirmation again, say \"Yes, I confirm five hundred and forty for Friday.\" Do not change the amount/date or refuse payment.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 540.0,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Answer the robot question honestly; do not lose the accepted amount/date.",
+      "Do not invent an interest rate.",
+      "No create_promise while consent is explicitly withheld; write only after the final clear confirmation."
+    ],
+    "rationale": "A4, A29, A34 and A44: answering a question must not consume or replace the pending agreement; a pre-read-back acceptance is not final write consent."
+  },
+  {
+    "id": "PUB-08",
+    "brief": "A",
+    "family": "Already paid",
+    "level": "medium",
+    "title": "Paid off and closed last year is a dispute, not a recent payment",
+    "variables": {
+      "first_name": "Hannah",
+      "last_name": "Schmidt",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1993-04-28",
+      "phone_last4": "3317"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "5512",
+        "past_due": 180.0,
+        "days_late": 5,
+        "minimum_payment": 54.0
+      }
+    ],
+    "script": "Confirm you are Hannah Schmidt and verify correctly. When the credit-card arrears are stated say: \"That card was fully paid off and closed last year. I do not owe this debt and I am not saying I paid this overdue amount this morning.\" If clarification is needed, repeat that the card was closed last year and this debt is disputed. Do not promise any payment.",
+    "expected": {
+      "outcome": "no_promise",
+      "reason": "dispute",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Treat an allegedly closed/paid-off product as a dispute, not already_paid.",
+      "Do not argue or persuade and make no promise.",
+      "Brief A has no notes; close no_promise/dispute rather than paid."
+    ],
+    "rationale": "A39\u201340 explicitly distinguish payment of current arrears from a historical payoff/closure."
+  },
+  {
+    "id": "PUB-09",
+    "brief": "A",
+    "family": "Restructuring",
+    "level": "medium",
+    "title": "One human request is withdrawn when the assistant offers to help",
+    "variables": {
+      "first_name": "Victor",
+      "last_name": "Ionescu",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1981-08-11",
+      "phone_last4": "5560"
+    },
+    "products": [
+      {
+        "type": "personal_loan",
+        "past_due": 2100.0,
+        "days_late": 28,
+        "instalment_amount": 700.0
+      }
+    ],
+    "script": "Confirm you are Victor Ionescu and verify correctly. At the payment question ask once for a human: \"Can I talk to a person?\" When the assistant asks whether it can help first, say \"Yes, you can help me. I can pay seven hundred dollars tomorrow.\" If the offer of help is phrased as a question, accept the assistant, not a transfer. Confirm only a read-back of 700 tomorrow. Do not ask for a payment plan or repeat the human request.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 700.0,
+          "date": "2026-10-15"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Ask once whether the assistant can help; do not transfer automatically on the first request.",
+      "After the customer accepts help, continue the payment path without treating the yes as transfer consent.",
+      "One promise of 700 on 2026-10-15; no transfer."
+    ],
+    "rationale": "A42 permits help first and transfers only if the customer insists; A25, A27 and A34 govern the accepted floor proposal."
+  },
+  {
+    "id": "PUB-10",
+    "brief": "A",
+    "family": "Tool failure",
+    "level": "hard",
+    "title": "Weekend rollover crosses a holiday while the first write still fails",
+    "variables": {
+      "first_name": "Grace",
+      "last_name": "Lin",
+      "title": "Ms",
+      "now": "2026-10-23T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1989-02-23",
+      "phone_last4": "9904"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "7740",
+        "past_due": 365.0,
+        "days_late": 8,
+        "minimum_payment": 109.5
+      }
+    ],
+    "script": "Confirm you are Grace Lin and verify correctly. At the payment question say \"I can pay all three hundred and sixty-five dollars tomorrow.\" Accept the next permitted business day when the agent explains that tomorrow cannot be used. Confirm only a read-back of the full amount on that offered business day. If told the write is being retried, keep the same promise and do not create another proposal.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 365.0,
+          "date": "2026-10-27"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "The named date 2026-10-24 rolls across the weekend and bank holiday to 2026-10-27, within deadline 2026-11-04.",
+      "Preserve the public first-create_promise failure: exactly two attempts and exactly one successful promise.",
+      "No claim that the promise succeeded before the successful retry."
+    ],
+    "faults": [
+      {
+        "tool": "create_promise",
+        "fail_first_n": 1
+      }
+    ],
+    "rationale": "A19\u201320, A34 and A37: calendar rollover and failure retry compose without changing the amount/date or duplicating a promise. The original public fault remains unchanged."
+  },
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "Multi-product",
+    "level": "medium",
+    "title": "Promise plus dispute plus hardship becomes support transfer before batch consent",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Confirm you are Sofia Almeida and verify correctly. After all products have been stated, say \"I can pay the card in full on Friday; the personal loan is not mine, and I lost my job and cannot pay the car loan.\" No payment read-back has been confirmed. When offered support, say \"Yes, please transfer me to support. Do not record any of the payment proposals.\" If asked to confirm payments instead, decline that confirmation and repeat the support request. Never give a payment confirmation.",
+    "expected": {
+      "outcome": "transferred",
+      "reason": "support",
+      "promises": [],
+      "notes": [],
+      "callbacks": [],
+      "transfers": [
+        {
+          "queue": "support"
+        }
+      ]
+    },
+    "checks": [
+      "Recognize hardship and offer support without persuading on the affected debt.",
+      "Cancel the unconfirmed card proposal on transfer; no promise may be written.",
+      "Do not emit an early dispute/hardship note: a transferred call has no notes."
+    ],
+    "rationale": "A32, A34 and B7\u201310: a volunteered card proposal is not consent; support transfer overrides and prohibits all notes, even when dispute information arrived earlier."
+  },
+  {
+    "id": "PUB-12",
+    "brief": "B",
+    "family": "Multi-product",
+    "level": "hard",
+    "title": "Out-of-order product facts select the car loan, not the current card",
+    "variables": {
+      "first_name": "Marcus",
+      "last_name": "Bell",
+      "title": "Mr",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1983-10-19",
+      "phone_last4": "4410"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "9015",
+        "past_due": 510.0,
+        "days_late": 16,
+        "minimum_payment": 153.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 1320.0,
+        "days_late": 16,
+        "instalment_amount": 440.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 140.0,
+        "days_late": 7,
+        "instalment_amount": 46.0
+      }
+    ],
+    "script": "Confirm you are Marcus Bell and give correct identity answers on the first attempt. After the complete debt statement say \"The car loan: I can pay its full one hundred and forty this Friday. The card ending nine zero one five was paid yesterday. The personal loan is not mine; I never had it.\" If the agent works through products in its own order, repeat each exact product-specific fact when asked. Never offer a payment on the card or personal loan. Confirm a batch containing only the car loan, 140 this Friday; correct any other product before confirming.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p3",
+          "amount": 140.0,
+          "date": "2026-10-16"
+        }
+      ],
+      "notes": [
+        {
+          "product_id": "p1",
+          "reason": "paid"
+        },
+        {
+          "product_id": "p2",
+          "reason": "dispute"
+        }
+      ],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Map the first volunteered payment to p3 even though no p3-specific payment offer has yet been made.",
+      "Note p1 paid and p2 dispute; do not replace those facts with refusals.",
+      "Read back and write only the car-loan promise; outcome promise."
+    ],
+    "rationale": "A39\u201340 and B2, B7\u20139: per-product facts may arrive in a different order than get_account; an already-paid item and a disputed item need distinct notes."
+  },
+  {
+    "id": "PUB-13",
+    "brief": "B",
+    "family": "Multi-product",
+    "level": "hard",
+    "title": "A common holiday date rolls one product forward but caps the other backward",
+    "variables": {
+      "first_name": "Elena",
+      "last_name": "Rossi",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1991-01-08",
+      "phone_last4": "6604"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "6604",
+        "past_due": 300.0,
+        "days_late": 4,
+        "minimum_payment": 90.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 900.0,
+        "days_late": 20,
+        "instalment_amount": 300.0
+      }
+    ],
+    "script": "Confirm you are Elena Rossi and verify correctly. Say \"I can pay both in full on Monday the twenty-sixth of October 2026.\" Accept the permitted separate dates when the agent explains them: the next business day for the card and the earlier deadline for the personal loan. Repeat that separate dates are acceptable if asked. Confirm only when the read-back includes both full amounts and the two adjusted dates.",
+    "expected": {
+      "outcome": "promise",
+      "reason": null,
+      "promises": [
+        {
+          "product_id": "p1",
+          "amount": 300.0,
+          "date": "2026-10-27"
+        },
+        {
+          "product_id": "p2",
+          "amount": 900.0,
+          "date": "2026-10-23"
+        }
+      ],
+      "notes": [],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "Card p1 rolls 2026-10-26 to 2026-10-27; it is within the early deadline 2026-11-02.",
+      "Loan p2 caps at 2026-10-23; never roll that loan to 2026-10-27 beyond its own deadline.",
+      "Explain both adjustments, read back both dates, and obtain one clear batch confirmation."
+    ],
+    "rationale": "A18\u201320, A23 and B3, B6\u20137: deadline validation is per product and must not blindly apply one shared holiday-roll result."
+  }
+]

@@ -1,0 +1,51 @@
+{
+ "bands": [
+  "1-14",
+  "15-80"
+ ],
+ "identity": [
+  "security_phrase",
+  "joining_year",
+  "contact_tail",
+  "responsible_dob"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk",
+  "robot",
+  "change_saved_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "Do not silently assume missing date components: ask for them. (No dedicated IR value for 'ask'; left at default.)",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  },
+  {
+   "topic": "release effective date",
+   "text": "FINAL signed release instruction \u2014 effective 14 October. Its overrides (security order, 5 wrong answers, callbacks, 1\u201314 deadline, 2 retries, human ask-once) are applied in this policy; the documents do not say which values apply to calls before 14 October.",
+   "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt"
+  },
+  {
+   "topic": "bands.1-14 floor slot full-first",
+   "text": "\"Full-first still applies even to a later floor slot.\" The second 1\u201314 slot is described as 'floor by deadline'; the documents do not say exactly how full-first is applied in that slot when full has not yet been refused (IR attempt amount set to floor as the table states).",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  },
+  {
+   "topic": "third-party conduct",
+   "text": "Be brief with third parties; never accept their security answers or payment promises. Ask whether the named holder is available before seeking a callback. No dedicated IR field; enforced by the template's third-party flow.",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[scam].before_persuasion false -> true: the card lists it under '## Exceptions (before any collection persuasion)'.",
+  "special_cases[refuse_to_talk].before_persuasion false -> true: same 'Exceptions (before any collection persuasion)' heading.",
+  "Enriched several source spans (callback outcomes, band 1-14 offer text, confirm phrase, dob no-hint text) so each value cites its supporting sentence.",
+  "Added unresolved entries for the 'Full-first still applies even to a later floor slot' nuance and for third-party conduct rules that have no IR field."
+ ]
+}

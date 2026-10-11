@@ -1,0 +1,580 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/codex-harbor-exceptions/01-mail.txt",
+  "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+  "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md",
+  "tests/fixtures/external/codex-harbor-exceptions/04-code-list.txt"
+ ],
+ "bank_name": "Harbor Glass Cooperative",
+ "identity": {
+  "requirements": [
+   {
+    "field": "passphrase",
+    "ask_text": "What is your security passphrase?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+     "text": "1. `passphrase`: What is your security passphrase? Format text, transmit the spoken text."
+    }
+   },
+   {
+    "field": "enrolment_year",
+    "ask_text": "In which year did you enrol?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+     "text": "2. `enrolment_year`: In which year did you enrol? Format year, four-digit year."
+    }
+   },
+   {
+    "field": "phone_suffix",
+    "ask_text": "What are the last five digits of your phone number?",
+    "answer_format": "digits",
+    "digits": 5,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+     "text": "3. `phone_suffix`: What are the last five digits of your phone number? Format digits, exactly 5 digits; preserve leading zeros."
+    }
+   },
+   {
+    "field": "signatory_dob",
+    "ask_text": "What is the signatory birth date?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+     "text": "4. `signatory_dob`: What is the signatory birth date? Format date, numeric input DMY, transmit YYYY-MM-DD."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "attempts_available",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "hg-unverified",
+   "hg-r-failed"
+  ],
+  "declined_outcome": [
+   "hg-unverified",
+   "hg-r-declined"
+  ],
+  "unclear_holder_outcome": [
+   "hg-unreached",
+   "hg-r-unclear"
+  ],
+  "failed_instruction": "Please use the verification desk before another call.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Four wrong answers TOTAL across questions close hg-unverified/hg-r-failed; the API attempts_available supplies the global remaining count. Passing one question does not reset the total. No format hints or free hint retries exist. Say \"Please use the verification desk before another call.\" on exhaustion. Explain security protection once on a refusal; a second refusal closes hg-unverified/hg-r-declined. A question about purpose is not a refusal. | 03-signed-memo A: Retain the global FOUR wrong-answer limit and the API attempts_available counter. ADD a stricter local rule: a SINGLE wrong phone_suffix immediately ends identity verification as hg-unverified/hg-r-failed"
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "09:00",
+   "end": "11:30",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "hg-unreached",
+    "hg-r-callback"
+   ],
+   "no_callback_outcome": [
+    "hg-unreached",
+    "hg-r-no-callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md",
+    "text": "B. HG-C1 \u2014 REPLACE the continuous callback window. Callback date must still be today or the next business day, itself a business day and strictly later than now. On Monday, Tuesday, Wednesday or Thursday allow only 09:00\u201312:00 OR 14:00\u201318:00, all four endpoints included. No callback in the lunch gap. On Friday allow ONLY 09:00\u201311:30 inclusive, never Friday afternoon. No callbacks on a weekend or holiday. Keep one retry for an invalid slot and all callback outcomes. This replaces the continuous-window draft; do not preserve 09:00\u201318:00 as a fallback."
+   }
+  },
+  "wrong_number_outcome": [
+   "hg-unreached",
+   "hg-r-wrong-number"
+  ],
+  "deceased_outcome": [
+   "hg-unreached",
+   "hg-r-deceased"
+  ],
+  "deceased_sentence": "We are sorry for your loss.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Reveal only the opening; ask when the holder is available. ... Wrong number closes hg-unreached/hg-r-wrong-number; death of holder: say \"We are sorry for your loss.\" and close hg-unreached/hg-r-deceased, with no further questions."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-26",
+   "2026-11-11",
+   "2026-12-24"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Business days Monday\u2013Friday except 2026-10-26, 2026-11-11, 2026-12-24. All calculations use now. \"Next weekday\" is in the following calendar week, even if today is that weekday; \"this weekday\" is current week. Missing date parts must be clarified, not assumed."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-12",
+   "days_late_min": 1,
+   "days_late_max": 12,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 8
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Days late 1\u201312: eighth business day strictly after today. ... Each band has one subsequent full-by-deadline offer, substituting the floor only if full was already refused."
+   }
+  },
+  {
+   "name": "13-70",
+   "days_late_min": 13,
+   "days_late_max": 70,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 5,
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Days late 13\u201370: today plus five calendar days, adjusted to the preceding business day. Each band has one subsequent full-by-deadline offer, substituting the floor only if full was already refused."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "hg-cycle": "cycle_min",
+   "hg-tool": "tool_min",
+   "hg-trade": "trade_min"
+  },
+  "floor_rules": {},
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Use the product-specific floor field in section 3 as the floor. Always ask full first, never ask the customer to choose an amount. Offer the effective floor once if full is too much; say \"The unpaid remainder stays overdue.\" Accept customer proposals from effective floor through full inclusive."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Dates must be today or later, business days and within deadline. Customer non-business dates roll forward only within that deadline; otherwise offer the deadline, never silently use an invalid day. Vague dates: clarify once, then offer the deadline. ... Today is an allowed date when business-day and deadline rules allow it."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says the current overdue amount for a product has already been paid.",
+   "action": {
+    "type": "note",
+    "reason": "hg-r-settled"
+   },
+   "say": "Payments may take three business days to reach our account view.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Current overdue amount already paid: say the already-paid sentence, mark hg-r-settled and continue other products; no promise."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs or disputes it, including claiming a historical payoff or closure means the current debt is not owed.",
+   "action": {
+    "type": "note",
+    "reason": "hg-r-disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Historical payoff/closure disputing the current debt counts as dispute. Debt not owned/disputed: mark hg-r-disputed and continue other products; no argument or promise."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions job loss, illness, or being unable to meet essential living costs (wins even if they also ask for smaller instalments).",
+   "action": {
+    "type": "note",
+    "reason": "hg-r-distress"
+   },
+   "say": "I am sorry you are facing this difficulty.",
+   "offer_transfer_queue": "hg-care-desk",
+   "offer_outcome": [
+    "hg-routed",
+    "hg-r-care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Job loss, illness or inability to meet essential living costs: say \"I am sorry you are facing this difficulty.\" Offer care desk; accepted care transfer uses hg-routed/hg-r-care. Hardship wins over a simultaneous request for smaller instalments. If care is declined, mark only that product hg-r-distress and continue without persuasion; a voluntary amount/date may still be validated and confirmed, replacing the note only if saved."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to change the contract or the instalments, without any hardship.",
+   "action": {
+    "type": "transfer",
+    "queue": "hg-plan-desk",
+    "outcome": "hg-routed",
+    "reason": "hg-r-replan"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Contract-change or instalment-change request without hardship: transfer immediately to plan desk, outcome hg-routed/hg-r-replan."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human or a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "hg-human-desk",
+    "outcome": "hg-routed",
+    "reason": "hg-r-person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Human request: ask once whether the assistant can help, then transfer only if they insist to human desk, outcome hg-routed/hg-r-person."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer worries the call is a scam or asks whether the call is genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You may verify this call using the contact number printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Scam concern: say scam_reply and continue the interrupted stage."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to continue the conversation or does not want to talk.",
+   "action": {
+    "type": "note",
+    "reason": "hg-r-refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Refusal to talk: ask once to continue, then mark remaining unresolved products hg-r-refused and finalize by saved-promise precedence without overwriting already known paid/disputed statuses."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot or automated system.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am the automated assistant of Harbor Glass Cooperative.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "| robot_reply | I am the automated assistant of Harbor Glass Cooperative. |"
+   }
+  },
+  {
+   "name": "cannot_answer",
+   "trigger": "The customer asks a question the assistant cannot answer from the available information.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Our account desk can explain that.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Never invent information for unanswerable questions. | cannot_answer_sentence | Our account desk can explain that. |"
+   }
+  },
+  {
+   "name": "change_recorded_promise",
+   "trigger": "The customer wants to change a promise that was already saved successfully.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please contact our service desk to change a saved agreement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+    "text": "Changes to successful promises use the sentence in section 7; no second write."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "hg-promised",
+    "reasons": [],
+    "when": "At least one promise saved successfully and no transfer."
+   },
+   {
+    "outcome": "hg-settled",
+    "reasons": [],
+    "when": "All products already paid and no promise saved."
+   },
+   {
+    "outcome": "hg-routed",
+    "reasons": [
+     "hg-r-replan",
+     "hg-r-person",
+     "hg-r-care"
+    ],
+    "when": "Transfer to hg-plan-desk, hg-human-desk or hg-care-desk."
+   },
+   {
+    "outcome": "hg-unarranged",
+    "reasons": [
+     "hg-r-refused",
+     "hg-r-distress",
+     "hg-r-disputed",
+     "hg-r-service"
+    ],
+    "when": "No promise saved and not all paid; reason of first non-paid product in account order."
+   },
+   {
+    "outcome": "hg-unverified",
+    "reasons": [
+     "hg-r-failed",
+     "hg-r-declined"
+    ],
+    "when": "Identity checks failed or declined."
+   },
+   {
+    "outcome": "hg-unreached",
+    "reasons": [
+     "hg-r-callback",
+     "hg-r-no-callback",
+     "hg-r-wrong-number",
+     "hg-r-deceased",
+     "hg-r-unclear"
+    ],
+    "when": "Holder not reached."
+   }
+  ],
+  "promise_outcome": "hg-promised",
+  "paid_outcome": "hg-settled",
+  "transfer_outcome": "hg-routed",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "hg-unarranged",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "hg-r-service",
+  "refused_reason": "hg-r-refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Transfer overrides other outcomes, cancels unconfirmed proposals, preserves successfully saved promises and permits NO notes before or after transfer. Otherwise any saved promise wins (hg-promised); all products already paid yields hg-settled; with none saved and not all paid use hg-unarranged with the first non-paid product reason in account order. ... Refusal is hg-r-refused; permanent service failure hg-r-service. Thank the customer and say goodbye BEFORE one close_call, the last bank action. | 04-code-list.txt disposition register"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "hg-r-refused",
+   "hg-r-distress",
+   "hg-r-disputed",
+   "hg-r-settled",
+   "hg-r-service"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/04-code-list.txt",
+   "text": "Note API reason values: hg-r-refused, hg-r-distress, hg-r-disputed, hg-r-settled, hg-r-service. Notes enabled; paid uses hg-r-settled, distress hg-r-distress, disputed hg-r-disputed, refused hg-r-refused, exhausted write failure hg-r-service."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "At most 3 products, in returned order. ... State all products, full sums and days late before asking for anything. Ask the full amount today once for the whole batch (singular wording for one). Then each product gets its own attempt counter, never another today question."
+  }
+ },
+ "phrases": {
+  "opening": "Hello, this is Harbor Glass Cooperative's automated assistant. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue holdings.",
+  "today_question": "Can you pay this amount today?",
+  "all_today_question": "Can you pay all these amounts today?",
+  "robot_reply": "I am the automated assistant of Harbor Glass Cooperative.",
+  "scam_reply": "You may verify this call using the contact number printed on your statement.",
+  "prohibited_before_verification": [
+   "arrears",
+   "overdue",
+   "balance",
+   "payment"
+  ],
+  "after_promise_sentence": "Your saved agreement will appear in the cooperative portal.",
+  "already_paid_sentence": "Payments may take three business days to reach our account view.",
+  "cannot_answer_sentence": "Our account desk can explain that.",
+  "recorded_promise_change_reply": "Please contact our service desk to change a saved agreement.",
+  "product_naming": {
+   "hg-cycle": "cycle account",
+   "hg-tool": "equipment advance",
+   "hg-trade": "trade account"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "## 7. Mandatory sentences \u2014 Use each sentence exactly in its indicated situation; substitute only title and last_name placeholders. ... Opening is verbatim."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save these arrangements together?",
+  "source": {
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/02-policy.md",
+   "text": "Read every pending product, amount and date in one batch, then ask \"May I save these arrangements together?\". ... At most one saved promise per product. One extra retry after a failed promise write; failed responses mean nothing committed."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "callback window (split hours)",
+   "text": "Signed memo B: Monday\u2013Thursday only 09:00\u201312:00 OR 14:00\u201318:00 (endpoints included, no lunch-gap callbacks); Friday ONLY 09:00\u201311:30 inclusive; no weekend/holiday callbacks; do not preserve 09:00\u201318:00 as a fallback. The IR holds a single start/end window, so 09:00\u201311:30 (valid on every business day) is stored; the compiler must additionally allow 11:30\u201312:00 and 14:00\u201318:00 on Monday\u2013Thursday.",
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md"
+  },
+  {
+   "topic": "phone_suffix single wrong answer",
+   "text": "Signed memo A: a SINGLE wrong phone_suffix immediately ends identity verification as hg-unverified/hg-r-failed, even if the global counter still has attempts left; do not ask that field again. Other questions keep the global four-wrong allowance; no correctly verified question may be repeated. The IR has no per-field wrong-answer limit.",
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md"
+  }
+ ]
+}

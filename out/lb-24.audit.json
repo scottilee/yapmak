@@ -1,0 +1,178 @@
+{
+ "covered": [
+  {
+   "rule": "Compliance 9 Oct: after a failed create_promise the agent must NOT retry (overrides Ops point 3)",
+   "where": "promise_write.retry_on_failure"
+  },
+  {
+   "rule": "Ops 7 Oct 1: order phone_last4, date_of_birth, postcode, birth_year; 3 wrong answers",
+   "where": "identity.requirements, identity.wrong_answer_limit"
+  },
+  {
+   "rule": "Ops 7 Oct 2: 56\u201390 deadline third business day after today",
+   "where": "bands[2].deadline"
+  },
+  {
+   "rule": "Ops 7 Oct 4: callbacks next business day only",
+   "where": "third_party.callback.days"
+  },
+  {
+   "rule": "Ops 7 Oct 4: human requests transfer immediately, no ask",
+   "where": "special_cases[human].ask_once_first"
+  },
+  {
+   "rule": "1: opening sentence, title and last name",
+   "where": "phrases.opening, phrases.holder_question"
+  },
+  {
+   "rule": "2: forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "3: confirmation asked twice, then unreached/unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "4: robot reply / scam reply",
+   "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
+  },
+  {
+   "rule": "5: third party, ask when customer can be reached",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "6: callback window 12:00\u201318:00, after now, unreached/callback",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "7: ask once more, unreached/no_callback",
+   "where": "third_party.callback.retry_once, no_callback_outcome"
+  },
+  {
+   "rule": "8: wrong number unreached/wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "9: deceased sentence and outcome",
+   "where": "third_party.deceased_sentence, deceased_outcome"
+  },
+  {
+   "rule": "10: refuse to talk no_arrangement/declined_payment",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "11: question formats, dmy",
+   "where": "identity.requirements[*].answer_format, numeric_date_order, digits"
+  },
+  {
+   "rule": "12: wrong_answers_left is the count",
+   "where": "identity.wrong_count_source, identity.remaining_slot"
+  },
+  {
+   "rule": "13: failed instruction, unverified/failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "14: explain once, unverified/declined",
+   "where": "identity.decline_explain_once, asking_purpose_counts_as_decline, declined_outcome"
+  },
+  {
+   "rule": "15/29: human -> desk, handed_over/person (ask-first overridden)",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "16: business days and holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "17: next/this weekday",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "18: debt intro, up to 2 products, state all, ask all today once",
+   "where": "phrases.debt_intro, phrases.all_today_question, multi_product"
+  },
+  {
+   "rule": "19: product naming, fixed floor 75.00 capped at full",
+   "where": "phrases.product_naming, amounts.floor_rules['*']"
+  },
+  {
+   "rule": "20: full first, never ask how much, floor once with 'the rest stays overdue'",
+   "where": "amounts"
+  },
+  {
+   "rule": "21: promise date rules",
+   "where": "dates"
+  },
+  {
+   "rule": "22: band table",
+   "where": "bands"
+  },
+  {
+   "rule": "23: persuasion attempts",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "24: attempts used up -> declined_payment",
+   "where": "outcomes.refused_reason, notes.reasons"
+  },
+  {
+   "rule": "25: already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "26: dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "27: hardship",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "28: restructuring",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "30: read-back 'Do you confirm?', one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "31: after-promise sentence",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "32: failure -> no_arrangement/system_error",
+   "where": "outcomes.service_error_reason, promise_write.retry_on_failure"
+  },
+  {
+   "rule": "33: change promise reply",
+   "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
+  },
+  {
+   "rule": "34: multi-product handling",
+   "where": "multi_product"
+  },
+  {
+   "rule": "35: notes",
+   "where": "notes"
+  },
+  {
+   "rule": "36: goodbye before close, outcome table",
+   "where": "outcomes.goodbye_before_close, outcomes.table"
+  },
+  {
+   "rule": "37: outcome precedence",
+   "where": "outcomes.promise_outcome, transfer_outcome, paid_outcome, no_promise_outcome, transfer_overrides_promise, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
+  }
+ ],
+ "fixed": [
+  "phrases.today_question: changed from the invented 'Can you pay the full past-due amount today?' to 'Can you pay all of it today?', following rule 18 ('ask once whether they can pay all of it today').",
+  "Added fuller source quotes (identity decline/failed text, third-party rule 5, band2 attempt 2, amounts rule 20, phrases forbidden words and product naming, promise read-back, goodbye before close) and noted that the 7 Oct message overrides the human-request rule. No values changed apart from today_question; every other value checked against the thread and the openapi enums (verify_identity field, product type, transfer queue, add_note reason, close_call outcome) and found correct, with document precedence applied (9 Oct > 7 Oct > 1 Oct)."
+ ],
+ "unresolved": [
+  "What to say when verify_identity returns hint day_month_swapped, and whether it counts as a wrong answer.",
+  "No sentence is dictated for questions the agent cannot answer.",
+  "What to do when a band's deadline (e.g. last business day of the current month) is already in the past; left at the default next_business_day.",
+  "No wording is dictated for the apology on a wrong number or for 'could not record it' after a create_promise failure (only the content is described)."
+ ]
+}

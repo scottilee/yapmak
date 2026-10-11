@@ -192,18 +192,6 @@ def test_idle_turns_wrap_the_call_up():
     assert bank.notes == [{"product_id": "p2", "reason": "refused"}, {"product_id": "p3", "reason": "refused"}] and bank.outcome == ("promise", None)
 
 
-def test_goodbye_at_the_readback_does_not_write():
-    # chatter at the read-back re-asks the confirmation; a goodbye counts as "not confirmed": nothing is written and the agent asks what to change
-    case = CASES["PUB-01"]
-    ir = P.PolicyIR.from_dict(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")))
-    wf = C.compile_workflow(ir, TOOLS)
-    bank = MockBank(copy.deepcopy(case))
-    drv = Driver(wf, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"),
-                 verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today"}] + [{"_node": "readback", "rb_intent": "other"}] * 2 + [{"_node": "readback", "rb_intent": "goodbye"}])
-    with pytest.raises(RuntimeError, match="script exhausted in node negotiate"):
-        drv.run()
-    assert bank.promises == [] and "change" in drv.vars.get("neg_instruction", "")
-
 
 def test_chatter_never_ends_a_call_early():
     # talkative customers (live B talkative 0/3 on the first idle rule): seven chatter turns, then the answer, still one promise
@@ -242,8 +230,8 @@ def test_too_much_first_then_floor_refused_runs_the_attempt_ladder():
     case = CASES["PUB-06"]
     bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-06",
                      verified(case) + [{"_node": "state_debt", "cust_intent": "too_much"}, {"_node": "negotiate", "cust_intent": "refuses"},
-                                       {"_node": "negotiate", "cust_intent": "refuses"}, {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB], "2026-10-14T11:00")
-    assert bank.promises == [{"product_id": "p1", "amount": 637.5, "date": "2026-10-23"}]
+                                       {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 637.5, "date": "2026-10-23"}]     # the floor (Friday) refused -> attempt 2: floor on the deadline
 
 
 def test_next_product_instruction_forbids_noted_claims_while_a_proposal_is_pending():
@@ -255,3 +243,138 @@ def test_next_product_instruction_forbids_noted_claims_while_a_proposal_is_pendi
     with pytest.raises(RuntimeError, match="script exhausted in node negotiate"):
         drv.run()
     assert "noted or recorded" in drv.vars["neg_instruction"] and bank.promises == []
+
+
+def test_not_verified_without_a_counter_counts_as_wrong():
+    # external package aster: the API has no remaining-attempts field and the policy counts in code (limit 2);
+    # the agent said "I could not read that" and re-asked for ever instead of counting the refusal
+    d = json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")); d["identity"]["wrong_answer_limit"] = 2; d["identity"]["wrong_count_source"] = "code"; d["identity"]["remaining_slot"] = ""
+    ir = P.PolicyIR.from_dict(d); wf = C.compile_workflow(ir, TOOLS)
+    case = CASES["PUB-03"]
+    class NoCounter(MockBank):
+        def call(self, name, body):
+            r = super().call(name, body)
+            if name == "verify_identity":
+                r = {"ok": bool(r.get("verified")), "verified": bool(r.get("verified"))}
+            return r
+    bank = NoCounter(copy.deepcopy(case))
+    drv = Driver(wf, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"),
+                 [CONFIRM, {"_node": "ask_0", "id_intent": "answers", "id_day": 1, "id_month": 1, "id_year": 1990}, {"_node": "ask_0", "id_intent": "answers", "id_day": 2, "id_month": 2, "id_year": 1991}])
+    drv.run()
+    assert [c[0] for c in bank.calls] == ["verify_identity", "verify_identity", "close_call"] and bank.outcome == ("not_verified", "failed")
+
+
+def test_common_holiday_date_rolls_one_product_and_clamps_the_other():
+    # other agent's live case (codex-1 PUB-13): "the 26th for both" -> p1 (early band) rolls to Tue 27 Oct, p2 (late band, deadline 23 Oct) is clamped to 23 Oct;
+    # before: the loop stopped at p1's roll-forward question and p2 later got a fresh attempt-1 proposal (16 Oct)
+    c = CASES["PUB-13"]
+    script = verified(c) + [{"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "date", "prop_day": 26, "prop_month": 10, "prop_product": "all"},
+                            {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-13", script, "2026-10-14T11:00", json.load(open(ROOT / "tests/fixtures/brief_ab.policy.json")))
+    assert sorted((p["product_id"], p["date"]) for p in bank.promises) == [("p1", "2026-10-27"), ("p2", "2026-10-23")]
+    assert bank.outcome == ("promise", None)
+
+
+def test_attempt_instruction_keeps_the_llm_on_the_current_product():
+    # live PUB-12 (three times tonight): after "I will not pay that loan" the LLM skipped the loan's second attempt and moved to the car loan
+    c = CASES["PUB-12"]
+    ir = P.PolicyIR.from_dict(P.merge_overlay(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), json.load(open(ROOT / "tests/fixtures/brief_ab.policy.json"))))
+    wf = C.compile_workflow(ir, TOOLS); bank = MockBank(copy.deepcopy(c))
+    drv = Driver(wf, bank, dict(c["variables"], customer_id="c1", now="2026-10-14T11:00"),
+                 [CONFIRM, dob(*reversed([int(x) for x in c["identity"]["date_of_birth"].split("-")])), phone("4401"), phone("4410"),
+                  {"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "tomorrow", "prop_product": "1"}, {"_node": "negotiate", "cust_intent": "refuses", "prop_product": "2"}])
+    with pytest.raises(RuntimeError, match="script exhausted in node negotiate"):
+        drv.run()
+    ins = drv.vars["neg_instruction"]
+    assert "440.00" in ins and "personal loan" in ins and "Stay on the personal loan" in ins
+
+
+def test_robot_question_asked_with_an_acceptance_is_answered_before_the_readback():
+    # live PUB-04 / PUB-07 (four times tonight): "Yes, that works. Are you a robot?" -> the read-back is fixed speech, so the question was never answered
+    case = CASES["PUB-01"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-01",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today", "aside": "robot"}, YES_RB], "2026-10-14T11:00")
+    rb = [s for n, s in drv.spoken if n == "readback"][0]
+    assert rb.startswith("I am Freya Bank's digital assistant.") and "To confirm" in rb
+    assert bank.promises == [{"product_id": "p1", "amount": 420.0, "date": "2026-10-14"}]
+
+
+def test_scam_question_asked_with_a_refusal_is_answered_in_the_next_instruction():
+    case = CASES["PUB-01"]
+    ir = P.PolicyIR.from_dict(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json"))); wf = C.compile_workflow(ir, TOOLS); bank = MockBank(copy.deepcopy(case))
+    drv = Driver(wf, bank, dict(case["variables"], customer_id="c1", now="2026-10-14T11:00"), verified(case) + [{"_node": "state_debt", "cust_intent": "refuses", "aside": "scam"}])
+    with pytest.raises(RuntimeError, match="script exhausted in node negotiate"):
+        drv.run()
+    ins = drv.vars["neg_instruction"]
+    assert ins.startswith('First answer their question in one sentence: "You can verify this call') and "Propose this payment" in ins
+
+
+def test_weekday_naming_the_offer_restates_it_and_bare_weekday_is_never_in_the_past():
+    # live PUB-07 (04 UTC): offer Tuesday 27 Oct; "I can do that on Tuesday" extracted as weekday tuesday/this -> was resolved to LAST Tuesday
+    case = CASES["PUB-07"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-07",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "vague"},
+                                       {"_node": "negotiate", "cust_intent": "proposes", "prop_kind": "date", "prop_day": 26},
+                                       {"_node": "negotiate", "cust_intent": "accepts", "prop_kind": "weekday", "prop_weekday": "tuesday", "prop_relative": "this"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 540.0, "date": "2026-10-27"}]
+    case = CASES["PUB-01"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-01",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "weekday", "prop_weekday": "tuesday", "prop_relative": "this"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 420.0, "date": "2026-10-20"}]   # the coming Tuesday, not 13 October
+
+
+def test_goodbye_at_the_readback_closes_once_without_writing():
+    case = CASES["PUB-01"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-01",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today"}, {"_node": "readback", "rb_intent": "goodbye"}], "2026-10-14T11:00")
+    assert bank.promises == [] and bank.outcome == ("no_promise", "refused") and [c[0] for c in bank.calls].count("close_call") == 1
+
+
+def test_floor_at_the_first_question_rides_on_attempt_one_date():
+    # public PUB-06 ledger: "too much" straight away -> floor 637.50 on Friday 16 Oct (asks_back persona says it at the first question)
+    case = CASES["PUB-06"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-06",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "too_much"}, {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 637.5, "date": "2026-10-16"}]
+
+
+def test_monday_the_26th_with_a_this_relative_is_the_26th():
+    # live A asks_back PUB-07: "Monday the 26th" extracted as weekday monday / this + day 26 -> was last Monday (past), three re-asks
+    case = CASES["PUB-07"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-07",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "weekday", "prop_weekday": "monday", "prop_relative": "this", "prop_day": 26},
+                                       {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 540.0, "date": "2026-10-27"}]      # 26 Oct is a holiday -> rolled to the 27th and accepted
+
+
+def test_aside_with_the_confirmation_is_spoken_before_the_recorded_sentence():
+    case = CASES["PUB-01"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-01",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "pays_today"}, {"_node": "readback", "rb_intent": "confirms", "aside": "robot"}], "2026-10-14T11:00")
+    said = " ".join(s for n, s in drv.spoken)
+    assert "I am Freya Bank's digital assistant." in said and bank.promises and bank.outcome == ("promise", None)
+
+
+def test_explicit_next_tuesday_is_not_folded_into_a_later_offer():
+    # offer Tuesday 27 Oct on the table; "next Tuesday" from Wednesday 14 Oct is the 20th and stays the 20th
+    case = CASES["PUB-07"]
+    bank, drv = _run(json.load(open(ROOT / "tests/fixtures/brief_a.policy.json")), "PUB-07",
+                     verified(case) + [{"_node": "state_debt", "cust_intent": "proposes", "prop_kind": "vague"},
+                                       {"_node": "negotiate", "cust_intent": "proposes", "prop_kind": "date", "prop_day": 26},
+                                       {"_node": "negotiate", "cust_intent": "proposes", "prop_kind": "weekday", "prop_weekday": "tuesday", "prop_relative": "next"}, YES_RB], "2026-10-14T11:00")
+    assert bank.promises == [{"product_id": "p1", "amount": 540.0, "date": "2026-10-20"}]
+
+
+def test_no_window_blocks_the_floor_offer_and_direct_acceptance():
+    d = json.load(open(ROOT / "tests/fixtures/brief_a.policy.json"))
+    d["bands"][1]["deadline"] = {"kind": "fixed_date", "date": "2026-10-01", "adjustment": "following"}; d["dates"]["past_deadline"] = "no_promise"
+    case = CASES["PUB-06"]
+    bank, drv = _run(d, "PUB-06", verified(case) + [{"_node": "state_debt", "cust_intent": "too_much"}, {"_node": "negotiate", "cust_intent": "accepts"}], "2026-10-14T11:00")
+    assert bank.promises == [] and bank.outcome == ("no_promise", "refused")
+
+
+def test_composite_deadline_children_are_validated():
+    d = json.load(open(ROOT / "tests/fixtures/brief_a.policy.json"))
+    d["bands"][0]["deadline"] = {"kind": "earliest", "rules": [{"kind": "nth_business_day", "n": 6}, {"kind": "calendar_days", "n": 9}]}   # child lacks adjustment
+    errs = P.validate(P.PolicyIR.from_dict(d), C.tool_enums(TOOLS))
+    assert any("adjustment" in e for e in errs)

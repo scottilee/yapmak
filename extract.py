@@ -36,9 +36,15 @@ The JSON must deserialize with `policy.PolicyIR.from_dict` (read policy.py for e
 - Outcomes: `failed_outcome`, `declined_outcome`, `unclear_holder_outcome`, callback outcomes, `wrong_number_outcome`, `deceased_outcome`
   are [outcome, reason] pairs; outcome must be a value of the close_call `outcome` enum, reason a value the documents list for it ("" if none).
 - `bands`: one per days-late band. `deadline` uses the DSL: {"kind":"nth_business_day","n":N} | {"kind":"calendar_days","n":N,"adjustment":"none|following|preceding"}
-  | {"kind":"fixed_date","date":"YYYY-MM-DD","adjustment":...} | {"kind":"end_of_month","basis":"calendar|business","adjustment":...}.
+  | {"kind":"fixed_date","date":"YYYY-MM-DD","adjustment":...} | {"kind":"end_of_month","basis":"calendar|business","adjustment":...,"month_offset":0}
+  | {"kind":"day_of_month","day":15,"month_offset":1,"adjustment":...} ("the 15th of next month" = day 15, month_offset 1; "end of next month" = end_of_month with month_offset 1;
+  "within N business days" = nth_business_day) | {"kind":"earliest","rules":[<two or more simple rules>]} for "whichever comes first" ("latest" for the later one).
+  `dates.past_deadline`: "no_promise" when the documents say that a deadline already behind us means no promise can be taken; otherwise leave the default.
   `attempts`: the persuasion attempts in order, each {"amount":"full|floor","date":"last_business_day_this_week_or_next|deadline|today|next_business_day","floor_if_full_refused":bool}.
 - `amounts.floors`: product type (a value of the product `type` enum in get_account) -> the response property that holds the lowest acceptable amount.
+  When the floor is NOT a bank field, use `amounts.floor_rules` instead (product type or "*" for all types): {"kind":"percent","percent":20,"min_amount":0}
+  for "at least 20 percent of the past-due amount", {"kind":"fixed","amount":50} for "no less than 50", {"kind":"field","field":"<property>"} for a field,
+  {"kind":"max_of","field":"<property>","percent":25,"round":"up_cent"} for "the greater of the base field and 25% of the balance (rounded up to the cent)". The floor never exceeds the full amount.
 - `special_cases`: one per situation the documents handle (already paid, dispute, hardship, restructuring, human request, scam question,
   refusal to talk, ...). `trigger` is a plain-language description of what the customer says. `action` is {"type":"close","outcome":..,"reason":..}
   or {"type":"transfer","queue":..,"outcome":..,"reason":..} or {"type":"note","reason":..} or {"type":"continue"}.

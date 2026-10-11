@@ -1,0 +1,72 @@
+{
+  "e870198": {
+    "explicit_year_with_weekday": {
+      "actual": [
+        "ok",
+        "2027-10-16"
+      ],
+      "expected": "2027-10-16"
+    },
+    "expired_deadline": {
+      "policy_deadline": "2026-10-29",
+      "effective_deadline": "2026-10-29"
+    },
+    "different_human_after_support_offer": {
+      "next": "negotiate",
+      "instruction": "Ask once whether you can help them yourself first. Then continue with the current question.",
+      "transfer": null,
+      "proposed": []
+    },
+    "other_with_payment_fields": {
+      "next": "readback",
+      "instruction": "",
+      "transfer": null,
+      "proposed": [
+        {
+          "id": "p1",
+          "amount": 200.0,
+          "date": "2026-10-15"
+        }
+      ]
+    },
+    "goodbye_at_readback": {
+      "next": "readback",
+      "instruction": "",
+      "proposed": true
+    }
+  },
+  "70ce3b4": {
+    "explicit_year_with_weekday": {
+      "actual": [
+        "ok",
+        "2026-10-17"
+      ],
+      "expected": "2027-10-16"
+    },
+    "expired_deadline": {
+      "policy_deadline": "2026-10-29",
+      "effective_deadline": "2026-11-02"
+    },
+    "different_human_after_support_offer": {
+      "next": "transfer",
+      "instruction": "Say one short sentence of sympathy. Do not propose any amount or date. Offer to connect them with the support team and ask whether they would like that.",
+      "transfer": {
+        "queue": "support",
+        "outcome": "transferred",
+        "reason": "support"
+      },
+      "proposed": []
+    },
+    "other_with_payment_fields": {
+      "next": "negotiate",
+      "instruction": "Reply in a few words and invite them to come back to the payment whenever they are ready; do not repeat the proposal or any amount or date.",
+      "transfer": null,
+      "proposed": []
+    },
+    "goodbye_at_readback": {
+      "next": "negotiate",
+      "instruction": "Ask what they would like to change: the amount or the date.",
+      "proposed": true
+    }
+  }
+}

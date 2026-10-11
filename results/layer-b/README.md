@@ -45,4 +45,10 @@ logged the conflict; un-dictated sentences (sympathy, cannot-answer) were writte
 found by this run (fixed in `layer_b.py` for the next run): the rendered brief skipped section 7 for single-product
 policies, and the OpenAPI copies kept practice descriptions (now scrubbed).
 
+Round 3 (11 Oct 03:11 UTC, after the floor-rule / deadline-kind additions): perm 10 and 14 (percent / fixed floors, clean), 6 and 24 (threads),
+1 and 9 (raw packs incl. "the 15th of next month" and "end of next month" deadlines) — the extractor encoded `floor_rules` ("*" wildcard,
+percent 20 min 50 / fixed 75) and the new deadline kinds correctly; 0 operative diffs on the 5 finished samples (16 samples overall). The
+run-time functional column of that round was polluted by a concurrent revert of the runtime (see results/audit/review-v22.md) and was re-checked
+offline afterwards: all pass.
+
 Re-run: `.venv/bin/python scripts/layer_b.py run --perms 1:clean,5:raw,...` (Claude only, ~3 min and ~$1 per sample).

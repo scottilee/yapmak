@@ -1,0 +1,50 @@
+{
+ "bands": [
+  "1-15",
+  "16-45",
+  "46-90"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The policy requires one short sentence of sympathy but does not dictate the words; a generic sentence was written.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "refuse_to_talk final outcome",
+   "text": "A second refusal 'ends the call and marks all remaining products tamarisk_refused'; the documents do not give a separate close pair, so the close follows the general precedence (a promise recorded earlier gives tamarisk_arranged; otherwise tamarisk_no_deal with the first non-settled note reason). The action records tamarisk_no_deal / tamarisk_refused as the usual result.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "account protection explanation wording",
+   "text": "'Explain account protection once after a refusal' gives no words for the explanation.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  },
+  {
+   "topic": "failed write sentence",
+   "text": "After a second create_promise failure the agent 'says it failed'; no wording is dictated.",
+   "doc": "tests/fixtures/external/v24-tamarisk-thread/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "Checked every value against the sources and the API enums: no wrong values found. Memo precedence (deadline windows, minimums, past-deadline no_promise) is applied correctly, and the unapproved draft values from the mail are correctly absent.",
+  "Added unresolved entries: refuse_to_talk close outcome depends on general precedence; account-protection explanation has no dictated wording; failed-write sentence has no dictated wording.",
+  "Expanded source texts: identity (holder-unclear rule), bands[2] (single attempt), multi_product (transfer keeps recorded promises)."
+ ]
+}

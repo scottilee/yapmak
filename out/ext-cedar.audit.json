@@ -1,0 +1,187 @@
+{
+ "covered": [
+  {
+   "rule": "\u00a71 Say the opening verbatim from section 7 and then the holder question",
+   "where": "phrases.opening, phrases.opening_verbatim, phrases.holder_question"
+  },
+  {
+   "rule": "\u00a71 at most two asks total; if still unclear close cr-unreached/cr-r-unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a71 never say arrears, overdue, balance or payment before security passes",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a71 A relative cannot verify or promise for the holder",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "\u00a71.1 birth_date, date, numeric MDY",
+   "where": "identity.requirements[0]"
+  },
+  {
+   "rule": "\u00a71.2 access_pin, exactly 6 digits, leading zeros",
+   "where": "identity.requirements[1]"
+  },
+  {
+   "rule": "\u00a71.3 locality_word, text",
+   "where": "identity.requirements[2]"
+  },
+  {
+   "rule": "\u00a71 Four wrong answers TOTAL ... cr-unverified/cr-r-failed; count in agent code; no remaining-count",
+   "where": "identity.wrong_answer_limit, identity.wrong_count_source, identity.remaining_slot, identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a71 No format hints or free hint retries exist",
+   "where": "identity.requirements[*].hint_field (empty)"
+  },
+  {
+   "rule": "\u00a71 \"Please use the verification desk before another call.\"",
+   "where": "identity.failed_instruction"
+  },
+  {
+   "rule": "\u00a71 Explain once on refusal; second refusal cr-unverified/cr-r-declined; purpose question not a refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline"
+  },
+  {
+   "rule": "\u00a72 Callback today or next business day, 08:45\u201317:15, strictly later than now, ask once more",
+   "where": "third_party.callback"
+  },
+  {
+   "rule": "\u00a72 cr-unreached/cr-r-no-callback, cr-unreached/cr-r-callback",
+   "where": "third_party.callback.no_callback_outcome, third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "\u00a72 Wrong number cr-unreached/cr-r-wrong-number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "\u00a72 death: \"Please accept our sympathy.\" cr-unreached/cr-r-deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "\u00a73 At most 1 products (also maxItems 1 in API)",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a73 State all products first; ask today once; per-product attempt counter",
+   "where": "multi_product.*"
+  },
+  {
+   "rule": "\u00a73 table: cr-flex flexible credit flex_base; cr-term term advance term_base",
+   "where": "phrases.product_naming, amounts.floor_rules[*].min_field"
+  },
+  {
+   "rule": "\u00a73 Business days Mon\u2013Fri except 2026-10-23, 2026-11-02, 2026-12-25",
+   "where": "calendar.holidays, calendar.business_days"
+  },
+  {
+   "rule": "\u00a73 Next weekday = following week; missing date parts clarified",
+   "where": "calendar.next_weekday_means_following_week, calendar.missing_date_parts"
+  },
+  {
+   "rule": "CR-D1 days 1\u201360, EARLIER of 6th business day and last business day of month",
+   "where": "bands[0].deadline, unresolved[0]"
+  },
+  {
+   "rule": "CR-D1 deadline before today: no promise, cr-none/cr-r-refused",
+   "where": "unresolved[1]"
+  },
+  {
+   "rule": "CR-D1 one subsequent full-by-deadline offer, floor only if full already refused",
+   "where": "bands[0].attempts"
+  },
+  {
+   "rule": "\u00a74 dates today or later, business days, roll forward within deadline, vague clarify once",
+   "where": "dates.*"
+  },
+  {
+   "rule": "\u00a74 Common dates adjusted per product",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "CR-A1 effective floor min(full, max(base, ceil 25%))",
+   "where": "amounts.floor_rules, unresolved[2]"
+  },
+  {
+   "rule": "\u00a75 full first, never ask amount, floor once, \"The unpaid remainder stays overdue.\", accept floor..full",
+   "where": "amounts.full_first, amounts.never_ask_how_much, amounts.floor_offered_once, amounts.floor_wording, amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "\u00a75 Today is an allowed date",
+   "where": "dates.promise_today_allowed"
+  },
+  {
+   "rule": "\u00a76 \"May I save this arrangement?\" batch read-back",
+   "where": "promise_write.confirm_phrase, multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "\u00a76 At most one saved promise per product; one extra retry",
+   "where": "promise_write.one_promise_per_product, promise_write.retry_on_failure"
+  },
+  {
+   "rule": "\u00a76 Changes to successful promises use section 7 sentence",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "\u00a76 already paid: sentence, cr-paid no reason",
+   "where": "special_cases[already_paid]"
+  },
+  {
+   "rule": "\u00a76 dispute incl. historical payoff: cr-none/cr-r-disputed",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "\u00a76 hardship: sympathy sentence, care desk offer cr-routed/cr-r-care, declined cr-none/cr-r-distress",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "\u00a76 contract/instalment change: cr-plan-desk cr-routed/cr-r-replan",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "\u00a76 human request: cr-human-desk cr-routed/cr-r-person, no help offer",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "\u00a76 scam: scam_reply and continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "\u00a76 refusal to talk: ask once then cr-none/cr-r-refused",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "\u00a76 Transfer overrides, preserves saved promises, no notes; precedence; goodbye before close_call",
+   "where": "outcomes.*, notes.none_on_transfer, multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "\u00a76 Notes disabled; register: no add_note calls authorized",
+   "where": "notes.enabled=false, notes.reasons=[]"
+  },
+  {
+   "rule": "\u00a77 sentence table (opening .. recorded_promise_change_reply)",
+   "where": "phrases.*"
+  },
+  {
+   "rule": "Disposition register outcomes/reasons",
+   "where": "outcomes.table"
+  },
+  {
+   "rule": "Queues cr-plan-desk, cr-human-desk, cr-care-desk",
+   "where": "special_cases[restructuring|human].action.queue, special_cases[hardship].offer_transfer_queue"
+  }
+ ],
+ "fixed": [
+  "Removed unresolved entry 'identity.wrong_count': the document settles it (count in agent code, 4 total) and it is already expressed by identity.wrong_count_source='code' and wrong_answer_limit=4.",
+  "Added 'A relative cannot verify or promise for the holder.' to third_party.source so that rule is traceable.",
+  "Extended amounts.source and promise_write.source with the below-floor, no-discount, consent-revalidation and service-failure sentences for traceability; no values changed.",
+  "Verified all other values against the specification and openapi enums (verify_identity field, close_call outcome/reason, transfer_to_agent queue, contract_kind); no value errors found."
+ ],
+ "unresolved": [
+  "CR-D1 deadline is the earlier of two rules (6th business day vs last business day of current month); the DSL has no min-of-two, encoded with extra 'cap'/'combine' keys the compiler must honour.",
+  "Deadline-before-today case (no promise, close cr-none/cr-r-refused) has no IR field.",
+  "Effective floor combines a base field, a 25% rule rounded up to the cent, and a cap at full; the floor_rules DSL cannot express it natively, encoded with extra keys."
+ ]
+}

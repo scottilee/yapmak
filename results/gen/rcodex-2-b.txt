@@ -1,0 +1,9 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > add_note > close_call
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > add_note > add_note > close_call
+       - notes [('p1', 'dispute'), ('p2', 'dispute')], expected [('p1', 'paid'), ('p2', 'dispute')]
+       - conversation: The agent failed the first success criterion regarding the specific note reasons for the products. According to Message 7 and the success criteria, p1 (credit card) should have been marked as 'paid' and p2 (personal loan) as 'dispute'. However, s
+
+slowest agent turn per call: median 17 s, worst 17 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+
+1 / 2 passed (bank records and conversation checks). Last simulation ff81a416-2c2a-4eb3-95d0-1e74bb2364e5, status completed, 65 s.

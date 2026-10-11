@@ -61,13 +61,18 @@ def _deadline_text(dl):
         adj = "the next business day" if dl["adjustment"] == "following" else "the previous business day"
         return f"today plus {dl['n']} calendar days; if that day is not a business day, {adj}"
     if k == "end_of_month":
+        month = {0: "the current calendar month", 1: "next month"}.get(dl.get("month_offset", 0), f"the month {dl.get('month_offset')} months ahead")
         if dl["basis"] == "business":
-            return "the last business day of the current calendar month"
+            return f"the last business day of {month}"
         adj = "the next business day" if dl["adjustment"] == "following" else "the previous business day"
-        return f"the last calendar day of the current month; if that day is not a business day, {adj}"
+        return f"the last calendar day of {month}; if that day is not a business day, {adj}"
     if k == "fixed_date":
         adj = "the next business day" if dl["adjustment"] == "following" else "the previous business day"
         return f"{_fmt_date(dl['date'])} for everyone; if that day is not a business day, {adj}"
+    if k == "day_of_month":
+        when = {0: "this month", 1: "next month"}.get(dl.get("month_offset", 0), f"{dl.get('month_offset')} months ahead")
+        adj = "the next business day" if dl["adjustment"] == "following" else "the previous business day"
+        return f"the {_ordinal(dl['day'])} of {when}; if that day is not a business day, {adj}"
     raise ValueError(k)
 
 
@@ -104,6 +109,8 @@ def render_clean(ir, bank, idreqs=None, limit=None, bands=None, retry=None, huma
     I, O, V = ir["identity"], ir["outcomes"], _vocab(ir)
     hard, restr, paid, disp, rtt = _sc(ir, "hardship"), _sc(ir, "restructuring"), _sc(ir, "already_paid"), _sc(ir, "dispute"), _sc(ir, "refuse_to_talk")
     floors, naming = ir["amounts"]["floors"], ir["phrases"]["product_naming"]
+    if not floors and ir["amounts"].get("floor_rules"):
+        floors = {t: "" for t in ir["amounts"]["floor_rules"] if t != "*"}
     notes = ir["notes"]
     mp = ir["multi_product"]["max_products"]
     L = [header or f"Collection-call brief for {bank}. Sole policy authority.", "", f"# {bank} — outbound collection calls", ""]
@@ -136,7 +143,16 @@ def render_clean(ir, bank, idreqs=None, limit=None, bands=None, retry=None, huma
           + (", all before asking anything; then ask once whether they can pay all of it today." if mp > 1 else "; then ask \"Can you make this payment today?\"."),
           "19. Product types and the lowest amount this call may accept (the floor) per type, as returned by `get_account`:"]
     for t, prop in floors.items():
-        L.append(f"    - `{t}` (say \"{naming.get(t, t.replace('_', ' '))}\"): floor is the `{prop}` field; the full amount is `past_due`.")
+        L.append(f"    - `{t}` (say \"{naming.get(t, t.replace('_', ' '))}\"): floor is the `{prop}` field; the full amount is `past_due`." if prop else f"    - `{t}` (say \"{naming.get(t, t.replace('_', ' '))}\").")
+    rules = ir["amounts"].get("floor_rules") or {}
+    if rules:
+        r0 = next(iter(rules.values()))
+        if r0["kind"] == "percent":
+            L[-len(floors) - 1:] = ["19. Product types, as returned by `get_account`: " + ", ".join(f"`{t}` (say \"{naming.get(t, t.replace('_', ' '))}\")" for t in floors or rules if t != "*") + ". The full amount is `past_due`. "
+                                   f"The lowest amount this call may accept (the floor) is {r0['percent']} percent of the past-due amount" + (f", and never less than {r0['min_amount']:.2f}" if r0.get("min_amount") else "") + "; no bank field carries it, you compute it."]
+        elif r0["kind"] == "fixed":
+            L[-len(floors) - 1:] = ["19. Product types, as returned by `get_account`: " + ", ".join(f"`{t}` (say \"{naming.get(t, t.replace('_', ' '))}\")" for t in floors or rules if t != "*") + ". The full amount is `past_due`. "
+                                   f"The lowest amount this call may accept (the floor) is a fixed {r0['amount']:.2f} for every product (or the full amount when that is lower); no bank field carries it."]
     L += ["20. Ask for the full past-due amount first. Never ask \"how much can you pay?\". Any amount between the floor and the full amount is accepted; an amount below the floor is refused, and the floor is offered once per product with the words \"the rest stays overdue\". "
           "If the customer refuses the floor too, there is nothing to record for that product.",
           "21. A promise date must be today or later, a business day, and not after the deadline. A weekend day or holiday rolls to the next business day. A vague date (next week, when I get paid): ask once for the exact day; if none follows, propose the deadline. "
@@ -272,11 +288,25 @@ def render(perm: int, style: str, out_dir: pathlib.Path) -> list[pathlib.Path]:
 
 
 # -------------------------------------------------------------------------------------------------------------- diff
+def _floor_rules_key(ir: dict) -> dict:
+    """Canonical floor rules: a "*" rule is expanded to every product type; numbers normalised."""
+    rules = ir["amounts"].get("floor_rules") or {}
+    types = sorted({t for t in list(ir["amounts"].get("floors") or {}) + list(rules) + list(ir.get("phrases", {}).get("product_naming") or {}) if t != "*"})
+    out = {}
+    for t in types:
+        r = rules.get(t) or rules.get("*")
+        if r:
+            out[t] = {k: (float(v) if isinstance(v, (int, float)) else v) for k, v in r.items() if k in ("kind", "field", "percent", "min_amount", "amount", "round") and v not in (None, 0, "")}
+    return out
+
+
 def _deadline_key(dl: dict) -> dict:
     """Canonical deadline: the adjustment is meaningless for a business-basis month end or an nth business day."""
     d = {k: v for k, v in dl.items()}
     if d.get("kind") == "nth_business_day" or (d.get("kind") == "end_of_month" and d.get("basis") == "business"):
         d.pop("adjustment", None)
+    if d.get("month_offset") in (0, None):
+        d.pop("month_offset", None)
     return d
 
 
@@ -301,6 +331,7 @@ def operative(ir: dict) -> dict:
         "calendar": {"holidays": sorted(C["holidays"]), "business_days": sorted(C["business_days"])},
         "bands": [(b["days_late_min"], b["days_late_max"], _deadline_key(b["deadline"]), len(b["attempts"])) for b in sorted(ir["bands"], key=lambda b: b["days_late_min"])],
         "floors": dict(ir["amounts"]["floors"]),
+        "floor_rules": _floor_rules_key(ir),
         "max_products": ir["multi_product"]["max_products"],
         "notes": {"enabled": N["enabled"], "reasons": sorted(N["reasons"]) if N["enabled"] else []},
         "outcomes": {"promise": O["promise_outcome"], "paid": O["paid_outcome"], "transfer": O["transfer_outcome"], "no_promise": O["no_promise_outcome"],

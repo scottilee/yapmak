@@ -1,0 +1,278 @@
+[
+ {
+  "id": "PUB-02",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Relative names a day beyond the callback window, then tomorrow",
+  "variables": {
+   "first_name": "Maria",
+   "last_name": "Costa",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1979-11-02",
+   "phone_last4": "0358"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 310.5,
+    "days_late": 11,
+    "instalment_amount": 103.5
+   }
+  ],
+  "script": "Say you are her neighbour and she is on holiday until the nineteenth at six in the evening. When asked when she can be reached, say: next Monday around six. When told that will not work, ask what days do work, and after the answer say: tomorrow at noon.",
+  "expected": {
+   "outcome": "not_reached",
+   "reason": "callback",
+   "promises": [],
+   "notes": [],
+   "callbacks": [
+    {
+     "date": "2026-10-15",
+     "time": "12:00"
+    }
+   ],
+   "transfers": []
+  },
+  "checks": [
+   "Monday 19 October is outside the permitted callback days (today or the next business day) even though 18:00 is inside the hours",
+   "The agent asks once for another time and never reveals why it is calling",
+   "Exactly one schedule_callback for 2026-10-15 at 12:00; outcome not_reached/callback"
+  ],
+  "rationale": "A6-A7: the window has two parts, days and time. edge-a2 PUB-02 and codex-1 PUB-02 fail the time part; this fails the day part (next Monday) while the named hour is valid. bankcal.callback_ok(2026-10-19, 12:00) = False, callback_ok(2026-10-15, 12:00) = True."
+ },
+ {
+  "id": "PUB-06",
+  "brief": "A",
+  "family": "Amounts",
+  "level": "hard",
+  "title": "Floor accepted for next Friday, which is the deadline",
+  "variables": {
+   "first_name": "Priya",
+   "last_name": "Nair",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1986-05-17",
+   "phone_last4": "1502"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "1903",
+    "past_due": 2125.1,
+    "days_late": 12,
+    "minimum_payment": 637.5
+   }
+  ],
+  "script": "Confirm you are Priya Nair and give the correct security answers. Say the full amount is too much right now. When the agent names the lowest amount it can record, accept it for next Friday, and say nothing else about amounts. Confirm the read-back if it is the minimum for Friday the twenty-third.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 637.5,
+     "date": "2026-10-23"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The floor 637.50 is offered once, with the note that the rest stays overdue (rule 26)",
+   "Next Friday resolves to 23 October, which is both a business day and the late-band deadline itself",
+   "Exactly one promise for 637.50 on 2026-10-23; no second attempt on the floor and no full-amount re-offer"
+  ],
+  "rationale": "A22, A26, A27 and A18: every prior floor-acceptance fixture lands on 16 or 19 October. Here next-Friday semantics coincides with the deadline, so a careless agent that shifts to today's week (16th) or misjudges the boundary fails. next Friday = 2026-10-23 via bankcal.resolve_date_expr; deadline = bankcal.deadline(nth_business_day 7)."
+ },
+ {
+  "id": "PUB-07",
+  "brief": "A",
+  "family": "Dates",
+  "level": "hard",
+  "title": "End of the month becomes a valid named day",
+  "variables": {
+   "first_name": "Samuel",
+   "last_name": "Ortiz",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1975-12-05",
+   "phone_last4": "7093"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 540.0,
+    "days_late": 5,
+    "instalment_amount": 180.0
+   }
+  ],
+  "script": "Confirm you are Samuel Ortiz and give the correct security answers. When asked whether you can pay today, say not today. When the agent asks when, say end of the month. When asked for the exact day, say Friday the thirtieth. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 540,
+     "date": "2026-10-30"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The vague period is asked about exactly once",
+   "30 October is accepted although it is far past this week: it is a business day and inside the early-band deadline of 2 November",
+   "Exactly one promise for 540 on 2026-10-30; no deadline proposal instead"
+  ],
+  "rationale": "A19-A21: prior vague-period fixtures end either at the deadline (edge-a2/a3 PUB-04/PUB-06) or at an after-deadline date. Here the resolved date is business-valid and comfortably inside the early deadline, so any deadline-substitution reflex fails. Early deadline 2026-11-02 and business-day check via bankcal."
+ },
+ {
+  "id": "PUB-08",
+  "brief": "A",
+  "family": "Already paid",
+  "level": "hard",
+  "title": "Wants to change a promise already recorded",
+  "variables": {
+   "first_name": "Hannah",
+   "last_name": "Schmidt",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1993-04-28",
+   "phone_last4": "3317"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "5512",
+    "past_due": 180.0,
+    "days_late": 5,
+    "minimum_payment": 54.0
+   }
+  ],
+  "script": "Confirm you are Hannah Schmidt and give the correct security answers. Say the full amount works today and confirm the read-back. After the agent says the promise is recorded, say: actually, move it to next Friday. If the agent cannot change it, accept that and let the call end there; do not withdraw the recorded promise.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 180,
+     "date": "2026-10-14"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "Exactly one create_promise, for 180 on 14 October, written before the change request",
+   "No second promise is written for 23 October and nothing is cancelled",
+   "The agent says the promise can be changed in the mobile app; it does not claim a change was made if no tool called it"
+  ],
+  "rationale": "A36-A38: recorded promises are immutable in-call. All existing read-back-change fixtures (edge-a1 PUB-08, edge-a4 PUB-01, codex-1 PUB-06) act BEFORE a write succeeds. The post-write change request is new, and the agent must neither fake a change nor write a second row."
+ },
+ {
+  "id": "PUB-09",
+  "brief": "A",
+  "family": "Restructuring",
+  "level": "hard",
+  "title": "Human request mid-negotiation, insists after the help offer",
+  "variables": {
+   "first_name": "Victor",
+   "last_name": "Ionescu",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1981-08-11",
+   "phone_last4": "5560"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 2100.0,
+    "days_late": 28,
+    "instalment_amount": 700.0
+   }
+  ],
+  "script": "Confirm you are Victor Ionescu and give the correct security answers. When the debt is stated, say you cannot pay today. When the agent makes its first payment proposal, say: this is getting nowhere, I want a real person. When asked whether the agent can help, say no, insist on a person. Do not offer any amount or date.",
+  "expected": {
+   "outcome": "transferred",
+   "reason": "human",
+   "promises": [],
+   "notes": [],
+   "callbacks": [],
+   "transfers": [
+    {
+     "queue": "general"
+    }
+   ]
+  },
+  "checks": [
+   "The agent asks once whether it can help before transferring (rule 42)",
+   "Nothing is recorded: the first proposal was never accepted, so no create_promise and no claim of one",
+   "transfer_to_agent with queue general; outcome transferred/human"
+  ],
+  "rationale": "A30, A42 and A46: the request arrives after proposals started, which no existing fixture does (edge-a3 PUB-01 is during identity; codex-1 PUB-09 is a request withdrawn by consent). Once help is declined, transfer wins over a further attempt."
+ },
+ {
+  "id": "PUB-05",
+  "brief": "A",
+  "family": "Hardship",
+  "level": "hard",
+  "title": "Bereavement plus pays-with-a-date offer",
+  "variables": {
+   "first_name": "Tomas",
+   "last_name": "Novak",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1990-09-09",
+   "phone_last4": "8846"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 780.0,
+    "days_late": 21,
+    "instalment_amount": 260.0
+   }
+  ],
+  "script": "Confirm you are Tomas Novak and give the correct security answers. When the debt is stated, say your mother passed away last week. When the agent offers the support team, decline. Then say: I can manage the two hundred and sixty next Monday, the nineteenth, nothing more. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 260,
+     "date": "2026-10-19"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "One short sentence of sympathy; no persuasion attempt is spent on offers the customer did not name",
+   "The support-team offer is made once and the decline is respected",
+   "Promise for the floor 260 on Monday 19 October, a business day inside the 23 October deadline",
+   "Outcome promise, not hardship: naming a date and amount after declining keeps the rule-32 promise path"
+  ],
+  "rationale": "A32's final sentence: 'if the customer still names a date or an amount themselves, record the promise'. edge-a6 PUB-05 uses this-Friday words; this uses next-Monday (2026-10-19 via bankcal.resolve_date_expr) so the date crystalization into the following calendar week is also tested on a hardship-declined call."
+ }
+]

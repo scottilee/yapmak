@@ -1,0 +1,701 @@
+{
+  "fixture": "codex-bracken-thread",
+  "brief": "01-mail-thread.txt",
+  "briefs": [
+    "01-mail-thread.txt",
+    "02-operating-card.md",
+    "03-codes.txt"
+  ],
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Bracken Exchange Bank",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "security_phrase",
+        "joining_year",
+        "contact_tail",
+        "responsible_dob"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security order"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "text",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 0,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.0.hint_reply": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "year",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.1.hint_reply": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "digits",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 5,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.2.hint_reply": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.3.answer_format": {
+      "expected": "date",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.3.digits": {
+      "expected": 0,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.3.numeric_date_order": {
+      "expected": "dmy",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.3.hint_field": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.requirements.3.hint_reply": {
+      "expected": "",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Security"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 5,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.remaining_slot": {
+      "expected": "remaining_checks",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "br-unverified",
+        "br-r-failed"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "br-unverified",
+        "br-r-declined"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "br-unreached",
+        "br-r-unclear"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please contact our account desk.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / identity"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.days": {
+      "expected": "next_business_day",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.start": {
+      "expected": "09:10",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.end": {
+      "expected": "16:50",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "br-unreached",
+        "br-r-callback"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "br-unreached",
+        "br-r-no-callback"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "br-unreached",
+        "br-r-wrong-number"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "br-unreached",
+        "br-r-deceased"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "We are sorry for your loss.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / third_party"
+    },
+    "calendar.holidays": {
+      "expected": [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / calendar"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / calendar"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / calendar"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "unresolved",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / calendar"
+    },
+    "amounts.floors": {
+      "expected": {
+        "br-cycle": "cycle_floor",
+        "br-tool": "tool_floor",
+        "br-trade": "trade_floor"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "amounts.floor_wording": {
+      "expected": "The unpaid remainder stays overdue.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / amounts"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / dates"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / dates"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / dates"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / dates"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "br-promised",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "br-settled",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "br-routed",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "br-unarranged",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "br-r-service",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.refused_reason": {
+      "expected": "br-r-refused",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / outcomes"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / notes"
+    },
+    "notes.reasons": {
+      "expected": [
+        "br-r-refused",
+        "br-r-distress",
+        "br-r-disputed",
+        "br-r-settled",
+        "br-r-service"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / notes"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / notes"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / notes"
+    },
+    "multi_product.max_products": {
+      "expected": 3,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / multi_product"
+    },
+    "phrases.opening": {
+      "expected": "Good day, Bracken Exchange Bank's automated assistant speaking. We record our calls.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue accounts listed on your statement.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.today_question": {
+      "expected": "Can you pay this amount today?",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you pay all these amounts today?",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.robot_reply": {
+      "expected": "I am the automated assistant of Bracken Exchange Bank.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.scam_reply": {
+      "expected": "You may verify this call using the contact number printed on your statement.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "arrears",
+        "overdue",
+        "balance",
+        "payment"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "We will send the arrangement details to your registered inbox.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Payments may take three business days to reach our account view.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our account desk can explain that.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Contact our account desk to change a saved arrangement.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "br-cycle": "cycle account",
+        "br-tool": "equipment advance",
+        "br-trade": "trade account"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / phrases"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 2,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / promise_write"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / promise_write"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I save these arrangements together?",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / promise_write"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "br-promised": [],
+        "br-settled": [],
+        "br-routed": [
+          "br-r-replan",
+          "br-r-person",
+          "br-r-care"
+        ],
+        "br-unarranged": [
+          "br-r-refused",
+          "br-r-distress",
+          "br-r-disputed",
+          "br-r-service"
+        ],
+        "br-unverified": [
+          "br-r-failed",
+          "br-r-declined"
+        ],
+        "br-unreached": [
+          "br-r-callback",
+          "br-r-no-callback",
+          "br-r-wrong-number",
+          "br-r-deceased",
+          "br-r-unclear"
+        ]
+      },
+      "source": "03-codes.txt"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 14,
+          "deadline": {
+            "kind": "calendar_days",
+            "n": 11,
+            "adjustment": "following"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 15,
+          "days_late_max": 80,
+          "deadline": {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Collection ladder"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "br-r-settled"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.already_paid.ask_once_first": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.already_paid.say": {
+      "expected": "Payments may take three business days to reach our account view.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "br-r-disputed"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.dispute.ask_once_first": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "br-r-distress"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.ask_once_first": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.say": {
+      "expected": "I am sorry you are facing this difficulty.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "br-care-desk",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.hardship.offer_outcome": {
+      "expected": [
+        "br-routed",
+        "br-r-care"
+      ],
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "br-plan-desk",
+        "outcome": "br-routed",
+        "reason": "br-r-replan"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.restructuring.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.restructuring.ask_once_first": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "br-human-desk",
+        "outcome": "br-routed",
+        "reason": "br-r-person"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.ask_once_first": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.scam.say": {
+      "expected": "You may verify this call using the contact number printed on your statement.",
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "note",
+        "reason": "br-r-refused"
+      },
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "02-operating-card.md, as amended by 01-mail-thread.txt final signed message; 03-codes.txt for code spelling / Exceptions"
+    }
+  },
+  "comparison_notes": [
+    "Authored oracle, not extractor output. Feed only numbered documents and openapi.json to the builder; exclude all oracles and README files.",
+    "Use scripts/check_synthetic_ir.project conventions: outcome reason lists and holiday/note/prohibited-word sets are unordered; identity order, attempt order and exact mandatory wording are significant.",
+    "Ask-text paraphrases, band names, free-form triggers and source spans require semantic review and are not exact-match checks. Different equivalent special-case action representations require manual review.",
+    "Expect no unresolved rules. An extractor marking any effective rule unresolved must report it rather than silently defaulting.",
+    "Product response-field mappings and renamed operation inputs live in OpenAPI, not PolicyIR; expected-api.json is their separate oracle."
+  ]
+}

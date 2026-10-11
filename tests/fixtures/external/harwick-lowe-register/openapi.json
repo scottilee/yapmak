@@ -1,0 +1,497 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "hlc synthetic bank API",
+    "version": "synthetic-1"
+  },
+  "servers": [
+    {
+      "url": "https://hl-om-policy.example.invalid/v1"
+    }
+  ],
+  "paths": {
+    "/verify_identity": {
+      "post": {
+        "summary": "Check one identity answer. The supplied documents fix question order and the global wrong-answer ceiling; attempts_left is authoritative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "konto_code",
+                      "geburtsdatum",
+                      "postleitzahl"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "konto_code: exactly six digits with leading zeros; geburtsdatum: ISO date (use dmy for numerals only); postleitzahl: letters and digits, spacing removed. Ask in the order the supplied documents fix."
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "field",
+                  "answer"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "all_verified": {
+                      "type": "boolean"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "answer_verified": {
+                      "type": "boolean"
+                    },
+                    "attempts_left": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/get_account": {
+      "post": {
+        "summary": "Return overdue facilities only after every identity question required by the supplied documents has passed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ref_no"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "facilities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "facility_id": {
+                            "type": "string"
+                          },
+                          "cat": {
+                            "type": "string",
+                            "enum": [
+                              "od",
+                              "term",
+                              "equip",
+                              "card",
+                              "invoice"
+                            ]
+                          },
+                          "outst": {
+                            "type": "number"
+                          },
+                          "days_o": {
+                            "type": "integer"
+                          },
+                          "od_min": {
+                            "type": "number",
+                            "description": "Floor for cat od only."
+                          },
+                          "tl_min": {
+                            "type": "number",
+                            "description": "Floor for cat term only."
+                          },
+                          "eq_min": {
+                            "type": "number",
+                            "description": "Floor for cat equip only."
+                          },
+                          "cl_min": {
+                            "type": "number",
+                            "description": "Floor for cat card only."
+                          },
+                          "inv_min": {
+                            "type": "number",
+                            "description": "Floor for cat invoice only."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/create_promise": {
+      "post": {
+        "summary": "Record a payment promise. One per facility.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "facility_id": {
+                    "type": "string"
+                  },
+                  "sum": {
+                    "type": "number",
+                    "description": "The promised amount."
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "facility_id",
+                  "amt",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/add_note": {
+      "post": {
+        "summary": "Set the note code for a facility without a promise, only where the supplied documents authorize a note.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "facility_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "hl-refuse",
+                      "hl-distress",
+                      "hl-dispute",
+                      "hl-cleared",
+                      "hl-R07"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "facility_id",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/schedule_callback": {
+      "post": {
+        "summary": "Book a telephone contact.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "HH:MM"
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/transfer_to_agent": {
+      "post": {
+        "summary": "Move the call to a named desk.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "hl-rework",
+                      "hl-desk"
+                    ]
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "queue"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    },
+    "/close_call": {
+      "post": {
+        "summary": "End the call. Always the last tool call. Nothing is accepted after it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ref_no": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "HL-PAY",
+                      "HL-CLR",
+                      "HL-TR",
+                      "HL-FULL",
+                      "HL-ID",
+                      "HL-MISS"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "hl-refuse",
+                      "hl-distress",
+                      "hl-dispute",
+                      "hl-R07",
+                      "hl-rework",
+                      "hl-person",
+                      "hl-fail",
+                      "hl-decline",
+                      "hl-cb",
+                      "hl-nocb",
+                      "hl-wrong",
+                      "hl-deceased",
+                      "hl-unclear"
+                    ],
+                    "description": "Omit for HL-PAY and HL-CLR. Other outcome/reason combinations are constrained by clause 11.6."
+                  }
+                },
+                "required": [
+                  "ref_no",
+                  "outcome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`success` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded."
+          }
+        }
+      }
+    }
+  }
+}

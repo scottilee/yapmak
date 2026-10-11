@@ -1,0 +1,128 @@
+{
+  "operations": {
+    "verify_identity": {
+      "path": "/servicing/verify_identity",
+      "required": [
+        "customer_id",
+        "field",
+        "answer"
+      ]
+    },
+    "get_account": {
+      "path": "/servicing/get_account",
+      "required": [
+        "customer_id"
+      ]
+    },
+    "create_promise": {
+      "path": "/servicing/create_promise",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "amount",
+        "date"
+      ]
+    },
+    "add_note": {
+      "path": "/servicing/add_note",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "reason"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/servicing/schedule_callback",
+      "required": [
+        "customer_id",
+        "date",
+        "time"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/servicing/transfer_to_agent",
+      "required": [
+        "customer_id",
+        "queue"
+      ]
+    },
+    "close_call": {
+      "path": "/servicing/close_call",
+      "required": [
+        "customer_id",
+        "outcome"
+      ]
+    }
+  },
+  "product_array": "facilities",
+  "product_fields": {
+    "id": "facility_ref",
+    "type": "facility_class",
+    "full": "arrears_total",
+    "days_late": "delinquent_days",
+    "floor_base_fields": {
+      "tamarisk_revolver": "revolver_base",
+      "tamarisk_equipment": "equipment_base",
+      "tamarisk_merchant": "merchant_base"
+    }
+  },
+  "response_slots": {
+    "success": "accepted",
+    "verified": "answer_matches",
+    "all_verified": "all_verified",
+    "remaining": "security_remaining"
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "postcode",
+        "birth_year",
+        "company_number",
+        "founded_year"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "tamarisk_refused",
+        "tamarisk_distress",
+        "tamarisk_disputed",
+        "tamarisk_settled",
+        "tamarisk_service_error"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "tamarisk_restructure",
+        "tamarisk_desk",
+        "tamarisk_care"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "tamarisk_arranged",
+        "tamarisk_settled",
+        "tamarisk_transferred",
+        "tamarisk_no_deal",
+        "tamarisk_unverified",
+        "tamarisk_unreached"
+      ],
+      "reason": [
+        "tamarisk_refused",
+        "tamarisk_distress",
+        "tamarisk_disputed",
+        "tamarisk_settled",
+        "tamarisk_service_error",
+        "tamarisk_restructure",
+        "tamarisk_person",
+        "tamarisk_care",
+        "tamarisk_failed",
+        "tamarisk_declined",
+        "tamarisk_callback",
+        "tamarisk_no_callback",
+        "tamarisk_wrong_number",
+        "tamarisk_deceased",
+        "tamarisk_unclear"
+      ]
+    }
+  }
+}

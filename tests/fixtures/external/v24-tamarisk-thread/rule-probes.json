@@ -1,0 +1,642 @@
+{
+  "fixture": "v24-tamarisk-thread",
+  "generation": "Dates computed with bankcal.deadline; all amount arithmetic uses Decimal, with decimal strings preserving cents. No workflow execution.",
+  "calendar": {
+    "holidays": [
+      "2026-10-30",
+      "2026-11-02",
+      "2026-11-16",
+      "2026-12-25",
+      "2027-01-01"
+    ],
+    "business_days": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "date_probes": [
+    {
+      "today": "2026-10-14",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-14",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-22",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-14",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-29",
+      "promise_window_open": false,
+      "expired_disposition": "tamarisk_refused"
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2027-01-15",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-12-22",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2027-01-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2027-01-15",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-12-31",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2027-01-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    }
+  ],
+  "floor_probes": [
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "2125.10",
+      "base_field": "revolver_base",
+      "base": "637.50",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "531.28",
+      "expected_floor": "637.50"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "180.00",
+      "base_field": "revolver_base",
+      "base": "20.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "45.00",
+      "expected_floor": "45.00"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "95.00",
+      "base_field": "revolver_base",
+      "base": "150.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "23.75",
+      "expected_floor": "95.00"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "301.03",
+      "base_field": "revolver_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "75.26",
+      "expected_floor": "75.26"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "375.00",
+      "base_field": "revolver_base",
+      "base": "75.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "93.75",
+      "expected_floor": "93.75"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "2125.10",
+      "base_field": "equipment_base",
+      "base": "637.50",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "850.04",
+      "expected_floor": "850.04"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "180.00",
+      "base_field": "equipment_base",
+      "base": "20.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "72.00",
+      "expected_floor": "72.00"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "95.00",
+      "base_field": "equipment_base",
+      "base": "150.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "38.00",
+      "expected_floor": "95.00"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "301.03",
+      "base_field": "equipment_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "120.42",
+      "expected_floor": "120.42"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "375.00",
+      "base_field": "equipment_base",
+      "base": "75.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "150.00",
+      "expected_floor": "150.00"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "2125.10",
+      "base_field": "merchant_base",
+      "base": "637.50",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "425.02",
+      "expected_floor": "637.50"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "180.00",
+      "base_field": "merchant_base",
+      "base": "20.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "36.00",
+      "expected_floor": "36.00"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "95.00",
+      "base_field": "merchant_base",
+      "base": "150.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "19.00",
+      "expected_floor": "95.00"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "301.03",
+      "base_field": "merchant_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "60.21",
+      "expected_floor": "60.21"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "375.00",
+      "base_field": "merchant_base",
+      "base": "75.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "75.00",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "301.02",
+      "base_field": "revolver_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "75.26",
+      "expected_floor": "75.26"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "401.01",
+      "base_field": "revolver_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "100.26",
+      "expected_floor": "100.26"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "401.03",
+      "base_field": "revolver_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "100.26",
+      "expected_floor": "100.26"
+    },
+    {
+      "product_type": "tamarisk_revolver",
+      "full": "2125.10",
+      "base_field": "revolver_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "revolver_base",
+        "percent": 25,
+        "round": "up_cent"
+      },
+      "percentage_component": "531.28",
+      "expected_floor": "531.28"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "301.02",
+      "base_field": "equipment_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "120.41",
+      "expected_floor": "120.41"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "401.01",
+      "base_field": "equipment_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "160.41",
+      "expected_floor": "160.41"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "401.03",
+      "base_field": "equipment_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "160.42",
+      "expected_floor": "160.42"
+    },
+    {
+      "product_type": "tamarisk_equipment",
+      "full": "2125.10",
+      "base_field": "equipment_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "equipment_base",
+        "percent": 40,
+        "round": "up_cent"
+      },
+      "percentage_component": "850.04",
+      "expected_floor": "850.04"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "301.02",
+      "base_field": "merchant_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "60.21",
+      "expected_floor": "60.21"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "401.01",
+      "base_field": "merchant_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "80.21",
+      "expected_floor": "80.21"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "401.03",
+      "base_field": "merchant_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "80.21",
+      "expected_floor": "80.21"
+    },
+    {
+      "product_type": "tamarisk_merchant",
+      "full": "2125.10",
+      "base_field": "merchant_base",
+      "base": "10.00",
+      "rule": {
+        "kind": "max_of",
+        "field": "merchant_base",
+        "percent": 20,
+        "round": "up_cent"
+      },
+      "percentage_component": "425.02",
+      "expected_floor": "425.02"
+    }
+  ]
+}

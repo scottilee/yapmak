@@ -1,0 +1,73 @@
+diff --git a/compile.py b/compile.py
+index 9281838..49e5b9a 100644
+--- a/compile.py
++++ b/compile.py
+@@ -189,6 +189,24 @@ def code_for(stage: str, ir: P.PolicyIR, slots: dict) -> str:
+ # =============================================================================================
+ # Prompts (deterministic defaults; an LLM-authored PromptSet can override any stage)
+ # =============================================================================================
++def sc_clause(ir, name: str, fallback: str) -> str:
++    """`mentions illness, ...` text for intent descriptions: the named special case's `trigger`
++    from the brief, so the routing vocabulary follows the policy, with Brief A's words only as fallback."""
++    t = ""
++    for sc in ir.special_cases:
++        if sc.name == name and (sc.trigger or "").strip():
++            t = sc.trigger.strip()
++            break
++    if not t:
++        return fallback
++    t = re.sub(r"^(the\s+)?customers?['’]?\s?", "", t, flags=re.I)
++    t = re.sub(r"^who\s+|^that\s+", "", t, flags=re.I)
++    t = t.rstrip(" .!") or fallback
++    if len(t) > 1 and t[0].isupper() and t[1].islower():
++        t = t[0].lower() + t[1:]
++    return t
++
++
+ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
+     ph = ir.phrases
+     bank = ir.bank_name or "the bank"
+@@ -231,7 +249,7 @@ def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
+             "The customer is verified and you are arranging a payment. Follow your current instruction exactly; every amount and date comes from it. "
+             "Never ask the customer to choose or name an amount: you propose every amount, from your instruction. If the customer proposes a date or an amount, acknowledge it briefly; the system checks it and your next instruction tells you what to say. "
+             "Say the sentence that the rest of the amount stays overdue at most once in the whole call; if you have said it, do not repeat it even if the instruction mentions it. Name the lowest amount at most once in the whole call; if the customer asks what it is after you named it, say it is the amount you just proposed and ask again whether they can pay it. "
+-            "If the customer mentions illness, a death in the family or job loss, say one short sentence of sympathy and nothing else about payment. "
++            f"If the customer {sc_clause(ir, 'hardship', 'mentions illness, a death in the family or job loss')}, say one short sentence of sympathy and nothing else about payment. "
+             "If they ask to spread the debt over time or to change its terms, say a colleague will handle that part; describe nothing yourself.\n"
+             "If the customer talks about something else, reply in a few words and invite them to come back to the payment (\"whenever you are ready\") without repeating the proposal or any amount. If they ask a question, answer it in one sentence and then ask whether they can make the payment you proposed. "
+             + ('\nIf the customer asks whether a recorded promise can be changed: say "' + ph.recorded_promise_change_reply + '" and continue. ' if ph.recorded_promise_change_reply else "")
+@@ -348,13 +366,18 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
+     nodes["get_account"] = api_node("get_account", tools["get_account"], body("get_account", customer_id="{{customer_id}}"), "init_products",
+                                     [{"path": "data." + A["list"], "variable": "products_raw"}], retries=1)
+     nodes["init_products"] = cn("init_products", ["state_debt"])
++    paid_desc = sc_clause(ir, "already_paid", "says they already paid this")
++    dispute_desc = sc_clause(ir, "dispute", "says the debt is not theirs, they never had the product, or it was closed or paid off before")
++    hardship_desc = sc_clause(ir, "hardship", "mentions illness, a death in the family or losing their job")
++    restruct_desc = sc_clause(ir, "restructuring", "asks for a payment plan, lower instalments or to restructure the debt")
+     neg_schema = [
+         ext("cust_intent", "string",
+             "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. "
+-            "proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. "
+-            "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. "
+-            "hardship = mentions illness, a death in the family or losing their job — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
++            f"proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. "
++            f"too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = {paid_desc}. dispute = {dispute_desc}. "
++            f"hardship = {hardship_desc} — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = {restruct_desc}; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
+             "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. goodbye = says goodbye or that they are hanging up or ending the call now. other.", INTENTS),
++        ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
+         ext("prop_amount", "float", "An amount of money the customer offers to pay, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none; an amount they say they cannot pay, or one unrelated to a payment, does not count."),
+     ] + date_ext("prop", "the payment date the customer named")
+     multi = ir.multi_product.max_products > 1
+@@ -369,9 +392,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
+     nodes["neg_route"] = cn("neg_route", ["negotiate", "readback", "transfer", "finalize"], default="negotiate")
+     rb_schema = [ext("rb_intent", "string",
+                      "The customer's answer to the read-back in the LAST message: confirms (yes, correct, I confirm), changes (they give a different amount or date), declines (no, without a new value), "
+-                     "already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), "
+-                     "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, goodbye (says goodbye or is hanging up), other.",
++                     f"already_paid ({paid_desc}), dispute ({dispute_desc}), hardship ({hardship_desc}), "
++                     f"restructuring ({restruct_desc}), human (asks for a person), refuses_to_talk, question, goodbye (says goodbye or is hanging up), other.",
+                      ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "goodbye", "other"]),
++                 ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
+                  ext("prop_amount", "float", "A new amount the customer named, as a number. Empty if none.")] + date_ext("prop", "a new payment date the customer named")
+     if multi:
+         rb_schema.append(ext("prop_product", "string", f"Which product a change refers to: {nums_text} as in the list {{{{product_list}}}}; all if not specified.", nums + ["all"]))

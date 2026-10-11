@@ -1,58 +1,83 @@
 {
  "perm": 14,
- "style": "raw",
+ "style": "clean",
  "slot": "lb-14",
  "exit": 0,
- "seconds": 155,
- "diff": [],
+ "seconds": 156,
+ "diff": [
+  {
+   "field": "floor_rules",
+   "truth": {
+    "mortgage": {
+     "kind": "fixed",
+     "amount": 75
+    },
+    "store_card": {
+     "kind": "fixed",
+     "amount": 75
+    },
+    "overdraft": {
+     "kind": "fixed",
+     "amount": 75
+    },
+    "student_loan": {
+     "kind": "fixed",
+     "amount": 75
+    }
+   },
+   "extracted": {
+    "*": {
+     "kind": "fixed",
+     "amount": 75.0
+    }
+   }
+  }
+ ],
  "functional": {
   "static": [],
   "scenarios": {
    "happy": [],
    "refusal": [],
    "hardship": [],
+   "hardship_accept": [],
    "third_party": [],
    "wrong_id": [],
    "dispute_one": [],
-   "write_fail": []
+   "write_fail": [],
+   "too_much_floor": [
+    "floor path: promises [{'product_id': 'p1', 'amount': 420.0, 'date': '2026-10-14'}] != one promise of the floor 75.0"
+   ],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": [
+    "driver: expected to be in readback, was in negotiate",
+    "close_call count/order: ['verify_identity', 'verify_identity', 'get_account']",
+    "outcome None != ('arrangement', None)",
+    "promises [] != [('p1', 247.5, '2026-10-14')]"
+   ]
   }
  },
  "unresolved": [
   {
    "topic": "cannot_answer_sentence",
-   "text": "The documents do not dictate a sentence for questions the assistant cannot answer.",
-   "doc": "results/layer-b/lb-14/02-policy.md"
+   "text": "The brief does not give a sentence for questions the assistant cannot answer.",
+   "doc": "results/layer-b/lb-14/brief.md"
   },
   {
-   "topic": "promise_write_failure_sentence",
-   "text": "After a failed create_promise the policy says only 'say you could not record it'; no field holds this sentence (e.g. 'I could not record your promise.').",
-   "doc": "results/layer-b/lb-14/02-policy.md"
-  },
-  {
-   "topic": "wrong_answer_limit",
-   "text": "The tool API summary says three wrong answers end the check; signed memo M54 sets 2 wrong answers in total. The memo value (2) is used.",
-   "doc": "results/layer-b/lb-14/03-memo.txt"
-  },
-  {
-   "topic": "wrong_number_apology",
-   "text": "Rule 8 says to apologise on a wrong number but dictates no words, and the IR has no phrase field for it.",
-   "doc": "results/layer-b/lb-14/02-policy.md"
-  },
-  {
-   "topic": "get_account_question_count",
-   "text": "The get_account API summary says it is refused 'until both questions are passed', but the documents define only one security question (birth_year); the single question is used.",
-   "doc": "openapi.json"
+   "topic": "missing_date_parts",
+   "text": "The brief does not say how to resolve a promise date given without month or year.",
+   "doc": "results/layer-b/lb-14/brief.md"
   }
  ],
  "audit_fixed": [
-  "Added unresolved entry: rule 8 requires an apology on a wrong number but dictates no words and the IR has no field for it.",
-  "Added unresolved entry: the openapi get_account summary mentions 'both questions', but the documents define only one security question (birth_year)."
+  "phrases.today_question changed from 'Can you pay this amount today?' to 'Can you pay all of it today?' to follow rule 18's wording ('ask once whether they can pay all of it today').",
+  "bands[0].source extended with 'Bands with one attempt stop after attempt 1.'; phrases.source extended with the rule 18 today-question text. No other discrepancies found: all enums (verify_identity field, product type, transfer queue, close_call outcome, add_note reason) checked against openapi.json."
  ],
  "audit_unresolved": [
-  "No dictated cannot-answer sentence.",
-  "No field for the 'could not record it' sentence after a failed create_promise.",
-  "API summary says three wrong answers; memo M54 sets 2 (memo used).",
-  "Wrong-number apology wording not dictated.",
-  "get_account summary says 'both questions' while only one security question exists."
+  "No sentence is given for questions the assistant cannot answer (phrases.cannot_answer_sentence left empty).",
+  "No rule for promise dates given without month or year (calendar.missing_date_parts = unresolved).",
+  "Only one source document, so there are no precedence conflicts to resolve."
  ]
 }

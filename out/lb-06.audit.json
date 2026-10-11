@@ -1,172 +1,173 @@
 {
  "covered": [
   {
-   "rule": "Mail: M46 overrides only its named P16 rules; code list C is the sole vocabulary; quoted 1 Oct settings obsolete",
-   "where": "source_docs; identity.requirements order (memo, not founded_year first); bands[1].deadline (memo, not fourth business day); third_party.callback.days (memo E, not 'no same-day callbacks')"
+   "rule": "1 Oct r1 opening + holder question",
+   "where": "phrases.opening, phrases.holder_question, phrases.opening_verbatim=false (content only, not dictated words)"
   },
   {
-   "rule": "P16 1 opening: automated assistant of Bank 6, call recorded; ask with title and last name",
-   "where": "phrases.opening, phrases.opening_verbatim=false, phrases.holder_question"
-  },
-  {
-   "rule": "P16 2 forbidden words before verification",
+   "rule": "1 Oct r2 forbidden words before verification",
    "where": "phrases.prohibited_before_verification"
   },
   {
-   "rule": "P16 3 clear confirmation, ask once more, then no-contact/unclear",
+   "rule": "1 Oct r3 holder confirmation, ask once more, unreached/unclear",
    "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
   },
   {
-   "rule": "P16 4 robot reply / scam reply and continue",
+   "rule": "1 Oct r4 robot / scam",
    "where": "phrases.robot_reply, phrases.scam_reply, special_cases[robot], special_cases[scam]"
   },
   {
-   "rule": "P16 5 third party: say nothing about the purpose, ask when reachable",
-   "where": "third_party.callback"
+   "rule": "1 Oct r5 third party",
+   "where": "third_party.source, third_party.callback"
   },
   {
-   "rule": "P16 6 + M46 E callback today or next business day, 09:00-17:30 inclusive, after now, no-contact/cb-set",
-   "where": "third_party.callback.days/start/end/must_be_after_now/scheduled_outcome"
+   "rule": "1 Oct r6 + 7 Oct pt4 callback next business day only, 12:00-19:00, after now",
+   "where": "third_party.callback.days=next_business_day, start, end, must_be_after_now, scheduled_outcome"
   },
   {
-   "rule": "P16 7 time outside window: ask once more, else no-contact/cb-none",
-   "where": "third_party.callback.retry_once, third_party.callback.no_callback_outcome"
+   "rule": "1 Oct r7 retry once, unreached/no_callback",
+   "where": "third_party.callback.retry_once, no_callback_outcome"
   },
   {
-   "rule": "P16 8 wrong number no-contact/wrong-no",
+   "rule": "1 Oct r8 wrong number",
    "where": "third_party.wrong_number_outcome"
   },
   {
-   "rule": "P16 9 deceased sentence and no-contact/deceased",
-   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+   "rule": "1 Oct r9 deceased",
+   "where": "third_party.deceased_sentence, deceased_outcome"
   },
   {
-   "rule": "P16 10 refuses to talk no-ptp/refuses",
-   "where": "special_cases[refuse_to_talk]"
+   "rule": "1 Oct r10 refuses to talk",
+   "where": "special_cases[refuse_to_talk], outcomes.refused_reason"
   },
   {
-   "rule": "P16 11 + M46 A question order company_number, founded_year, postcode; formats kept",
+   "rule": "1 Oct r11 + 7 Oct pt1 question order phone_last4, date_of_birth, postcode, birth_year; formats",
    "where": "identity.requirements"
   },
   {
-   "rule": "P16 12 + M46 A 5 wrong answers total; use wrong_answers_left",
-   "where": "identity.wrong_answer_limit=5, identity.remaining_slot, identity.wrong_count_source"
+   "rule": "date given as numbers read month/day/year",
+   "where": "identity.requirements[1].numeric_date_order=mdy, hint_field=hint"
   },
   {
-   "rule": "P16 13 failed check sentence, id-fail/exhausted",
+   "rule": "1 Oct r12 + 7 Oct pt1 5 wrong answers total, wrong_answers_left",
+   "where": "identity.wrong_answer_limit=5, wrong_count_source=api, remaining_slot"
+  },
+  {
+   "rule": "1 Oct r13 failed check",
    "where": "identity.failed_instruction, identity.failed_outcome"
   },
   {
-   "rule": "P16 14 explain once, second refusal id-fail/would-not-answer",
-   "where": "identity.decline_explain_once, identity.asking_purpose_counts_as_decline, identity.declined_outcome"
+   "rule": "1 Oct r14 decline / asks purpose",
+   "where": "identity.decline_explain_once, asking_purpose_counts_as_decline, declined_outcome"
   },
   {
-   "rule": "P16 15/29 + M46 D human request: ask once, then front-desk escalated/agent",
+   "rule": "1 Oct r15 human during identity check -> desk / handed_over person",
    "where": "special_cases[human]"
   },
   {
-   "rule": "P16 16 Monday-Thursday business days, no holidays",
+   "rule": "1 Oct r16 business days Mon-Sat, holidays",
    "where": "calendar.business_days, calendar.holidays"
   },
   {
-   "rule": "P16 17 next/this weekday",
+   "rule": "1 Oct r17 next/this weekday",
    "where": "calendar.next_weekday_means_following_week"
   },
   {
-   "rule": "P16 18 debt intro, up to 2 products, state all, ask all today once",
-   "where": "phrases.debt_intro, multi_product.max_products, multi_product.state_all_before_asking, phrases.today_question, phrases.all_today_question"
+   "rule": "1 Oct r18 debt intro, up to 4 products, state all, ask pay all today",
+   "where": "phrases.debt_intro, multi_product.max_products=4, multi_product.state_all_before_asking, phrases.today_question, phrases.all_today_question"
   },
   {
-   "rule": "P16 19 floors and product naming",
-   "where": "amounts.floors, phrases.product_naming"
+   "rule": "1 Oct r19 product naming; floor 20% min 50.00",
+   "where": "phrases.product_naming, amounts.floor_rules[*]"
   },
   {
-   "rule": "P16 20 full first, never ask how much, floor once with 'the rest stays overdue'",
+   "rule": "1 Oct r20 full first, never ask how much, floor once 'the rest stays overdue'",
    "where": "amounts"
   },
   {
-   "rule": "P16 21 promise date rules",
+   "rule": "1 Oct r21 promise date rules",
    "where": "dates"
   },
   {
-   "rule": "P16 22 band1 end of calendar month, following",
-   "where": "bands[0]"
+   "rule": "1 Oct r22 band table (band1, band2)",
+   "where": "bands[0], bands[1]"
   },
   {
-   "rule": "P16 22 + M46 B band2 today + 14 calendar days, following",
-   "where": "bands[1].deadline"
+   "rule": "7 Oct pt2 band3 deadline = 15th of next month, following",
+   "where": "bands[2].deadline"
   },
   {
-   "rule": "P16 23 attempts: full on last business day this/next week (floor if full refused), then floor on deadline",
+   "rule": "1 Oct r23 one attempt, full on last business day this/next week, floor if full refused",
    "where": "bands[*].attempts"
   },
   {
-   "rule": "P16 24 attempts used up: note refuses",
+   "rule": "1 Oct r24 attempts used -> declined_payment",
    "where": "outcomes.refused_reason, notes.reasons"
   },
   {
-   "rule": "P16 25 already paid sentence, note, continue",
+   "rule": "1 Oct r25 already paid",
    "where": "special_cases[already_paid], phrases.already_paid_sentence"
   },
   {
-   "rule": "P16 26 dispute note and continue",
+   "rule": "1 Oct r26 dispute",
    "where": "special_cases[dispute]"
   },
   {
-   "rule": "P16 27 hardship: sympathy, welfare offer, decline no-ptp/vulnerable, may record promise",
+   "rule": "1 Oct r27 hardship",
    "where": "special_cases[hardship]"
   },
   {
-   "rule": "P16 28 restructuring transfer plans escalated/plans",
+   "rule": "1 Oct r28 restructuring",
    "where": "special_cases[restructuring]"
   },
   {
-   "rule": "P16 30 read-back, 'Do you confirm?', one promise per product",
-   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product"
+   "rule": "1 Oct r29 overridden by 7 Oct pt4 (ask once first)",
+   "where": "special_cases[human].ask_once_first=true"
   },
   {
-   "rule": "P16 31 after-promise sentence",
+   "rule": "1 Oct r30 read-back, Do you confirm?, one promise per product",
+   "where": "promise_write.confirm_phrase, promise_write.one_promise_per_product, multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "1 Oct r31 after promise sentence",
    "where": "phrases.after_promise_sentence"
   },
   {
-   "rule": "P16 32 + M46 C retry 2 times, then could-not-record, no-ptp/tool-error",
-   "where": "promise_write.retry_on_failure=2, phrases.cannot_answer_sentence, outcomes.service_error_reason"
+   "rule": "1 Oct r32 / 7 Oct pt3 / 9 Oct correction: no retry, system_error",
+   "where": "promise_write.retry_on_failure=0, outcomes.service_error_reason"
   },
   {
-   "rule": "P16 33 change recorded promise reply",
+   "rule": "1 Oct r33 change recorded promise",
    "where": "phrases.recorded_promise_change_reply, special_cases[change_promise]"
   },
   {
-   "rule": "P16 34 same call, common date clamped, one read-back, promise survives transfer",
+   "rule": "1 Oct r34 several products",
    "where": "multi_product"
   },
   {
-   "rule": "P16 35 one note per unpromised product, none on transfer",
+   "rule": "1 Oct r35 notes",
    "where": "notes"
   },
   {
-   "rule": "P16 36 goodbye before close_call; outcome list",
-   "where": "outcomes.goodbye_before_close, outcomes.table"
+   "rule": "1 Oct r36 outcomes list, goodbye before close",
+   "where": "outcomes.table, outcomes.goodbye_before_close"
   },
   {
-   "rule": "P16 37 outcome precedence",
-   "where": "outcomes.promise_outcome, transfer_overrides_promise, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
-  },
-  {
-   "rule": "Code list C outcomes, queues, add_note reasons",
-   "where": "outcomes.table, special_cases[*].action.queue, notes.reasons"
+   "rule": "1 Oct r37 precedence",
+   "where": "outcomes.promise_outcome, paid_outcome, transfer_outcome, transfer_overrides_promise, no_promise_outcome, all_paid_closes_as_paid, no_promise_reason_from_first_non_paid_note"
   }
  ],
  "fixed": [
-  "phrases.opening: removed the added 'Hello,' so the sentence holds only what P16 1 requires (automated assistant of Bank 6, call is recorded); still opening_verbatim=false because the words are not dictated.",
-  "phrases.today_question: changed 'Can you pay this today?' to 'Can you pay all of it today?' to match the P16 18 wording.",
-  "phrases.cannot_answer_sentence: removed the added apology so it says only what P16 32 requires ('say you could not record it').",
-  "Source spans extended (identity, callback, third party, multi_product, phrases, promise_write, outcomes) to quote the rules each value comes from (P16 3, 5, 7, 30, 36, 19 naming)."
+  "special_cases[human].source: the quote was mislabelled. It presented the 1 Oct rule 29 text ('do not ask whether you can help') as the overriding Operations text. Replaced it with Operations 7 Oct point 4 ('ask once whether you can help first'), noting that this overrides rule 29. The values were already correct.",
+  "identity.source, outcomes.source, phrases.source, promise_write.source: added the quotes that support holder_confirmation_asks, goodbye_before_close, today_question and confirm_phrase/one_promise_per_product.",
+  "unresolved: added an entry for the rule 32 'say you could not record it' sentence, which has no dictated wording and no phrase field."
  ],
  "unresolved": [
-  "Wrong-answer limit: M46 says 5 in total, but the API summary says three wrong answers end the check. Kept 5 from the memo; the API's wrong_answers_left may end the check sooner.",
-  "Human request during the identity check: P16 15 transfers at once, while M46 D says to ask once first and does not separate the phases. Ask-once-first is applied to every human request.",
-  "The API says get_account is refused until 'both questions' are passed, but the documents require three security questions. Kept the three from the documents.",
-  "Hardship: the documents ask for one short sentence of sympathy without giving the words, so the sentence used is written, not quoted."
+  "No reply is dictated for the verify_identity hint `day_month_swapped`, so hint_reply is empty.",
+  "No sentence is given for questions the agent cannot answer.",
+  "The documents do not say what happens when a computed deadline is already in the past.",
+  "No band covers products more than 60 days late or 0 days late.",
+  "It is unclear whether 'ask once whether you can help first' (7 Oct) also applies to human requests during the identity check (rule 15). It is applied to all human requests.",
+  "No wording is given for the 'could not record it' sentence after a failed create_promise."
  ]
 }

@@ -60,6 +60,68 @@ Items marked **confirmed** were reproduced by the reviewer with a throwaway offl
 17. Tried: "too much" at the first question = persuasion attempt 1 with the floor — reverted after re-reading rule 26 (the floor offer is
     not an attempt; refusing it is the flat refusal that starts the ladder), which the auditors' probe P5 encodes.
 
+18. **OpenAPI schema composition crashed the build** — found by the external packages (`tests/fixtures/external/`): both realistic APIs use
+    base properties plus `oneOf` refinements (per-product-type floor fields; reason omitted for reasonless outcomes) and `parse_openapi`
+    raised "schema composition is unsupported". (fix: compositions are flattened — properties united with enum unions, `allOf` adds every
+    variant's required, `oneOf`/`anyOf` keep only the fields required by every variant, `not` dropped; response/request needles widened for
+    `facility_ref`/`account_ref`, `category`, `callback_on`/`callback_at`, `route_key`, `closing_code`/`closing_reason`. Practice exports
+    byte-identical; `tests/test_openapi_composition.py`.)
+
+19. **`ok:false` without a remaining counter looped on "I could not read that"** (review item, confirmed by the external package aster: no
+    counter, policy counts in code). Fixed: a bank refusal counts as a wrong answer; the agent formats every answer itself so "unreadable"
+    is not a real state.
+20. **A common date for several products stopped at the first product needing an answer** (other agent's live case codex-1 PUB-13: "the
+    26th for both" → p1 rolled to the 27th, but p2's clamp to its 23 Oct deadline was lost and it got a fresh attempt-1 proposal for the 16th).
+    Fixed: the common date is applied to every product first; the first open question becomes the current product.
+21. Known limitation, not fixed: two special cases in one sentence ("the card is paid and the loan is not mine") extract as one intent, so one
+    product gets the other's note (codex-2 PUB-13). Needs a multi-intent extraction schema.
+
+## v24 additions (11 Oct 02:40–03:20 UTC)
+- OpenAPI compositions flattened; mapper vocabularies widened (items 18); `ok:false` without a counter counts as wrong (19); common date
+  applied to every product (20); "stay on this product" sentence in multi-product attempt instructions (LLM skipped the loan's second
+  attempt three times live).
+- **Floor rules** (`amounts.floor_rules`: percent of the past-due amount with a minimum, fixed amount, or a field) and **deadline kinds**
+  `day_of_month` ("the 15th of next month") and `month_offset` on `end_of_month` ("end of next month"); extraction guide, validation,
+  runtime, invariants and the permutation generator extended; 7 new tests. Practice exports unchanged in behaviour (the embedded runtime
+  changed, so the bytes did).
+- Another agent edited `workflow_runtime.py` and the regression tests concurrently (≈03:00 UTC): it removed the past-deadline guard and the
+  support-offer acceptance (both live-verified) and rewrote a test to match. Restored. Its two other changes were kept: an explicit full date
+  with a year wins over a weekday mismatch, and an idle-labelled turn that carries a date or amount is treated as a proposal.
+
+- **`aside` extraction variable** (negotiate + read-back): a robot/scam question asked in the same message as an answer ("Yes, that works.
+  Are you a robot?") is answered in the next sentence — prefixed to the fixed read-back or goodbye speech, or to the LLM's next instruction.
+  The read-back is fixed TTS, so before this the question was silently dropped; it was the single most frequent judge failure tonight
+  (PUB-04 ×3, PUB-07 ×1, codex PUB-07).
+- Composite deadlines (`earliest`/`latest` of simple rules), `dates.past_deadline = no_promise`, and `max_of` floors (greater of a base field
+  and a percentage, rounded up to the cent) — the three cheap kinds among the four the cedar/harbor packages flagged as unexpressible. Still
+  unsupported: per-weekday split callback windows and a per-field "one wrong answer locks" rule (both logged as unresolved by the extractor).
+
+- **Code-node retry**: live B PUB-13 (03:26 UTC): the write-step code node hit the platform's "unparseable result" fault once (the previous
+  node in the same call ran fine), its default transition went to close_call with empty outcome variables, and the bank rejected the close
+  three times — a confirmed read-back with no promise. Code nodes now carry `maxRetries: 1` (they are deterministic over `vars`, so a re-run is
+  safe; api_request nodes keep 0). `build.py` additionally records an offline run of the invariant scenarios on the compiled workflow in the
+  trace before publishing (informational, never blocking).
+
+- **Bare weekday vs the offer / the past** — live A PUB-07 (03:51 UTC): the agent offered Tuesday 27 Oct, the customer said "I can do that
+  on Tuesday" (weekday tuesday, relative this), and bankcal's "this Tuesday" from a Wednesday is LAST Tuesday (13 Oct) → a past proposal,
+  an LLM claim of a recording, then a goodbye that closed without a promise. Fixed: a weekday that names the offer on the table restates the
+  offer; a bare weekday never resolves to the past (the coming one is used). Also: a goodbye at the read-back now finalizes at once (unsaved
+  proposals abandoned, notes written, one close) instead of asking what to change (the second reviewer's R5).
+
+- **First floor offer dated like attempt 1** — live A asks_back PUB-06: "too much" at the first question → the floor was offered for today;
+  the public PUB-06 ledger expects the accepted floor on Friday 16 Oct, i.e. the floor rides on attempt 1's date. Refusing it is the flat
+  refusal that uses attempt 1 (rule 30) and repeating the same offer is forbidden (rule 31), so attempt 2 (floor on the deadline) follows at
+  once; probe P5 and the ladder test now encode that reading. Weekday + day + this/next precedence refined ("Monday the 26th" when "this
+  Monday" has passed is the 26th; "this Friday" with a stray "30th" from another sentence stays the coming Friday).
+
+- 05:00–05:40 UTC: fresh-v24 review items fixed — floor offer / direct acceptance honour `no_window`; an explicit "next <weekday>" is not
+  folded into the offer; an aside that arrives with the final confirmation is spoken before the "recorded" sentence or the goodbye
+  (`aside_carry`); composite deadline children fully validated. `submit.sh` now fails loudly when `git push` fails (the rehearsal showed a
+  silent exit 0). Verify success flag `accepted` (sable/tamarisk APIs) added to the mapper — another crash-class vocabulary gap. "This product
+  already has a promise" from the bank now counts as recorded (stale practice session / duplicate-write race). The other agent's two edits were
+  re-adopted in guarded form: the brief's special-case trigger text is appended to the tuned intent descriptions only when it adds vocabulary
+  (practice export unchanged), and the neutral hint fallback sentence.
+
 ## Generalisation gaps noted (not changed in v23)
 Text identity answers sent verbatim (spaces kept); bare weekday earlier in the week resolves to the past; `refuse_to_talk.ask_once_first`
 ignored; `prop_product` enum stops at 3; out-of-range days_late falls back to the nearest band; `ok:false` without a remaining counter

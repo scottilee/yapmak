@@ -1,0 +1,505 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+  "openapi.json"
+ ],
+ "bank_name": "Cedar Reach Savings",
+ "identity": {
+  "requirements": [
+   {
+    "field": "birth_date",
+    "ask_text": "What is your birth date?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "mdy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+     "text": "1. `birth_date`: What is your birth date? Format date, numeric input MDY, transmit YYYY-MM-DD."
+    }
+   },
+   {
+    "field": "access_pin",
+    "ask_text": "What is your six-digit access PIN?",
+    "answer_format": "digits",
+    "digits": 6,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+     "text": "2. `access_pin`: What is your six-digit access PIN? Format digits, exactly 6 digits; preserve leading zeros."
+    }
+   },
+   {
+    "field": "locality_word",
+    "ask_text": "What is your locality security word?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+     "text": "3. `locality_word`: What is your locality security word? Format text, transmit the spoken text."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "code",
+  "remaining_slot": "",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "cr-unverified",
+   "cr-r-failed"
+  ],
+  "declined_outcome": [
+   "cr-unverified",
+   "cr-r-declined"
+  ],
+  "unclear_holder_outcome": [
+   "cr-unreached",
+   "cr-r-unclear"
+  ],
+  "failed_instruction": "Please use the verification desk before another call.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "Four wrong answers TOTAL across questions close cr-unverified/cr-r-failed; count wrong answers in agent code; no remaining-count response is supplied. Passing one question does not reset the total. No format hints or free hint retries exist. Say \"Please use the verification desk before another call.\" on exhaustion. Explain security protection once on a refusal; a second refusal closes cr-unverified/cr-r-declined. A question about purpose is not a refusal. ... Answer a question before repeating the holder question, at most two asks total; if still unclear close cr-unreached/cr-r-unclear."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "today_or_next_business_day",
+   "start": "08:45",
+   "end": "17:15",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "cr-unreached",
+    "cr-r-callback"
+   ],
+   "no_callback_outcome": [
+    "cr-unreached",
+    "cr-r-no-callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Callback today or next business day, 08:45\u201317:15 inclusive. Callback must be strictly later than now. A missing time is incomplete: clarify, never guess. Ask once more after an invalid slot; a second invalid slot or no supplied slot closes cr-unreached/cr-r-no-callback. Successful schedule_callback then closes cr-unreached/cr-r-callback."
+   }
+  },
+  "wrong_number_outcome": [
+   "cr-unreached",
+   "cr-r-wrong-number"
+  ],
+  "deceased_outcome": [
+   "cr-unreached",
+   "cr-r-deceased"
+  ],
+  "deceased_sentence": "Please accept our sympathy.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "A relative cannot verify or promise for the holder. ... Reveal only the opening; ask when the holder is available. ... Wrong number closes cr-unreached/cr-r-wrong-number; death of holder: say \"Please accept our sympathy.\" and close cr-unreached/cr-r-deceased, with no further questions."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-23",
+   "2026-11-02",
+   "2026-12-25"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "Business days Monday\u2013Friday except 2026-10-23, 2026-11-02, 2026-12-25. All calculations use now. \"Next weekday\" is in the following calendar week, even if today is that weekday; \"this weekday\" is current week. Missing date parts must be clarified, not assumed."
+  }
+ },
+ "bands": [
+  {
+   "name": "CR-D1",
+   "days_late_min": 1,
+   "days_late_max": 60,
+   "deadline": {
+    "kind": "nth_business_day",
+    "n": 6,
+    "cap": {
+     "kind": "end_of_month",
+     "basis": "business",
+     "adjustment": "none",
+     "month_offset": 0
+    },
+    "combine": "earlier"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "CR-D1: Days late 1\u201360 share one rule: deadline is the EARLIER of (a) the sixth business day strictly after today and (b) the last business day of the current calendar month. Neither boundary may be exceeded. ... There is one subsequent full-by-deadline offer, using the calculated floor only if full was already refused."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "cr-flex": {
+    "kind": "percent",
+    "percent": 25,
+    "min_amount": 0,
+    "rounding": "up_to_cent",
+    "min_field": "flex_base",
+    "combine_with_field": "higher",
+    "cap": "full_amount"
+   },
+   "cr-term": {
+    "kind": "percent",
+    "percent": 25,
+    "min_amount": 0,
+    "rounding": "up_to_cent",
+    "min_field": "term_base",
+    "combine_with_field": "higher",
+    "cap": "full_amount"
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "CR-A1: Compute the effective floor as the LOWER of the full overdue sum and the HIGHER of (a) the product-specific base minimum in section 3 and (b) one quarter of the full overdue sum, rounding that quarter UP to the next cent. ... Always ask full first, never ask the customer to choose an amount. Offer the effective floor once if full is too much; say \"The unpaid remainder stays overdue.\" Accept customer proposals from effective floor through full inclusive. Below floor: offer effective floor once; refusal is flat refusal. Never accept more than full or offer discounts, waivers or revised terms."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "Dates must be today or later, business days and within deadline. Customer non-business dates roll forward only within that deadline; otherwise offer the deadline, never silently use an invalid day. Vague dates: clarify once, then offer the deadline. ... Today is an allowed date when business-day and deadline rules allow it."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says the current overdue amount has already been paid.",
+   "action": {
+    "type": "close",
+    "outcome": "cr-paid",
+    "reason": ""
+   },
+   "say": "Allow two business days for a payment to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Current overdue amount already paid: say the already-paid sentence, close cr-paid without reason; no promise."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says the debt is not theirs or disputes it, including claiming a historical payoff or closure disproves the current debt.",
+   "action": {
+    "type": "close",
+    "outcome": "cr-none",
+    "reason": "cr-r-disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Historical payoff/closure disputing the current debt counts as dispute. Debt not owned/disputed: close cr-none/cr-r-disputed; no argument or promise."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions job loss, illness or inability to meet essential living costs (even if also asking for smaller instalments).",
+   "action": {
+    "type": "close",
+    "outcome": "cr-none",
+    "reason": "cr-r-distress"
+   },
+   "say": "I am sorry you are facing this difficulty.",
+   "offer_transfer_queue": "cr-care-desk",
+   "offer_outcome": [
+    "cr-routed",
+    "cr-r-care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Job loss, illness or inability to meet essential living costs: say \"I am sorry you are facing this difficulty.\" Offer care desk; accepted care transfer uses cr-routed/cr-r-care. Hardship wins over a simultaneous request for smaller instalments. If care is declined, close cr-none/cr-r-distress immediately, even if a promise is volunteered."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to change the contract or the instalments, without hardship.",
+   "action": {
+    "type": "transfer",
+    "queue": "cr-plan-desk",
+    "outcome": "cr-routed",
+    "reason": "cr-r-replan"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Contract-change or instalment-change request without hardship: transfer immediately to plan desk, outcome cr-routed/cr-r-replan."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak with a human / a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "cr-human-desk",
+    "outcome": "cr-routed",
+    "reason": "cr-r-person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Human request: transfer immediately, without offering to help first to human desk, outcome cr-routed/cr-r-person."
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer worries the call is a scam or asks whether the call is genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Please check this call using the number on your membership card.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Scam concern: say scam_reply and continue the interrupted stage."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the conversation.",
+   "action": {
+    "type": "close",
+    "outcome": "cr-none",
+    "reason": "cr-r-refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+    "text": "Refusal to talk: ask once to continue, then close cr-none/cr-r-refused."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "cr-promised",
+    "reasons": [],
+    "when": "At least one promise saved successfully (omit reason)."
+   },
+   {
+    "outcome": "cr-paid",
+    "reasons": [],
+    "when": "All products already paid (omit reason)."
+   },
+   {
+    "outcome": "cr-routed",
+    "reasons": [
+     "cr-r-replan",
+     "cr-r-person",
+     "cr-r-care"
+    ],
+    "when": "Transfer to cr-plan-desk, cr-human-desk or cr-care-desk."
+   },
+   {
+    "outcome": "cr-none",
+    "reasons": [
+     "cr-r-refused",
+     "cr-r-distress",
+     "cr-r-disputed",
+     "cr-r-service"
+    ],
+    "when": "No promise saved and not all paid."
+   },
+   {
+    "outcome": "cr-unverified",
+    "reasons": [
+     "cr-r-failed",
+     "cr-r-declined"
+    ],
+    "when": "Security checks failed or declined."
+   },
+   {
+    "outcome": "cr-unreached",
+    "reasons": [
+     "cr-r-callback",
+     "cr-r-no-callback",
+     "cr-r-wrong-number",
+     "cr-r-deceased",
+     "cr-r-unclear"
+    ],
+    "when": "Holder not reached."
+   }
+  ],
+  "promise_outcome": "cr-promised",
+  "paid_outcome": "cr-paid",
+  "transfer_outcome": "cr-routed",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "cr-none",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "cr-r-service",
+  "refused_reason": "cr-r-refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "Transfer overrides other outcomes, cancels unconfirmed proposals, preserves successfully saved promises and permits NO notes before or after transfer. Otherwise any saved promise wins (cr-promised); all products already paid yields cr-paid; with none saved and not all paid use cr-none with the first non-paid product reason in account order. Notes disabled. Refusal is cr-r-refused; permanent service failure cr-r-service. Thank the customer and say goodbye BEFORE one close_call, the last bank action."
+  }
+ },
+ "notes": {
+  "enabled": false,
+  "reasons": [],
+  "note_each_unpromised_product": false,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "The endpoint exists for other programmes but notes are disabled for this programme: no add_note calls are authorized."
+  }
+ },
+ "multi_product": {
+  "max_products": 1,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "At most 1 products, in returned order. ... State all products, full sums and days late before asking for anything. Ask the full amount today once for the whole batch (singular wording for one). Then each product gets its own attempt counter, never another today question."
+  }
+ },
+ "phrases": {
+  "opening": "Hello, this is Cedar Reach Savings's automated assistant. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue contracts.",
+  "today_question": "Can you pay this amount today?",
+  "all_today_question": "Can you pay all these amounts today?",
+  "robot_reply": "I am the automated assistant of Cedar Reach Savings.",
+  "scam_reply": "Please check this call using the number on your membership card.",
+  "prohibited_before_verification": [
+   "arrears",
+   "overdue",
+   "balance",
+   "payment"
+  ],
+  "after_promise_sentence": "We will send a confirmation to your secure message box.",
+  "already_paid_sentence": "Allow two business days for a payment to appear.",
+  "cannot_answer_sentence": "Our member desk can explain that.",
+  "recorded_promise_change_reply": "Please contact our service desk to change a saved agreement.",
+  "product_naming": {
+   "cr-flex": "flexible credit",
+   "cr-term": "term advance"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "## 7. Mandatory sentences \u2014 Use each sentence exactly in its indicated situation; substitute only title and last_name placeholders. ... Opening is verbatim. / Before all security passes, disclose no account information and never say arrears, overdue, balance or payment. / | cr-flex | flexible credit | flex_base | | cr-term | term advance | term_base |"
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save this arrangement?",
+  "source": {
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md",
+   "text": "Read every pending product, amount and date in one batch, then ask \"May I save this arrangement?\". Only a clear yes permits create_promise; any correction invalidates consent and requires revalidation plus a fresh read-back. At most one saved promise per product. One extra retry after a failed promise write; failed responses mean nothing committed. After both attempts fail, mark service failure, say it failed and never say it succeeded."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "bands.CR-D1.deadline",
+   "text": "Deadline is the EARLIER of (a) the sixth business day strictly after today and (b) the last business day of the current calendar month; neither boundary may be exceeded. The DSL has no min-of-two rule, so the deadline is encoded as nth_business_day n=6 with an extra 'cap' (end_of_month, business basis, current month) and combine='earlier'; the compiler must apply the cap.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  },
+  {
+   "topic": "bands.CR-D1.deadline_before_today",
+   "text": "If the deadline is already before today, no eligible promise date exists: take no promise and close cr-none/cr-r-refused; never extend into the following month. No IR field expresses this.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  },
+  {
+   "topic": "amounts.floor_rules",
+   "text": "Effective floor = min(full overdue sum, max(product base field [flex_base/term_base], ceil-to-cent(25% of full overdue sum))). The API base fields are not the final floor; the DSL has no combined field+percent rule, so floor_rules carry extra keys min_field, combine_with_field='higher', rounding='up_to_cent', cap='full_amount' that the compiler must honour. Do not use the base alone or round to nearest.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  }
+ ]
+}

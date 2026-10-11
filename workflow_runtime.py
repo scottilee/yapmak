@@ -120,6 +120,14 @@ def _resolve_date(prefix, today, offer_date=None):
         rel = _get(prefix + '_relative').lower()
         day = _int(_get(prefix + '_day'))
         expr = dict(weekday=wd, relative='next' if rel == 'next' else 'this')
+        if not day and offer_date and datetime.date.fromisoformat(offer_date).weekday() == wd:
+            nxt = resolve_date_expr(today, dict(weekday=wd, relative='next'), _calendar_dict()) if rel == 'next' else None
+            if rel != 'next' or nxt == offer_date:
+                return 'ok', offer_date        # "I can do that on Tuesday" while Tuesday the 27th is on the table: the offer, restated
+        if not day and rel != 'next':
+            cand = resolve_date_expr(today, expr, _calendar_dict())
+            if cand and cand != 'vague' and cand < today:
+                expr = dict(weekday=wd, relative='next')   # "this Tuesday" said on a Wednesday is the coming Tuesday, never last week's
         if day:
             # a day number next to a weekday is kept only when it names that weekday ("Tuesday the 27th", "Friday the 23rd");
             # a stray number from another sentence ("my wedding is on the 30th ... I can pay this Friday") is ignored
@@ -137,10 +145,16 @@ def _resolve_date(prefix, today, offer_date=None):
                     cands.append((dict(weekday=wd, relative=relative), c2))
             if offer_date and any(c == offer_date for _, c in cands):
                 expr = next(e for e, c in cands if c == offer_date)  # restating the offer
-            elif rel in ('this', 'next'):
-                expr = next((e for e, c in cands if 'weekday' in e), expr)   # "this Friday" + a stray number: the weekday wins
-            elif cands:
-                expr = cands[0][0]
+            elif any('weekday' in e for e, _ in cands):
+                expr = next(e for e, c in cands if 'weekday' in e)   # "Friday the 23rd": the number names a Friday ahead
+            else:
+                wk = resolve_date_expr(today, expr, _calendar_dict())
+                if wk and wk != 'vague' and wk >= today:
+                    pass                                              # "this Friday" + a stray number from another sentence: the weekday wins
+                elif cands:
+                    expr = cands[0][0]                                # "Monday the 26th" when "this Monday" already passed: the dated reading
+                else:
+                    expr = dict(weekday=wd, relative='next')
     elif kind in ('date', 'weekday'):
         day = _int(_get(prefix + '_day'))
         if day is None:
@@ -170,14 +184,52 @@ def _name(p):
     except Exception:
         return tpl
 
+def _floor_rule(p):
+    rules = POLICY['amounts'].get('floor_rules') or dict()
+    t = _str(p.get('type'))
+    rule = rules.get(t) or rules.get('*')
+    if rule:
+        return rule
+    field = POLICY['amounts']['floors'].get(t)
+    return dict(kind='field', field=field) if field else None
+
+def _floor_fields():
+    """Every response property a floor may live in (from `floors` and field-kind / max_of `floor_rules`)."""
+    out = set(POLICY['amounts']['floors'].values())
+    for r in (POLICY['amounts'].get('floor_rules') or dict()).values():
+        if isinstance(r, dict) and r.get('kind') in ('field', 'max_of') and r.get('field'):
+            out.add(r['field'])
+    return out
+
 def _floor_words(p):
-    field = POLICY['amounts']['floors'].get(_str(p.get('type'))) or ''
-    return field.replace('_', ' ').strip() or 'lowest amount'
+    rule = _floor_rule(p) or dict()
+    if rule.get('kind') == 'field':
+        return _str(rule.get('field')).replace('_', ' ').strip() or 'lowest amount'
+    return 'lowest amount'
 
 def _floor_of(p):
-    field = POLICY['amounts']['floors'].get(_str(p.get('type')))
-    v = _float(p.get(field)) if field else None
-    return v if v is not None else _float(p.get('full')) or 0.0
+    rule = _floor_rule(p)
+    full = _float(p.get('full')) or 0.0
+    v = None
+    if rule and rule.get('kind') == 'field':
+        v = _float(p.get(rule.get('field')))
+    elif rule and rule.get('kind') == 'percent':
+        v = round(full * float(rule.get('percent') or 0) / 100.0, 2)
+        v = max(v, float(rule.get('min_amount') or 0))
+    elif rule and rule.get('kind') == 'fixed':
+        v = float(rule.get('amount') or 0)
+    elif rule and rule.get('kind') == 'max_of':
+        base = _float(p.get(rule.get('field'))) or 0.0
+        pct = full * float(rule.get('percent') or 0) / 100.0
+        if rule.get('round') == 'up_cent':
+            cents = int(pct * 100 + 1e-9)
+            pct = (cents + (1 if pct * 100 - cents > 1e-9 else 0)) / 100.0   # round UP to the next cent, without math.ceil
+        else:
+            pct = round(pct, 2)
+        v = max(base, pct)
+    if v is None:
+        return full
+    return min(v, full) if full else v
 
 def _band(days_late):
     bands = POLICY['bands']
@@ -217,7 +269,7 @@ def _products_from_vars():
         A = SLOTS['account']
         for i in range(8):
             p = dict()
-            for k in (A['id'], A['type'], A['card_last4'], A['past_due'], A['days_late']) + tuple(POLICY['amounts']['floors'].values()):
+            for k in (A['id'], A['type'], A['card_last4'], A['past_due'], A['days_late']) + tuple(sorted(_floor_fields())):
                 for key in ('get_account_response.data.' + A['list'] + '.' + str(i) + '.' + k, 'products_raw.' + str(i) + '.' + k, A['list'] + '.' + str(i) + '.' + k):
                     if vars.get(key) is not None:
                         p[k] = vars.get(key)
@@ -251,6 +303,11 @@ def st_opening_route():
         _save(S)
         _set_next('ask_0')
     elif h == 'third_party':
+        CB = TP.get('callback') or dict()
+        if CB.get('enabled', True) is False:
+            # the documents schedule no callbacks: disclose nothing, close with the policy's not-reached outcome
+            oc = CB.get('no_callback_outcome') or TP.get('wrong_number_outcome') or ['', '']
+            return _close(S, oc[0], oc[1], 'I understand. I will try again another time. Thank you, goodbye.')
         _save(S)
         _set_next('third_party')
     elif h == 'wrong_number':
@@ -529,13 +586,11 @@ def st_verify_after(i):
         _save(S)
         return _set_next('ask_' + str(i + 1))
     if hint:
-        vars['id_say'] = (r.get('hint_reply') or 'Could you say that again, with the month as a word?')
+        vars['id_say'] = (r.get('hint_reply') or 'Could you say that once more, in the form the question asked for?')
         _save(S)
         return _set_next('ask_' + str(i))
-    if not ok and left is None:
-        vars['id_say'] = 'I could not read that. ' + _q(r)
-        _save(S)
-        return _set_next('ask_' + str(i))
+    # ok:false without a remaining counter is a wrong answer, not an unreadable one: the agent formats every answer itself
+    # (ISO date, exact digits), so a bank refusal counts against the allowance instead of looping on "could not read that".
     if str(I.get('wrong_count_source', 'api')) != 'api':
         left = None     # the documents fixed the allowance; ignore the API's remaining count for exhaustion (unreadable detection above still uses it)
     S['id_wrong'] = S.get('id_wrong', 0) + 1
@@ -566,7 +621,7 @@ def st_init_products():
         p['card_last4'] = _str(raw.get(A['card_last4']))
         p['full'] = _float(raw.get(A['past_due'])) or 0.0
         p['days_late'] = _int(raw.get(A['days_late'])) or 0
-        for f in set(POLICY['amounts']['floors'].values()):
+        for f in _floor_fields():
             if raw.get(f) is not None:
                 p[f] = raw.get(f)
         p['name'] = _name(p)
@@ -578,8 +633,12 @@ def st_init_products():
         p['deadline'] = deadline(S['today'], band['deadline'], h, b)
         if not p['deadline']:
             raise ValueError('Cannot resolve policy deadline')
+        p['no_window'] = False
         if p['deadline'] < S['today']:
-            p['deadline'] = next_business_day(S['today'], h, b) or S['today']   # never propose or record a past date
+            if POLICY['dates'].get('past_deadline', 'next_business_day') == 'no_promise':
+                p['no_window'] = True       # the documents say: no eligible date -> no promise for this product
+            else:
+                p['deadline'] = next_business_day(S['today'], h, b) or S['today']   # never propose or record a past date
         p['attempts'] = band.get('attempts', [])
         p['attempts_used'] = 0
         p['full_refused'] = False
@@ -624,7 +683,7 @@ def _undecided(S):
 def _start_attempt(S, p, k):
     """Make persuasion attempt number k (1-based) for product p. Returns False when attempts are exhausted."""
     attempts = p.get('attempts') or []
-    if k > len(attempts):
+    if k > len(attempts) or p.get('no_window'):
         return False
     a = attempts[k - 1]
     h, b = _cal()
@@ -650,7 +709,10 @@ def _start_attempt(S, p, k):
         p['floor_note_said'] = True
     elif amount == p['floor'] and amount < p['full']:
         floor_note = ' Do not repeat that the rest stays overdue; you said it already.'
-    vars['neg_instruction'] = 'Propose this payment for the ' + p['name'] + ': ' + _money(amount) + ' on ' + _fmt(date) + '. Ask whether they can make that payment.' + floor_note
+    stay = ''
+    if len(S['products']) > 1 and any(q is not p and not q['proposed'] and not q['disposition'] for q in S['products']):
+        stay = ' Stay on the ' + p['name'] + ' for this question; do not move on to another product or mention the others yet.'
+    vars['neg_instruction'] = 'Propose this payment for the ' + p['name'] + ': ' + _money(amount) + ' on ' + _fmt(date) + '. Ask whether they can make that payment.' + floor_note + stay
     return True
 
 def _enter_product(S, k):
@@ -697,6 +759,8 @@ def _readback(S):
 def _apply_proposal(S, p, amount, date, date_status, allow_clamp):
     """Validate a customer proposal for one product. Returns 'done' or an instruction string (and sets S['offer'])."""
     h, b = _cal()
+    if p.get('no_window'):
+        return 'refusal'                      # no eligible promise date for this product: nothing can be recorded
     v = validate_proposal(S['today'], p['deadline'], date, date_status, amount, p['floor'], p['full'], h, b)
     verdict = v.get('verdict')
     D = POLICY['dates']
@@ -1002,7 +1066,7 @@ def st_neg_route():
             same_date = date_status != 'ok' or date == o.get('date')
             if same_amount and same_date:
                 has_prop = False          # the customer restated the offer: that is an acceptance
-        if intent in ('accepts', 'pays_today') and not has_prop and S.get('offer'):
+        if intent in ('accepts', 'pays_today') and not has_prop and S.get('offer') and not p.get('no_window'):
             o = S['offer']
             p['proposed'] = True
             p['proposed_amount'] = float(o['amount'])
@@ -1050,6 +1114,10 @@ def _too_much(S):
         S['phase'] = 'product'
         S['pi'] = targets[0]
     p['full_refused'] = True
+    if p.get('no_window'):
+        p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'   # no eligible date: nothing to offer
+        S['offer'] = None
+        return _advance(S)
     o = S.get('offer') or dict()
     if p.get('floor_offered') or not bool(A.get('floor_offered_once', True)):
         k = p.get('attempts_used', 0) + 1
@@ -1060,7 +1128,11 @@ def _too_much(S):
         return _advance(S)
     p['floor_offered'] = True
     p['floor_note_said'] = True
-    date = (S.get('offer') or dict()).get('date') or _today_bd(S)
+    date = (S.get('offer') or dict()).get('date')
+    if not date:
+        h, b = _cal()
+        first = (p.get('attempts') or [dict()])[0]
+        date = attempt_date(S['today'], first.get('date', 'deadline'), p['deadline'], h, b) or _today_bd(S)   # the floor rides on attempt 1's date
     if date > p['deadline']:
         date = p['deadline']
     S['offer'] = dict(amount=p['floor'], date=date)
@@ -1079,21 +1151,31 @@ def _proposal(S, amount, date, date_status):
     if amount is None and S.get('offer') and not multi_all:
         amount = S['offer'].get('amount')      # the amount currently on the table (e.g. the floor) stays
     if multi_all:
+        # a common date is applied to EVERY product (clamped to each deadline); the first product that needs the customer's
+        # answer (roll-forward, below floor) becomes the current one, the others keep their clamped proposals
+        first = None
         for k in targets:
             p = S['products'][k]
             r = _apply_proposal(S, p, amount if len(targets) == 1 else None, date, date_status, bool(POLICY['multi_product'].get('common_date_clamped_per_product', True)))
-            if r != 'done':
-                S['phase'] = 'product'
-                S['pi'] = k
-                if r == 'refusal':
-                    kk = p.get('attempts_used', 0) + 1
-                    if not _start_attempt(S, p, kk):
-                        p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
-                        return _advance(S)
-                else:
-                    vars['neg_instruction'] = r
-                _save(S)
-                return _set_next('negotiate')
+            if r != 'done' and first is None:
+                first = (k, r, S.get('offer'))
+            elif r != 'done':
+                S['offer'] = first[2]            # keep the first open question's offer on the table
+        if first is not None:
+            k, r, offer = first
+            p = S['products'][k]
+            S['offer'] = offer
+            S['phase'] = 'product'
+            S['pi'] = k
+            if r == 'refusal':
+                kk = p.get('attempts_used', 0) + 1
+                if not _start_attempt(S, p, kk):
+                    p['disposition'] = POLICY['outcomes'].get('refused_reason') or 'refused'
+                    return _advance(S)
+            else:
+                vars['neg_instruction'] = r
+            _save(S)
+            return _set_next('negotiate')
         return _advance(S)
     k = targets[0]
     p = S['products'][k]
@@ -1131,7 +1213,8 @@ def st_readback_route():
             _save(S)
             return _set_next('readback')       # re-enter: the read-back sentence is spoken again and the confirmation asked again
         S['rb_idle'] = 0
-        intent = 'declines'                    # goodbye, or six turns without an answer: not confirmed
+        S['rb_declined'] = 2                   # goodbye, or six turns without an answer: not confirmed and the customer is leaving
+        intent = 'declines'                    # -> unsaved proposals abandoned, notes written, one close
     else:
         S['rb_idle'] = 0
     if intent in ('already_paid', 'dispute', 'hardship', 'restructuring', 'human', 'refuses_to_talk'):
@@ -1194,6 +1277,9 @@ def st_write_step():
     if S.get('w_pending') and 0 <= k < len(S['products']):
         p = S['products'][k]
         raw_ok = _get('w_ok').lower()
+        if raw_ok == 'false' and 'already' in _get('w_error').lower():
+            raw_ok = 'true'                   # "this product already has a promise": the promise exists, the goal is met (duplicate write race)
+        _clear('w_error')
         status = _get('w_status')
         ok = raw_ok == 'true'
         _clear('w_ok', 'w_status')
@@ -1221,6 +1307,11 @@ def st_write_step():
     S['w_idx'] = -1
     _save(S)
     st_finalize()
+
+def _consume_aside_into_goodbye():
+    if _str(vars.get('aside_carry')) and vars.get('goodbye_text'):
+        vars['goodbye_text'] = _str(vars.get('aside_carry')) + ' ' + _str(vars.get('goodbye_text'))
+        vars['aside_carry'] = ''
 
 def st_finalize():
     S = _S()
@@ -1271,7 +1362,9 @@ def st_finalize():
     S['n_idx'] = -1
     _save(S)
     if S['notes']:
+        _consume_aside_into_goodbye()
         return _set_next('notes_step')
+    _consume_aside_into_goodbye()
     _set_next('close_reason' if reason else 'close_noreason')
 
 def st_notes_step():
@@ -1314,9 +1407,38 @@ def _stuck(stage):
         pass
     return False
 
+def _aside_reply(aside):
+    ph = POLICY['phrases']
+    if aside == 'robot':
+        return ph.get('robot_reply') or ('I am ' + _str(POLICY.get('bank_name') or 'the bank') + "'s digital assistant.")
+    if aside == 'scam':
+        return ph.get('scam_reply') or ('You can verify this call by phoning ' + _str(POLICY.get('bank_name') or 'the bank') + "'s customer service number.")
+    return ''
+
+def _apply_aside():
+    """A robot/scam question that came WITH the customer's answer is answered in the next sentence, whatever node speaks it
+    (the read-back and goodbye are fixed TTS, so the LLM never gets a chance otherwise). The reply waits in `aside_carry`
+    until a spoken sentence consumes it (here, in the write step, or in finalize)."""
+    reply = _str(vars.get('aside_carry'))
+    if not reply:
+        return
+    nxt = _str(vars.get('next'))
+    if nxt == 'readback' and vars.get('readback_text'):
+        vars['readback_text'] = reply + ' ' + _str(vars['readback_text']); vars['aside_carry'] = ''
+    elif nxt in ('finalize', 'transfer', 'close_reason', 'close_noreason') and vars.get('goodbye_text'):
+        vars['goodbye_text'] = reply + ' ' + _str(vars['goodbye_text']); vars['aside_carry'] = ''
+    elif nxt in ('negotiate', 'third_party', 'state_debt') or nxt.startswith('ask_'):
+        vars['neg_instruction'] = 'First answer their question in one sentence: "' + reply + '" Then: ' + _str(vars.get('neg_instruction')); vars['aside_carry'] = ''
+    # else: left in aside_carry for the write step / finalize
+
 def _run(stage):
     if _stuck(stage):
         return
+    if stage in ('neg_route', 'readback_route'):
+        reply = _aside_reply(_get('aside'))
+        _clear('aside')
+        if reply:
+            vars['aside_carry'] = reply          # consumed by the next spoken sentence (see _apply_aside / write step)
     try:
         if stage == 'setup':
             st_setup()
@@ -1353,3 +1475,4 @@ def _run(stage):
         else:
             vars['next'] = 'finalize'
             vars['goodbye_text'] = 'I am sorry, a technical problem stops me from continuing. Thank you for your time, goodbye.'
+    _apply_aside()

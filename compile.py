@@ -189,6 +189,26 @@ def code_for(stage: str, ir: P.PolicyIR, slots: dict) -> str:
 # =============================================================================================
 # Prompts (deterministic defaults; an LLM-authored PromptSet can override any stage)
 # =============================================================================================
+def sc_clause(ir: P.PolicyIR, name: str, tuned: str) -> str:
+    """Intent description for a special case: the tuned wording (judge-safe, sweep-tested) plus the brief's own trigger text when it
+    adds vocabulary the tuned wording lacks (a hidden brief may define hardship/dispute/restructuring differently)."""
+    trig = ""
+    for sc in ir.special_cases:
+        if sc.name == name and (sc.trigger or "").strip():
+            trig = sc.trigger.strip().rstrip(" .!")
+            break
+    if not trig:
+        return tuned
+    t = re.sub(r"^(the\s+)?customers?['’]?\s?", "", trig, flags=re.I)
+    t = re.sub(r"^(who|that)\s+", "", t, flags=re.I)
+    words = {w for w in re.findall(r"[a-z]+", t.lower()) if len(w) > 3}
+    known = set(re.findall(r"[a-z]+", tuned.lower()))
+    new = words - known - {"customer", "says", "mentions", "their", "they", "about", "with", "this", "that", "from", "have", "been", "were", "which"}
+    if len(new) < 2:
+        return tuned
+    return tuned + " (the bank's words: " + t[0].lower() + t[1:] + ")"
+
+
 def default_prompts(ir: P.PolicyIR) -> P.PromptSet:
     ph = ir.phrases
     bank = ir.bank_name or "the bank"
@@ -352,9 +372,10 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
         ext("cust_intent", "string",
             "What the customer did in the LAST message. accepts = agreed to the payment the assistant just proposed (yes, okay, that works, I can do that). pays_today = says they can pay today / now. "
             "proposes = offers to pay on their own date and/or with their own amount (e.g. 'I can pay on Friday', 'I could do 200', 'the week after next'); talking about a date for another reason (a wedding on the 30th) is NOT a proposal. refuses = says no / cannot pay / nothing, without naming a payment date or amount. "
-            "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. dispute = says the debt is not theirs, they never had the product, or it was closed or paid off before. "
-            "hardship = mentions illness, a death in the family or losing their job — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). restructuring = asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question). human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
+            "too_much = says the full amount is too much or asks for something lower without naming an amount. already_paid = says they already paid this. " + "dispute = " + sc_clause(ir, "dispute", "says the debt is not theirs, they never had the product, or it was closed or paid off before") + ". "
+            "hardship = " + sc_clause(ir, "hardship", "mentions illness, a death in the family or losing their job") + " — this wins over everything else they say in the same message (asking for a discount or saying they cannot pay anything is still hardship). " + "restructuring = " + sc_clause(ir, "restructuring", "asks for a payment plan, lower instalments or to restructure the debt; asking for a discount or a waiver alone is NOT restructuring (it is question)") + ". human = asks to speak to a person / a human agent (a question whether the assistant is a robot or an AI is a question, not human). "
             "scam = asks whether this is a scam. refuses_to_talk = says they do not want to talk. question = asks something else. goodbye = says goodbye or that they are hanging up or ending the call now. other.", INTENTS),
+        ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
         ext("prop_amount", "float", "An amount of money the customer offers to pay, as a number (e.g. 'two hundred' -> 200, 'six hundred thirty-seven fifty' -> 637.50). Empty if none; an amount they say they cannot pay, or one unrelated to a payment, does not count."),
     ] + date_ext("prop", "the payment date the customer named")
     multi = ir.multi_product.max_products > 1
@@ -372,6 +393,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
                      "already_paid (says they already paid), dispute (says the debt is not theirs or the product was closed), hardship (mentions illness, a death in the family or losing their job), "
                      "restructuring (asks for a payment plan, lower instalments or to restructure), human (asks for a person), refuses_to_talk, question, goodbye (says goodbye or is hanging up), other.",
                      ["confirms", "changes", "declines", "already_paid", "dispute", "hardship", "restructuring", "human", "refuses_to_talk", "question", "goodbye", "other"]),
+                 ext("aside", "string", "A question the customer asked in the SAME message in addition to their answer or statement: robot if they asked whether this is a robot, an AI, a machine or a recording; scam if they asked whether this is a scam or genuine; none otherwise (also none when the question IS the whole message).", ["robot", "scam"]),
                  ext("prop_amount", "float", "A new amount the customer named, as a number. Empty if none.")] + date_ext("prop", "a new payment date the customer named")
     if multi:
         rb_schema.append(ext("prop_product", "string", f"Which product a change refers to: {nums_text} as in the list {{{{product_list}}}}; all if not specified.", nums + ["all"]))
@@ -387,7 +409,7 @@ def compile_workflow(ir: P.PolicyIR, tools: dict[str, ToolSpec], prompts: P.Prom
     nodes["write_step"]["on_enter_first_entry_only"] = True
     nodes["create_promise"] = api_node("create_promise", tools["create_promise"],
                                        body("create_promise", customer_id="{{customer_id}}", product_id="{{w_product_id}}", amount="{{w_amount}}", date="{{w_date}}"),
-                                       "write_step", [{"path": "data." + slots["ok"], "variable": "w_ok"}, {"path": "status_code", "variable": "w_status"}])
+                                       "write_step", [{"path": "data." + slots["ok"], "variable": "w_ok"}, {"path": "status_code", "variable": "w_status"}, {"path": "data.error", "variable": "w_error"}])
     nodes["transfer"] = api_node("transfer", tools["transfer_to_agent"], body("transfer_to_agent", customer_id="{{customer_id}}", queue="{{transfer_queue}}"),
                                  "finalize", [{"path": "data." + slots["ok_by_tool"]["transfer_to_agent"], "variable": "t_ok"}])
     nodes["finalize"] = cn("finalize", ["notes_step", "close_reason", "close_noreason"], default="close_reason")

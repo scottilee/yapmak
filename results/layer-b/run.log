@@ -16,3 +16,8 @@
 [lb-07 thread] exit=0 157s diffs=0 functional={}
 [lb-15 thread] exit=0 160s diffs=0 functional={}
 [lb-17 thread] exit=0 167s diffs=0 functional={}
+== layer B run 2026-10-11T03:11Z: [(10, 'clean'), (14, 'clean'), (6, 'thread'), (24, 'thread'), (1, 'raw'), (9, 'raw')]
+[lb-14 clean] exit=0 156s diffs=1 functional={'too_much_floor': 1, 'between': 4}
+[lb-10 clean] exit=0 163s diffs=2 functional={'too_much_floor': 1, 'between': 4}
+== layer B run 2026-10-11T03:23Z: [(24, 'thread')]
+[lb-24 thread] exit=0 153s diffs=0 functional={}

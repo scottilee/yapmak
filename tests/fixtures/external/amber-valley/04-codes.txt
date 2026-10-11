@@ -1,0 +1,13 @@
+CODE LIST C-AVS-2026 — authoritative enum combinations
+
+avs_arranged: (omit reason)
+avs_settled: (omit reason)
+avs_transferred: avs_restructure | avs_person | avs_support
+avs_no_deal: avs_refused | avs_distress | avs_disputed | avs_service_error
+avs_unverified: avs_failed | avs_declined
+avs_unreached: avs_callback | avs_no_callback | avs_wrong_number | avs_deceased | avs_unclear
+
+Transfer queues: avs_restructure, avs_desk, avs_support
+add_note reasons: avs_refused, avs_distress, avs_disputed, avs_settled, avs_service_error
+
+Only these combinations are allowed. Omit reason where stated.

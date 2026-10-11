@@ -1,0 +1,39 @@
+{
+  "packages": [
+    {
+      "name": "codex-cedar-limits",
+      "supported_checks": 128,
+      "behavioral_probes": 8,
+      "deliberate_schema_gaps": [
+        "CR-D1",
+        "CR-A1"
+      ]
+    },
+    {
+      "name": "codex-harbor-exceptions",
+      "supported_checks": 132,
+      "behavioral_probes": 9,
+      "deliberate_schema_gaps": [
+        "HG-I1",
+        "HG-C1"
+      ]
+    }
+  ],
+  "validation": {
+    "seven_post_operations": true,
+    "json_schema_draft4_compatible_subset": true,
+    "openapi_parser": true,
+    "request_slots": true,
+    "response_slots": true,
+    "enum_oracles": true,
+    "date_probes_recomputed_with_bankcal": true,
+    "amount_probes_decimal": true,
+    "callback_probes_per_interval_bankcal": true,
+    "identity_probes": "Manually checked against signed memo; no v24 implementation exists to execute them."
+  },
+  "notes": [
+    "Removed inherited oneOf schemas from the new fixture APIs and selected mappable renamed fields to isolate the two intended rule gaps per package. Concrete API enum unions are validated; the briefs define valid close outcome/reason pairings.",
+    "The current schema validates only the supported skeleton. Supported-check matches and fixture self-consistency do not imply complete policy support.",
+    "No extracted or compiled workflow was generated for these fixtures."
+  ]
+}

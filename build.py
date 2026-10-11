@@ -102,6 +102,21 @@ def build(a):
         if errs:
             raise SystemExit("static check failed: " + "; ".join(errs))
         (out / f"{a.slot}.candidate.json").write_text(json.dumps(wf, indent=1))
+        # offline behaviour check before publishing: the IR-parameterized scenarios against a mock bank (seconds). Informational —
+        # a failing scenario is recorded for the operator, never blocks the publish (an unpublished agent scores zero).
+        try:
+            sys.path.insert(0, str(ROOT / "tests"))
+            import invariants as INV
+            t0 = time.time()
+            fails = {}
+            for sc in INV.SCENARIOS:
+                for now in INV.NOWS[:2]:
+                    problems, _bank = INV.run_scenario(ir, wf, sc, tools, now)
+                    if problems and not problems[0].startswith("n/a"):
+                        fails[f"{sc}@{now[:10]}"] = problems[:3]
+            tr.event("offline_invariants", scenarios=len(INV.SCENARIOS) * 2, failing=fails, duration_ms=int((time.time() - t0) * 1000))
+        except Exception as e:  # noqa: BLE001 - never fatal
+            tr.event("offline_invariants", error=repr(e)[:300])
 
         # 3. publish + checkpoint ---------------------------------------------------------------
         retry(lambda: freya.validate_workflow(a.slot, wf), "validate", tr)

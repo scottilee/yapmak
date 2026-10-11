@@ -1,12 +1,14 @@
 {
  "bands": [
   "band1",
-  "band2"
+  "band2",
+  "band3"
  ],
  "identity": [
-  "company_number",
-  "founded_year",
-  "postcode"
+  "phone_last4",
+  "date_of_birth",
+  "postcode",
+  "birth_year"
  ],
  "special_cases": [
   "already_paid",
@@ -21,30 +23,39 @@
  ],
  "unresolved": [
   {
-   "topic": "wrong_answer_limit vs API",
-   "text": "Memo M46 sets 5 wrong answers total and P16 says to use the API's `wrong_answers_left`, but the tool API summary says 'Three wrong answers in total end the check.' The limit of 5 is kept from the memo; the API may end the check earlier.",
-   "doc": "results/layer-b/lb-06/03-memo.txt"
+   "topic": "identity.hint_reply",
+   "text": "The API's verify_identity returns hint `day_month_swapped`, but the documents dictate no reply for it; hint_reply left empty.",
+   "doc": "results/layer-b/lb-06/thread.txt"
   },
   {
-   "topic": "human request during identity check",
-   "text": "P16 rule 15 transfers immediately during the identity check; memo M46 D says human requests are handled by first asking once whether the assistant can help, without distinguishing phases. Applied ask-once-first to all human requests.",
-   "doc": "results/layer-b/lb-06/03-memo.txt"
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The documents give no sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-06/thread.txt"
   },
   {
-   "topic": "get_account precondition vs three questions",
-   "text": "The tool API says get_account is 'Refused until both questions are passed', while the documents require three security questions (company_number, founded_year, postcode). The documents' three questions are kept.",
-   "doc": "openapi.json"
+   "topic": "dates.past_deadline",
+   "text": "The documents do not say what to do when the computed deadline is already in the past; default kept.",
+   "doc": "results/layer-b/lb-06/thread.txt"
   },
   {
-   "topic": "hardship sympathy wording",
-   "text": "P16 27 requires 'one short sentence of sympathy' without dictating the words; 'I am very sorry to hear that.' is a written sentence, not dictated wording.",
-   "doc": "results/layer-b/lb-06/02-policy.md"
+   "topic": "bands",
+   "text": "The documents define bands only for 1 to 60 days late; products outside that range are not covered.",
+   "doc": "results/layer-b/lb-06/thread.txt"
+  },
+  {
+   "topic": "special_cases.human",
+   "text": "Operations (7 October) says human requests: ask once whether you can help first; it does not say whether this also applies during the identity check (rule 15). It is applied to all human requests.",
+   "doc": "results/layer-b/lb-06/thread.txt"
+  },
+  {
+   "topic": "promise_write.failure_sentence",
+   "text": "Rule 32 says to say you could not record the promise, but gives no wording and the schema has no phrase field for it.",
+   "doc": "results/layer-b/lb-06/thread.txt"
   }
  ],
  "audit_fixed": [
-  "phrases.opening: removed the added 'Hello,' so the sentence holds only what P16 1 requires (automated assistant of Bank 6, call is recorded); still opening_verbatim=false because the words are not dictated.",
-  "phrases.today_question: changed 'Can you pay this today?' to 'Can you pay all of it today?' to match the P16 18 wording.",
-  "phrases.cannot_answer_sentence: removed the added apology so it says only what P16 32 requires ('say you could not record it').",
-  "Source spans extended (identity, callback, third party, multi_product, phrases, promise_write, outcomes) to quote the rules each value comes from (P16 3, 5, 7, 30, 36, 19 naming)."
+  "special_cases[human].source: the quote was mislabelled. It presented the 1 Oct rule 29 text ('do not ask whether you can help') as the overriding Operations text. Replaced it with Operations 7 Oct point 4 ('ask once whether you can help first'), noting that this overrides rule 29. The values were already correct.",
+  "identity.source, outcomes.source, phrases.source, promise_write.source: added the quotes that support holder_confirmation_asks, goodbye_before_close, today_question and confirm_phrase/one_promise_per_product.",
+  "unresolved: added an entry for the rule 32 'say you could not record it' sentence, which has no dictated wording and no phrase field."
  ]
 }

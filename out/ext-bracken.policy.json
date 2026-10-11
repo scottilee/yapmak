@@ -1,0 +1,574 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+  "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+  "tests/fixtures/external/codex-bracken-thread/03-codes.txt"
+ ],
+ "bank_name": "Bracken Exchange Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "security_phrase",
+    "ask_text": "What is your security phrase?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+     "text": "Security: ask security_phrase, joining_year, contact_tail, responsible_dob, in that order. ... Formats and questions are unchanged."
+    }
+   },
+   {
+    "field": "joining_year",
+    "ask_text": "In which four-digit year did you join us?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+     "text": "| 3 | joining_year | In which four-digit year did you join us? | four-digit year, transmit as text |"
+    }
+   },
+   {
+    "field": "contact_tail",
+    "ask_text": "What are the last five digits of your contact number?",
+    "answer_format": "digits",
+    "digits": 5,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+     "text": "| 2 | contact_tail | What are the last five digits of your contact number? | 5 digits, preserve leading zeroes |"
+    }
+   },
+   {
+    "field": "responsible_dob",
+    "ask_text": "What is the responsible account holder's birth date?",
+    "answer_format": "date",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+     "text": "| 1 | responsible_dob | What is the responsible account holder's birth date? | date; numerical order DMY; transmit YYYY-MM-DD | ... no format hints or hint replies exist."
+    }
+   }
+  ],
+  "wrong_answer_limit": 5,
+  "wrong_count_source": "api",
+  "remaining_slot": "remaining_checks",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "br-unverified",
+   "br-r-failed"
+  ],
+  "declined_outcome": [
+   "br-unverified",
+   "br-r-declined"
+  ],
+  "unclear_holder_outcome": [
+   "br-unreached",
+   "br-r-unclear"
+  ],
+  "failed_instruction": "Please contact our account desk.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+   "text": "Permit FIVE wrong answers globally, using the API remaining_checks counter. (card: Holder confirmation may be asked twice. Explain the purpose of security once after a refusal; a second refusal closes br-unverified/br-r-declined. Merely asking why we need security is not refusal. Exhausted wrong answers close br-unverified/br-r-failed after \"Please contact our account desk.\")"
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "09:10",
+   "end": "16:50",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "br-unreached",
+    "br-r-callback"
+   ],
+   "no_callback_outcome": [
+    "br-unreached",
+    "br-r-no-callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+    "text": "Restore next-business-day-only callbacks, 09:10\u201316:50 inclusive, strictly after now. One opportunity to correct an invalid slot remains in force. (card: invalid or absent after that gives br-unreached/br-r-no-callback. A successfully scheduled slot gives br-unreached/br-r-callback.)"
+   }
+  },
+  "wrong_number_outcome": [
+   "br-unreached",
+   "br-r-wrong-number"
+  ],
+  "deceased_outcome": [
+   "br-unreached",
+   "br-r-deceased"
+  ],
+  "deceased_sentence": "We are sorry for your loss.",
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "If the number is wrong, use br-unreached/br-r-wrong-number; if the holder died, say \"We are sorry for your loss.\" and use br-unreached/br-r-deceased."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-18",
+   "2026-10-29",
+   "2026-11-01",
+   "2026-11-26"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   6
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "unresolved",
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "Open Sunday, Monday, Tuesday, Wednesday and Thursday; Friday and Saturday are closed. Holidays: 2026-10-18, 2026-10-29, 2026-11-01, 2026-11-26."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-14",
+   "days_late_min": 1,
+   "days_late_max": 14,
+   "deadline": {
+    "kind": "calendar_days",
+    "n": 11,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "last_business_day_this_week_or_next",
+     "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+    "text": "Days late 1\u201314: replace both earlier deadlines with today plus ELEVEN calendar days, adjusted FOLLOWING to a business day. The two offer slots are unchanged. (card: Full by last business day this week, using next week if today is that day; then floor by deadline)"
+   }
+  },
+  {
+   "name": "15-80",
+   "days_late_min": 15,
+   "days_late_max": 80,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "preceding"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "| 15\u201380 | Last business day of the current month; business basis, preceding adjustment | Full by deadline, using floor if full already refused |"
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {
+   "br-cycle": "cycle_floor",
+   "br-tool": "tool_floor",
+   "br-trade": "trade_floor"
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The unpaid remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "Always start with the full overdue sum. Never ask how much the customer can pay. Offer the product's floor once if full is unaffordable; say \"The unpaid remainder stays overdue.\" Accept any customer-proposed amount between floor and full inclusive"
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "Today is allowed when it is a business day. Roll a customer-proposed non-business day forward, then cap at that product's deadline by offering the deadline for agreement. ... For a vague date ask once, then offer the deadline."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says the current overdue sum has already been paid.",
+   "action": {
+    "type": "note",
+    "reason": "br-r-settled"
+   },
+   "say": "Payments may take three business days to reach our account view.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "Current overdue sum already paid: say \"Payments may take three business days to reach our account view.\"; mark that product br-r-settled and continue. Do not ask for a promise on that product."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer disputes ownership of the account or the debt, including saying a historical account was paid off while denying the current debt.",
+   "action": {
+    "type": "note",
+    "reason": "br-r-disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "Ownership/debt dispute: mark that product br-r-disputed and continue. Historical account payoff combined with denial of current debt is a dispute, not a current-payment report."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer describes hardship such as job loss, illness or inability to meet essential living costs (wins over a simultaneous request for smaller instalments).",
+   "action": {
+    "type": "note",
+    "reason": "br-r-distress"
+   },
+   "say": "I am sorry you are facing this difficulty.",
+   "offer_transfer_queue": "br-care-desk",
+   "offer_outcome": [
+    "br-routed",
+    "br-r-care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": true,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "Hardship includes job loss, illness and inability to meet essential living costs. Say \"I am sorry you are facing this difficulty.\" Offer br-care-desk; if accepted transfer and close br-routed/br-r-care. ... If the care offer is declined, mark only the affected product br-r-distress and continue without persuasion. A volunteered amount/date may still be accepted after the care offer"
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to change the contract, instalments or repayment plan without hardship.",
+   "action": {
+    "type": "transfer",
+    "queue": "br-plan-desk",
+    "outcome": "br-routed",
+    "reason": "br-r-replan"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "Requests to change the contract, instalments or repayment plan without hardship: transfer to br-plan-desk and close br-routed/br-r-replan; no persuasion and no promise."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak with a human / a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "br-human-desk",
+    "outcome": "br-routed",
+    "reason": "br-r-person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+    "text": "Human request: restore ASK ONCE whether our assistant can help, then transfer only if the customer still wants a person. (card: if the customer agrees continue, otherwise transfer to br-human-desk and close br-routed/br-r-person)"
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer worries the call is a scam or asks how to know the call is genuine.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You may verify this call using the contact number printed on your statement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "## Exceptions (before any collection persuasion) ... Scam concern: say the scam_reply below, then continue at the interrupted stage; not a transfer or a close."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the conversation.",
+   "action": {
+    "type": "note",
+    "reason": "br-r-refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "## Exceptions (before any collection persuasion) ... Refusal to talk: ask once whether we may continue. If still refused, mark remaining unresolved products br-r-refused, stop further discussion and finalize by the outcome precedence above (do not overwrite saved promises or existing paid/dispute markers). No promise is taken after that refusal."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether they are talking to a robot or an automated system.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am the automated assistant of Bracken Exchange Bank.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "| robot_reply | I am the automated assistant of Bracken Exchange Bank. |"
+   }
+  },
+  {
+   "name": "change_saved_promise",
+   "trigger": "The customer wants to change an arrangement that was already saved.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "Contact our account desk to change a saved arrangement.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+    "text": "Changes to saved promises are directed to the stated change channel, never implemented as another write. | recorded_promise_change_reply | Contact our account desk to change a saved arrangement. |"
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "br-promised",
+    "reasons": [],
+    "when": "At least one saved promise."
+   },
+   {
+    "outcome": "br-settled",
+    "reasons": [],
+    "when": "All products were paid."
+   },
+   {
+    "outcome": "br-routed",
+    "reasons": [
+     "br-r-replan",
+     "br-r-person",
+     "br-r-care"
+    ],
+    "when": "Transfer: plan desk br-r-replan, human desk br-r-person, care desk br-r-care."
+   },
+   {
+    "outcome": "br-unarranged",
+    "reasons": [
+     "br-r-refused",
+     "br-r-distress",
+     "br-r-disputed",
+     "br-r-service"
+    ],
+    "when": "No arrangement; reason of the first non-paid product in returned order."
+   },
+   {
+    "outcome": "br-unverified",
+    "reasons": [
+     "br-r-failed",
+     "br-r-declined"
+    ],
+    "when": "Identity failure or decline."
+   },
+   {
+    "outcome": "br-unreached",
+    "reasons": [
+     "br-r-callback",
+     "br-r-no-callback",
+     "br-r-wrong-number",
+     "br-r-deceased",
+     "br-r-unclear"
+    ],
+    "when": "Holder unavailable or unknown."
+   }
+  ],
+  "promise_outcome": "br-promised",
+  "paid_outcome": "br-settled",
+  "transfer_outcome": "br-routed",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "br-unarranged",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "br-r-service",
+  "refused_reason": "br-r-refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/03-codes.txt",
+   "text": "Promises: br-promised; all paid: br-settled; transfer: br-routed; no arrangement: br-unarranged. (card: A transfer overrides the closing result even if a promise was already recorded ... otherwise use br-unarranged with the first non-paid product's reason in returned product order ... A permanent write failure uses br-r-service ...; plain refusal uses br-r-refused. Say goodbye before close_call.)"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "br-r-refused",
+   "br-r-distress",
+   "br-r-disputed",
+   "br-r-settled",
+   "br-r-service"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/03-codes.txt",
+   "text": "Note endpoint vocabulary: br-r-refused, br-r-distress, br-r-disputed, br-r-settled, br-r-service. Enable notes: one note per unpromised product, deferred until the final non-transfer choice. ... No note on a successfully promised product and none on transfers."
+  }
+ },
+ "multi_product": {
+  "max_products": 3,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "Maximum three products. ... State every returned product with its amount before asking anything about payment; ask whether all can be paid today once ... Attempt counters belong to each product. A proposed common date is rolled and capped separately for each product. ... saved promises survive."
+  }
+ },
+ "phrases": {
+  "opening": "Good day, Bracken Exchange Bank's automated assistant speaking. We record our calls.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue accounts listed on your statement.",
+  "today_question": "Can you pay this amount today?",
+  "all_today_question": "Can you pay all these amounts today?",
+  "robot_reply": "I am the automated assistant of Bracken Exchange Bank.",
+  "scam_reply": "You may verify this call using the contact number printed on your statement.",
+  "prohibited_before_verification": [
+   "arrears",
+   "overdue",
+   "balance",
+   "payment"
+  ],
+  "after_promise_sentence": "We will send the arrangement details to your registered inbox.",
+  "already_paid_sentence": "Payments may take three business days to reach our account view.",
+  "cannot_answer_sentence": "Our account desk can explain that.",
+  "recorded_promise_change_reply": "Contact our account desk to change a saved arrangement.",
+  "product_naming": {
+   "br-cycle": "cycle account",
+   "br-tool": "equipment advance",
+   "br-trade": "trade account"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md",
+   "text": "The opening and every sentence in this table are mandatory verbatim when the named situation occurs. ... The four forbidden pre-verification tokens are exactly `arrears`, `overdue`, `balance`, `payment`."
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 2,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I save these arrangements together?",
+  "source": {
+   "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt",
+   "text": "Promise failures: allow TWO EXTRA retries after the initial failure (three total attempts). A failed response means nothing committed. After three failures classify service failure and never claim success. (card: seek one explicit confirmation for the whole pending batch using \"May I save these arrangements together?\")"
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "calendar.missing_date_parts",
+   "text": "Do not silently assume missing date components: ask for them. (No dedicated IR value for 'ask'; left at default.)",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  },
+  {
+   "topic": "release effective date",
+   "text": "FINAL signed release instruction \u2014 effective 14 October. Its overrides (security order, 5 wrong answers, callbacks, 1\u201314 deadline, 2 retries, human ask-once) are applied in this policy; the documents do not say which values apply to calls before 14 October.",
+   "doc": "tests/fixtures/external/codex-bracken-thread/01-mail-thread.txt"
+  },
+  {
+   "topic": "bands.1-14 floor slot full-first",
+   "text": "\"Full-first still applies even to a later floor slot.\" The second 1\u201314 slot is described as 'floor by deadline'; the documents do not say exactly how full-first is applied in that slot when full has not yet been refused (IR attempt amount set to floor as the table states).",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  },
+  {
+   "topic": "third-party conduct",
+   "text": "Be brief with third parties; never accept their security answers or payment promises. Ask whether the named holder is available before seeking a callback. No dedicated IR field; enforced by the template's third-party flow.",
+   "doc": "tests/fixtures/external/codex-bracken-thread/02-operating-card.md"
+  }
+ ]
+}

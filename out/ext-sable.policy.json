@@ -1,0 +1,586 @@
+{
+ "source_docs": [
+  "tests/fixtures/external/v24-sable-percent/01-specification.md",
+  "openapi.json"
+ ],
+ "bank_name": "Sable Orchard Business Bank",
+ "identity": {
+  "requirements": [
+   {
+    "field": "postcode",
+    "ask_text": "What is the registered business postcode?",
+    "answer_format": "text",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+     "text": "1. `postcode`: \"What is the registered business postcode?\" Answer format: text; letters and digits only; strip spaces."
+    }
+   },
+   {
+    "field": "birth_year",
+    "ask_text": "In what year were you born?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+     "text": "2. `birth_year`: \"In what year were you born?\" Answer format: year; four-digit year."
+    }
+   },
+   {
+    "field": "company_number",
+    "ask_text": "What is the eight-digit company registration number?",
+    "answer_format": "digits",
+    "digits": 8,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+     "text": "3. `company_number`: \"What is the eight-digit company registration number?\" Answer format: digits; exactly eight digits, preserving leading zeros."
+    }
+   },
+   {
+    "field": "founded_year",
+    "ask_text": "In what year was the company founded?",
+    "answer_format": "year",
+    "digits": 0,
+    "numeric_date_order": "dmy",
+    "hint_field": "",
+    "hint_reply": "",
+    "source": {
+     "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+     "text": "4. `founded_year`: \"In what year was the company founded?\" Answer format: year; four-digit year."
+    }
+   }
+  ],
+  "wrong_answer_limit": 4,
+  "wrong_count_source": "api",
+  "remaining_slot": "security_remaining",
+  "holder_confirmation_asks": 2,
+  "decline_explain_once": true,
+  "asking_purpose_counts_as_decline": false,
+  "failed_outcome": [
+   "sable_unverified",
+   "sable_failed"
+  ],
+  "declined_outcome": [
+   "sable_unverified",
+   "sable_declined"
+  ],
+  "unclear_holder_outcome": [
+   "sable_unreached",
+   "sable_unclear"
+  ],
+  "failed_instruction": "Please contact our business desk.",
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Ask at most twice in total; if still unclear close `sable_unreached` / `sable_unclear`. ... Maximum wrong answers across the entire check: 4. Use the API's security_remaining, not a separate per-question allowance. On exhaustion say exactly \"Please contact our business desk.\" and close `sable_unverified` / `sable_failed`. Explain account protection once after a refusal; a second refusal closes `sable_unverified` / `sable_declined`. A question about why security is needed does NOT count as a refusal; answer and ask again. The API provides no recoverable-format hint, so no hint rule applies."
+  }
+ },
+ "third_party": {
+  "callback": {
+   "enabled": true,
+   "days": "next_business_day",
+   "start": "08:30",
+   "end": "16:15",
+   "must_be_after_now": true,
+   "retry_once": true,
+   "scheduled_outcome": [
+    "sable_unreached",
+    "sable_callback"
+   ],
+   "no_callback_outcome": [
+    "sable_unreached",
+    "sable_no_callback"
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Callbacks are on the next business day only, between 08:30 and 16:15 inclusive, strictly after now. A missing hour must be clarified, never guessed. For an invalid slot ask once for another; a second failure or refusal closes `sable_unreached` / `sable_no_callback`. A successfully scheduled callback closes `sable_unreached` / `sable_callback`."
+   }
+  },
+  "wrong_number_outcome": [
+   "sable_unreached",
+   "sable_wrong_number"
+  ],
+  "deceased_outcome": [
+   "sable_unreached",
+   "sable_deceased"
+  ],
+  "deceased_sentence": "Please accept our condolences.",
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Disclose nothing about purpose or facilities. Ask when the holder can be reached. ... Wrong number: `sable_unreached` / `sable_wrong_number`. Deceased holder: say exactly \"Please accept our condolences.\" and close `sable_unreached` / `sable_deceased`."
+  }
+ },
+ "calendar": {
+  "holidays": [
+   "2026-10-30",
+   "2026-11-02",
+   "2026-11-16",
+   "2026-12-25",
+   "2027-01-01"
+  ],
+  "business_days": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "next_weekday_means_following_week": true,
+  "missing_date_parts": "next_occurrence",
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Business days are Monday through Friday except 2026-10-30, 2026-11-02, 2026-11-16, 2026-12-25, 2027-01-01. \"Next Friday\" means Friday of the following calendar week, including when today is Friday; \"this Friday\" means the current week's Friday. For a missing month/year choose the next occurrence of the named day/date on or after today. No other holidays apply."
+  }
+ },
+ "bands": [
+  {
+   "name": "1-15",
+   "days_late_min": 1,
+   "days_late_max": 15,
+   "deadline": {
+    "kind": "day_of_month",
+    "day": 15,
+    "month_offset": 1,
+    "adjustment": "following"
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Days late 1\u201315 inclusive: the deadline is the 15th of next month, moved forward to the first business day on or after that date."
+   }
+  },
+  {
+   "name": "16-45",
+   "days_late_min": 16,
+   "days_late_max": 45,
+   "deadline": {
+    "kind": "earliest",
+    "rules": [
+     {
+      "kind": "nth_business_day",
+      "n": 6
+     },
+     {
+      "kind": "end_of_month",
+      "basis": "business",
+      "adjustment": "none",
+      "month_offset": 0
+     }
+    ]
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Days late 16\u201345 inclusive: use the sixth business day after today or the last business day of this month, whichever comes first. Adjust each candidate before comparing them. ... Do not count today among business days after today."
+   }
+  },
+  {
+   "name": "46-90",
+   "days_late_min": 46,
+   "days_late_max": 90,
+   "deadline": {
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "none",
+    "month_offset": 1
+   },
+   "attempts": [
+    {
+     "amount": "full",
+     "date": "deadline",
+     "floor_if_full_refused": true
+    }
+   ],
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Days late 46\u201390 inclusive: use the last business day of next month. ... There is one persuasion attempt: full overdue balance on the deadline, substituting the floor only if full has already been refused."
+   }
+  }
+ ],
+ "amounts": {
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "percent",
+    "percent": 20,
+    "min_amount": 75.0
+   }
+  },
+  "full_first": true,
+  "never_ask_how_much": true,
+  "floor_offered_once": true,
+  "floor_wording": "The remainder stays overdue.",
+  "accept_between_floor_and_full": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Ask for full overdue balance first. For every product the minimum is 20% of the full arrears, rounded to the nearest whole cent, subject to a minimum of 75.00. Cap the resulting minimum at the full arrears. ... On full being too much, offer the floor once per product and say exactly \"The remainder stays overdue.\" Never ask how much they can pay. Accept an amount between floor and full inclusive; never accept less than floor or more than full."
+  }
+ },
+ "dates": {
+  "promise_today_allowed": true,
+  "weekend_or_holiday_roll_forward": true,
+  "vague_ask_once_then_deadline": true,
+  "after_deadline_offer_deadline": true,
+  "past_deadline": "no_promise",
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "There is no promise once the deadline has passed: when the calculated date is earlier than today, do not extend the window, do not accept even a payment promise for today, and mark that product sable_refused while continuing other products. The deadline itself remains eligible. ... A promise date may be today, must be a business day and not exceed the deadline. Roll weekends/holidays forward only if the resulting business date is within deadline; otherwise offer the deadline. Ask once to clarify a vague period, then propose the deadline. If a requested date is later than the deadline, offer the deadline instead."
+  }
+ },
+ "special_cases": [
+  {
+   "name": "already_paid",
+   "trigger": "The customer says they have already paid this product.",
+   "action": {
+    "type": "note",
+    "reason": "sable_settled"
+   },
+   "say": "Payments can take two business days to appear.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Handle these before persuasion. Already paid: say exactly \"Payments can take two business days to appear.\", take no new promise for that product, mark `sable_settled` and continue other products."
+   }
+  },
+  {
+   "name": "dispute",
+   "trigger": "The customer says it is not their debt, they never held the product, or it was closed or paid off earlier.",
+   "action": {
+    "type": "note",
+    "reason": "sable_disputed"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Dispute (not their debt, never held it, or it was closed/paid off earlier): do not argue or take a promise for it; mark `sable_disputed` and continue."
+   }
+  },
+  {
+   "name": "hardship",
+   "trigger": "The customer mentions illness, bereavement or job loss.",
+   "action": {
+    "type": "note",
+    "reason": "sable_distress"
+   },
+   "say": "I am sorry to hear that.",
+   "offer_transfer_queue": "sable_care",
+   "offer_outcome": [
+    "sable_transferred",
+    "sable_care"
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "Hardship means illness, bereavement or job loss: one short sentence of sympathy, no persuasion and no promise for the affected product. Offer queue `sable_care`; if accepted transfer and close `sable_transferred` / `sable_care`, otherwise mark `sable_distress` and continue other products."
+   }
+  },
+  {
+   "name": "restructuring",
+   "trigger": "The customer asks to restructure or reduce instalments.",
+   "action": {
+    "type": "transfer",
+    "queue": "sable_restructure",
+    "outcome": "sable_transferred",
+    "reason": "sable_restructure"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "A request to restructure or reduce instalments transfers immediately to `sable_restructure` and closes `sable_transferred` / `sable_restructure`."
+   }
+  },
+  {
+   "name": "human",
+   "trigger": "The customer asks to speak to a human or a person.",
+   "action": {
+    "type": "transfer",
+    "queue": "sable_desk",
+    "outcome": "sable_transferred",
+    "reason": "sable_person"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "A request for a human: ask once if this assistant can help; if they insist, transfer to `sable_desk` and close `sable_transferred` / `sable_person`."
+   }
+  },
+  {
+   "name": "refuse_to_talk",
+   "trigger": "The customer refuses to talk or continue the call.",
+   "action": {
+    "type": "close",
+    "outcome": "sable_no_deal",
+    "reason": "sable_refused"
+   },
+   "say": "",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": true,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "A refusal to talk: ask once if you may continue; a second refusal ends the call and marks all remaining products `sable_refused`."
+   }
+  },
+  {
+   "name": "robot",
+   "trigger": "The customer asks whether this is a robot.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "I am Sable Orchard Business Bank's automated assistant.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "If asked whether this is a robot say exactly \"I am Sable Orchard Business Bank's automated assistant.\""
+   }
+  },
+  {
+   "name": "scam",
+   "trigger": "The customer asks whether this call is a scam.",
+   "action": {
+    "type": "continue"
+   },
+   "say": "You can call the number on your bank statement to verify us.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": false,
+   "source": {
+    "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+    "text": "If asked about a scam say exactly \"You can call the number on your bank statement to verify us.\" and continue."
+   }
+  }
+ ],
+ "outcomes": {
+  "table": [
+   {
+    "outcome": "sable_arranged",
+    "reasons": [],
+    "when": ""
+   },
+   {
+    "outcome": "sable_settled",
+    "reasons": [],
+    "when": ""
+   },
+   {
+    "outcome": "sable_transferred",
+    "reasons": [
+     "sable_restructure",
+     "sable_person",
+     "sable_care"
+    ],
+    "when": ""
+   },
+   {
+    "outcome": "sable_no_deal",
+    "reasons": [
+     "sable_refused",
+     "sable_distress",
+     "sable_disputed",
+     "sable_service_error"
+    ],
+    "when": ""
+   },
+   {
+    "outcome": "sable_unverified",
+    "reasons": [
+     "sable_failed",
+     "sable_declined"
+    ],
+    "when": ""
+   },
+   {
+    "outcome": "sable_unreached",
+    "reasons": [
+     "sable_callback",
+     "sable_no_callback",
+     "sable_wrong_number",
+     "sable_deceased",
+     "sable_unclear"
+    ],
+    "when": ""
+   }
+  ],
+  "promise_outcome": "sable_arranged",
+  "paid_outcome": "sable_settled",
+  "transfer_outcome": "sable_transferred",
+  "transfer_overrides_promise": true,
+  "no_promise_outcome": "sable_no_deal",
+  "all_paid_closes_as_paid": true,
+  "no_promise_reason_from_first_non_paid_note": true,
+  "service_error_reason": "sable_service_error",
+  "refused_reason": "sable_refused",
+  "goodbye_before_close": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Outcome precedence: transfer overrides any promise; otherwise at least one recorded promise gives `sable_arranged`; otherwise all products settled gives `sable_settled`; otherwise `sable_no_deal` with the first non-settled product's note reason in get_account order. Exactly one close_call is the last bank action. Thank the customer and say goodbye before calling it. ... These are the only allowed combinations; omit reason entirely for rows with none"
+  }
+ },
+ "notes": {
+  "enabled": true,
+  "reasons": [
+   "sable_refused",
+   "sable_distress",
+   "sable_disputed",
+   "sable_settled",
+   "sable_service_error"
+  ],
+  "note_each_unpromised_product": true,
+  "none_on_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "On a non-transfer call, after processing all products, add exactly one note per unpromised product, using only sable_refused, sable_distress, sable_disputed, sable_settled, sable_service_error. Never add notes on a transferred call, including before transfer; defer notes until the non-transfer outcome is known."
+  }
+ },
+ "multi_product": {
+  "max_products": 2,
+  "state_all_before_asking": true,
+  "ask_all_today_once": true,
+  "per_product_attempts": true,
+  "common_date_clamped_per_product": true,
+  "one_confirmation_for_batch": true,
+  "recorded_promises_survive_transfer": true,
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Up to 2 products may be returned in facilities. ... State all products and their amounts/days late before asking anything. ... Process products in get_account order with separate attempt counters. ... A common date after a product's deadline is clamped to that product's own deadline and explained in the read-back. ... Read back product, amount and date for all proposed payments in one batch. ... A transfer cancels unrecorded proposals but keeps already recorded promises."
+  }
+ },
+ "phrases": {
+  "opening": "Good day, this is Sable Orchard Business Bank's automated assistant. We record this call.",
+  "opening_verbatim": true,
+  "holder_question": "Am I speaking with {{title}} {{last_name}}?",
+  "debt_intro": "I am calling about the overdue business products.",
+  "today_question": "Can you settle this today?",
+  "all_today_question": "Can you settle all these products today?",
+  "robot_reply": "I am Sable Orchard Business Bank's automated assistant.",
+  "scam_reply": "You can call the number on your bank statement to verify us.",
+  "prohibited_before_verification": [
+   "arrears",
+   "overdue",
+   "facility",
+   "payment"
+  ],
+  "after_promise_sentence": "We will email confirmation to your registered address.",
+  "already_paid_sentence": "Payments can take two business days to appear.",
+  "cannot_answer_sentence": "Our business desk can answer that question.",
+  "recorded_promise_change_reply": "Please contact our business desk to change a recorded promise.",
+  "product_naming": {
+   "sable_revolver": "working capital line",
+   "sable_equipment": "asset finance loan",
+   "sable_merchant": "merchant advance"
+  },
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Start exactly: \"Good day, this is Sable Orchard Business Bank's automated assistant. We record this call.\" Then ask exactly: \"Am I speaking with {{title}} {{last_name}}?\" ... Before ALL verification answers pass, never say these words or disclose their associated information: arrears, overdue, facility, payment. ... Call sable_revolver a working capital line, sable_equipment an asset finance loan and sable_merchant a merchant advance. ... First ask exactly \"Can you settle all these products today?\" once for all products; for a single product use \"Can you settle this today?\" ... Debt introduction after verification is exactly \"I am calling about the overdue business products.\""
+  }
+ },
+ "promise_write": {
+  "retry_on_failure": 1,
+  "one_promise_per_product": true,
+  "confirm_phrase": "May I record these promises?",
+  "source": {
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md",
+   "text": "Ask exactly \"May I record these promises?\" A clear yes to the unchanged batch is required; any correction invalidates consent and requires a new read-back. One create_promise per product, at most one successful promise per product. If a write fails, retry it once; a second failure marks only that product `sable_service_error`, says it failed, and continues the other products. Never claim a failed write was recorded."
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "floor rounding",
+   "text": "The minimum is 20% of the full arrears rounded to the nearest whole cent (not up); the percent floor rule has no rounding-mode field, so the compiler must round half to nearest cent.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The document requires one short sentence of sympathy but does not dictate its words; the 'say' text is a non-verbatim sentence written to that content.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "refuse_to_talk final outcome",
+   "text": "A second refusal 'ends the call and marks all remaining products sable_refused'; the document does not give a dedicated close pair, so the final outcome follows the general precedence (a promise already recorded on another product still gives sable_arranged; otherwise sable_no_deal / sable_refused, or the first non-settled note reason).",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "no discount or new plan",
+   "text": "\"Never offer a discount, waiver or a new instalment plan.\" No IR field holds this prohibition; the dialogue prompt must carry it.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The conversation failed to meet all the success criteria. While security questions were handled correctly (DOB asked once in Message 2, Phone asked twice in Messages 4 and 6), and the correct outcomes were recorded for each product (promise for c
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 3 s, worst 10 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 2 / 3 passed, 75 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 13 s, worst 14 s. Failed calls where the customer hung up: 0.
+WARNING: the phone agent was slow in this run. If the same agent is fast in another run, the model was busy and this score is too low.
+-- run 2 of 3: 3 / 3 passed, 76 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 2 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 3 / 3 passed, 55 s
+
+PASS PUB-11 3/3
+FAIL PUB-12 2/3
+PASS PUB-13 3/3
+
+2 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation 1a92874c-64a2-4ad0-a8f5-1d7ac30948f4, status completed, 205 s.

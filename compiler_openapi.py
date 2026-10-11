@@ -31,8 +31,47 @@ def _resolve(value, document, stack=()):
         resolved = _resolve(target, document, stack + (ref,))
         return {**resolved, **_resolve({k: v for k, v in value.items() if k != "$ref"}, document, stack)}
     if any(k in value for k in ("allOf", "oneOf", "anyOf")):
-        raise ValueError("OpenAPI schema composition is unsupported; provide a concrete object schema")
+        return _flatten_composition({k: _resolve(v, document, stack) for k, v in value.items()})
     return {k: _resolve(v, document, stack) for k, v in value.items()}
+
+
+def _flatten_composition(schema: dict) -> dict:
+    """Collapse allOf/oneOf/anyOf into one object schema the template can bake bodies against. Base `properties` stay;
+    variant properties are merged in (enums united, new fields added). `allOf` adds every variant's `required`; `oneOf`/`anyOf`
+    keep only fields required by every variant (the base `required` always stays). `not` constraints are dropped: the policy
+    decides which fields a given outcome carries (e.g. no reason for reasonless outcomes)."""
+    out = {k: v for k, v in schema.items() if k not in ("allOf", "oneOf", "anyOf", "not")}
+    props = dict(out.get("properties") or {})
+    required = list(out.get("required") or [])
+    for key in ("allOf", "oneOf", "anyOf"):
+        variants = [v for v in schema.get(key) or [] if isinstance(v, dict)]
+        if not variants:
+            continue
+        variants = [_flatten_composition(v) if any(c in v for c in ("allOf", "oneOf", "anyOf")) else v for v in variants]
+        for v in variants:
+            for name, vs in (v.get("properties") or {}).items():
+                if name in props and isinstance(props[name], dict) and isinstance(vs, dict):
+                    merged = dict(props[name])
+                    if "enum" in vs:
+                        merged["enum"] = list(dict.fromkeys(list(merged.get("enum") or []) + list(vs["enum"])))
+                    for k2, v2 in vs.items():
+                        if k2 not in merged:
+                            merged[k2] = v2
+                    props[name] = merged
+                else:
+                    props[name] = vs
+        if key == "allOf":
+            for v in variants:
+                required += [r for r in v.get("required") or [] if r not in required]
+        else:
+            common = set.intersection(*(set(v.get("required") or []) for v in variants)) if variants else set()
+            required += [r for r in sorted(common) if r not in required]
+        if "type" not in out:
+            out["type"] = next((v.get("type") for v in variants if v.get("type")), "object")
+    out["properties"] = props
+    if required:
+        out["required"] = required
+    return out
 
 
 def parse_openapi(path: str) -> dict[str, ToolSpec]:
@@ -102,11 +141,11 @@ REQUEST_SLOTS = {
     "add_note":        {"product_id": (("product_id", "facility_id", "account_id", "obligation", "product", "facility", "account", "loan", "_id", "id"), ("customer", "client", "member", "note_id")),
                         "reason": (("reason", "code", "category", "kind", "type"), ("product", "customer", "text", "note_id")),
                         "text": (("text", "note", "comment", "message", "detail", "body"), ("product", "customer", "reason", "code"))},
-    "schedule_callback": {"date": (("date", "day", "when"), ("time", "customer")),
-                          "time": (("time", "hour", "slot", "clock"), ("date", "day", "customer"))},
-    "transfer_to_agent": {"queue": (("queue", "team", "department", "desk", "destination", "target", "group"), ("customer",))},
-    "close_call":      {"outcome": (("outcome", "disposition", "result", "status", "resolution"), ("reason", "sub", "customer")),
-                        "reason": (("reason", "sub", "detail", "cause", "code"), ("outcome", "disposition", "result", "status", "customer"))},
+    "schedule_callback": {"date": (("date", "day", "when", "_on", "scheduled_for"), ("time", "customer", "client", "_at")),
+                          "time": (("time", "hour", "slot", "clock", "_at"), ("date", "day", "customer", "client", "_on"))},
+    "transfer_to_agent": {"queue": (("queue", "team", "department", "desk", "destination", "target", "group", "route", "line", "key"), ("customer", "client", "member"))},
+    "close_call":      {"outcome": (("outcome", "disposition", "result", "status", "resolution", "closing_code", "code"), ("reason", "sub", "customer", "client")),
+                        "reason": (("reason", "sub", "detail", "cause", "code"), ("outcome", "disposition", "result", "status", "customer", "client", "closing_code"))},
 }
 OPTIONAL_REQUEST_SLOTS = {("add_note", "text"), ("close_call", "reason")}
 
@@ -157,7 +196,7 @@ def response_slots(tools: dict[str, ToolSpec]) -> dict:
     items = g.get(list_prop, {}).get("items", {}).get("properties", {})
     slots = {
         "verify": {
-            "ok": _pick(v, "ok", "success", default=""),
+            "ok": _pick(v, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="", exclude=("all_", "verified", "match", "remaining", "left", "hint", "error")),
             "verified": next((k for k in v if "verified" in k and not k.startswith("all")), _pick(v, "match", "correct", "passed", default="")),
             "all_verified": _pick(v, "all_verified", "all", "complete", default=""),
             "remaining": _pick(v, "left", "remaining", "attempts", default=""),
@@ -165,15 +204,18 @@ def response_slots(tools: dict[str, ToolSpec]) -> dict:
         },
         "account": {
             "list": list_prop or "",
-            "id": _pick(items, "product_id", "facility_id", "account_id", "_id", "id", default=""),
-            "type": _pick(items, "type", "kind", "product", default=""),
+            "id": _pick(items, "product_id", "facility_id", "account_id", "_id", "_ref", "reference", "identifier", "id", "ref", default="",
+                        exclude=("customer", "client", "member", "holder")),
+            "type": _pick(items, "type", "kind", "category", "class", "product", "facility", "account", default="",
+                          exclude=("_id", "_ref", "amount", "days", "minimum", "floor", "instalment", "last4")),
             "past_due": _pick(items, "past_due", "arrears", "outstanding", "overdue", "due", "balance", "amount", default="",
                               exclude=("minimum", "min_", "scheduled", "instalment", "installment", "repayment", "days", "late", "since", "count")),
             "days_late": _pick(items, "days_late", "days", "late", "overdue_since", default="", exclude=("amount", "balance")),
             "card_last4": _pick(items, "last4", "last_4", "last_four", default=""),
         },
         # the success flag of every write tool, per tool (the template routes on it after each engine-fired call)
-        "ok_by_tool": {n: _pick(t.response_props, "ok", "success", "accepted", "executed", default="") for n, t in tools.items()},
+        "ok_by_tool": {n: _pick(t.response_props, "ok", "success", "accepted", "succeeded", "executed", "completed", "status", default="",
+                                exclude=("all_", "verified", "match", "remaining", "left", "hint", "error", "_id", "products", "items")) for n, t in tools.items()},
     }
     slots["ok"] = slots["ok_by_tool"].get("create_promise", "")
     # enforcement slots: an unmapped one must stop the build (plan §3.2) instead of baking a stock name

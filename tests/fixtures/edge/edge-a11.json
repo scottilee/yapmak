@@ -1,0 +1,183 @@
+[
+ {
+  "id": "PUB-01",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Scam doubt at the read-back does not undo the agreement",
+  "variables": {
+   "first_name": "Daniel",
+   "last_name": "Reyes",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1988-03-14",
+   "phone_last4": "4471"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "4821",
+    "past_due": 420.0,
+    "days_late": 6,
+    "minimum_payment": 126.0
+   }
+  ],
+  "script": "Confirm you are Daniel Reyes and give the correct security answers. When asked whether you can pay today, say you can pay the full amount today. At the read-back, before confirming, ask: how do I know this is not a scam? After the agent answers, confirm the unchanged read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 420,
+     "date": "2026-10-14"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The scam question is answered by pointing at Freya Bank's customer service number, and the agent continues",
+   "The agent does not treat the scam question as a refusal or restart identity verification",
+   "The promise for 420 today is written only after the confirmation that follows the answer",
+   "Nothing about collections, debt or payment is said before identity is verified"
+  ],
+  "rationale": "A43 (scam question, continue) combined with A34-A37 at the read-back. The robot case (edge-a1 PUB-07) sits in the opening; this one sits on consent itself, so a careless agent that restarts or rewrites the offer fails. Dates: today 2026-10-14 is a business day (bankcal.is_business_day)."
+ },
+ {
+  "id": "PUB-02",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Same-day callback at half past eleven",
+  "variables": {
+   "first_name": "Maria",
+   "last_name": "Costa",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1979-11-02",
+   "phone_last4": "0358"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 310.5,
+    "days_late": 11,
+    "instalment_amount": 103.5
+   }
+  ],
+  "script": "Say you are her brother and she is out at the shops. If asked what the call is about, do not insist. When asked when she can be reached, say: she will be back half past eleven today. Also ask once whether she owes money, and accept whatever the agent says.",
+  "expected": {
+   "outcome": "not_reached",
+   "reason": "callback",
+   "promises": [],
+   "notes": [],
+   "callbacks": [
+    {
+     "date": "2026-10-14",
+     "time": "11:30"
+    }
+   ],
+   "transfers": []
+  },
+  "checks": [
+   "Nothing about the purpose or any amount is confirmed; the debt question is deflected without details",
+   "11:30 today is accepted because it is later than now and inside 10:00-19:00, not shifted to tomorrow",
+   "Exactly one schedule_callback for 2026-10-14 at 11:30; outcome not_reached/callback"
+  ],
+  "rationale": "A6: callbacks may be today, later than now. Every existing callback fixture books the next day (codex-1 PUB-02 tests the equal-to-now boundary). A careless agent with a next-day-only habit fails. Verified with bankcal.callback_ok(2026-10-14, 11:30, window 10-19) = True."
+ },
+ {
+  "id": "PUB-03",
+  "brief": "A",
+  "family": "Identity",
+  "level": "hard",
+  "title": "Declines the second question after passing the first",
+  "variables": {
+   "first_name": "Owen",
+   "last_name": "Park",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1992-07-21",
+   "phone_last4": "6630"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "0377",
+    "past_due": 95.0,
+    "days_late": 4,
+    "minimum_payment": 28.5
+   }
+  ],
+  "script": "Confirm you are Owen Park. Give the correct date of birth. When asked for the phone digits, say you never give that over the phone. When the assistant explains why the questions protect the account, refuse again firmly and ask nothing more.",
+  "expected": {
+   "outcome": "not_verified",
+   "reason": "declined",
+   "promises": [],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The passed date of birth is kept; the agent does not ask it again",
+   "The purpose of the questions is explained exactly once before closing",
+   "No get_account, no amount, product or days-late disclosure",
+   "Outcome not_verified/declined, not failed: no wrong answer was counted"
+  ],
+  "rationale": "A11 and A15: a correct answer followed by a refusal reaches declined, distinct from edge-a3 PUB-03 (two from-the-start refusals) and codex-1 PUB-03 (wrong-answer budget). A careless agent that treats refusal as a wrong answer closes failed."
+ },
+ {
+  "id": "PUB-04",
+  "brief": "A",
+  "family": "Dates",
+  "level": "hard",
+  "title": "Customer asks what the last possible day is",
+  "variables": {
+   "first_name": "Lena",
+   "last_name": "Hoffmann",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1984-01-30",
+   "phone_last4": "2219"
+  },
+  "products": [
+   {
+    "type": "car_loan",
+    "past_due": 1250.0,
+    "days_late": 14,
+    "instalment_amount": 400.0
+   }
+  ],
+  "script": "Confirm you are Lena Hoffmann and give the correct security answers. When the debt is stated, say you cannot pay today and ask: what is the very last day I could pay this? When the agent names a date, say that date works and that you will pay the full amount then. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 1250,
+     "date": "2026-10-23"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "The agent names the late-band deadline, 23 October, as the last possible date; it does not plead ignorance (rule 44 does not cover this)",
+   "The full amount 1250 is kept on the named date",
+   "Exactly one promise on 2026-10-23; no invention of a later or earlier date"
+  ],
+  "rationale": "A23 and A44: the deadline IS known information from the brief, not a tool-only fact, so pleading 'I do not have that information' is wrong. No existing fixture asks the agent to volunteer the limit on request (edge-a2 PUB-04 has the agent offering it after an after-deadline proposal). Deadline 2026-10-23 from bankcal.deadline(nth_business_day 7 after 2026-10-14)."
+ }
+]

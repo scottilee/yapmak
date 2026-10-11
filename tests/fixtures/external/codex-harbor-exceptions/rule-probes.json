@@ -1,0 +1,87 @@
+[
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-14T08:00",
+    "date": "2026-10-14",
+    "time": "12:00",
+    "expected_allowed": true
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-14T08:00",
+    "date": "2026-10-14",
+    "time": "12:30",
+    "expected_allowed": false
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-14T08:00",
+    "date": "2026-10-14",
+    "time": "14:00",
+    "expected_allowed": true
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-14T08:00",
+    "date": "2026-10-15",
+    "time": "18:00",
+    "expected_allowed": true
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-15T08:00",
+    "date": "2026-10-16",
+    "time": "11:30",
+    "expected_allowed": true
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-15T08:00",
+    "date": "2026-10-16",
+    "time": "11:31",
+    "expected_allowed": false
+  },
+  {
+    "rule": "HG-C1",
+    "now": "2026-10-15T08:00",
+    "date": "2026-10-16",
+    "time": "14:00",
+    "expected_allowed": false
+  },
+  {
+    "rule": "HG-I1",
+    "answers": [
+      {
+        "field": "passphrase",
+        "verified": true
+      },
+      {
+        "field": "enrolment_year",
+        "verified": true
+      },
+      {
+        "field": "phone_suffix",
+        "verified": false,
+        "attempts_available": 3
+      }
+    ],
+    "expected_next": "close_call",
+    "expected_outcome": [
+      "hg-unverified",
+      "hg-r-failed"
+    ],
+    "forbidden_next": "ask_phone_suffix_again"
+  },
+  {
+    "rule": "HG-I1",
+    "answers": [
+      {
+        "field": "passphrase",
+        "verified": false,
+        "attempts_available": 3
+      }
+    ],
+    "expected_next": "ask_passphrase_again",
+    "expected_global_wrong_used": 1
+  }
+]

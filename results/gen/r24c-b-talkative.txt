@@ -1,0 +1,16 @@
+FAIL PUB-11 medium Multi-product  | verify > verify > get_account > add_note > add_note > add_note > close_call
+       - outcome ('no_promise', 'hardship'), expected ('promise', None)
+       - promises [], expected [('p1', 220.0, '2026-10-16'), ('p2', 640.0, '2026-10-16'), ('p3', 75.0, '2026-10-16')]
+       - notes [('p1', 'hardship'), ('p2', 'hardship'), ('p3', 'hardship')], expected []
+       - conversation: The agent successfully stated all three products (credit card, personal loan, and car loan) in Message 8 before asking for payment, satisfying the first criterion. However, the agent failed the other criteria: there was no read-back or confirmati
+FAIL PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+       - conversation: The conversation failed several of the specific attempt-count criteria. 1. While the security questions were handled correctly (phone re-asked once in Message 6 and DOB asked once in Message 2), and the credit card promise was recorded correctly,
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > add_note > add_note > close_call
+       - outcome ('no_promise', 'refused'), expected ('promise', None)
+       - promises [], expected [('p1', 300.0, '2026-10-30'), ('p2', 900.0, '2026-10-23')]
+       - notes [('p1', 'refused'), ('p2', 'refused')], expected []
+       - conversation: - The credit card payment was not recorded for 30 October; the assistant recorded a refusal instead. - The loan payment was not recorded for 23 October; the assistant recorded a refusal instead. - There was no read-back of payment dates as no agr
+
+slowest agent turn per call: median 2 s, worst 10 s. Failed calls where the customer hung up: 0.
+
+0 / 3 passed (bank records and conversation checks). Last simulation 4fcc6877-c472-4e3c-bfc8-a310f8be9ba0, status completed, 159 s.

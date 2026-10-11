@@ -1,0 +1,160 @@
+{
+ "agent_id": "8912d228-94d9-4308-b85c-3054f1ff15a6",
+ "simulation_id": "7a424466-ec61-4e52-abe9-4085d0da1a17",
+ "iteration_id": "c62e154e-cc3e-499b-b030-1d62e7a7c54c",
+ "seconds": 57,
+ "passed": 2,
+ "total": 3,
+ "runs": 1,
+ "final": [
+  {
+   "id": "PUB-11",
+   "family": "v24 branch",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  },
+  {
+   "id": "PUB-12",
+   "family": "v24 branch",
+   "passes": 0,
+   "runs": 1,
+   "pass": false
+  },
+  {
+   "id": "PUB-13",
+   "family": "v24 branch",
+   "passes": 1,
+   "runs": 1,
+   "pass": true
+  }
+ ],
+ "rows": [
+  {
+   "id": "PUB-11",
+   "level": "hard",
+   "family": "v24 branch",
+   "pass": true,
+   "failed": [],
+   "call_id": "3c6035f1-633a-41a6-bbda-8d0ceb9c84b2",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_db6347be-01a",
+   "slowest_turn_s": 1.7,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-12",
+   "level": "hard",
+   "family": "v24 branch",
+   "pass": false,
+   "failed": [
+    "conversation: The assistant failed to meet the success criteria because it did not retain the original common proposal for all products in [Message 8]. When the user proposed paying all three products on October 31 in [Message 7], the assistant only addressed the car loan rollover (140.00) in [Message 8], ignoring the credit card and personal loan. Although the assistant eventually corrected the dates and expla"
+   ],
+   "call_id": "89d483fd-5dad-4455-8e7e-877a4c90d257",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_9c9a4af5-3fa",
+   "slowest_turn_s": 1.8,
+   "ended": "assistant-ended-call"
+  },
+  {
+   "id": "PUB-13",
+   "level": "hard",
+   "family": "v24 branch",
+   "pass": true,
+   "failed": [],
+   "call_id": "f70352f6-8585-4ace-9a8d-5243edd18215",
+   "tools": [
+    "verify_identity",
+    "verify_identity",
+    "get_account",
+    "create_promise",
+    "create_promise",
+    "close_call"
+   ],
+   "customer_id": "c_db99020a-df0",
+   "slowest_turn_s": 1.6,
+   "ended": "assistant-ended-call"
+  }
+ ],
+ "all_rows": [
+  [
+   {
+    "id": "PUB-11",
+    "level": "hard",
+    "family": "v24 branch",
+    "pass": true,
+    "failed": [],
+    "call_id": "3c6035f1-633a-41a6-bbda-8d0ceb9c84b2",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_db6347be-01a",
+    "slowest_turn_s": 1.7,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-12",
+    "level": "hard",
+    "family": "v24 branch",
+    "pass": false,
+    "failed": [
+     "conversation: The assistant failed to meet the success criteria because it did not retain the original common proposal for all products in [Message 8]. When the user proposed paying all three products on October 31 in [Message 7], the assistant only addressed the car loan rollover (140.00) in [Message 8], ignoring the credit card and personal loan. Although the assistant eventually corrected the dates and expla"
+    ],
+    "call_id": "89d483fd-5dad-4455-8e7e-877a4c90d257",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_9c9a4af5-3fa",
+    "slowest_turn_s": 1.8,
+    "ended": "assistant-ended-call"
+   },
+   {
+    "id": "PUB-13",
+    "level": "hard",
+    "family": "v24 branch",
+    "pass": true,
+    "failed": [],
+    "call_id": "f70352f6-8585-4ace-9a8d-5243edd18215",
+    "tools": [
+     "verify_identity",
+     "verify_identity",
+     "get_account",
+     "create_promise",
+     "create_promise",
+     "close_call"
+    ],
+    "customer_id": "c_db99020a-df0",
+    "slowest_turn_s": 1.6,
+    "ended": "assistant-ended-call"
+   }
+  ]
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "bands": [
+  "early",
+  "late"
+ ],
+ "identity": [
+  "postcode",
+  "client_reference",
+  "birth_year",
+  "account_pin"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam",
+  "other_question"
+ ],
+ "unresolved": [
+  {
+   "topic": "payment_plan special case",
+   "text": "P-AVS-2026 \u00a79 row payment_plan says to ask how much they can pay each month, propose a 3-month plan, record it and close `avs_arranged`; this contradicts \u00a77 (\"Never ask the customer how much they can pay\", \"Never offer a discount, waiver or new instalment plan\") and overlaps the restructuring rule (\"wants lower instalments\"); create_promise records one amount and date only. Not compiled as a special case.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "days late outside bands",
+   "text": "Bands cover only 1\u201320 and 21\u201360 days late; the documents do not say how to handle 0 or more than 60 days late.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "numeric date order",
+   "text": "P-AVS-2026 says purely numeric dates use month/day/year, but no identity question is a date; no requirement uses numeric_date_order.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  },
+  {
+   "topic": "hardship sympathetic sentence",
+   "text": "P-AVS-2026 \u00a79 requires 'one short sympathetic sentence' for hardship but does not dictate its words; special_cases[hardship].say holds a short sentence written to match that content.",
+   "doc": "tests/fixtures/external/amber-valley/02-policy.md"
+  }
+ ],
+ "audit_fixed": [
+  "special_cases[hardship].say: was empty although \u00a79 requires 'one short sympathetic sentence'; added a short sentence with that content and recorded in unresolved that the words are not dictated.",
+  "unresolved[payment_plan]: clarified that the row also overlaps the restructuring trigger and cannot be expressed with create_promise (one amount/date)."
+ ]
+}

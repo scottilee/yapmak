@@ -54,7 +54,9 @@ DEADLINES = [
     {"kind": "calendar_days", "n": 14, "adjustment": "following"}, {"kind": "calendar_days", "n": 9, "adjustment": "preceding"},
     {"kind": "end_of_month", "basis": "business", "adjustment": "preceding"}, {"kind": "end_of_month", "basis": "calendar", "adjustment": "following"},
     {"kind": "fixed_date", "date": "2026-11-30", "adjustment": "following"},
+    {"kind": "day_of_month", "day": 15, "month_offset": 1, "adjustment": "following"}, {"kind": "end_of_month", "basis": "business", "adjustment": "none", "month_offset": 1},
 ]
+FLOOR_RULE_SETS = [None, None, None, {"*": {"kind": "percent", "percent": 20, "min_amount": 50}}, {"*": {"kind": "fixed", "amount": 75}}]
 
 
 def permute(base: dict, rng: random.Random, k: int) -> dict:
@@ -84,6 +86,12 @@ def permute(base: dict, rng: random.Random, k: int) -> dict:
     ir["bands"] = bands
     # products / floors / notes / multi
     ir["amounts"]["floors"] = rng.choice(PRODUCT_SETS)
+    fr = rng.choice(FLOOR_RULE_SETS)
+    if fr:   # the floor is a rule, not a bank field: keep the product types, drop the field mapping
+        ir["amounts"]["floor_rules"] = {t: dict(next(iter(fr.values()))) for t in ir["amounts"]["floors"]}
+        ir["amounts"]["floors"] = {}
+    else:
+        ir["amounts"]["floor_rules"] = {}
     ir["multi_product"]["max_products"] = rng.choice([1, 2, 3, 4])
     notes_on = ir["multi_product"]["max_products"] > 1 and rng.random() < 0.8
     ir["notes"]["enabled"] = notes_on
@@ -118,10 +126,27 @@ def permute(base: dict, rng: random.Random, k: int) -> dict:
         elif sc["name"] == "human":
             sc["ask_once_first"] = rng.random() < 0.6
     ir["promise_write"]["retry_on_failure"] = rng.choice([0, 1, 2])
+    ir["phrases"]["product_naming"] = {t: t.replace("_", " ") for t in (ir["amounts"]["floors"] or ir["amounts"]["floor_rules"])}
+    # --- subtractive dimension: hidden briefs may simply not have some of brief A's rules ---
+    minimal = rng.random() < 0.4
+    if minimal:
+        drop = set(rng.sample(["hardship", "restructuring", "already_paid", "dispute", "refuse_to_talk"], rng.choice([1, 2, 3])))
+        ir["special_cases"] = [sc for sc in ir["special_cases"] if sc["name"] not in drop]
+        if rng.random() < 0.5:
+            ir["third_party"]["callback"]["enabled"] = False
+        if rng.random() < 0.5:
+            ir["bands"][-1]["attempts"] = []            # a plain no ends it for that band
+        if rng.random() < 0.4:
+            ir["amounts"]["floors"] = {}
+            ir["amounts"]["floor_rules"] = {t: {"kind": "percent", "percent": 100} for t in ir["phrases"]["product_naming"]}   # only the full amount is acceptable
+        if rng.random() < 0.5:
+            ir["identity"]["requirements"] = ir["identity"]["requirements"][:1]
+    ir["_minimal"] = minimal
     ir["bank_name"] = f"Bank {k}"
     ir["phrases"]["opening"] = f"Good day, this is the automated assistant of Bank {k}. We record this call."
-    ir["phrases"]["product_naming"] = {t: t.replace("_", " ") for t in ir["amounts"]["floors"]}
-    ir["source_docs"] = [f"synthetic permutation {k}"]
+
+    ir.pop("_minimal", None)
+    ir["source_docs"] = [f"synthetic permutation {k}" + (" (minimal)" if minimal else "")]
     ir["unresolved"] = []
     return ir, v
 
@@ -137,7 +162,7 @@ def mutate_openapi(base: dict, ir: dict, v: dict) -> dict:
         return P_[path]["post"]["responses"]["200"]["content"]["application/json"]["schema"]["properties"]
     props("/verify_identity")["field"]["enum"] = [r["field"] for r in ir["identity"]["requirements"]]
     items = resp("/get_account")["products"]["items"]["properties"]
-    items["type"]["enum"] = list(ir["amounts"]["floors"])
+    items["type"]["enum"] = list(ir["amounts"]["floors"] or ir["amounts"]["floor_rules"])
     for old in ("minimum_payment", "instalment_amount"):
         items.pop(old, None)
     for f in set(ir["amounts"]["floors"].values()):

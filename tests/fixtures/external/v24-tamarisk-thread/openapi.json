@@ -1,0 +1,512 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tamarisk Quay Business Bank servicing API",
+    "version": "24.1"
+  },
+  "servers": [
+    {
+      "url": "https://v24-tamarisk-thread.example.invalid/v1"
+    }
+  ],
+  "components": {},
+  "paths": {
+    "/servicing/verify_identity": {
+      "post": {
+        "summary": "Check one security answer. The supplied brief defines question order and the total wrong-answer allowance; security_remaining is authoritative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "postcode",
+                      "birth_year",
+                      "company_number",
+                      "founded_year"
+                    ]
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "postcode: letters and digits without spaces; birth_year/founded_year: four-digit year; company_number: exactly eight digits. Verify in the order in the supplied brief."
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "field",
+                  "answer"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "all_verified": {
+                      "type": "boolean"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "answer_matches": {
+                      "type": "boolean"
+                    },
+                    "security_remaining": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "verify_identity"
+      }
+    },
+    "/servicing/get_account": {
+      "post": {
+        "summary": "Return overdue products only after every identity question required by the supplied brief has passed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    },
+                    "facilities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "facility_ref": {
+                            "type": "string"
+                          },
+                          "arrears_total": {
+                            "type": "number",
+                            "minimum": 0.01
+                          },
+                          "delinquent_days": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 90
+                          },
+                          "revolver_base": {
+                            "type": "number",
+                            "description": "Bank supplied base minimum; effective negotiated minimum is governed by the bank brief."
+                          },
+                          "equipment_base": {
+                            "type": "number",
+                            "description": "Bank supplied base minimum; effective negotiated minimum is governed by the bank brief."
+                          },
+                          "merchant_base": {
+                            "type": "number",
+                            "description": "Bank supplied base minimum; effective negotiated minimum is governed by the bank brief."
+                          },
+                          "facility_class": {
+                            "type": "string",
+                            "enum": [
+                              "tamarisk_revolver",
+                              "tamarisk_equipment",
+                              "tamarisk_merchant"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "facility_ref",
+                          "facility_class",
+                          "arrears_total",
+                          "delinquent_days",
+                          "revolver_base",
+                          "equipment_base",
+                          "merchant_base"
+                        ]
+                      },
+                      "minItems": 1,
+                      "maxItems": 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "get_account"
+      }
+    },
+    "/servicing/create_promise": {
+      "post": {
+        "summary": "Record a payment promise. One per product.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "facility_ref": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "facility_ref",
+                  "amount",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "promise_id": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "create_promise"
+      }
+    },
+    "/servicing/add_note": {
+      "post": {
+        "summary": "Record the permitted reason for a product without a promise, only when the supplied brief authorizes a note.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "facility_ref": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "tamarisk_refused",
+                      "tamarisk_distress",
+                      "tamarisk_disputed",
+                      "tamarisk_settled",
+                      "tamarisk_service_error"
+                    ]
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "facility_ref",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "add_note"
+      }
+    },
+    "/servicing/schedule_callback": {
+      "post": {
+        "summary": "Book a callback.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "HH:MM"
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "schedule_callback"
+      }
+    },
+    "/servicing/transfer_to_agent": {
+      "post": {
+        "summary": "Hand the call to a person.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "queue": {
+                    "type": "string",
+                    "enum": [
+                      "tamarisk_restructure",
+                      "tamarisk_desk",
+                      "tamarisk_care"
+                    ]
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "queue"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "transfer_to_agent"
+      }
+    },
+    "/servicing/close_call": {
+      "post": {
+        "summary": "End the call. Always the last tool call. Nothing is accepted after it.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {
+                    "type": "string"
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "tamarisk_arranged",
+                      "tamarisk_settled",
+                      "tamarisk_transferred",
+                      "tamarisk_no_deal",
+                      "tamarisk_unverified",
+                      "tamarisk_unreached"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "tamarisk_refused",
+                      "tamarisk_distress",
+                      "tamarisk_disputed",
+                      "tamarisk_settled",
+                      "tamarisk_service_error",
+                      "tamarisk_restructure",
+                      "tamarisk_person",
+                      "tamarisk_care",
+                      "tamarisk_failed",
+                      "tamarisk_declined",
+                      "tamarisk_callback",
+                      "tamarisk_no_callback",
+                      "tamarisk_wrong_number",
+                      "tamarisk_deceased",
+                      "tamarisk_unclear"
+                    ],
+                    "description": "Omit for arranged and settled outcomes. Other outcome/reason combinations are constrained by the brief."
+                  }
+                },
+                "required": [
+                  "customer_id",
+                  "outcome"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "`accepted` is false when the bank action was not carried out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "accepted": {
+                      "type": "boolean",
+                      "description": "True only when the bank operation succeeded; HTTP status alone does not authorize a success claim."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The service failed and nothing was recorded. Retry only if the effective brief permits it."
+          }
+        },
+        "operationId": "close_call"
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+ "bands": [
+  "CR-D1"
+ ],
+ "identity": [
+  "birth_date",
+  "access_pin",
+  "locality_word"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "bands.CR-D1.deadline",
+   "text": "Deadline is the EARLIER of (a) the sixth business day strictly after today and (b) the last business day of the current calendar month; neither boundary may be exceeded. The DSL has no min-of-two rule, so the deadline is encoded as nth_business_day n=6 with an extra 'cap' (end_of_month, business basis, current month) and combine='earlier'; the compiler must apply the cap.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  },
+  {
+   "topic": "bands.CR-D1.deadline_before_today",
+   "text": "If the deadline is already before today, no eligible promise date exists: take no promise and close cr-none/cr-r-refused; never extend into the following month. No IR field expresses this.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  },
+  {
+   "topic": "amounts.floor_rules",
+   "text": "Effective floor = min(full overdue sum, max(product base field [flex_base/term_base], ceil-to-cent(25% of full overdue sum))). The API base fields are not the final floor; the DSL has no combined field+percent rule, so floor_rules carry extra keys min_field, combine_with_field='higher', rounding='up_to_cent', cap='full_amount' that the compiler must honour. Do not use the base alone or round to nearest.",
+   "doc": "tests/fixtures/external/codex-cedar-limits/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "Removed unresolved entry 'identity.wrong_count': the document settles it (count in agent code, 4 total) and it is already expressed by identity.wrong_count_source='code' and wrong_answer_limit=4.",
+  "Added 'A relative cannot verify or promise for the holder.' to third_party.source so that rule is traceable.",
+  "Extended amounts.source and promise_write.source with the below-floor, no-discount, consent-revalidation and service-failure sentences for traceability; no values changed.",
+  "Verified all other values against the specification and openapi enums (verify_identity field, close_call outcome/reason, transfer_to_agent queue, contract_kind); no value errors found."
+ ]
+}

@@ -18,38 +18,30 @@
   "scam",
   "robot",
   "refuse_to_talk",
+  "wrong_number",
+  "deceased",
   "change_promise"
  ],
  "unresolved": [
   {
+   "topic": "identity.hint_reply",
+   "text": "verify_identity can return hint `day_month_swapped`, but the documents do not say what to tell the customer when it fires.",
+   "doc": "openapi.json"
+  },
+  {
    "topic": "phrases.cannot_answer_sentence",
-   "text": "The brief does not dictate a sentence for questions the assistant cannot answer.",
-   "doc": "results/layer-b/lb-01/brief.md"
+   "text": "The documents do not dictate a sentence for questions the assistant cannot answer. The only related instruction is for a failed promise write: 'say you could not record it' (rule 32), which the schema has no phrase field for.",
+   "doc": "results/layer-b/lb-01/02-policy.md"
   },
   {
-   "topic": "identity.date_of_birth.hint_reply",
-   "text": "The API can return hint day_month_swapped, but the brief does not dictate what to say; the reply used restates the brief's day-month-year reading order.",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "calendar.missing_date_parts",
-   "text": "The brief does not say how to interpret a date with missing parts (e.g. a day without a month).",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "promise_write.failure_sentence",
-   "text": "The brief says to say the promise could not be recorded after a second create_promise failure (rule 32), but gives no exact words and the schema has no dedicated field for it.",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "hardship.multi_product",
-   "text": "Rule 27 closes the call as no-ptp / vulnerable when the transfer is declined; it does not say whether other products are handled first, so ends_call is true.",
-   "doc": "results/layer-b/lb-01/brief.md"
+   "topic": "dates.past_deadline",
+   "text": "The documents do not say what to do when a computed deadline is already behind us; left at the default.",
+   "doc": "results/layer-b/lb-01/02-policy.md"
   }
  ],
  "audit_fixed": [
-  "phrases.opening: removed the invented greeting 'Hello,'; the brief only dictates the content (automated assistant of Bank 1, call recorded) and the opening is not verbatim.",
-  "outcomes.source: added the rule-36 goodbye-before-close quote that supports goodbye_before_close.",
-  "unresolved: added an entry noting rule 27 does not settle whether other products are handled before the hardship close; clarified the rule-32 failure sentence entry."
+  "phrases.opening: removed the leading 'Hello,' because the documents only give the content (automated assistant of Bank 1, call is recorded), and that greeting word was not in the source.",
+  "phrases.today_question: changed to 'Can you pay all of it today?' to match P11 rule 18 ('ask once whether they can pay all of it today') instead of the paraphrase 'full past-due amount'.",
+  "Source spans: added the P11 text that the memo keeps (phone_last4 format, band2 attempt count, human queue/outcome, confirm phrase) to the relevant source fields. No values changed."
  ]
 }

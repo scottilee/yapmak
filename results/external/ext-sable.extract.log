@@ -1,0 +1,50 @@
+{
+ "bands": [
+  "1-15",
+  "16-45",
+  "46-90"
+ ],
+ "identity": [
+  "postcode",
+  "birth_year",
+  "company_number",
+  "founded_year"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "refuse_to_talk",
+  "robot",
+  "scam"
+ ],
+ "unresolved": [
+  {
+   "topic": "floor rounding",
+   "text": "The minimum is 20% of the full arrears rounded to the nearest whole cent (not up); the percent floor rule has no rounding-mode field, so the compiler must round half to nearest cent.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "hardship sympathy sentence",
+   "text": "The document requires one short sentence of sympathy but does not dictate its words; the 'say' text is a non-verbatim sentence written to that content.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "refuse_to_talk final outcome",
+   "text": "A second refusal 'ends the call and marks all remaining products sable_refused'; the document does not give a dedicated close pair, so the final outcome follows the general precedence (a promise already recorded on another product still gives sable_arranged; otherwise sable_no_deal / sable_refused, or the first non-settled note reason).",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  },
+  {
+   "topic": "no discount or new plan",
+   "text": "\"Never offer a discount, waiver or a new instalment plan.\" No IR field holds this prohibition; the dialogue prompt must carry it.",
+   "doc": "tests/fixtures/external/v24-sable-percent/01-specification.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added unresolved entry for the refuse_to_talk outcome: the document only says the call ends and remaining products are marked sable_refused, so the final outcome follows general precedence (an earlier recorded promise still gives sable_arranged).",
+  "Added unresolved entry for 'Never offer a discount, waiver or a new instalment plan', which had no representation in the IR.",
+  "Extended source quotes (identity, third_party, bands[1], amounts, dates, notes, multi_product, phrases, promise_write, outcomes) to cite the full constraining sentences; no values were changed because all extracted values matched the specification and the API enums."
+ ]
+}

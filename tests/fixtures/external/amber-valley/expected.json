@@ -1,0 +1,632 @@
+{
+  "fixture": "amber-valley",
+  "brief": "02-policy.md",
+  "memo": "03-memo.txt",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Amber Valley Savings",
+      "source": "document title"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "postcode",
+        "client_reference",
+        "birth_year",
+        "account_pin"
+      ],
+      "source": "M-AVS-001 section A"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "text",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 0,
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "digits",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 6,
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "year",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.3.answer_format": {
+      "expected": "digits",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.requirements.3.digits": {
+      "expected": 4,
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 4,
+      "source": "M-AVS-001 section B"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.remaining_slot": {
+      "expected": "remaining_attempts",
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "P-AVS-2026 section 1"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "avs_unverified",
+        "avs_failed"
+      ],
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "avs_unverified",
+        "avs_declined"
+      ],
+      "source": "P-AVS-2026 section 3"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "avs_unreached",
+        "avs_unclear"
+      ],
+      "source": "P-AVS-2026 section 1"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please contact our identity desk.",
+      "source": "P-AVS-2026 section 3"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.days": {
+      "expected": "next_business_day",
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.start": {
+      "expected": "09:00",
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.end": {
+      "expected": "17:30",
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "avs_unreached",
+        "avs_callback"
+      ],
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "avs_unreached",
+        "avs_no_callback"
+      ],
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "avs_unreached",
+        "avs_wrong_number"
+      ],
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "avs_unreached",
+        "avs_deceased"
+      ],
+      "source": "P-AVS-2026 section 2"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Please accept my condolences.",
+      "source": "P-AVS-2026 section 2"
+    },
+    "calendar.holidays": {
+      "expected": [
+        "2026-10-30",
+        "2026-11-11",
+        "2026-12-25",
+        "2027-01-01"
+      ],
+      "source": "P-AVS-2026 section 5"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "P-AVS-2026 section 5"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "P-AVS-2026 section 5"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "P-AVS-2026 section 5"
+    },
+    "amounts.floors": {
+      "expected": {
+        "revolve_card": "minimum_due",
+        "term_loan": "instalment_due",
+        "auto_lease": "lease_due"
+      },
+      "source": "P-AVS-2026 section 4"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "amounts.floor_wording": {
+      "expected": "The unpaid remainder stays overdue.",
+      "source": "P-AVS-2026 section 7"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "P-AVS-2026 section 7"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "M-AVS-002 section F reverses M-AVS-001"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "P-AVS-2026 section 8"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I record these payment arrangements?",
+      "source": "P-AVS-2026 section 8"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "notes.reasons": {
+      "expected": [
+        "avs_refused",
+        "avs_distress",
+        "avs_disputed",
+        "avs_settled",
+        "avs_service_error"
+      ],
+      "source": "C-AVS-2026"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "multi_product.max_products": {
+      "expected": 3,
+      "source": "P-AVS-2026 section 4"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "P-AVS-2026 section 4"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "P-AVS-2026 section 4"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "P-AVS-2026 section 6"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "P-AVS-2026 section 6"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "P-AVS-2026 section 8"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "avs_arranged": [],
+        "avs_settled": [],
+        "avs_transferred": [
+          "avs_restructure",
+          "avs_person",
+          "avs_support"
+        ],
+        "avs_no_deal": [
+          "avs_refused",
+          "avs_distress",
+          "avs_disputed",
+          "avs_service_error"
+        ],
+        "avs_unverified": [
+          "avs_failed",
+          "avs_declined"
+        ],
+        "avs_unreached": [
+          "avs_callback",
+          "avs_no_callback",
+          "avs_wrong_number",
+          "avs_deceased",
+          "avs_unclear"
+        ]
+      },
+      "source": "C-AVS-2026"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "avs_arranged",
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "avs_settled",
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "avs_transferred",
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "avs_no_deal",
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "avs_service_error",
+      "source": "C-AVS-2026"
+    },
+    "outcomes.refused_reason": {
+      "expected": "avs_refused",
+      "source": "C-AVS-2026"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "P-AVS-2026 section 10"
+    },
+    "phrases.opening": {
+      "expected": "Good afternoon, this is Amber Valley Savings' automated assistant. This call is recorded.",
+      "source": "P-AVS-2026 section 1"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {{title}} {{last_name}}?",
+      "source": "P-AVS-2026 section 1"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about overdue commitments.",
+      "source": "P-AVS-2026 section 4"
+    },
+    "phrases.today_question": {
+      "expected": "Can you settle this commitment today?",
+      "source": "P-AVS-2026 section 4"
+    },
+    "phrases.all_today_question": {
+      "expected": "Can you settle every listed commitment today?",
+      "source": "P-AVS-2026 section 4"
+    },
+    "phrases.robot_reply": {
+      "expected": "I am Amber Valley Savings' automated assistant.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "phrases.scam_reply": {
+      "expected": "You can verify this call using the number on your statement.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "overdue",
+        "arrears",
+        "balance",
+        "commitment",
+        "payment",
+        "card",
+        "loan",
+        "lease"
+      ],
+      "source": "P-AVS-2026 section 1"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "A confirmation will be sent to your secure mailbox.",
+      "source": "P-AVS-2026 section 8"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "A received payment may take two working days to appear.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our service desk can answer that question.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Please use your secure mailbox to request a change.",
+      "source": "P-AVS-2026 section 8"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "revolve_card": "revolving charge card",
+        "term_loan": "term loan",
+        "auto_lease": "auto lease"
+      },
+      "source": "P-AVS-2026 section 4"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 20,
+          "deadline": {
+            "kind": "nth_business_day",
+            "n": 10
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 21,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "P-AVS-2026 section 6 + M-AVS-001 section C"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "avs_settled"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.already_paid.say": {
+      "expected": "A received payment may take two working days to appear.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "avs_disputed"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "avs_distress"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "avs_support",
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.offer_outcome": {
+      "expected": [
+        "avs_transferred",
+        "avs_support"
+      ],
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "avs_restructure",
+        "outcome": "avs_transferred",
+        "reason": "avs_restructure"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.restructuring.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "avs_desk",
+        "outcome": "avs_transferred",
+        "reason": "avs_person"
+      },
+      "source": "M-AVS-001 section D"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "M-AVS-001 section D"
+    },
+    "special_cases.human.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.scam.say": {
+      "expected": "You can verify this call using the number on your statement.",
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "avs_no_deal",
+        "reason": "avs_refused"
+      },
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "P-AVS-2026 section 9"
+    },
+    "unresolved.$count": {
+      "expected": 1,
+      "source": "payment_plan special case requires unsupported instalment-plan behaviour"
+    },
+    "unresolved.0.topic": {
+      "expected": "payment_plan",
+      "source": "P-AVS-2026 section 9"
+    }
+  },
+  "comparison_notes": [
+    "Expected values authored before extraction; source spans, free prose triggers and arbitrary band names require manual semantic review.",
+    "Outcome tables and note/holiday sets are compared without order; identity and attempt order are significant.",
+    "The payment_plan special case is deliberately unsupported by the fixed template and should surface in unresolved[].",
+    "M-AVS-002 reverses the retry removal in M-AVS-001; retry_on_failure must be 1.",
+    "No public mock simulations: identities/products/schema differ; .example.invalid tool endpoints prevent accidental bank writes."
+  ]
+}

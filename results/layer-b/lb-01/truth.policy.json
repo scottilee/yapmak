@@ -118,9 +118,10 @@
    "days_late_min": 1,
    "days_late_max": 10,
    "deadline": {
-    "kind": "calendar_days",
-    "n": 9,
-    "adjustment": "preceding"
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "none",
+    "month_offset": 1
    },
    "attempts": [
     {
@@ -138,7 +139,7 @@
   {
    "name": "band2",
    "days_late_min": 11,
-   "days_late_max": 90,
+   "days_late_max": 60,
    "deadline": {
     "kind": "nth_business_day",
     "n": 3
@@ -148,16 +149,17 @@
      "amount": "full",
      "date": "last_business_day_this_week_or_next",
      "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": true
     }
    ]
   }
  ],
  "amounts": {
-  "floors": {
-   "credit_card": "minimum_payment",
-   "personal_loan": "instalment_amount",
-   "car_loan": "instalment_amount"
-  },
+  "floors": {},
   "full_first": true,
   "never_ask_how_much": true,
   "floor_offered_once": true,
@@ -166,6 +168,20 @@
   "source": {
    "doc": "briefs/brief-a.md",
    "text": "rules 24-27"
+  },
+  "floor_rules": {
+   "credit_card": {
+    "kind": "fixed",
+    "amount": 75
+   },
+   "personal_loan": {
+    "kind": "fixed",
+    "amount": 75
+   },
+   "car_loan": {
+    "kind": "fixed",
+    "amount": 75
+   }
   }
  },
  "dates": {

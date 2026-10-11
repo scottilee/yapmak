@@ -1,0 +1,54 @@
+{
+ "perm": 24,
+ "style": "thread",
+ "slot": "lb-24",
+ "exit": 0,
+ "seconds": 153,
+ "diff": [],
+ "functional": {
+  "static": [],
+  "scenarios": {
+   "happy": [],
+   "refusal": [],
+   "hardship": [],
+   "hardship_accept": [],
+   "third_party": [],
+   "wrong_id": [],
+   "dispute_one": [],
+   "write_fail": [],
+   "too_much_floor": [],
+   "below_floor_twice": [],
+   "after_deadline": [],
+   "readback_change": [],
+   "weekend_named": [],
+   "between": []
+  }
+ },
+ "unresolved": [
+  {
+   "topic": "identity.date_of_birth.hint_reply",
+   "text": "The API can return hint `day_month_swapped` for date_of_birth, but the documents do not say what to tell the customer or whether it counts as a wrong answer.",
+   "doc": "results/layer-b/lb-24/thread.txt"
+  },
+  {
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The documents do not dictate a sentence for questions the agent cannot answer.",
+   "doc": "results/layer-b/lb-24/thread.txt"
+  },
+  {
+   "topic": "dates.past_deadline",
+   "text": "The documents do not say what happens when a product's deadline (e.g. last business day of the current month) is already behind today.",
+   "doc": "results/layer-b/lb-24/thread.txt"
+  }
+ ],
+ "audit_fixed": [
+  "phrases.today_question: changed from the invented 'Can you pay the full past-due amount today?' to 'Can you pay all of it today?', following rule 18 ('ask once whether they can pay all of it today').",
+  "Added fuller source quotes (identity decline/failed text, third-party rule 5, band2 attempt 2, amounts rule 20, phrases forbidden words and product naming, promise read-back, goodbye before close) and noted that the 7 Oct message overrides the human-request rule. No values changed apart from today_question; every other value checked against the thread and the openapi enums (verify_identity field, product type, transfer queue, add_note reason, close_call outcome) and found correct, with document precedence applied (9 Oct > 7 Oct > 1 Oct)."
+ ],
+ "audit_unresolved": [
+  "What to say when verify_identity returns hint day_month_swapped, and whether it counts as a wrong answer.",
+  "No sentence is dictated for questions the agent cannot answer.",
+  "What to do when a band's deadline (e.g. last business day of the current month) is already in the past; left at the default next_business_day.",
+  "No wording is dictated for the apology on a wrong number or for 'could not record it' after a create_promise failure (only the content is described)."
+ ]
+}

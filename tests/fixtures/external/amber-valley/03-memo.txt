@@ -1,0 +1,27 @@
+SIGNED MEMO M-AVS-001 — 5 October 2026, 10:00 UTC
+Approved: Operations and Compliance
+
+This memo replaces the following P-AVS-2026 settings and nothing else:
+
+A. Identity question order is changed to: postcode FIRST, client_reference SECOND, birth_year THIRD, account_pin FOURTH. Retain the exact P-AVS-2026 question sentences and formats.
+
+B. Wrong-answer limit is 4 total, not 3. The API slot `remaining_attempts` remains authoritative.
+
+C. For days late 21–60 only, replace the 15th business day after today (historical forwarding) with the LAST BUSINESS DAY OF THE CURRENT CALENDAR MONTH: end_of_month, basis=business, adjustment=preceding. Do not count forward from today or roll into the next month. The 1–20 band remains the 10th business day after today.
+
+D. Human requests transfer immediately to `avs_desk`, without asking whether the assistant can help first.
+
+E. Callbacks remain next-business-day only; the 09:00–17:30 window remains.
+
+All remaining P-AVS-2026 wording, holidays, notes and outcome precedence remain effective.
+
+---
+
+SIGNED MEMO M-AVS-002 — 9 October 2026, 14:30 UTC
+Approved: Operations and Compliance
+
+This memo reverses one setting in M-AVS-001:
+
+F. Failed `create_promise` attempts: restore one retry after a first failure, so a total of two attempts are permitted per product. M-AVS-001 had removed the retry. The API `transaction_ok` flag still governs whether anything was saved.
+
+All other M-AVS-001 overrides remain in force.

@@ -1,0 +1,127 @@
+{
+  "operations": {
+    "get_account": {
+      "path": "/case/get_account",
+      "required": [
+        "client_ref"
+      ]
+    },
+    "verify_identity": {
+      "path": "/case/verify_identity",
+      "required": [
+        "client_ref",
+        "check_key",
+        "answer_text"
+      ]
+    },
+    "create_promise": {
+      "path": "/case/create_promise",
+      "required": [
+        "client_ref",
+        "account_ref",
+        "promised_amount",
+        "due_on"
+      ]
+    },
+    "add_note": {
+      "path": "/case/add_note",
+      "required": [
+        "client_ref",
+        "account_ref",
+        "note_code"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/case/schedule_callback",
+      "required": [
+        "client_ref",
+        "callback_on",
+        "callback_at"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/case/transfer_to_agent",
+      "required": [
+        "client_ref",
+        "route_key"
+      ]
+    },
+    "close_call": {
+      "path": "/case/close_call",
+      "required": [
+        "client_ref",
+        "closing_code"
+      ]
+    }
+  },
+  "product_array": "accounts",
+  "product_fields": {
+    "id": "account_ref",
+    "type": "category",
+    "full": "overdue_amount",
+    "days_late": "arrears_days",
+    "floors": {
+      "br-cycle": "cycle_floor",
+      "br-tool": "tool_floor",
+      "br-trade": "trade_floor"
+    }
+  },
+  "response_slots": {
+    "success": "operation_success",
+    "verified": "check_passed",
+    "all_verified": "all_checks_complete",
+    "remaining": "remaining_checks"
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "security_phrase",
+        "joining_year",
+        "contact_tail",
+        "responsible_dob"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "br-promised",
+        "br-settled",
+        "br-routed",
+        "br-unarranged",
+        "br-unverified",
+        "br-unreached"
+      ],
+      "reason": [
+        "br-r-replan",
+        "br-r-person",
+        "br-r-care",
+        "br-r-refused",
+        "br-r-distress",
+        "br-r-disputed",
+        "br-r-service",
+        "br-r-failed",
+        "br-r-declined",
+        "br-r-callback",
+        "br-r-no-callback",
+        "br-r-wrong-number",
+        "br-r-deceased",
+        "br-r-unclear"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "br-plan-desk",
+        "br-human-desk",
+        "br-care-desk"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "br-r-refused",
+        "br-r-distress",
+        "br-r-disputed",
+        "br-r-settled",
+        "br-r-service"
+      ]
+    }
+  }
+}

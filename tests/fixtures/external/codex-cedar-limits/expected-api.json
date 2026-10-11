@@ -1,0 +1,125 @@
+{
+  "operations": {
+    "get_account": {
+      "path": "/case/get_account",
+      "required": [
+        "customer_id"
+      ]
+    },
+    "verify_identity": {
+      "path": "/case/verify_identity",
+      "required": [
+        "customer_id",
+        "field",
+        "value"
+      ]
+    },
+    "create_promise": {
+      "path": "/case/create_promise",
+      "required": [
+        "customer_id",
+        "contract_id",
+        "amount",
+        "date"
+      ]
+    },
+    "add_note": {
+      "path": "/case/add_note",
+      "required": [
+        "customer_id",
+        "contract_id",
+        "reason"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/case/schedule_callback",
+      "required": [
+        "customer_id",
+        "date",
+        "time"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/case/transfer_to_agent",
+      "required": [
+        "customer_id",
+        "queue"
+      ]
+    },
+    "close_call": {
+      "path": "/case/close_call",
+      "required": [
+        "customer_id",
+        "outcome"
+      ]
+    }
+  },
+  "product_array": "contracts",
+  "product_fields": {
+    "id": "contract_id",
+    "type": "contract_kind",
+    "full": "overdue_total",
+    "days_late": "late_days",
+    "floors": {
+      "cr-flex": "flex_base",
+      "cr-term": "term_base"
+    }
+  },
+  "response_slots": {
+    "success": "ok",
+    "verified": "verified",
+    "all_verified": "all_verified",
+    "remaining": ""
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "birth_date",
+        "access_pin",
+        "locality_word"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "cr-promised",
+        "cr-paid",
+        "cr-routed",
+        "cr-none",
+        "cr-unverified",
+        "cr-unreached"
+      ],
+      "reason": [
+        "cr-r-replan",
+        "cr-r-person",
+        "cr-r-care",
+        "cr-r-refused",
+        "cr-r-distress",
+        "cr-r-disputed",
+        "cr-r-service",
+        "cr-r-failed",
+        "cr-r-declined",
+        "cr-r-callback",
+        "cr-r-no-callback",
+        "cr-r-wrong-number",
+        "cr-r-deceased",
+        "cr-r-unclear"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "cr-plan-desk",
+        "cr-human-desk",
+        "cr-care-desk"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "cr-r-refused",
+        "cr-r-distress",
+        "cr-r-disputed",
+        "cr-r-settled",
+        "cr-r-service"
+      ]
+    }
+  }
+}

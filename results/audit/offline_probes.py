@@ -226,9 +226,8 @@ results.append(rep("P4 outside-window twice -> no_callback", st, bank,
 
 # P5. floor refused then attempts consumed (rule 26+30; PUB-06 late band, floor 637.50, deadline 2026-10-23)
 c = CASES["PUB-06"]
-s = verified(c) + [{"_node": "state_debt", "cust_intent": "too_much"},
-                   {"_node": "negotiate", "cust_intent": "refuses"},     # refuse floor -> flat refusal uses attempt 1
-                   {"_node": "negotiate", "cust_intent": "refuses"},     # refuse attempt 1 -> attempt 2 floor on deadline
+s = verified(c) + [{"_node": "state_debt", "cust_intent": "too_much"},               # floor offered once, dated like attempt 1 (Friday)
+                   {"_node": "negotiate", "cust_intent": "refuses"},     # refuse floor -> flat refusal uses attempt 1; repeating it is forbidden (rule 31) -> attempt 2: floor on the deadline
                    {"_node": "negotiate", "cust_intent": "accepts"}, YES_RB]
 st, bank, d = run(WFA, c, s)
 results.append(rep("P5 floor-refused attempt ladder", st, bank, want_outcome=("promise", None),

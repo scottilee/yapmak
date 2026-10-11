@@ -1,0 +1,17 @@
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-14')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to meet the success criteria regarding the promise date. While the agent correctly avoided asking how much the user could pay and offered the minimum payment with the required note in Message 10, it ignored the user's request to 
+FAIL PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+       - conversation: The agent failed the criterion to ask for the exact day only once. The agent asked the customer to provide a date three times (Messages 14, 16, and 18) because it erroneously claimed the date provided (October 26) was in the past before eventuall
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 9 s. Failed calls where the customer hung up: 0.
+
+8 / 10 passed (bank records and conversation checks). Last simulation 3f097425-e884-4784-bd93-46176c151181, status completed, 109 s.

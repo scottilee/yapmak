@@ -1,0 +1,12 @@
+# Harbor Glass Cooperative — disposition register
+Code spelling is authoritative here. Hyphens and prefixes are significant. A reason is required exactly when listed, otherwise omit it.
+| Outcome | Reasons |
+|---|---|
+| hg-promised | omit reason |
+| hg-settled | omit reason |
+| hg-routed | hg-r-replan, hg-r-person, hg-r-care |
+| hg-unarranged | hg-r-refused, hg-r-distress, hg-r-disputed, hg-r-service |
+| hg-unverified | hg-r-failed, hg-r-declined |
+| hg-unreached | hg-r-callback, hg-r-no-callback, hg-r-wrong-number, hg-r-deceased, hg-r-unclear |
+Queues: hg-plan-desk (replanning), hg-human-desk (human help), hg-care-desk (hardship support). Their respective transfer reasons are hg-r-replan, hg-r-person, hg-r-care.
+Note API reason values: hg-r-refused, hg-r-distress, hg-r-disputed, hg-r-settled, hg-r-service. Notes enabled; paid uses hg-r-settled, distress hg-r-distress, disputed hg-r-disputed, refused hg-r-refused, exhausted write failure hg-r-service.

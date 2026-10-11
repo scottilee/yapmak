@@ -1,0 +1,381 @@
+{
+  "fixture": "v24-sable-percent",
+  "generation": "Dates computed with bankcal.deadline; all amount arithmetic uses Decimal, with decimal strings preserving cents. No workflow execution.",
+  "calendar": {
+    "holidays": [
+      "2026-10-30",
+      "2026-11-02",
+      "2026-11-16",
+      "2026-12-25",
+      "2027-01-01"
+    ],
+    "business_days": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "date_probes": [
+    {
+      "today": "2026-10-14",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-14",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-22",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-14",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-28",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2026-11-17",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-10-29",
+      "promise_window_open": false,
+      "expired_disposition": "sable_refused"
+    },
+    {
+      "today": "2026-10-31",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2026-11-30",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2027-01-15",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-12-22",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-14",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2027-01-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 1,
+      "rule": {
+        "kind": "day_of_month",
+        "day": 15,
+        "month_offset": 1,
+        "adjustment": "following"
+      },
+      "expected_deadline": "2027-01-15",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 16,
+      "rule": {
+        "kind": "earliest",
+        "rules": [
+          {
+            "kind": "nth_business_day",
+            "n": 6
+          },
+          {
+            "kind": "end_of_month",
+            "basis": "business",
+            "adjustment": "preceding",
+            "month_offset": 0
+          }
+        ]
+      },
+      "expected_deadline": "2026-12-31",
+      "promise_window_open": true,
+      "expired_disposition": null
+    },
+    {
+      "today": "2026-12-31",
+      "days_late": 46,
+      "rule": {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding",
+        "month_offset": 1
+      },
+      "expected_deadline": "2027-01-29",
+      "promise_window_open": true,
+      "expired_disposition": null
+    }
+  ],
+  "floor_probes": [
+    {
+      "product_type": "sable_revolver",
+      "full": "2125.10",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "425.02",
+      "expected_floor": "425.02"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "180.00",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "36.00",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "95.00",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "19.00",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "301.03",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "60.21",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "375.00",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "75.00",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "301.02",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "60.20",
+      "expected_floor": "75.00"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "401.01",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "80.20",
+      "expected_floor": "80.20"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "401.03",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "80.21",
+      "expected_floor": "80.21"
+    },
+    {
+      "product_type": "sable_revolver",
+      "full": "2125.10",
+      "base_field": null,
+      "base": null,
+      "rule": {
+        "kind": "percent",
+        "percent": 20,
+        "min_amount": 75
+      },
+      "percentage_component": "425.02",
+      "expected_floor": "425.02"
+    }
+  ]
+}

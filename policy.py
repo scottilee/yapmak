@@ -24,7 +24,8 @@ from typing import Any, get_args, get_origin, get_type_hints
 #   {"kind": "calendar_days", "n": 14}         today + n calendar days; explicit adjustment required
 #   {"kind": "fixed_date", "date": "YYYY-MM-DD"}
 #   {"kind": "end_of_month"}                   explicit basis=calendar|business and adjustment required
-DEADLINE_KINDS = ("nth_business_day", "calendar_days", "fixed_date", "end_of_month")
+DEADLINE_KINDS = ("nth_business_day", "calendar_days", "fixed_date", "end_of_month", "day_of_month", "earliest", "latest")
+FLOOR_RULE_KINDS = ("field", "percent", "fixed", "max_of")
 
 # Date sources an attempt may propose.
 ATTEMPT_DATE_SOURCES = ("last_business_day_this_week_or_next", "deadline", "today", "next_business_day")
@@ -119,6 +120,10 @@ class Band:
 @dataclass
 class AmountPolicy:
     floors: dict[str, str] = field(default_factory=dict)   # product type -> response property with the floor
+    # product type (or "*" for every type) -> floor rule when the floor is not a bank field:
+    #   {"kind": "field", "field": <response property>} | {"kind": "percent", "percent": 20, "min_amount": 0} | {"kind": "fixed", "amount": 50}
+    # a percent rule applies to the past-due amount; the floor never exceeds the full amount. `floors` stays the shorthand for field rules.
+    floor_rules: dict[str, dict[str, Any]] = field(default_factory=dict)
     full_first: bool = True
     never_ask_how_much: bool = True
     floor_offered_once: bool = True
@@ -133,6 +138,7 @@ class DatePolicy:
     weekend_or_holiday_roll_forward: bool = True
     vague_ask_once_then_deadline: bool = True
     after_deadline_offer_deadline: bool = True
+    past_deadline: str = "next_business_day"   # when the computed deadline is already behind us: next_business_day (offer the first business day) | no_promise (no eligible date: the product gets no promise)
     source: Span = field(default_factory=Span)
 
 
@@ -370,6 +376,32 @@ def _coerce(t, value):
 
 
 # ---------------------------------------------------------------------------------------------
+def _validate_deadline_rule(rule: dict, band: str, errs: list, iso_date) -> None:
+    """Checks for one simple deadline rule (also applied to each child of earliest/latest)."""
+    kind = rule.get("kind")
+    if kind not in DEADLINE_KINDS or kind in ("earliest", "latest"):
+        errs.append(f"band {band}: unknown or nested deadline kind {kind}")
+        return
+    if kind in ("nth_business_day", "calendar_days"):
+        n = rule.get("n")
+        if type(n) is not int or n < (1 if kind == "nth_business_day" else 0):
+            errs.append(f"band {band}: invalid deadline n")
+    if kind == "fixed_date" and not iso_date(rule.get("date")):
+        errs.append(f"band {band}: invalid fixed deadline date")
+    if kind != "nth_business_day" and rule.get("adjustment") not in ("none", "following", "preceding"):
+        errs.append(f"band {band}: explicit deadline adjustment required")
+    if kind == "end_of_month" and rule.get("basis") not in ("calendar", "business"):
+        errs.append(f"band {band}: explicit end_of_month basis required")
+    if kind in ("end_of_month", "day_of_month"):
+        mo = rule.get("month_offset", 0)
+        if type(mo) is not int or not 0 <= mo <= 12:
+            errs.append(f"band {band}: month_offset must be an integer 0..12")
+    if kind == "day_of_month":
+        dd = rule.get("day")
+        if type(dd) is not int or not 1 <= dd <= 31:
+            errs.append(f"band {band}: day_of_month needs day 1..31")
+
+
 def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = None) -> list[str]:
     """Structural problems the compiler cannot work around. `tool_enums` is {operation: {field: [values]}}
     from the OpenAPI document; when given, every outcome/reason/queue/note reason in the IR must be in it."""
@@ -421,23 +453,35 @@ def validate(ir: PolicyIR, tool_enums: dict[str, dict[str, list[str]]] | None = 
             errs.append(f"band {b.name}: deadline must be an object")
             continue
         kind = b.deadline.get("kind")
-        if kind in ("nth_business_day", "calendar_days"):
-            n = b.deadline.get("n")
-            if type(n) is not int or n < (1 if kind == "nth_business_day" else 0):
-                errs.append(f"band {b.name}: invalid deadline n")
-        if kind == "fixed_date" and not iso_date(b.deadline.get("date")):
-            errs.append(f"band {b.name}: invalid fixed deadline date")
-        if b.deadline.get("kind") not in DEADLINE_KINDS:
-            errs.append(f"band {b.name}: unknown deadline kind {b.deadline.get('kind')}")
-        if b.deadline.get("kind") != "nth_business_day" and b.deadline.get("adjustment") not in ("none", "following", "preceding"):
-            errs.append(f"band {b.name}: explicit deadline adjustment required")
-        if b.deadline.get("kind") == "end_of_month" and b.deadline.get("basis") not in ("calendar", "business"):
-            errs.append(f"band {b.name}: explicit end_of_month basis required")
+        rules_to_check = [b.deadline]
+        if kind in ("earliest", "latest"):
+            subs = b.deadline.get("rules")
+            if not isinstance(subs, list) or len(subs) < 2 or any(not isinstance(r, dict) or r.get("kind") not in DEADLINE_KINDS or r.get("kind") in ("earliest", "latest") for r in subs):
+                errs.append(f"band {b.name}: {kind} needs a list of at least two simple deadline rules")
+                rules_to_check = []
+            else:
+                rules_to_check = list(subs)
+        for sub in rules_to_check:
+            _validate_deadline_rule(sub, b.name, errs, iso_date)
         for a in b.attempts:
             if a.amount not in ATTEMPT_AMOUNT_SOURCES or a.date not in ATTEMPT_DATE_SOURCES:
                 errs.append(f"band {b.name}: bad attempt {a}")
-    if not ir.amounts.floors:
-        errs.append("amounts.floors is empty")
+    if not ir.amounts.floors and not ir.amounts.floor_rules:
+        errs.append("amounts.floors is empty (and no floor_rules)")
+    for t, rule in (ir.amounts.floor_rules or {}).items():
+        if not isinstance(rule, dict) or rule.get("kind") not in FLOOR_RULE_KINDS:
+            errs.append(f"amounts.floor_rules[{t}]: kind must be one of {FLOOR_RULE_KINDS}")
+            continue
+        if rule["kind"] == "field" and not rule.get("field"):
+            errs.append(f"amounts.floor_rules[{t}]: field rule needs a response property name")
+        if rule["kind"] == "percent" and not (isinstance(rule.get("percent"), (int, float)) and 0 < rule["percent"] <= 100):
+            errs.append(f"amounts.floor_rules[{t}]: percent must be in (0, 100]")
+        if rule["kind"] == "fixed" and not (isinstance(rule.get("amount"), (int, float)) and rule["amount"] > 0):
+            errs.append(f"amounts.floor_rules[{t}]: fixed rule needs a positive amount")
+        if rule["kind"] == "max_of" and not (rule.get("field") and isinstance(rule.get("percent"), (int, float)) and 0 < rule["percent"] <= 100):
+            errs.append(f"amounts.floor_rules[{t}]: max_of needs a field and a percent in (0, 100]")
+    if ir.dates.past_deadline not in ("next_business_day", "no_promise"):
+        errs.append("dates.past_deadline must be next_business_day or no_promise")
     names = {sc.name for sc in ir.special_cases}
     if not ir.phrases.opening:
         errs.append("phrases.opening is empty: write the opening sentence the documents require")

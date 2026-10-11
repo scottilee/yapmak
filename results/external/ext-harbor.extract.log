@@ -1,0 +1,40 @@
+{
+ "bands": [
+  "1-12",
+  "13-70"
+ ],
+ "identity": [
+  "passphrase",
+  "enrolment_year",
+  "phone_suffix",
+  "signatory_dob"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk",
+  "robot",
+  "cannot_answer",
+  "change_recorded_promise"
+ ],
+ "unresolved": [
+  {
+   "topic": "callback window (split hours)",
+   "text": "Signed memo B: Monday\u2013Thursday only 09:00\u201312:00 OR 14:00\u201318:00 (endpoints included, no lunch-gap callbacks); Friday ONLY 09:00\u201311:30 inclusive; no weekend/holiday callbacks; do not preserve 09:00\u201318:00 as a fallback. The IR holds a single start/end window, so 09:00\u201311:30 (valid on every business day) is stored; the compiler must additionally allow 11:30\u201312:00 and 14:00\u201318:00 on Monday\u2013Thursday.",
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md"
+  },
+  {
+   "topic": "phone_suffix single wrong answer",
+   "text": "Signed memo A: a SINGLE wrong phone_suffix immediately ends identity verification as hg-unverified/hg-r-failed, even if the global counter still has attempts left; do not ask that field again. Other questions keep the global four-wrong allowance; no correctly verified question may be repeated. The IR has no per-field wrong-answer limit.",
+   "doc": "tests/fixtures/external/codex-harbor-exceptions/03-signed-memo.md"
+  }
+ ],
+ "audit_fixed": [
+  "Added special_cases[cannot_answer] (continue, say 'Our account desk can explain that.'), so the \u00a77 rule 'Never invent information for unanswerable questions' is represented as a situation and not only as a phrase.",
+  "Everything else was verified and kept unchanged: all values match the sources, all enums exist in openapi.json (check_key, holding_kind, note_code, target_queue, disposition, closing_reason), and memo A and memo B take precedence over the policy, with the 09:00\u201318:00 draft window not kept."
+ ]
+}

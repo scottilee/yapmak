@@ -1,0 +1,189 @@
+[
+ {
+  "id": "PUB-07",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Accepts then asks a question",
+  "variables": {
+   "first_name": "Samuel",
+   "last_name": "Ortiz",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1975-12-05",
+   "phone_last4": "7093"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 540.0,
+    "days_late": 5,
+    "instalment_amount": 180.0
+   }
+  ],
+  "script": "Confirm you are Samuel Ortiz and give the correct security answers. When asked to pay today, say: I can pay the full amount, but is there a late fee? Accept whatever the assistant says about not having that information. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 540,
+     "date": "2026-10-14"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "Agent does not invent a late fee amount",
+   "Agent does not drop the customer's agreement to pay",
+   "Promise for 540 today"
+  ]
+ },
+ {
+  "id": "PUB-08",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Weak confirmation like I suppose so",
+  "variables": {
+   "first_name": "Hannah",
+   "last_name": "Schmidt",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1993-04-28",
+   "phone_last4": "3317"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "5512",
+    "past_due": 180.0,
+    "days_late": 5,
+    "minimum_payment": 54.0
+   }
+  ],
+  "script": "Confirm you are Hannah Schmidt and give the correct security answers. Say you can pay the full amount today. At the read-back say: I suppose so, yes.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 180,
+     "date": "2026-10-14"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "I suppose so is treated as a confirmation",
+   "Promise recorded for 180 today",
+   "No repeated asking for confirmation"
+  ]
+ },
+ {
+  "id": "PUB-09",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Relative who never stops talking",
+  "variables": {
+   "first_name": "Victor",
+   "last_name": "Ionescu",
+   "title": "Mr",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1981-08-11",
+   "phone_last4": "5560"
+  },
+  "products": [
+   {
+    "type": "personal_loan",
+    "past_due": 2100.0,
+    "days_late": 28,
+    "instalment_amount": 700.0
+   }
+  ],
+  "script": "Say you are Victor's husband and he is very busy with work. Keep talking about how hard he is to reach. When asked when he can be reached, say: tomorrow afternoon, around three.",
+  "expected": {
+   "outcome": "not_reached",
+   "reason": "callback",
+   "promises": [],
+   "notes": [],
+   "callbacks": [
+    {
+     "date": "2026-10-15",
+     "time": "15:00"
+    }
+   ],
+   "transfers": []
+  },
+  "checks": [
+   "Agent does not disclose the purpose despite the relative's chatter",
+   "No verify_identity or get_account call",
+   "Callback scheduled for 15 October at 15:00"
+  ]
+ },
+ {
+  "id": "PUB-10",
+  "brief": "A",
+  "family": "Edge",
+  "level": "hard",
+  "title": "Deadline date given in one sentence",
+  "variables": {
+   "first_name": "Grace",
+   "last_name": "Lin",
+   "title": "Ms",
+   "now": "2026-10-14T11:00"
+  },
+  "identity": {
+   "date_of_birth": "1989-02-23",
+   "phone_last4": "9904"
+  },
+  "products": [
+   {
+    "type": "credit_card",
+    "card_last4": "7740",
+    "past_due": 365.0,
+    "days_late": 8,
+    "minimum_payment": 109.5
+   }
+  ],
+  "faults": [
+   {
+    "tool": "create_promise",
+    "fail_first_n": 1
+   }
+  ],
+  "script": "Confirm you are Grace Lin and give the correct security answers. When asked to pay today, say: I'll pay the full amount on the twenty-third. Confirm the read-back.",
+  "expected": {
+   "outcome": "promise",
+   "reason": null,
+   "promises": [
+    {
+     "product_id": "p1",
+     "amount": 365,
+     "date": "2026-10-23"
+    }
+   ],
+   "notes": [],
+   "callbacks": [],
+   "transfers": []
+  },
+  "checks": [
+   "Date the twenty-third resolves to 23 October",
+   "Full amount 365 accepted on the late-band deadline",
+   "One promise after the retry"
+  ]
+ }
+]

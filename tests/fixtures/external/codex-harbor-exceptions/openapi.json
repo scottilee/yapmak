@@ -1,0 +1,709 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Harbor Glass Cooperative Collections Sandbox",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://codex-harbor-exceptions.example.invalid"
+    }
+  ],
+  "paths": {
+    "/case/get_account": {
+      "post": {
+        "operationId": "get_account",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  }
+                },
+                "required": [
+                  "client_ref"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "holdings": {
+                      "type": "array",
+                      "maxItems": 3,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "holding_id": {
+                            "type": "string",
+                            "description": "Identifier of the specific product returned by get_account; never use its display name."
+                          },
+                          "holding_kind": {
+                            "type": "string",
+                            "description": "Product type; selects the corresponding minimum amount field.",
+                            "enum": [
+                              "hg-cycle",
+                              "hg-tool",
+                              "hg-trade"
+                            ]
+                          },
+                          "arrears_value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Full currently overdue amount."
+                          },
+                          "delinquent_days": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 70,
+                            "description": "Days late used to choose the policy band."
+                          },
+                          "cycle_min": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable promise amount for hg-cycle; populated only for that type."
+                          },
+                          "tool_min": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable promise amount for hg-tool; populated only for that type."
+                          },
+                          "trade_min": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum acceptable promise amount for hg-trade; populated only for that type."
+                          }
+                        },
+                        "required": [
+                          "holding_id",
+                          "holding_kind",
+                          "arrears_value",
+                          "delinquent_days"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "description": "All overdue products in the order to discuss them."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "holdings"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/verify_identity": {
+      "post": {
+        "operationId": "verify_identity",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "check_key": {
+                    "type": "string",
+                    "description": "Identity requirement key.",
+                    "enum": [
+                      "passphrase",
+                      "enrolment_year",
+                      "phone_suffix",
+                      "signatory_dob"
+                    ]
+                  },
+                  "answer_text": {
+                    "type": "string",
+                    "description": "Normalized answer: dates YYYY-MM-DD, digit strings preserve leading zeros; text remains text; year is four digits."
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "check_key",
+                  "answer_text"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "matched": {
+                      "type": "boolean",
+                      "description": "This answer passed the named security check."
+                    },
+                    "complete": {
+                      "type": "boolean",
+                      "description": "All required security checks have passed."
+                    },
+                    "attempts_available": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 4,
+                      "description": "Global number of wrong answers still allowed across all questions."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "matched",
+                    "complete",
+                    "attempts_available"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/create_promise": {
+      "post": {
+        "operationId": "create_promise",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "holding_id": {
+                    "type": "string",
+                    "description": "Identifier of the specific product returned by get_account; never use its display name."
+                  },
+                  "promised_amount": {
+                    "type": "number",
+                    "exclusiveMinimum": false,
+                    "minimum": 0,
+                    "description": "Confirmed payment amount for this product."
+                  },
+                  "due_on": {
+                    "type": "string",
+                    "description": "Confirmed promise date.",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "holding_id",
+                  "promised_amount",
+                  "due_on"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    }
+                  },
+                  "required": [
+                    "request_success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/add_note": {
+      "post": {
+        "operationId": "add_note",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "holding_id": {
+                    "type": "string",
+                    "description": "Identifier of the specific product returned by get_account; never use its display name."
+                  },
+                  "note_code": {
+                    "type": "string",
+                    "description": "Reason this product has no recorded promise.",
+                    "enum": [
+                      "hg-r-refused",
+                      "hg-r-distress",
+                      "hg-r-disputed",
+                      "hg-r-settled",
+                      "hg-r-service"
+                    ]
+                  },
+                  "note_text": {
+                    "type": "string",
+                    "description": "Optional factual note."
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "holding_id",
+                  "note_code"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    }
+                  },
+                  "required": [
+                    "request_success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/schedule_callback": {
+      "post": {
+        "operationId": "schedule_callback",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "callback_date": {
+                    "type": "string",
+                    "description": "Agreed callback date.",
+                    "format": "date"
+                  },
+                  "callback_time": {
+                    "type": "string",
+                    "description": "Agreed callback time, 24-hour HH:MM.",
+                    "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "callback_date",
+                  "callback_time"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    }
+                  },
+                  "required": [
+                    "request_success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/transfer_to_agent": {
+      "post": {
+        "operationId": "transfer_to_agent",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "target_queue": {
+                    "type": "string",
+                    "description": "Destination queue for the accepted handoff.",
+                    "enum": [
+                      "hg-plan-desk",
+                      "hg-human-desk",
+                      "hg-care-desk"
+                    ]
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "target_queue"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    }
+                  },
+                  "required": [
+                    "request_success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case/close_call": {
+      "post": {
+        "operationId": "close_call",
+        "description": "All calls require the customer identifier. Failure responses do not commit a write.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_ref": {
+                    "type": "string",
+                    "description": "Customer identifier from the call customer_id variable."
+                  },
+                  "disposition": {
+                    "type": "string",
+                    "description": "Final outcome code.",
+                    "enum": [
+                      "hg-promised",
+                      "hg-settled",
+                      "hg-routed",
+                      "hg-unarranged",
+                      "hg-unverified",
+                      "hg-unreached"
+                    ]
+                  },
+                  "closing_reason": {
+                    "type": "string",
+                    "description": "Reason code, omitted for reasonless outcomes.",
+                    "enum": [
+                      "hg-r-replan",
+                      "hg-r-person",
+                      "hg-r-care",
+                      "hg-r-refused",
+                      "hg-r-distress",
+                      "hg-r-disputed",
+                      "hg-r-service",
+                      "hg-r-failed",
+                      "hg-r-declined",
+                      "hg-r-callback",
+                      "hg-r-no-callback",
+                      "hg-r-wrong-number",
+                      "hg-r-deceased",
+                      "hg-r-unclear"
+                    ]
+                  }
+                },
+                "required": [
+                  "client_ref",
+                  "disposition"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Operation result; inspect success flag before saying it succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    }
+                  },
+                  "required": [
+                    "request_success"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable, nothing committed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request_success": {
+                      "type": "boolean",
+                      "description": "True only if this operation succeeded; false means no write was committed."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Failure explanation."
+                    }
+                  },
+                  "required": [
+                    "request_success",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

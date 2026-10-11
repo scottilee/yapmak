@@ -1,13 +1,11 @@
 {
  "bands": [
   "band1",
-  "band2",
-  "band3"
+  "band2"
  ],
  "identity": [
-  "company_number",
-  "founded_year",
-  "postcode"
+  "date_of_birth",
+  "phone_last4"
  ],
  "special_cases": [
   "already_paid",
@@ -17,39 +15,33 @@
   "human",
   "scam",
   "robot",
-  "refuse_to_talk"
+  "refuse_to_talk",
+  "change_promise"
  ],
  "unresolved": [
   {
-   "topic": "cannot_answer_sentence",
-   "text": "The brief does not dictate a sentence for questions the agent cannot answer.",
+   "topic": "identity.hint_reply",
+   "text": "verify_identity can return hint `day_month_swapped`, but the brief does not say what to tell the customer when it fires.",
    "doc": "results/layer-b/lb-10/brief.md"
   },
   {
-   "topic": "wrong_answer_limit",
-   "text": "The brief says 4 wrong answers in total end the check and to use the API's wrong_answers_left; the API summary says three wrong answers end the check. The brief (sole policy authority) value 4 is used.",
+   "topic": "phrases.cannot_answer_sentence",
+   "text": "The brief dictates no sentence for questions the assistant cannot answer.",
    "doc": "results/layer-b/lb-10/brief.md"
   },
   {
-   "topic": "identity_question_count",
-   "text": "The brief asks 3 security questions; the get_account API summary says it is refused until 'both questions' are passed. The brief's 3 questions are used.",
+   "topic": "identity.phone_last4 digits",
+   "text": "The field is named phone_last4 but the brief says the answer is exactly 6 digits including leading zeros; 6 was used as stated.",
    "doc": "results/layer-b/lb-10/brief.md"
   },
   {
-   "topic": "missing_date_parts",
-   "text": "The brief does not say how to interpret a date missing its month or year.",
-   "doc": "results/layer-b/lb-10/brief.md"
-  },
-  {
-   "topic": "card_last4",
-   "text": "The brief does not say to name a credit card's last digits; product naming uses the plain type names only.",
+   "topic": "bands.days_late coverage",
+   "text": "The band table covers only 1 to 60 days late; the brief does not say how to handle a product outside that range.",
    "doc": "results/layer-b/lb-10/brief.md"
   }
  ],
  "audit_fixed": [
-  "phrases.opening: removed the invented greeting 'Hello, this is'; the sentence now states only what rule 1 requires (automated assistant of Bank 10, call recorded).",
-  "third_party.source: added the rule 5 sentence (third party: say nothing about the purpose, ask when the customer can be reached).",
-  "outcomes.source and promise_write.source: added the goodbye-before-close and 'Do you confirm?' sentences as their sources.",
-  "unresolved: added the conflict between the brief's 3 security questions and the get_account summary's 'both questions', and the fact that the brief does not mention card_last4 naming."
+  "phrases.opening: removed the invented greeting 'Hello,'; the brief only dictates the content (automated assistant of Bank 10, call recorded), so the sentence now states just that.",
+  "Expanded source spans (third_party, calendar, bands[0], outcomes, phrases) to quote rules 5, 16, 'Bands with one attempt stop after attempt 1', 36 and 2 that support the values."
  ]
 }

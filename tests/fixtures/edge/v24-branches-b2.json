@@ -1,0 +1,68 @@
+[
+  {
+    "id": "PUB-11",
+    "brief": "B",
+    "family": "v24 branch",
+    "level": "hard",
+    "title": "v24: goodbye cancels a pending batch before later products are finished",
+    "variables": {
+      "first_name": "Sofia",
+      "last_name": "Almeida",
+      "title": "Ms",
+      "now": "2026-10-14T11:00"
+    },
+    "identity": {
+      "date_of_birth": "1987-06-03",
+      "phone_last4": "2288"
+    },
+    "products": [
+      {
+        "type": "credit_card",
+        "card_last4": "2288",
+        "past_due": 220.0,
+        "days_late": 9,
+        "minimum_payment": 66.0
+      },
+      {
+        "type": "personal_loan",
+        "past_due": 640.0,
+        "days_late": 9,
+        "instalment_amount": 213.0
+      },
+      {
+        "type": "car_loan",
+        "past_due": 75.0,
+        "days_late": 3,
+        "instalment_amount": 25.0
+      }
+    ],
+    "script": "Confirm you are Sofia Almeida. Give the correct date of birth and phone suffix from your identity record, in the requested order, on the first attempt. Wait until verification and the complete debt statement. After all three products are stated, offer to pay the card in full tomorrow and explicitly say you have not decided about the loans. When the assistant next asks about another product, say \"I do not want to discuss the remaining products.\" At its next question, before any batch confirmation, say exactly: \"I still do not want to talk. Cancel the unsaved card proposal too; I am making no promises on any product. I am ending this call. Goodbye.\" Repeat that final sentence if asked more questions; never confirm a batch.",
+    "expected": {
+      "outcome": "no_promise",
+      "reason": "refused",
+      "promises": [],
+      "notes": [
+        {
+          "product_id": "p1",
+          "reason": "refused"
+        },
+        {
+          "product_id": "p2",
+          "reason": "refused"
+        },
+        {
+          "product_id": "p3",
+          "reason": "refused"
+        }
+      ],
+      "callbacks": [],
+      "transfers": []
+    },
+    "checks": [
+      "No promise may be written: a pending card proposal was explicitly withdrawn before confirmation.",
+      "Do not start another product or re-enter batch read-back after the second refusal and explicit termination.",
+      "One refused note for each unpromised product, then one no_promise/refused close; no transfers."
+    ],
+    "rationale": "A34/A45 and B7/B8/Closing: explicit termination concerns the whole call; unsaved proposals are not recorded promises and must not survive withdrawal."
+  }
+]

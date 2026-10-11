@@ -33,7 +33,9 @@ def code_node(name, code, targets, default=None):
     return {
         "name": name, "node_type": "code", "passthrough": True, "passthrough_default_transition": default or targets[-1],
         "on_enter": {"type": "silent"}, "disable_inactivity_monitor": True,
-        "pre_actions": [{"type": "function", "function": {"name": "code_exec", "handler": "__function__:code_exec",
+        # one platform-level retry: a code node that fails to return a parseable result (a sandbox hiccup) is re-run once before the
+        # default transition fires; code nodes are deterministic over `vars`, so a retry is safe (api_request nodes keep 0 retries)
+        "pre_actions": [{"type": "function", "config": {"timeoutMs": 45000, "maxRetries": 1}, "function": {"name": "code_exec", "handler": "__function__:code_exec",
                          "parameters": {"type": "object", "properties": {"code": {"type": "string", "default": code},
                                                                          "timeout_ms": {"type": "number", "default": 40000}}}}}],
         "transitions": [on_next(t) for t in targets] + [always(default or targets[-1])],

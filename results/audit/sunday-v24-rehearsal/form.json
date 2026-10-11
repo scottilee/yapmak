@@ -1,0 +1,14 @@
+{
+  "team": "temsilci",
+  "repo": "https://www.github.com/scottilee/temsilci",
+  "commit": "6181252ce0e71420dac66380d62a3cd90ddc1ff4",
+  "run_command": "source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-1 && source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-2",
+  "workflows": {
+    "hidden-1": "out/hidden-1.workflow.json",
+    "hidden-2": "out/hidden-2.workflow.json"
+  },
+  "traces": {
+    "hidden-1": "traces/hidden-1.jsonl",
+    "hidden-2": "traces/hidden-2.jsonl"
+  }
+}

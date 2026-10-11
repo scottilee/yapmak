@@ -14,7 +14,6 @@
  "paths": {
   "/verify_identity": {
    "post": {
-    "summary": "Check one security answer. Three wrong answers in total end the check.",
     "requestBody": {
      "required": true,
      "content": {
@@ -28,14 +27,12 @@
          "field": {
           "type": "string",
           "enum": [
-           "company_number",
-           "founded_year",
-           "postcode"
+           "date_of_birth",
+           "phone_last4"
           ]
          },
          "answer": {
-          "type": "string",
-          "description": "For date_of_birth: the date as YYYY-MM-DD. Callers say dates in words, the agent converts. An unreadable value is rejected with ok=false and is not counted as a wrong answer. For phone_last4: four digits."
+          "type": "string"
          }
         },
         "required": [
@@ -49,7 +46,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -81,15 +77,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/get_account": {
    "post": {
-    "summary": "The late products. Refused until both questions are passed.",
     "requestBody": {
      "required": true,
      "content": {
@@ -110,7 +103,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -139,20 +131,13 @@
               ]
              },
              "card_last4": {
-              "type": "string",
-              "description": "credit cards only"
+              "type": "string"
              },
              "past_due": {
               "type": "number"
              },
              "days_late": {
               "type": "integer"
-             },
-             "minimum_payment": {
-              "type": "number"
-             },
-             "instalment_amount": {
-              "type": "number"
              }
             }
            }
@@ -162,15 +147,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/create_promise": {
    "post": {
-    "summary": "Record a payment promise. One per product.",
     "requestBody": {
      "required": true,
      "content": {
@@ -204,7 +186,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -224,15 +205,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/add_note": {
    "post": {
-    "summary": "Brief B: record why a product ended without a promise.",
     "requestBody": {
      "required": true,
      "content": {
@@ -271,7 +249,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -288,15 +265,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/schedule_callback": {
    "post": {
-    "summary": "Book a callback.",
     "requestBody": {
      "required": true,
      "content": {
@@ -312,8 +286,7 @@
           "format": "date"
          },
          "time": {
-          "type": "string",
-          "description": "HH:MM"
+          "type": "string"
          }
         },
         "required": [
@@ -327,7 +300,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -344,15 +316,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/transfer_to_agent": {
    "post": {
-    "summary": "Hand the call to a person.",
     "requestBody": {
      "required": true,
      "content": {
@@ -382,7 +351,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -399,15 +367,12 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   },
   "/close_call": {
    "post": {
-    "summary": "End the call. Always the last tool call. Nothing is accepted after it.",
     "requestBody": {
      "required": true,
      "content": {
@@ -430,8 +395,7 @@
           ]
          },
          "reason": {
-          "type": "string",
-          "description": "Required for every outcome except promise and paid. See the table in the brief."
+          "type": "string"
          }
         },
         "required": [
@@ -444,7 +408,6 @@
     },
     "responses": {
      "200": {
-      "description": "`ok` is false when the action was not carried out.",
       "content": {
        "application/json": {
         "schema": {
@@ -461,9 +424,7 @@
        }
       }
      },
-     "500": {
-      "description": "The service failed. Nothing was recorded. The call may be repeated."
-     }
+     "500": {}
     }
    }
   }

@@ -1,0 +1,675 @@
+{
+  "fixture": "harwick-lowe-register",
+  "brief": "01-amendment-mail.txt (newest) + 02-signed-memo.md + 03-policy.md",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "Harwick & Lowe Commercial Bank",
+      "source": "policy header"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "konto_code",
+        "geburtsdatum",
+        "postleitzahl"
+      ],
+      "source": "memo M-1 order, clause 4.1 superseded"
+    },
+    "identity.requirements.0.field": {
+      "expected": "konto_code",
+      "source": "memo M-1"
+    },
+    "identity.requirements.0.ask_text": {
+      "expected": "What are the six digits of your account code?",
+      "source": "clause 4.2 (wording kept by M-1)"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 6,
+      "source": "clause 4.2"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "clause 4.2: no format-hint facility is provided"
+    },
+    "identity.requirements.1.field": {
+      "expected": "geburtsdatum",
+      "source": "memo M-1"
+    },
+    "identity.requirements.1.ask_text": {
+      "expected": "What is your date of birth, as registered?",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.1.answer_format": {
+      "expected": "date",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.1.digits": {
+      "expected": 0,
+      "source": "clause 4.2"
+    },
+    "identity.requirements.1.numeric_date_order": {
+      "expected": "dmy",
+      "source": "clause 4.2: numerals only read day-month-year"
+    },
+    "identity.requirements.1.hint_field": {
+      "expected": "",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.2.field": {
+      "expected": "postleitzahl",
+      "source": "memo M-1"
+    },
+    "identity.requirements.2.ask_text": {
+      "expected": "What is your postcode, as registered?",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.2.answer_format": {
+      "expected": "text",
+      "source": "clause 4.2"
+    },
+    "identity.requirements.2.digits": {
+      "expected": 0,
+      "source": "clause 4.2"
+    },
+    "identity.requirements.2.hint_field": {
+      "expected": "",
+      "source": "clause 4.2"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 4,
+      "source": "memo M-2 (clause 4.3 said three; M-77 wins)"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "memo M-2: the facility's remaining count governs"
+    },
+    "identity.remaining_slot": {
+      "expected": "attempts_left",
+      "source": "memo M-2 and API response"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "clause 2.2"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "clause 4.5"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "clause 4.5: a question as to why the check exists is not a refusal"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "HL-ID",
+        "hl-fail"
+      ],
+      "source": "clause 4.4 + 11.6"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "HL-ID",
+        "hl-decline"
+      ],
+      "source": "clause 4.5 + 11.6"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "HL-MISS",
+        "hl-unclear"
+      ],
+      "source": "clause 2.2 + 11.6"
+    },
+    "identity.failed_instruction": {
+      "expected": "Our service desk will verify you instead.",
+      "source": "clause 4.4"
+    },
+    "third_party.callback.enabled": {
+      "expected": true,
+      "source": "clause 3.1, day rule restored by mail S-72"
+    },
+    "third_party.callback.days": {
+      "expected": "today_or_next_business_day",
+      "source": "clause 3.1; memo M-3's day restriction withdrawn by mail S-72"
+    },
+    "third_party.callback.start": {
+      "expected": "09:00",
+      "source": "memo M-3 hours, kept by mail S-72"
+    },
+    "third_party.callback.end": {
+      "expected": "18:00",
+      "source": "memo M-3 hours, kept by mail S-72"
+    },
+    "third_party.callback.must_be_after_now": {
+      "expected": true,
+      "source": "clause 3.1: a start time... must lie later than now"
+    },
+    "third_party.callback.retry_once": {
+      "expected": true,
+      "source": "clause 3.2: an unusable window is re-asked once"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "HL-MISS",
+        "hl-cb"
+      ],
+      "source": "clause 3.3 + 11.6"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "HL-MISS",
+        "hl-nocb"
+      ],
+      "source": "clause 3.2 + 11.6"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "HL-MISS",
+        "hl-wrong"
+      ],
+      "source": "clause 3.4 + 11.6"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "HL-MISS",
+        "hl-deceased"
+      ],
+      "source": "clause 3.4 + 11.6"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "Our condolences on your loss.",
+      "source": "clause 3.4"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "clause 5.2: none are prescribed"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "source": "clause 5.1: Monday through Saturday, Sunday alone closed"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "clause 5.3"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "clause 5.4"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 9,
+          "deadline": {
+            "kind": "earliest",
+            "rules": [
+              {
+                "kind": "calendar_days",
+                "n": 9,
+                "adjustment": "none"
+              },
+              {
+                "kind": "end_of_month",
+                "basis": "business",
+                "adjustment": "preceding"
+              }
+            ]
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 10,
+          "days_late_max": 29,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 15,
+            "month_offset": 1,
+            "adjustment": "following"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        },
+        {
+          "days_late_min": 30,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 20,
+            "month_offset": 1,
+            "adjustment": "following"
+          },
+          "attempts": [
+            {
+              "amount": "full",
+              "date": "last_business_day_this_week_or_next",
+              "floor_if_full_refused": true
+            },
+            {
+              "amount": "floor",
+              "date": "deadline",
+              "floor_if_full_refused": true
+            }
+          ]
+        }
+      ],
+      "source": "clause 7.1 and 7.2; clause 7.1(c) superseded by memo M-4"
+    },
+    "amounts.floors": {
+      "expected": {
+        "od": "od_min",
+        "term": "tl_min",
+        "equip": "eq_min",
+        "card": "cl_min",
+        "invoice": "inv_min"
+      },
+      "source": "clause 6.2"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "clause 8.1"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "clause 8.1: the debtor is never asked what it can pay"
+    },
+    "amounts.floor_offered_once": {
+      "expected": true,
+      "source": "clause 8.2: the floor offered once"
+    },
+    "amounts.floor_wording": {
+      "expected": "The remainder falls due again.",
+      "source": "clause 8.2"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "clause 8.2"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "clause 8.3"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": true,
+      "source": "clause 8.3: a date on a closed day within the k-date moves to the next business day"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": true,
+      "source": "clause 7.4"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": true,
+      "source": "clause 7.5"
+    },
+    "dates.past_deadline": {
+      "expected": "next_business_day",
+      "source": "no expired k-date can be constructed from clauses 7.1 and M-4; the template default is asserted"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "clause 11.5: a failure... is retried once"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "clause 9.3"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "May I record these payments?",
+      "source": "clause 9.1"
+    },
+    "notes.enabled": {
+      "expected": true,
+      "source": "clause 11.1"
+    },
+    "notes.reasons": {
+      "expected": [
+        "hl-R07",
+        "hl-cleared",
+        "hl-dispute",
+        "hl-distress",
+        "hl-refuse"
+      ],
+      "source": "clauses 10.1, 10.2, 10.3, 10.6 and 11.5; vocabulary of 11.6"
+    },
+    "notes.note_each_unpromised_product": {
+      "expected": true,
+      "source": "clause 11.1: one note per unrecorded facility"
+    },
+    "notes.none_on_transfer": {
+      "expected": true,
+      "source": "clause 11.2"
+    },
+    "multi_product.max_products": {
+      "expected": 5,
+      "source": "clause 6.1: at most five (5) entries"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "clause 6.3"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "clause 7.3 context: one settle-today question opens the negotiation; counters are per facility"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "clause 7.2: per facility"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "clause 7.1: each facility on its own k-date"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "clause 9.1: one batch read-back"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "clause 11.4: written ranks keep"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "HL-PAY": [],
+        "HL-CLR": [],
+        "HL-TR": [
+          "hl-person",
+          "hl-rework"
+        ],
+        "HL-FULL": [
+          "hl-R07",
+          "hl-dispute",
+          "hl-distress",
+          "hl-refuse"
+        ],
+        "HL-ID": [
+          "hl-decline",
+          "hl-fail"
+        ],
+        "HL-MISS": [
+          "hl-cb",
+          "hl-deceased",
+          "hl-nocb",
+          "hl-unclear",
+          "hl-wrong"
+        ]
+      },
+      "source": "clause 11.6"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "HL-PAY",
+      "source": "clause 11.3"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "HL-CLR",
+      "source": "clause 11.3"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "HL-TR",
+      "source": "clause 11.3"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "HL-FULL",
+      "source": "clause 11.3"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "clause 11.3: a transfer rank overrides every other"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "clause 11.3: every facility noted hl-cleared gives HL-CLR"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "clause 11.3: the first non-cleared facility, in account-facility order"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "hl-R07",
+      "source": "clause 11.5 + 11.6"
+    },
+    "outcomes.refused_reason": {
+      "expected": "hl-refuse",
+      "source": "clause 10.6 + 11.6"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "clause 11.4"
+    },
+    "phrases.opening": {
+      "expected": "This is the Harwick & Lowe automated collections assistant. We record calls for your protection.",
+      "source": "clause 2.1"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "clause 2.1: said verbatim"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I speaking with {title} {last_name}?",
+      "source": "clause 2.2"
+    },
+    "phrases.debt_intro": {
+      "expected": "I am calling about the overdue facilities of Harwick & Lowe.",
+      "source": "clause 6.5"
+    },
+    "phrases.robot_reply": {
+      "expected": "This is the Harwick & Lowe automated collections assistant.",
+      "source": "clause 2.4"
+    },
+    "phrases.scam_reply": {
+      "expected": "You may verify us on the number printed on your contract letter.",
+      "source": "clause 2.4"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "arrears",
+        "dues",
+        "facility",
+        "overdue",
+        "payment",
+        "recover"
+      ],
+      "source": "clause 2.3"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "A confirmation will set by secure post.",
+      "source": "clause 9.5"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "Payments appear within two working days.",
+      "source": "clause 10.1"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "Our service desk will advise that.",
+      "source": "clause 10.9"
+    },
+    "phrases.recorded_promise_change_reply": {
+      "expected": "Alterations of kept records are made by secure post.",
+      "source": "clause 9.5"
+    },
+    "special_cases.already_paid.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hl-cleared"
+      },
+      "source": "clause 10.1 + 11.1"
+    },
+    "special_cases.already_paid.takes_promise": {
+      "expected": false,
+      "source": "clause 10.1: no record is taken for that facility"
+    },
+    "special_cases.already_paid.ends_call": {
+      "expected": false,
+      "source": "clause 10.1: the remaining facilities continue"
+    },
+    "special_cases.already_paid.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.already_paid.say": {
+      "expected": "Payments appear within two working days.",
+      "source": "clause 10.1"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hl-dispute"
+      },
+      "source": "clause 10.2 + 11.1"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "clause 10.2: no argument, no record"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": false,
+      "source": "clause 10.2: the remaining ones continue"
+    },
+    "special_cases.dispute.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.hardship.action": {
+      "expected": {
+        "type": "note",
+        "reason": "hl-distress"
+      },
+      "source": "clause 10.3 + 11.1"
+    },
+    "special_cases.hardship.takes_promise": {
+      "expected": false,
+      "source": "clause 10.3: no persuasion and no record for that facility"
+    },
+    "special_cases.hardship.ends_call": {
+      "expected": false,
+      "source": "clause 10.3: the remaining facilities continue"
+    },
+    "special_cases.hardship.offer_transfer_queue": {
+      "expected": "",
+      "source": "clause 10.3: NO transfer is offered; unlike most banks no support desk exists here"
+    },
+    "special_cases.hardship.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.restructuring.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "hl-rework",
+        "outcome": "HL-TR",
+        "reason": "hl-rework"
+      },
+      "source": "clause 10.4 + 11.6"
+    },
+    "special_cases.restructuring.ends_call": {
+      "expected": true,
+      "source": "clause 10.4: the call moves at once"
+    },
+    "special_cases.restructuring.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "hl-desk",
+        "outcome": "HL-TR",
+        "reason": "hl-person"
+      },
+      "source": "clause 10.5 + 11.6"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": true,
+      "source": "clause 10.5: ask once whether this assistant can help"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "clause 10.5"
+    },
+    "special_cases.human.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "HL-FULL",
+        "reason": "hl-refuse"
+      },
+      "source": "clause 10.6 + 11.6: hl-refuse on every remaining facility, closed per 11.3"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": true,
+      "source": "clause 10.6: ask once whether one may continue"
+    },
+    "special_cases.refuse_to_talk.takes_promise": {
+      "expected": false,
+      "source": "clause 10.6"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "clause 10.6"
+    },
+    "special_cases.refuse_to_talk.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "clause 10.8 + 2.4"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "clause 2.4: the call continues"
+    },
+    "special_cases.scam.say": {
+      "expected": "You may verify us on the number printed on your contract letter.",
+      "source": "clause 2.4"
+    },
+    "special_cases.scam.before_persuasion": {
+      "expected": true,
+      "source": "clause 10 preamble"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "od": "overdraft",
+        "term": "term loan",
+        "equip": "equipment loan",
+        "card": "store card",
+        "invoice": "invoice finance"
+      },
+      "source": "clause 6.4"
+    }
+  },
+  "comparison_notes": [
+    "Document precedence, newest first: 01-amendment-mail.txt (13 Oct) overrides 02-signed-memo.md (12 Oct) for its named subject; the memo overrides 03-policy.md (5 Oct) for the clauses each item names; everything else in the policy stands. The mail S-72 reverses exactly one thing - the day restriction of M-3 - while keeping M-3's 09:00-18:00 hours.",
+    "Unlike brief A: document register is legal (numbered clauses, cross-references), the business week runs Monday-Saturday with no holidays, up to five facilities, notes are ON with hyphenated prefixed codes (hl-...), three bands with three different deadline shapes (whichever-comes-first via earliest, day_of_month offset 1 twice), hardship never transfers (note + continue only), restructuring and human queues differ (hl-rework, hl-desk), outcome/reason vocabulary is mixed-case hyphenated (HL-PAY, HL-FULL, hl-R07, ...), and identity fields/ask order come from a signed memo, not the policy.",
+    "Field names are deliberately non-English/abbreviated (ref_no, konto_code, geburtsdatum, postleitzahl, facility_id, cat, outst, days_o, od_min/tl_min/eq_min/cl_min/inv_min) while the agent speaks English.",
+    "Clause 7.2(b) names the first attempt date for the late band as last-business-day-this-week-or-next; that is the purpose clause ATTEMPT_DATE_SOURCES supports directly.",
+    "No public mock simulations: identities/products/schema differ; .example.invalid endpoints prevent accidental bank writes.",
+    "Authored offline: any band or attempt date is probeable with bankcal (six-day weeks: Monday-Saturday); no extraction, build, publication or simulation was run."
+  ]
+}

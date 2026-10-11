@@ -1,0 +1,125 @@
+{
+  "operations": {
+    "get_account": {
+      "path": "/case/get_account",
+      "required": [
+        "customer_id"
+      ]
+    },
+    "verify_identity": {
+      "path": "/case/verify_identity",
+      "required": [
+        "customer_id",
+        "field",
+        "value"
+      ]
+    },
+    "create_promise": {
+      "path": "/case/create_promise",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "amount",
+        "date"
+      ]
+    },
+    "add_note": {
+      "path": "/case/add_note",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "reason"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/case/schedule_callback",
+      "required": [
+        "customer_id",
+        "date",
+        "time"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/case/transfer_to_agent",
+      "required": [
+        "customer_id",
+        "queue"
+      ]
+    },
+    "close_call": {
+      "path": "/case/close_call",
+      "required": [
+        "customer_id",
+        "outcome"
+      ]
+    }
+  },
+  "product_array": "facilities",
+  "product_fields": {
+    "id": "facility_ref",
+    "type": "facility_kind",
+    "full": "arrears_total",
+    "days_late": "days_overdue",
+    "floors": {
+      "aq-flex": "flex_minimum",
+      "aq-term": "term_instalment"
+    }
+  },
+  "response_slots": {
+    "success": "ok",
+    "verified": "verified",
+    "all_verified": "all_verified",
+    "remaining": ""
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "member_birthdate",
+        "member_pin",
+        "postal_token"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "aq-promised",
+        "aq-paid",
+        "aq-routed",
+        "aq-none",
+        "aq-unverified",
+        "aq-unreached"
+      ],
+      "reason": [
+        "aq-r-replan",
+        "aq-r-person",
+        "aq-r-care",
+        "aq-r-refused",
+        "aq-r-distress",
+        "aq-r-disputed",
+        "aq-r-service",
+        "aq-r-failed",
+        "aq-r-declined",
+        "aq-r-callback",
+        "aq-r-no-callback",
+        "aq-r-wrong-number",
+        "aq-r-deceased",
+        "aq-r-unclear"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "aq-plan-desk",
+        "aq-human-desk",
+        "aq-care-desk"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "aq-r-refused",
+        "aq-r-distress",
+        "aq-r-disputed",
+        "aq-r-settled",
+        "aq-r-service"
+      ]
+    }
+  }
+}

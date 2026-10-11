@@ -1,0 +1,8 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > get_account > promise > add_note > add_note > close_call
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+       - promises [('p1', 300.0, '2026-10-27'), ('p2', 900.0, '2026-10-16')], expected [('p1', 300.0, '2026-10-27'), ('p2', 900.0, '2026-10-23')]
+
+slowest agent turn per call: median 2 s, worst 11 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation 9fa00da3-01fc-479b-b74c-fd3e8f10dd1b, status completed, 85 s.

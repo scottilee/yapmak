@@ -1,0 +1,534 @@
+[
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-14",
+      {
+        "kind": "calendar_days",
+        "n": 11,
+        "adjustment": "following"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-25",
+    "band": "Band 1"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-14",
+      {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-28",
+    "band": "Band 2"
+  },
+  {
+    "function": "last_business_day_of_week",
+    "args": [
+      "2026-10-14",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-15"
+  },
+  {
+    "function": "next_business_day",
+    "args": [
+      "2026-10-14",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      false
+    ],
+    "expected": "2026-10-15"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-23",
+      {
+        "kind": "calendar_days",
+        "n": 11,
+        "adjustment": "following"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-11-03",
+    "band": "Band 1"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-23",
+      {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-28",
+    "band": "Band 2"
+  },
+  {
+    "function": "last_business_day_of_week",
+    "args": [
+      "2026-10-23",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-25"
+  },
+  {
+    "function": "next_business_day",
+    "args": [
+      "2026-10-23",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      false
+    ],
+    "expected": "2026-10-25"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-28",
+      {
+        "kind": "calendar_days",
+        "n": 11,
+        "adjustment": "following"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-11-08",
+    "band": "Band 1"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-10-28",
+      {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-28",
+    "band": "Band 2"
+  },
+  {
+    "function": "last_business_day_of_week",
+    "args": [
+      "2026-10-28",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-10-28"
+  },
+  {
+    "function": "next_business_day",
+    "args": [
+      "2026-10-28",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      false
+    ],
+    "expected": "2026-11-02"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-11-02",
+      {
+        "kind": "calendar_days",
+        "n": 11,
+        "adjustment": "following"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-11-15",
+    "band": "Band 1"
+  },
+  {
+    "function": "deadline",
+    "args": [
+      "2026-11-02",
+      {
+        "kind": "end_of_month",
+        "basis": "business",
+        "adjustment": "preceding"
+      },
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-11-30",
+    "band": "Band 2"
+  },
+  {
+    "function": "last_business_day_of_week",
+    "args": [
+      "2026-11-02",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    ],
+    "expected": "2026-11-08"
+  },
+  {
+    "function": "next_business_day",
+    "args": [
+      "2026-11-02",
+      [
+        "2026-10-18",
+        "2026-10-29",
+        "2026-11-01",
+        "2026-11-26"
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        6
+      ],
+      false
+    ],
+    "expected": "2026-11-03"
+  },
+  {
+    "function": "callback_ok",
+    "args": [
+      "2026-10-14T11:00",
+      "2026-10-15",
+      "09:10",
+      {
+        "holidays": [
+          "2026-10-18",
+          "2026-10-29",
+          "2026-11-01",
+          "2026-11-26"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          6
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "unresolved",
+        "enabled": true,
+        "days": "next_business_day",
+        "start": "09:10",
+        "end": "16:50",
+        "must_be_after_now": true,
+        "retry_once": true,
+        "scheduled_outcome": [
+          "br-unreached",
+          "br-r-callback"
+        ],
+        "no_callback_outcome": [
+          "br-unreached",
+          "br-r-no-callback"
+        ]
+      }
+    ],
+    "expected": true
+  },
+  {
+    "function": "callback_ok",
+    "args": [
+      "2026-10-14T11:00",
+      "2026-10-15",
+      "16:50",
+      {
+        "holidays": [
+          "2026-10-18",
+          "2026-10-29",
+          "2026-11-01",
+          "2026-11-26"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          6
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "unresolved",
+        "enabled": true,
+        "days": "next_business_day",
+        "start": "09:10",
+        "end": "16:50",
+        "must_be_after_now": true,
+        "retry_once": true,
+        "scheduled_outcome": [
+          "br-unreached",
+          "br-r-callback"
+        ],
+        "no_callback_outcome": [
+          "br-unreached",
+          "br-r-no-callback"
+        ]
+      }
+    ],
+    "expected": true
+  },
+  {
+    "function": "callback_ok",
+    "args": [
+      "2026-10-14T11:00",
+      "2026-10-15",
+      "08:00",
+      {
+        "holidays": [
+          "2026-10-18",
+          "2026-10-29",
+          "2026-11-01",
+          "2026-11-26"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          6
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "unresolved",
+        "enabled": true,
+        "days": "next_business_day",
+        "start": "09:10",
+        "end": "16:50",
+        "must_be_after_now": true,
+        "retry_once": true,
+        "scheduled_outcome": [
+          "br-unreached",
+          "br-r-callback"
+        ],
+        "no_callback_outcome": [
+          "br-unreached",
+          "br-r-no-callback"
+        ]
+      }
+    ],
+    "expected": false
+  },
+  {
+    "function": "callback_ok",
+    "args": [
+      "2026-10-14T09:10",
+      "2026-10-14",
+      "09:10",
+      {
+        "holidays": [
+          "2026-10-18",
+          "2026-10-29",
+          "2026-11-01",
+          "2026-11-26"
+        ],
+        "business_days": [
+          0,
+          1,
+          2,
+          3,
+          6
+        ],
+        "next_weekday_means_following_week": true,
+        "missing_date_parts": "unresolved",
+        "enabled": true,
+        "days": "next_business_day",
+        "start": "09:10",
+        "end": "16:50",
+        "must_be_after_now": true,
+        "retry_once": true,
+        "scheduled_outcome": [
+          "br-unreached",
+          "br-r-callback"
+        ],
+        "no_callback_outcome": [
+          "br-unreached",
+          "br-r-no-callback"
+        ]
+      }
+    ],
+    "expected": false
+  }
+]

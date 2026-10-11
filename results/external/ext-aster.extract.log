@@ -1,0 +1,43 @@
+{
+ "bands": [
+  "1-6",
+  "7-20",
+  "21-50"
+ ],
+ "identity": [
+  "member_birthdate",
+  "member_pin",
+  "postal_token"
+ ],
+ "special_cases": [
+  "already_paid",
+  "dispute",
+  "hardship",
+  "restructuring",
+  "human",
+  "scam",
+  "refuse_to_talk"
+ ],
+ "unresolved": [
+  {
+   "topic": "campaign_window",
+   "text": "Calls in this campaign have local now dates from 14 October through 10 November 2026 inclusive. Outside that window this campaign is not assigned. (No IR field for the campaign date window.)",
+   "doc": "tests/fixtures/external/codex-aster-quay/01-tables.md"
+  },
+  {
+   "topic": "missing_date_parts",
+   "text": "Do not silently assume missing date components: ask for them. (Left at default 'unresolved'; the schema has no explicit 'ask' value.)",
+   "doc": "tests/fixtures/external/codex-aster-quay/01-tables.md"
+  },
+  {
+   "topic": "full_first_in_floor_slot",
+   "text": "Full-first still applies even to a later floor slot. (Band 1-6 second slot is 'floor by deadline'; the IR cannot express offering full first within a floor slot when full has not yet been refused.)",
+   "doc": "tests/fixtures/external/codex-aster-quay/01-tables.md"
+  }
+ ],
+ "audit_fixed": [
+  "bands[0].attempts[0].floor_if_full_refused false -> true: the general ladder rule 'Each ladder slot has its own date; if full was already refused, substitute the floor' applies to every slot, including the first 1-6 slot (the initial full-today question may already have been refused).",
+  "bands[0].source extended with the general slot rule; outcomes/notes/multi_product/promise_write source texts extended with supporting sentences (exhaustion -> aq-none/aq-r-refused, Notes Disabled, facilities maxItems 1, one promise per product).",
+  "Added unresolved entry for 'Full-first still applies even to a later floor slot', which the attempt DSL cannot express."
+ ]
+}

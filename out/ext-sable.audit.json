@@ -1,0 +1,219 @@
+{
+ "covered": [
+  {
+   "rule": "1 Start exactly: \"Good day, this is Sable Orchard Business Bank's automated assistant. We record this call.\"",
+   "where": "phrases.opening, phrases.opening_verbatim=true"
+  },
+  {
+   "rule": "1 Ask exactly \"Am I speaking with {{title}} {{last_name}}?\"",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "1 Ask at most twice; unclear -> sable_unreached / sable_unclear",
+   "where": "identity.holder_confirmation_asks=2, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "1 Never say arrears, overdue, facility, payment before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "2 Callbacks next business day only, 08:30-16:15 inclusive, strictly after now; ask once for another slot",
+   "where": "third_party.callback.days/start/end/must_be_after_now/retry_once"
+  },
+  {
+   "rule": "2 Callback scheduled / no callback outcomes",
+   "where": "third_party.callback.scheduled_outcome, third_party.callback.no_callback_outcome"
+  },
+  {
+   "rule": "2 Wrong number sable_unreached / sable_wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "2 Deceased: \"Please accept our condolences.\" sable_unreached / sable_deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "3 Four questions in order postcode, birth_year, company_number, founded_year with formats",
+   "where": "identity.requirements[0..3]"
+  },
+  {
+   "rule": "3 company_number exactly eight digits",
+   "where": "identity.requirements[2].digits=8"
+  },
+  {
+   "rule": "3 Max 4 wrong answers across the check; use security_remaining",
+   "where": "identity.wrong_answer_limit=4, identity.wrong_count_source=api, identity.remaining_slot"
+  },
+  {
+   "rule": "3 On exhaustion say \"Please contact our business desk.\" close sable_unverified / sable_failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "3 Explain once; second refusal sable_unverified / sable_declined",
+   "where": "identity.decline_explain_once, identity.declined_outcome"
+  },
+  {
+   "rule": "3 Asking why security is needed is not a refusal",
+   "where": "identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "3 No recoverable-format hint",
+   "where": "identity.requirements[*].hint_field empty"
+  },
+  {
+   "rule": "4 Up to 2 products",
+   "where": "multi_product.max_products=2"
+  },
+  {
+   "rule": "4 Product naming",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "4 State all products before asking",
+   "where": "multi_product.state_all_before_asking"
+  },
+  {
+   "rule": "4 Business days Mon-Fri except listed holidays; no other holidays",
+   "where": "calendar.business_days, calendar.holidays"
+  },
+  {
+   "rule": "4 \"Next Friday\" = following calendar week",
+   "where": "calendar.next_weekday_means_following_week"
+  },
+  {
+   "rule": "4 Missing month/year -> next occurrence on or after today",
+   "where": "calendar.missing_date_parts=next_occurrence"
+  },
+  {
+   "rule": "5 Days late 1-15: 15th of next month, moved forward",
+   "where": "bands[0].deadline"
+  },
+  {
+   "rule": "5 Days late 16-45: earliest of 6th business day / last business day of this month",
+   "where": "bands[1].deadline"
+  },
+  {
+   "rule": "5 Days late 46-90: last business day of next month",
+   "where": "bands[2].deadline"
+  },
+  {
+   "rule": "5 Deadline passed -> no promise, mark sable_refused",
+   "where": "dates.past_deadline=no_promise, outcomes.refused_reason"
+  },
+  {
+   "rule": "5 One persuasion attempt: full on deadline, floor if full refused",
+   "where": "bands[*].attempts"
+  },
+  {
+   "rule": "5 \"Can you settle all these products today?\" / \"Can you settle this today?\"",
+   "where": "phrases.all_today_question, phrases.today_question, multi_product.ask_all_today_once"
+  },
+  {
+   "rule": "5 Separate attempt counters, get_account order; common date clamped",
+   "where": "multi_product.per_product_attempts, multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "6 Floor 20% of arrears, min 75.00, capped at full",
+   "where": "amounts.floor_rules['*']"
+  },
+  {
+   "rule": "6 Full first, floor once, \"The remainder stays overdue.\", never ask how much, accept floor..full",
+   "where": "amounts.full_first, amounts.floor_offered_once, amounts.floor_wording, amounts.never_ask_how_much, amounts.accept_between_floor_and_full"
+  },
+  {
+   "rule": "6 Promise date today allowed, business day, roll forward within deadline, vague ask once, later than deadline -> deadline",
+   "where": "dates.*"
+  },
+  {
+   "rule": "6 Never offer discount, waiver or new instalment plan",
+   "where": "unresolved[3]"
+  },
+  {
+   "rule": "7 Batch read-back, \"May I record these promises?\"",
+   "where": "multi_product.one_confirmation_for_batch, promise_write.confirm_phrase"
+  },
+  {
+   "rule": "7 One promise per product; retry once; second failure sable_service_error",
+   "where": "promise_write.retry_on_failure=1, promise_write.one_promise_per_product, outcomes.service_error_reason"
+  },
+  {
+   "rule": "7 \"We will email confirmation to your registered address.\"",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "7 \"Please contact our business desk to change a recorded promise.\"",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "8 Already paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "8 Dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "8 Hardship, offer sable_care, else sable_distress",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "8 Restructure -> sable_restructure, sable_transferred / sable_restructure",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "8 Human: ask once, then sable_desk, sable_transferred / sable_person",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "8 Refusal to talk: ask once, then end and mark sable_refused",
+   "where": "special_cases[refuse_to_talk], unresolved[2]"
+  },
+  {
+   "rule": "8 Robot reply",
+   "where": "special_cases[robot], phrases.robot_reply"
+  },
+  {
+   "rule": "8 Scam reply and continue",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "8 \"Our business desk can answer that question.\"",
+   "where": "phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "9 One note per unpromised product with allowed reasons; none on transfer",
+   "where": "notes.*"
+  },
+  {
+   "rule": "9 Transfer keeps recorded promises",
+   "where": "multi_product.recorded_promises_survive_transfer"
+  },
+  {
+   "rule": "9 Outcome precedence",
+   "where": "outcomes.transfer_overrides_promise, promise_outcome, paid_outcome, all_paid_closes_as_paid, no_promise_outcome, no_promise_reason_from_first_non_paid_note"
+  },
+  {
+   "rule": "9 Goodbye before close_call",
+   "where": "outcomes.goodbye_before_close"
+  },
+  {
+   "rule": "9 Debt intro \"I am calling about the overdue business products.\"",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "10 Outcome code table",
+   "where": "outcomes.table"
+  }
+ ],
+ "fixed": [
+  "Added unresolved entry for the refuse_to_talk outcome: the document only says the call ends and remaining products are marked sable_refused, so the final outcome follows general precedence (an earlier recorded promise still gives sable_arranged).",
+  "Added unresolved entry for 'Never offer a discount, waiver or a new instalment plan', which had no representation in the IR.",
+  "Extended source quotes (identity, third_party, bands[1], amounts, dates, notes, multi_product, phrases, promise_write, outcomes) to cite the full constraining sentences; no values were changed because all extracted values matched the specification and the API enums."
+ ],
+ "unresolved": [
+  "Floor rounding is 'nearest whole cent'; the percent floor rule has no rounding-mode field.",
+  "Hardship sympathy sentence wording is not dictated; 'I am sorry to hear that.' is a written-to-content sentence.",
+  "Refusal to talk has no dedicated close pair; outcome follows the general precedence.",
+  "Prohibition on offering discounts, waivers or new instalment plans has no IR field."
+ ]
+}

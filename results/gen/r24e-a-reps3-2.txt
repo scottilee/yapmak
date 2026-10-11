@@ -1,0 +1,59 @@
+FAIL PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+       - conversation: no verdict
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - promises [('p1', 637.5, '2026-10-14')], expected [('p1', 637.5, '2026-10-16')]
+       - conversation: The agent failed to meet the success criteria regarding the promise date. While the agent correctly offered the minimum payment only once and included the note about the remaining balance staying overdue, and never asked 'how much' the customer c
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 4 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 8 / 10 passed, 371 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+FAIL PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+       - conversation: no verdict
+FAIL PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+       - conversation: no verdict
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 5 s, worst 10 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 8 / 10 passed, 99 s
+
+PASS PUB-01 easy   Happy path     | verify > verify > get_account > promise > close_call
+PASS PUB-02 medium Third party    | schedule_callback > close_call
+PASS PUB-03 medium Identity       | verify > verify > verify > close_call
+PASS PUB-04 medium Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-05 medium Hardship       | verify > verify > get_account > close_call
+PASS PUB-06 hard   Amounts        | verify > verify > get_account > promise > close_call
+PASS PUB-07 hard   Dates          | verify > verify > get_account > promise > close_call
+PASS PUB-08 medium Already paid   | verify > verify > get_account > close_call
+PASS PUB-09 medium Restructuring  | verify > verify > get_account > transfer_to_agent > close_call
+PASS PUB-10 hard   Tool failure   | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 9 s, worst 12 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 10 / 10 passed, 109 s
+
+FAIL PUB-01 2/3
+PASS PUB-02 3/3
+PASS PUB-03 3/3
+PASS PUB-04 3/3
+PASS PUB-05 3/3
+FAIL PUB-06 1/3
+FAIL PUB-07 2/3
+PASS PUB-08 3/3
+PASS PUB-09 3/3
+PASS PUB-10 3/3
+
+7 / 10 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation f241dfa1-4029-4f72-a915-d0072fed0541, status completed, 578 s.

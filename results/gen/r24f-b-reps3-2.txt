@@ -1,0 +1,28 @@
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 4 s, worst 5 s. Failed calls where the customer hung up: 0.
+-- run 1 of 3: 3 / 3 passed, 44 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+PASS PUB-13 hard   Multi-product  | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 6 s, worst 7 s. Failed calls where the customer hung up: 0.
+-- run 2 of 3: 3 / 3 passed, 53 s
+
+PASS PUB-11 medium Multi-product  | verify > verify > get_account > promise > promise > promise > close_call
+PASS PUB-12 hard   Multi-product  | verify > verify > verify > get_account > promise > add_note > add_note > close_call
+FAIL PUB-13 hard   Multi-product  | verify > verify > get_account > promise > verify > verify > get_account > promise > promise > promise > add_note > close_call
+       - notes [('p1', 'service_error')], expected []
+       - conversation: The call failed to meet the first success criterion because the credit card promise for 30 October was not successfully recorded. System events show that the `create_promise` call for the credit card (product p1) failed because 'this product alre
+
+slowest agent turn per call: median 6 s, worst 7 s. Failed calls where the customer hung up: 0.
+-- run 3 of 3: 2 / 3 passed, 587 s
+
+PASS PUB-11 3/3
+PASS PUB-12 3/3
+FAIL PUB-13 2/3
+
+2 / 3 passed (bank records and conversation checks), a customer counts with 3 of 3 runs. Last simulation c4106ba6-d821-445a-80e0-4424734d426c, status completed, 684 s.

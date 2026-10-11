@@ -1,59 +1,62 @@
 {
  "source_docs": [
-  "results/layer-b/lb-01/brief.md"
+  "results/layer-b/lb-01/01-mail.txt",
+  "results/layer-b/lb-01/02-policy.md",
+  "results/layer-b/lb-01/03-memo.txt",
+  "results/layer-b/lb-01/04-codes.txt"
  ],
  "bank_name": "Bank 1",
  "identity": {
   "requirements": [
    {
     "field": "phone_last4",
-    "ask_text": "Could you tell me the last 4 digits of your phone number?",
+    "ask_text": "Could you please tell me the last 4 digits of your phone number?",
     "answer_format": "digits",
     "digits": 4,
     "numeric_date_order": "dmy",
     "hint_field": "",
     "hint_reply": "",
     "source": {
-     "doc": "results/layer-b/lb-01/brief.md",
-     "text": "`phone_last4` \u2014 ask for your phone last4. Format digits, exactly 4 digits including leading zeros."
+     "doc": "results/layer-b/lb-01/03-memo.txt",
+     "text": "A. Security asks in this order: `phone_last4` FIRST, `date_of_birth` SECOND, `postcode` THIRD, `birth_year` FOURTH. Keep each question's wording and format. (P11 rule 11.4: `phone_last4` \u2014 ask for your phone last4. Format digits, exactly 4 digits including leading zeros.)"
     }
    },
    {
     "field": "date_of_birth",
-    "ask_text": "Could you tell me your date of birth?",
+    "ask_text": "Could you please tell me your date of birth?",
     "answer_format": "date",
     "digits": 0,
     "numeric_date_order": "dmy",
     "hint_field": "hint",
-    "hint_reply": "Could you give me your date of birth again: day first, then month, then year?",
+    "hint_reply": "",
     "source": {
-     "doc": "results/layer-b/lb-01/brief.md",
+     "doc": "results/layer-b/lb-01/02-policy.md",
      "text": "`date_of_birth` \u2014 ask for your date of birth. Format date, sent as YYYY-MM-DD; a date given only as numbers is read day, then month, then year."
     }
    },
    {
     "field": "postcode",
-    "ask_text": "Could you tell me your postcode?",
+    "ask_text": "Could you please tell me your postcode?",
     "answer_format": "text",
     "digits": 0,
     "numeric_date_order": "dmy",
     "hint_field": "",
     "hint_reply": "",
     "source": {
-     "doc": "results/layer-b/lb-01/brief.md",
+     "doc": "results/layer-b/lb-01/02-policy.md",
      "text": "`postcode` \u2014 ask for your postcode. Format text: letters and digits, spaces removed."
     }
    },
    {
     "field": "birth_year",
-    "ask_text": "Could you tell me your birth year?",
+    "ask_text": "Could you please tell me your birth year?",
     "answer_format": "year",
     "digits": 0,
     "numeric_date_order": "dmy",
     "hint_field": "",
     "hint_reply": "",
     "source": {
-     "doc": "results/layer-b/lb-01/brief.md",
+     "doc": "results/layer-b/lb-01/02-policy.md",
      "text": "`birth_year` \u2014 ask for your birth year. Format year, four digits."
     }
    }
@@ -78,8 +81,8 @@
   ],
   "failed_instruction": "Please use the mobile app or visit a branch.",
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "A wrong answer may be asked again. 3 wrong answers in total end the check, whichever question they were on; the API's `wrong_answers_left` is the count to use. ... Ask once more; if it is still unclear after the second ask, close as `no-contact` / `unclear`. ... If the customer declines to answer or asks what the call is about before answering, explain once that the questions protect their account. A second refusal closes as `id-fail` / `would-not-answer`."
+   "doc": "results/layer-b/lb-01/03-memo.txt",
+   "text": "3 wrong answers TOTAL across the whole check, not 4."
   }
  },
  "third_party": {
@@ -99,8 +102,8 @@
     "cb-none"
    ],
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
-    "text": "A callback is for today or the next business day, from 12:00 to 17:30, both included, and later than `now`. Call `schedule_callback` with the date and the time, then close as `no-contact` / `cb-set`. If the person names a time outside that window, say so and ask once more. If no valid time results, close as `no-contact` / `cb-none`."
+    "doc": "results/layer-b/lb-01/03-memo.txt",
+    "text": "E. Callbacks are for today or the next business day; the existing window remains. (P11 rule 6: from 12:00 to 17:30, both included, and later than `now`.)"
    }
   },
   "wrong_number_outcome": [
@@ -113,8 +116,8 @@
   ],
   "deceased_sentence": "I am sorry for your loss.",
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "Someone other than the customer (relative, colleague, friend): say nothing about the purpose. Ask when the customer can be reached. ... Wrong number: apologise and close as `no-contact` / `wrong-no`. The customer has died: say \"I am sorry for your loss.\" and close as `no-contact` / `deceased`."
+   "doc": "results/layer-b/lb-01/02-policy.md",
+   "text": "Wrong number: apologise and close as `no-contact` / `wrong-no`. The customer has died: say \"I am sorry for your loss.\" and close as `no-contact` / `deceased`."
   }
  },
  "calendar": {
@@ -133,8 +136,8 @@
   "next_weekday_means_following_week": true,
   "missing_date_parts": "unresolved",
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "Business days are Monday to Saturday, except Bank 1 holidays: 2026-10-14, 2026-10-15. \"Next <weekday>\" means that weekday of the following week, even when today is that weekday; \"this <weekday>\" means the coming one."
+   "doc": "results/layer-b/lb-01/02-policy.md",
+   "text": "Business days are Monday to Saturday, except Bank 1 holidays: 2026-10-14, 2026-10-15. \"Next <weekday>\" means that weekday of the following week, even when today is that weekday"
   }
  },
  "bands": [
@@ -143,9 +146,10 @@
    "days_late_min": 1,
    "days_late_max": 10,
    "deadline": {
-    "kind": "calendar_days",
-    "n": 9,
-    "adjustment": "preceding"
+    "kind": "end_of_month",
+    "basis": "business",
+    "adjustment": "none",
+    "month_offset": 1
    },
    "attempts": [
     {
@@ -160,14 +164,14 @@
     }
    ],
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
-    "text": "| 1 to 10 | band1 | today plus 9 calendar days; if that day is not a business day, the previous business day | 2 |"
+    "doc": "results/layer-b/lb-01/02-policy.md",
+    "text": "| 1 to 10 | band1 | the last business day of next month | 2 |"
    }
   },
   {
    "name": "band2",
    "days_late_min": 11,
-   "days_late_max": 90,
+   "days_late_max": 60,
    "deadline": {
     "kind": "nth_business_day",
     "n": 3
@@ -177,19 +181,26 @@
      "amount": "full",
      "date": "last_business_day_this_week_or_next",
      "floor_if_full_refused": true
+    },
+    {
+     "amount": "floor",
+     "date": "deadline",
+     "floor_if_full_refused": false
     }
    ],
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
-    "text": "| 11 to 90 | band2 | the third business day after today | 1 |"
+    "doc": "results/layer-b/lb-01/03-memo.txt",
+    "text": "B. For days late 11\u201360 only, the deadline is no longer the sixth business day after today but the third business day after today. (P11 table: | 11 to 60 | band2 | ... | 2 |)"
    }
   }
  ],
  "amounts": {
-  "floors": {
-   "credit_card": "minimum_payment",
-   "personal_loan": "instalment_amount",
-   "car_loan": "instalment_amount"
+  "floors": {},
+  "floor_rules": {
+   "*": {
+    "kind": "fixed",
+    "amount": 75.0
+   }
   },
   "full_first": true,
   "never_ask_how_much": true,
@@ -197,8 +208,8 @@
   "floor_wording": "the rest stays overdue",
   "accept_between_floor_and_full": true,
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "Ask for the full past-due amount first. Never ask \"how much can you pay?\". Any amount between the floor and the full amount is accepted; an amount below the floor is refused, and the floor is offered once per product with the words \"the rest stays overdue\"."
+   "doc": "results/layer-b/lb-01/02-policy.md",
+   "text": "The lowest amount this call may accept (the floor) is a fixed 75.00 for every product (or the full amount when that is lower); no bank field carries it. ... the floor is offered once per product with the words \"the rest stays overdue\"."
   }
  },
  "dates": {
@@ -206,15 +217,16 @@
   "weekend_or_holiday_roll_forward": true,
   "vague_ask_once_then_deadline": true,
   "after_deadline_offer_deadline": true,
+  "past_deadline": "next_business_day",
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
+   "doc": "results/layer-b/lb-01/02-policy.md",
    "text": "A promise date must be today or later, a business day, and not after the deadline. A weekend day or holiday rolls to the next business day. A vague date (next week, when I get paid): ask once for the exact day; if none follows, propose the deadline. A date after the deadline: offer the deadline instead."
   }
  },
  "special_cases": [
   {
    "name": "already_paid",
-   "trigger": "The customer says they have already paid this product.",
+   "trigger": "The customer says they have already paid the product.",
    "action": {
     "type": "note",
     "reason": "already-paid"
@@ -230,13 +242,13 @@
    "takes_promise": false,
    "ends_call": false,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "Already paid: say \"Payments can take one business day to appear.\". Note the product as `already-paid` and continue with the other products."
    }
   },
   {
    "name": "dispute",
-   "trigger": "The customer says it is not their debt, they never had the product, or it was closed or paid off before.",
+   "trigger": "The customer disputes the product: says it is not their debt, they never had the product, or it was closed or paid off before.",
    "action": {
     "type": "note",
     "reason": "disputes"
@@ -252,19 +264,19 @@
    "takes_promise": false,
    "ends_call": false,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "Dispute (not their debt, never had the product, closed or paid off before): note the product as `disputes` and continue with the other products."
    }
   },
   {
    "name": "hardship",
-   "trigger": "The customer mentions hardship such as illness, a death in the family, or job loss.",
+   "trigger": "The customer describes hardship such as illness, a death in the family, or job loss.",
    "action": {
     "type": "close",
     "outcome": "no-ptp",
     "reason": "vulnerable"
    },
-   "say": "I am sorry to hear that.",
+   "say": "I am very sorry to hear that.",
    "offer_transfer_queue": "welfare",
    "offer_outcome": [
     "escalated",
@@ -275,7 +287,7 @@
    "takes_promise": true,
    "ends_call": true,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "Hardship (illness, a death in the family, job loss): say one short sentence of sympathy, make no persuasion attempt, and offer a transfer to the `welfare` team. If they accept, call `transfer_to_agent` with queue `welfare` and close as `escalated` / `welfare`. If they decline, close as `no-ptp` / `vulnerable`. A customer in hardship may still name a date and amount; record it."
    }
   },
@@ -299,13 +311,13 @@
    "takes_promise": false,
    "ends_call": true,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "Restructuring (a payment plan, lower instalments, changing the terms): call `transfer_to_agent` with queue `plans` and close as `escalated` / `plans`. Promises already recorded on this call stay recorded."
    }
   },
   {
    "name": "human",
-   "trigger": "The customer asks to speak to a human agent (during the identity check or after verification).",
+   "trigger": "The customer asks to speak to a human agent (during or after the identity check).",
    "action": {
     "type": "transfer",
     "queue": "front-desk",
@@ -323,8 +335,8 @@
    "takes_promise": false,
    "ends_call": true,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
-    "text": "A request for a human agent during the identity check: call `transfer_to_agent` with queue `front-desk` and close as `escalated` / `agent`. ... A request for a human after verification: do not ask whether you can help; transfer to `front-desk` and close as `escalated` / `agent`."
+    "doc": "results/layer-b/lb-01/03-memo.txt",
+    "text": "D. Human requests transfer immediately, without asking whether the assistant can help. (P11 rules 15/29: transfer to `front-desk` and close as `escalated` / `agent`.)"
    }
   },
   {
@@ -339,12 +351,12 @@
     "",
     ""
    ],
-   "before_persuasion": false,
+   "before_persuasion": true,
    "ask_once_first": false,
    "takes_promise": false,
    "ends_call": false,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "If the person suspects a scam: say they can verify the call by phoning Bank 1's customer service number, and continue."
    }
   },
@@ -365,7 +377,7 @@
    "takes_promise": false,
    "ends_call": false,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "If asked whether this is a robot: say \"I am Bank 1's digital assistant.\""
    }
   },
@@ -383,13 +395,59 @@
     "",
     ""
    ],
+   "before_persuasion": true,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-01/02-policy.md",
+    "text": "The customer refuses to talk: close as `no-ptp` / `refuses`."
+   }
+  },
+  {
+   "name": "wrong_number",
+   "trigger": "The person says this is a wrong number.",
+   "action": {
+    "type": "close",
+    "outcome": "no-contact",
+    "reason": "wrong-no"
+   },
+   "say": "I apologise for the inconvenience.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
    "before_persuasion": false,
    "ask_once_first": false,
    "takes_promise": false,
    "ends_call": true,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
-    "text": "The customer refuses to talk: close as `no-ptp` / `refuses`."
+    "doc": "results/layer-b/lb-01/02-policy.md",
+    "text": "Wrong number: apologise and close as `no-contact` / `wrong-no`."
+   }
+  },
+  {
+   "name": "deceased",
+   "trigger": "The person says the customer has died.",
+   "action": {
+    "type": "close",
+    "outcome": "no-contact",
+    "reason": "deceased"
+   },
+   "say": "I am sorry for your loss.",
+   "offer_transfer_queue": "",
+   "offer_outcome": [
+    "",
+    ""
+   ],
+   "before_persuasion": false,
+   "ask_once_first": false,
+   "takes_promise": false,
+   "ends_call": true,
+   "source": {
+    "doc": "results/layer-b/lb-01/02-policy.md",
+    "text": "The customer has died: say \"I am sorry for your loss.\" and close as `no-contact` / `deceased`."
    }
   },
   {
@@ -409,7 +467,7 @@
    "takes_promise": false,
    "ends_call": false,
    "source": {
-    "doc": "results/layer-b/lb-01/brief.md",
+    "doc": "results/layer-b/lb-01/02-policy.md",
     "text": "If the customer asks whether a recorded promise can be changed: say \"You can change it in the mobile app.\""
    }
   }
@@ -433,7 +491,7 @@
      "agent",
      "welfare"
     ],
-    "when": "A transfer, with the transfer's reason, even after a promise."
+    "when": "A transfer, even after a promise."
    },
    {
     "outcome": "no-ptp",
@@ -443,7 +501,7 @@
      "disputes",
      "tool-error"
     ],
-    "when": "No promise: the reason of the first product in get_account order that is not paid."
+    "when": "No promise: reason of the first product in get_account order that is not paid."
    },
    {
     "outcome": "id-fail",
@@ -451,7 +509,7 @@
      "exhausted",
      "would-not-answer"
     ],
-    "when": "Identity check failed or refused."
+    "when": "Identity check failed or declined."
    },
    {
     "outcome": "no-contact",
@@ -476,8 +534,8 @@
   "refused_reason": "refuses",
   "goodbye_before_close": true,
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "Thank the customer and say goodbye before `close_call`, which is the last tool call. ... At least one promise recorded: `ptp-recorded`. A transfer: `escalated` with the transfer's reason, even after a promise. All products already paid: `already-paid`. No promise: `no-ptp` with the reason of the first product in `get_account` order that is not paid."
+   "doc": "results/layer-b/lb-01/04-codes.txt",
+   "text": "CODE LIST C \u2014 authoritative enum combinations ... Only these combinations are allowed; omit reason where stated. (P11 rule 37: At least one promise recorded: `ptp-recorded`. A transfer: `escalated` with the transfer's reason, even after a promise. All products already paid: `already-paid`. No promise: `no-ptp` with the reason of the first product in `get_account` order that is not paid.)"
   }
  },
  "notes": {
@@ -492,7 +550,7 @@
   "note_each_unpromised_product": true,
   "none_on_transfer": true,
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
+   "doc": "results/layer-b/lb-01/02-policy.md",
    "text": "Before closing a call that is not a transfer, add exactly one note (`add_note`) for each product without a promise, with the reason that applies: `refuses`, `vulnerable`, `disputes`, `already-paid`, `tool-error`. No notes on a transfer."
   }
  },
@@ -505,8 +563,8 @@
   "one_confirmation_for_batch": true,
   "recorded_promises_survive_transfer": true,
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "`get_account` returns up to 2 products. State every product with its past-due amount and days late, all before asking anything; then ask once whether they can pay all of it today. ... Every product is handled on the same call: a common date is checked against each product's own deadline and clamped to it; one read-back covers all pending promises; a transfer after a recorded promise keeps the promise."
+   "doc": "results/layer-b/lb-01/02-policy.md",
+   "text": "`get_account` returns up to 2 products. State every product with its past-due amount and days late, all before asking anything; then ask once whether they can pay all of it today. ... a common date is checked against each product's own deadline and clamped to it; one read-back covers all pending promises; a transfer after a recorded promise keeps the promise."
   }
  },
  "phrases": {
@@ -535,8 +593,8 @@
    "car_loan": "car loan"
   },
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "First sentence: say you are the automated assistant of Bank 1 and that the call is recorded. Then ask whether you are speaking with the customer, using title and last name. Before the identity check is complete, never say the words collections, debt, payment, credit card or loan ... After verification say you are calling from the Bank 1 collections team about a late payment. ... then ask once whether they can pay all of it today."
+   "doc": "results/layer-b/lb-01/02-policy.md",
+   "text": "First sentence: say you are the automated assistant of Bank 1 and that the call is recorded. Then ask whether you are speaking with the customer, using title and last name. ... After verification say you are calling from the Bank 1 collections team about a late payment. ... then ask once whether they can pay all of it today."
   }
  },
  "promise_write": {
@@ -544,35 +602,25 @@
   "one_promise_per_product": true,
   "confirm_phrase": "Do you confirm?",
   "source": {
-   "doc": "results/layer-b/lb-01/brief.md",
-   "text": "Read the product, the amount and the date back and ask \"Do you confirm?\". ... If `create_promise` fails, try once more; if it still fails, say you could not record it and close as `no-ptp` / `tool-error` (note the product `tool-error`)."
+   "doc": "results/layer-b/lb-01/03-memo.txt",
+   "text": "C. After a failed create_promise retry once, not 2. (P11 rule 30: ask \"Do you confirm?\" ... one promise per product.)"
   }
  },
  "unresolved": [
   {
+   "topic": "identity.hint_reply",
+   "text": "verify_identity can return hint `day_month_swapped`, but the documents do not say what to tell the customer when it fires.",
+   "doc": "openapi.json"
+  },
+  {
    "topic": "phrases.cannot_answer_sentence",
-   "text": "The brief does not dictate a sentence for questions the assistant cannot answer.",
-   "doc": "results/layer-b/lb-01/brief.md"
+   "text": "The documents do not dictate a sentence for questions the assistant cannot answer. The only related instruction is for a failed promise write: 'say you could not record it' (rule 32), which the schema has no phrase field for.",
+   "doc": "results/layer-b/lb-01/02-policy.md"
   },
   {
-   "topic": "identity.date_of_birth.hint_reply",
-   "text": "The API can return hint day_month_swapped, but the brief does not dictate what to say; the reply used restates the brief's day-month-year reading order.",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "calendar.missing_date_parts",
-   "text": "The brief does not say how to interpret a date with missing parts (e.g. a day without a month).",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "promise_write.failure_sentence",
-   "text": "The brief says to say the promise could not be recorded after a second create_promise failure (rule 32), but gives no exact words and the schema has no dedicated field for it.",
-   "doc": "results/layer-b/lb-01/brief.md"
-  },
-  {
-   "topic": "hardship.multi_product",
-   "text": "Rule 27 closes the call as no-ptp / vulnerable when the transfer is declined; it does not say whether other products are handled first, so ends_call is true.",
-   "doc": "results/layer-b/lb-01/brief.md"
+   "topic": "dates.past_deadline",
+   "text": "The documents do not say what to do when a computed deadline is already behind us; left at the default.",
+   "doc": "results/layer-b/lb-01/02-policy.md"
   }
  ]
 }

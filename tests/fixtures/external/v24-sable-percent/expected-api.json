@@ -1,0 +1,124 @@
+{
+  "operations": {
+    "verify_identity": {
+      "path": "/servicing/verify_identity",
+      "required": [
+        "customer_id",
+        "field",
+        "answer"
+      ]
+    },
+    "get_account": {
+      "path": "/servicing/get_account",
+      "required": [
+        "customer_id"
+      ]
+    },
+    "create_promise": {
+      "path": "/servicing/create_promise",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "amount",
+        "date"
+      ]
+    },
+    "add_note": {
+      "path": "/servicing/add_note",
+      "required": [
+        "customer_id",
+        "facility_ref",
+        "reason"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/servicing/schedule_callback",
+      "required": [
+        "customer_id",
+        "date",
+        "time"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/servicing/transfer_to_agent",
+      "required": [
+        "customer_id",
+        "queue"
+      ]
+    },
+    "close_call": {
+      "path": "/servicing/close_call",
+      "required": [
+        "customer_id",
+        "outcome"
+      ]
+    }
+  },
+  "product_array": "facilities",
+  "product_fields": {
+    "id": "facility_ref",
+    "type": "facility_class",
+    "full": "arrears_total",
+    "days_late": "delinquent_days",
+    "floor_base_fields": {}
+  },
+  "response_slots": {
+    "success": "accepted",
+    "verified": "answer_matches",
+    "all_verified": "all_verified",
+    "remaining": "security_remaining"
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "postcode",
+        "birth_year",
+        "company_number",
+        "founded_year"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "sable_refused",
+        "sable_distress",
+        "sable_disputed",
+        "sable_settled",
+        "sable_service_error"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "sable_restructure",
+        "sable_desk",
+        "sable_care"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "sable_arranged",
+        "sable_settled",
+        "sable_transferred",
+        "sable_no_deal",
+        "sable_unverified",
+        "sable_unreached"
+      ],
+      "reason": [
+        "sable_refused",
+        "sable_distress",
+        "sable_disputed",
+        "sable_settled",
+        "sable_service_error",
+        "sable_restructure",
+        "sable_person",
+        "sable_care",
+        "sable_failed",
+        "sable_declined",
+        "sable_callback",
+        "sable_no_callback",
+        "sable_wrong_number",
+        "sable_deceased",
+        "sable_unclear"
+      ]
+    }
+  }
+}

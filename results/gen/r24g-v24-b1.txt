@@ -1,0 +1,8 @@
+PASS PUB-11 hard   v24 branch     | verify > verify > get_account > promise > promise > promise > close_call
+FAIL PUB-12 hard   v24 branch     | verify > verify > get_account > promise > promise > promise > close_call
+       - conversation: The assistant failed to meet the success criteria because it did not retain the original common proposal for all products in [Message 8]. When the user proposed paying all three products on October 31 in [Message 7], the assistant only addressed 
+PASS PUB-13 hard   v24 branch     | verify > verify > get_account > promise > promise > close_call
+
+slowest agent turn per call: median 2 s, worst 2 s. Failed calls where the customer hung up: 0.
+
+2 / 3 passed (bank records and conversation checks). Last simulation 7a424466-ec61-4e52-abe9-4085d0da1a17, status completed, 57 s.

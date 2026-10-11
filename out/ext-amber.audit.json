@@ -1,0 +1,206 @@
+{
+ "covered": [
+  {
+   "rule": "Mail: M-AVS-001 overrides only rules it names; M-AVS-002 wins where it conflicts; forwarded paragraph historical only",
+   "where": "identity.requirements order, identity.wrong_answer_limit, bands[1].deadline, special_cases[human], promise_write.retry_on_failure"
+  },
+  {
+   "rule": "Mail: C-AVS-2026 is the sole valid vocabulary",
+   "where": "outcomes.table, notes.reasons, special_cases[*].action"
+  },
+  {
+   "rule": "\u00a71 Say exactly opening sentence",
+   "where": "phrases.opening, phrases.opening_verbatim=true"
+  },
+  {
+   "rule": "\u00a71 Ask exactly 'Am I speaking with {{title}} {{last_name}}?'",
+   "where": "phrases.holder_question"
+  },
+  {
+   "rule": "\u00a71 Ask at most twice; unclear -> avs_unreached/avs_unclear",
+   "where": "identity.holder_confirmation_asks, identity.unclear_holder_outcome"
+  },
+  {
+   "rule": "\u00a71 forbidden words before verification",
+   "where": "phrases.prohibited_before_verification"
+  },
+  {
+   "rule": "\u00a72 third party: disclose nothing, ask when holder reachable",
+   "where": "third_party.source"
+  },
+  {
+   "rule": "\u00a72 callback scheduled -> avs_unreached/avs_callback",
+   "where": "third_party.callback.scheduled_outcome"
+  },
+  {
+   "rule": "\u00a72 invalid slot twice/refusal -> avs_unreached/avs_no_callback",
+   "where": "third_party.callback.no_callback_outcome, third_party.callback.retry_once"
+  },
+  {
+   "rule": "\u00a72 wrong number -> avs_unreached/avs_wrong_number",
+   "where": "third_party.wrong_number_outcome"
+  },
+  {
+   "rule": "\u00a72 deceased: 'Please accept my condolences.' -> avs_unreached/avs_deceased",
+   "where": "third_party.deceased_sentence, third_party.deceased_outcome"
+  },
+  {
+   "rule": "\u00a72 + Memo E callbacks next business day 09:00-17:30 strictly after now",
+   "where": "third_party.callback.days/start/end/must_be_after_now"
+  },
+  {
+   "rule": "\u00a73 table questions/formats + Memo A order postcode, client_reference, birth_year, account_pin",
+   "where": "identity.requirements"
+  },
+  {
+   "rule": "\u00a73 API supplies no recoverable-format hint",
+   "where": "identity.requirements[*].hint_field (default empty)"
+  },
+  {
+   "rule": "\u00a73 remaining_attempts authoritative + Memo B limit 4",
+   "where": "identity.wrong_count_source, identity.remaining_slot, identity.wrong_answer_limit"
+  },
+  {
+   "rule": "\u00a73 limit reached: 'Please contact our identity desk.' -> avs_unverified/avs_failed",
+   "where": "identity.failed_instruction, identity.failed_outcome"
+  },
+  {
+   "rule": "\u00a73 explain once, second refusal -> avs_unverified/avs_declined; asking why is NOT a refusal",
+   "where": "identity.decline_explain_once, identity.declined_outcome, identity.asking_purpose_counts_as_decline=false"
+  },
+  {
+   "rule": "\u00a73 purely numeric dates month/day/year",
+   "where": "unresolved[numeric date order]"
+  },
+  {
+   "rule": "\u00a74 up to 3 obligations",
+   "where": "multi_product.max_products"
+  },
+  {
+   "rule": "\u00a74 floor mapping table",
+   "where": "amounts.floors"
+  },
+  {
+   "rule": "\u00a74 spoken product names",
+   "where": "phrases.product_naming"
+  },
+  {
+   "rule": "\u00a74 'I am calling about overdue commitments.'",
+   "where": "phrases.debt_intro"
+  },
+  {
+   "rule": "\u00a74 today questions single/several; state all first; per-product counters",
+   "where": "phrases.today_question, phrases.all_today_question, multi_product.*"
+  },
+  {
+   "rule": "\u00a75 business days and holidays; next Friday; missing date parts next occurrence",
+   "where": "calendar"
+  },
+  {
+   "rule": "\u00a76 band 1-20: 10th business day; full on deadline; floor if refused",
+   "where": "bands[0]"
+  },
+  {
+   "rule": "\u00a76 + Memo C band 21-60: last business day of current month",
+   "where": "bands[1]"
+  },
+  {
+   "rule": "\u00a76 common date clamped per product",
+   "where": "multi_product.common_date_clamped_per_product"
+  },
+  {
+   "rule": "\u00a76 at exhaustion mark avs_refused",
+   "where": "outcomes.refused_reason"
+  },
+  {
+   "rule": "\u00a77 full first, never ask how much, floor once with 'The unpaid remainder stays overdue.', accept floor..full",
+   "where": "amounts"
+  },
+  {
+   "rule": "\u00a77 promise date today allowed, business day, roll forward within deadline, vague asked once",
+   "where": "dates"
+  },
+  {
+   "rule": "\u00a78 'May I record these payment arrangements?' batch read-back",
+   "where": "promise_write.confirm_phrase, multi_product.one_confirmation_for_batch"
+  },
+  {
+   "rule": "\u00a78 + Memo F retry once; second failure avs_service_error",
+   "where": "promise_write.retry_on_failure, outcomes.service_error_reason"
+  },
+  {
+   "rule": "\u00a78 one promise per product",
+   "where": "promise_write.one_promise_per_product"
+  },
+  {
+   "rule": "\u00a78 'A confirmation will be sent to your secure mailbox.'",
+   "where": "phrases.after_promise_sentence"
+  },
+  {
+   "rule": "\u00a78 'Please use your secure mailbox to request a change.'",
+   "where": "phrases.recorded_promise_change_reply"
+  },
+  {
+   "rule": "\u00a79 already_paid",
+   "where": "special_cases[already_paid], phrases.already_paid_sentence"
+  },
+  {
+   "rule": "\u00a79 dispute",
+   "where": "special_cases[dispute]"
+  },
+  {
+   "rule": "\u00a79 hardship",
+   "where": "special_cases[hardship]"
+  },
+  {
+   "rule": "\u00a79 restructuring",
+   "where": "special_cases[restructuring]"
+  },
+  {
+   "rule": "\u00a79 human + Memo D immediate transfer to avs_desk",
+   "where": "special_cases[human]"
+  },
+  {
+   "rule": "\u00a79 refuse_to_talk",
+   "where": "special_cases[refuse_to_talk]"
+  },
+  {
+   "rule": "\u00a79 robot",
+   "where": "special_cases[robot], phrases.robot_reply"
+  },
+  {
+   "rule": "\u00a79 scam",
+   "where": "special_cases[scam], phrases.scam_reply"
+  },
+  {
+   "rule": "\u00a79 other_question",
+   "where": "special_cases[other_question], phrases.cannot_answer_sentence"
+  },
+  {
+   "rule": "\u00a79 payment_plan (conflicts with \u00a77)",
+   "where": "unresolved[payment_plan special case]"
+  },
+  {
+   "rule": "\u00a710 one note per unpromised product, allowed reasons, none on transfer",
+   "where": "notes"
+  },
+  {
+   "rule": "\u00a710 transfer overrides, arranged/settled/no_deal precedence, goodbye before close",
+   "where": "outcomes.*"
+  },
+  {
+   "rule": "C-AVS-2026 outcome/reason combinations and queues",
+   "where": "outcomes.table, special_cases[*].action.queue"
+  }
+ ],
+ "fixed": [
+  "special_cases[hardship].say: was empty although \u00a79 requires 'one short sympathetic sentence'; added a short sentence with that content and recorded in unresolved that the words are not dictated.",
+  "unresolved[payment_plan]: clarified that the row also overlaps the restructuring trigger and cannot be expressed with create_promise (one amount/date)."
+ ],
+ "unresolved": [
+  "payment_plan row in \u00a79 conflicts with \u00a77 (never ask how much, never offer a new instalment plan); not compiled.",
+  "No band for 0 days late or more than 60 days late.",
+  "Month/day/year numeric date rule has no date identity question to apply to.",
+  "Wording of the hardship sympathetic sentence is not dictated."
+ ]
+}

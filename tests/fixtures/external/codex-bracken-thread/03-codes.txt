@@ -1,0 +1,13 @@
+# Dispositions and routing: Bracken Exchange Bank
+This is the complete, case-sensitive vocabulary. Hyphens are significant; do not substitute generic codes. A reason is mandatory exactly for rows listing reasons, and omitted otherwise.
+| Outcome | Allowed reasons |
+|---|---|
+| br-promised | (omit reason) |
+| br-settled | (omit reason) |
+| br-routed | br-r-replan, br-r-person, br-r-care |
+| br-unarranged | br-r-refused, br-r-distress, br-r-disputed, br-r-service |
+| br-unverified | br-r-failed, br-r-declined |
+| br-unreached | br-r-callback, br-r-no-callback, br-r-wrong-number, br-r-deceased, br-r-unclear |
+Promises: br-promised; all paid: br-settled; transfer: br-routed; no arrangement: br-unarranged. Identity failure/decline: br-unverified; holder unavailable or unknown: br-unreached.
+Queues: br-plan-desk, br-human-desk, br-care-desk. Plan desk uses br-r-replan, human desk br-r-person, care desk br-r-care under br-routed.
+Note endpoint vocabulary: br-r-refused, br-r-distress, br-r-disputed, br-r-settled, br-r-service. Enable notes: one note per unpromised product, deferred until the final non-transfer choice. Paid uses br-r-settled, hardship br-r-distress, dispute br-r-disputed, refusal br-r-refused, exhausted write failure br-r-service. No note on a successfully promised product and none on transfers.

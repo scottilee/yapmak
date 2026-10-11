@@ -1,0 +1,127 @@
+{
+  "operations": {
+    "get_account": {
+      "path": "/case/get_account",
+      "required": [
+        "client_ref"
+      ]
+    },
+    "verify_identity": {
+      "path": "/case/verify_identity",
+      "required": [
+        "client_ref",
+        "check_key",
+        "answer_text"
+      ]
+    },
+    "create_promise": {
+      "path": "/case/create_promise",
+      "required": [
+        "client_ref",
+        "holding_id",
+        "promised_amount",
+        "due_on"
+      ]
+    },
+    "add_note": {
+      "path": "/case/add_note",
+      "required": [
+        "client_ref",
+        "holding_id",
+        "note_code"
+      ]
+    },
+    "schedule_callback": {
+      "path": "/case/schedule_callback",
+      "required": [
+        "client_ref",
+        "callback_date",
+        "callback_time"
+      ]
+    },
+    "transfer_to_agent": {
+      "path": "/case/transfer_to_agent",
+      "required": [
+        "client_ref",
+        "target_queue"
+      ]
+    },
+    "close_call": {
+      "path": "/case/close_call",
+      "required": [
+        "client_ref",
+        "disposition"
+      ]
+    }
+  },
+  "product_array": "holdings",
+  "product_fields": {
+    "id": "holding_id",
+    "type": "holding_kind",
+    "full": "arrears_value",
+    "days_late": "delinquent_days",
+    "floors": {
+      "hg-cycle": "cycle_min",
+      "hg-tool": "tool_min",
+      "hg-trade": "trade_min"
+    }
+  },
+  "response_slots": {
+    "success": "request_success",
+    "verified": "matched",
+    "all_verified": "complete",
+    "remaining": "attempts_available"
+  },
+  "enum_roles": {
+    "verify_identity": {
+      "field": [
+        "passphrase",
+        "enrolment_year",
+        "phone_suffix",
+        "signatory_dob"
+      ]
+    },
+    "close_call": {
+      "outcome": [
+        "hg-promised",
+        "hg-settled",
+        "hg-routed",
+        "hg-unarranged",
+        "hg-unverified",
+        "hg-unreached"
+      ],
+      "reason": [
+        "hg-r-replan",
+        "hg-r-person",
+        "hg-r-care",
+        "hg-r-refused",
+        "hg-r-distress",
+        "hg-r-disputed",
+        "hg-r-service",
+        "hg-r-failed",
+        "hg-r-declined",
+        "hg-r-callback",
+        "hg-r-no-callback",
+        "hg-r-wrong-number",
+        "hg-r-deceased",
+        "hg-r-unclear"
+      ]
+    },
+    "transfer_to_agent": {
+      "queue": [
+        "hg-plan-desk",
+        "hg-human-desk",
+        "hg-care-desk"
+      ]
+    },
+    "add_note": {
+      "reason": [
+        "hg-r-refused",
+        "hg-r-distress",
+        "hg-r-disputed",
+        "hg-r-settled",
+        "hg-r-service"
+      ]
+    }
+  }
+}

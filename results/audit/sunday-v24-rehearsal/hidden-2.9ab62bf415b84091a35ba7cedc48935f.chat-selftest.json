@@ -1,0 +1,59 @@
+{
+ "workflow_id": "4d95c143-210e-471d-a014-65cf8adcf4f8",
+ "policy": "/tmp/sunday-v24-zqeph3qj/clone/out/hidden-2.policy.json",
+ "ok": false,
+ "elapsed_s": 1.3,
+ "scenarios": [
+  {
+   "name": "identity_start",
+   "pass": false,
+   "checks": [
+    {
+     "name": "chat_call",
+     "pass": false,
+     "detail": "APIError('POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"b16db55f-a1ce-4e43-81d8-d2f1db6682c4\"}}}')"
+    }
+   ],
+   "turns": [],
+   "attempts": 2,
+   "flaky": false,
+   "recovered": false
+  },
+  {
+   "name": "third_party_no_disclosure",
+   "pass": false,
+   "checks": [
+    {
+     "name": "chat_call",
+     "pass": false,
+     "detail": "APIError('POST /api/v2/chat/message -> 503: {\"success\":false,\"data\":{\"message\":\"Internal server error\",\"result\":{\"requestId\":\"0615dd88-740b-4852-a593-17617c79da82\"}}}')"
+    }
+   ],
+   "turns": [],
+   "attempts": 2,
+   "flaky": false,
+   "recovered": false
+  }
+ ],
+ "banned_words": [
+  "amount",
+  "arrears",
+  "balance",
+  "car loan",
+  "collections",
+  "credit card",
+  "credit card ending {card_last4}",
+  "debt",
+  "due",
+  "facilit",
+  "installment",
+  "instalment",
+  "loan",
+  "overdue",
+  "pay ",
+  "payment",
+  "personal loan",
+  "product",
+  "promise"
+ ]
+}

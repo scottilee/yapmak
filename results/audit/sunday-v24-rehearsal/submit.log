@@ -1,0 +1,33 @@
+WARN incomplete git identity; committing as 'temsilci <submission@localhost>' (git config --global user.name/user.email to change)
+Switched to a new branch 'rehearsal'
+[04:17:49] on branch rehearsal
+[04:17:49] inputs already committed
+[04:17:49] build 1: source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-1
+{"slot": "hidden-1", "workflow_id": "011f407c-9d02-4a7e-af9d-6aa151c9ab96", "agent_id": "94c5b956-a0d3-48f2-a7af-0155735bcfa3", "version": 3, "workflow": "/tmp/sunday-v24-zqeph3qj/clone/out/hidden-1.workflow.json", "trace": "/tmp/sunday-v24-zqeph3qj/clone/traces/hidden-1.jsonl", "elapsed_s": 13}
+[04:18:02] build 1 finished
+[04:18:02] build 2: source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-2
+{"slot": "hidden-2", "workflow_id": "4d95c143-210e-471d-a014-65cf8adcf4f8", "agent_id": "81c5fa71-1604-4834-bfed-0e7976a84227", "version": 3, "workflow": "/tmp/sunday-v24-zqeph3qj/clone/out/hidden-2.workflow.json", "trace": "/tmp/sunday-v24-zqeph3qj/clone/traces/hidden-2.jsonl", "elapsed_s": 8}
+[04:18:11] build 2 finished
+[04:18:11] skipping out/hidden-1.audit.json: not written by this run (stale)
+[04:18:11] skipping out/hidden-2.audit.json: not written by this run (stale)
+8 artifacts passed credential scanning
+[04:18:11] artifacts committed: 6181252ce0e71420dac66380d62a3cd90ddc1ff4
+{
+  "team": "temsilci",
+  "repo": "https://www.github.com/scottilee/temsilci",
+  "commit": "6181252ce0e71420dac66380d62a3cd90ddc1ff4",
+  "run_command": "source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-1 && source .env && .venv/bin/python build.py --policy tests/fixtures/brief_a.policy.json --openapi tools/openapi.json --slot hidden-2",
+  "workflows": {
+    "hidden-1": "out/hidden-1.workflow.json",
+    "hidden-2": "out/hidden-2.workflow.json"
+  },
+  "traces": {
+    "hidden-1": "traces/hidden-1.jsonl",
+    "hidden-2": "traces/hidden-2.jsonl"
+  }
+}
+[04:18:11] form committed: c80b975 (form.commit = 6181252ce0e71420dac66380d62a3cd90ddc1ff4, the artifacts commit)
+fatal: could not read Username for 'https://github.com': terminal prompts disabled
+
+build 1: ok   build 2: ok
+submit commit 6181252ce0e71420dac66380d62a3cd90ddc1ff4   form: submission/form.json

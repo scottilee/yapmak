@@ -1,0 +1,446 @@
+{
+  "fixture": "gv-finance-sheet",
+  "brief": "01-call-sheet.md + 02-codes.txt",
+  "openapi": "openapi.json",
+  "checks": {
+    "bank_name": {
+      "expected": "GRIMSBY VALE FINANCE",
+      "source": "call sheet header"
+    },
+    "identity.requirements.$fields": {
+      "expected": [
+        "sec_code"
+      ],
+      "source": "SECURITY: one question only"
+    },
+    "identity.requirements.0.field": {
+      "expected": "sec_code",
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.ask_text": {
+      "expected": "What are the four digits of your security code?",
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.answer_format": {
+      "expected": "digits",
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.digits": {
+      "expected": 4,
+      "source": "call sheet SECURITY"
+    },
+    "identity.requirements.0.hint_field": {
+      "expected": "",
+      "source": "call sheet: no recoverable-format hint is supplied"
+    },
+    "identity.wrong_answer_limit": {
+      "expected": 3,
+      "source": "call sheet SECURITY: wrong cap = 3 for the whole check"
+    },
+    "identity.wrong_count_source": {
+      "expected": "api",
+      "source": "call sheet SECURITY: follow tries_left from the API, not your own tally"
+    },
+    "identity.remaining_slot": {
+      "expected": "tries_left",
+      "source": "call sheet SECURITY"
+    },
+    "identity.holder_confirmation_asks": {
+      "expected": 2,
+      "source": "OPEN: 2 asks max"
+    },
+    "identity.decline_explain_once": {
+      "expected": true,
+      "source": "call sheet SECURITY: refusing -> explain once -> refuse again -> close"
+    },
+    "identity.asking_purpose_counts_as_decline": {
+      "expected": false,
+      "source": "call sheet SECURITY: a question is a question, not a refusal"
+    },
+    "identity.failed_outcome": {
+      "expected": [
+        "ID-F",
+        "G01"
+      ],
+      "source": "call sheet SECURITY + 02-codes"
+    },
+    "identity.declined_outcome": {
+      "expected": [
+        "ID-F",
+        "G02"
+      ],
+      "source": "call sheet SECURITY + 02-codes"
+    },
+    "identity.unclear_holder_outcome": {
+      "expected": [
+        "NOANS",
+        "D60"
+      ],
+      "source": "OPEN + 02-codes"
+    },
+    "identity.failed_instruction": {
+      "expected": "Please use the GVF app.",
+      "source": "call sheet SECURITY"
+    },
+    "third_party.callback.enabled": {
+      "expected": false,
+      "source": "3RD PARTY: NO callback booking"
+    },
+    "third_party.callback.scheduled_outcome": {
+      "expected": [
+        "NOANS",
+        "CNA"
+      ],
+      "source": "no schedule ever happens; the field mirrors the disabled-callback close for structural validity"
+    },
+    "third_party.callback.no_callback_outcome": {
+      "expected": [
+        "NOANS",
+        "CNA"
+      ],
+      "source": "3RD PARTY: the customer is told to call the bank; close NOANS / CNA"
+    },
+    "third_party.wrong_number_outcome": {
+      "expected": [
+        "NOANS",
+        "NR"
+      ],
+      "source": "3RD PARTY + 02-codes"
+    },
+    "third_party.deceased_outcome": {
+      "expected": [
+        "NOANS",
+        "DECD"
+      ],
+      "source": "3RD PARTY + 02-codes"
+    },
+    "third_party.deceased_sentence": {
+      "expected": "We extend our condolences.",
+      "source": "3RD PARTY"
+    },
+    "calendar.holidays": {
+      "expected": [],
+      "source": "DATES: business day = every day of the week. no shutdown days"
+    },
+    "calendar.business_days": {
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "source": "call sheet DATES"
+    },
+    "calendar.next_weekday_means_following_week": {
+      "expected": true,
+      "source": "DATES: next fri = fri of the following week even when said on a fri"
+    },
+    "calendar.missing_date_parts": {
+      "expected": "next_occurrence",
+      "source": "DATES: missing bits fold to the next occurrence"
+    },
+    "bands.$rules": {
+      "expected": [
+        {
+          "days_late_min": 1,
+          "days_late_max": 60,
+          "deadline": {
+            "kind": "day_of_month",
+            "day": 20,
+            "month_offset": 1,
+            "adjustment": "none"
+          },
+          "attempts": []
+        }
+      ],
+      "source": "DATES: k-date = the 20th of the month after the call; AMOUNTS: ZERO persuasion, no agent-proposed offers"
+    },
+    "amounts.floors": {
+      "expected": {},
+      "source": "AMOUNTS: bottom_line is computed, not a get_account field alone"
+    },
+    "amounts.floor_rules": {
+      "expected": {
+        "*": {
+          "kind": "max_of",
+          "field": "min_pmt",
+          "percent": 15
+        }
+      },
+      "source": "AMOUNTS: bottom_line = greater(min_pmt, 15% of amt_due); min_pmt and amt_due are the get_account names"
+    },
+    "amounts.full_first": {
+      "expected": true,
+      "source": "ACCOUNT: ask full amt_due first"
+    },
+    "amounts.never_ask_how_much": {
+      "expected": true,
+      "source": "AMOUNTS: no re-asks, no counter offers, no 'what can you do' questions, ever"
+    },
+    "amounts.accept_between_floor_and_full": {
+      "expected": true,
+      "source": "AMOUNTS: accepts wide range bottom_line..full, never above amt_due"
+    },
+    "amounts.floor_offered_once": {
+      "expected": false,
+      "source": "AMOUNTS: zero persuasion; a below-floor amount is simply not recordable and no counter offer follows"
+    },
+    "dates.promise_today_allowed": {
+      "expected": true,
+      "source": "DATES: promise date ok when today or later"
+    },
+    "dates.weekend_or_holiday_roll_forward": {
+      "expected": false,
+      "source": "DATES: sun day named... not recordable. no nudging to the next business day"
+    },
+    "dates.vague_ask_once_then_deadline": {
+      "expected": false,
+      "source": "DATES: vague -> get the exact day once. still vague -> the call ends there (No-PTP / No-PTP); the agent proposes nothing"
+    },
+    "dates.after_deadline_offer_deadline": {
+      "expected": false,
+      "source": "DATES: date past the k-date -> not recordable; the agent proposes nothing"
+    },
+    "dates.past_deadline": {
+      "expected": "next_business_day",
+      "source": "call sheet offers nothing explicitly; the k-date of the month after the call is never in the past"
+    },
+    "promise_write.retry_on_failure": {
+      "expected": 1,
+      "source": "WRITE: write fails -> retry once"
+    },
+    "promise_write.one_promise_per_product": {
+      "expected": true,
+      "source": "WRITE: create_promise, one per item"
+    },
+    "promise_write.confirm_phrase": {
+      "expected": "Record that now?",
+      "source": "WRITE"
+    },
+    "notes.enabled": {
+      "expected": false,
+      "source": "call sheet directs no add_note call; outcomes carry both reasons on close_call"
+    },
+    "notes.reasons": {
+      "expected": [],
+      "source": "02-codes sheet: no add_note vocabulary in use"
+    },
+    "multi_product.max_products": {
+      "expected": 1,
+      "source": "ACCOUNT: at most 1"
+    },
+    "multi_product.state_all_before_asking": {
+      "expected": true,
+      "source": "ACCOUNT: state amt_due + dl_days flat before the ask"
+    },
+    "multi_product.ask_all_today_once": {
+      "expected": true,
+      "source": "ACCOUNT: one product, no group question"
+    },
+    "multi_product.per_product_attempts": {
+      "expected": true,
+      "source": "single product; no group counters apply"
+    },
+    "multi_product.common_date_clamped_per_product": {
+      "expected": true,
+      "source": "single product; no clamping across items applies"
+    },
+    "multi_product.one_confirmation_for_batch": {
+      "expected": true,
+      "source": "single product; one read-back and one confirmation"
+    },
+    "multi_product.recorded_promises_survive_transfer": {
+      "expected": true,
+      "source": "WRITE: recorded promise stays as-is"
+    },
+    "outcomes.$table": {
+      "expected": {
+        "PTP": [],
+        "No-PTP": [
+          "No-PTP",
+          "R07"
+        ],
+        "ID-F": [
+          "G01",
+          "G02"
+        ],
+        "NOANS": [
+          "CNA",
+          "DECD",
+          "D60",
+          "NR"
+        ],
+        "TR-H": [
+          "HUM"
+        ],
+        "S8": []
+      },
+      "source": "02-codes sheet"
+    },
+    "outcomes.promise_outcome": {
+      "expected": "PTP",
+      "source": "02-codes sheet"
+    },
+    "outcomes.paid_outcome": {
+      "expected": "S8",
+      "source": "02-codes sheet: S8 is reserved; call sheet 4 has no already-paid rule, so no path reaches S8"
+    },
+    "outcomes.transfer_outcome": {
+      "expected": "TR-H",
+      "source": "02-codes sheet"
+    },
+    "outcomes.no_promise_outcome": {
+      "expected": "No-PTP",
+      "source": "02-codes sheet"
+    },
+    "outcomes.transfer_overrides_promise": {
+      "expected": true,
+      "source": "02-codes sheet; a person transfer after a recorded promise closes TR-H"
+    },
+    "outcomes.all_paid_closes_as_paid": {
+      "expected": true,
+      "source": "no already-paid path exists on this sheet; if a policy value must be supplied, use the S8 row"
+    },
+    "outcomes.no_promise_reason_from_first_non_paid_note": {
+      "expected": true,
+      "source": "single product; the close reason is the close-time fact itself"
+    },
+    "outcomes.service_error_reason": {
+      "expected": "R07",
+      "source": "WRITE: 2nd failure -> close No-PTP / R07"
+    },
+    "outcomes.refused_reason": {
+      "expected": "No-PTP",
+      "source": "AMOUNTS: one no and the call is over: close No-PTP / No-PTP"
+    },
+    "outcomes.goodbye_before_close": {
+      "expected": true,
+      "source": "WRITE: then thank + goodbye, then close_call"
+    },
+    "phrases.opening": {
+      "expected": "GRIMSBY VALE FINANCE automated collections line. We record this call.",
+      "source": "OPEN: say once, exactly"
+    },
+    "phrases.opening_verbatim": {
+      "expected": true,
+      "source": "OPEN: say once, exactly"
+    },
+    "phrases.holder_question": {
+      "expected": "Am I through to {{name_title}} {{last}}?",
+      "source": "OPEN"
+    },
+    "phrases.robot_reply": {
+      "expected": "GVF assistant.",
+      "source": "call sheet ROBOT Q"
+    },
+    "phrases.scam_reply": {
+      "expected": "Call the number printed on your statement to check us.",
+      "source": "call sheet SCAM Q"
+    },
+    "phrases.prohibited_before_verification": {
+      "expected": [
+        "amount",
+        "arrears",
+        "deadline",
+        "overdue",
+        "owe",
+        "payment"
+      ],
+      "source": "OPEN: never say these before every security answer passes"
+    },
+    "phrases.after_promise_sentence": {
+      "expected": "A text from GV Fin will confirm this arrangement.",
+      "source": "WRITE"
+    },
+    "phrases.already_paid_sentence": {
+      "expected": "",
+      "source": "the sheet defines no already-paid wording; the rule is absent"
+    },
+    "phrases.cannot_answer_sentence": {
+      "expected": "GVF staff on the main line can answer that.",
+      "source": "CUSTOMER SAYS"
+    },
+    "special_cases.dispute.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "No-PTP",
+        "reason": "No-PTP"
+      },
+      "source": "CUSTOMER SAYS: 'not my debt'... don't argue, don't take a promise, close No-PTP / No-PTP"
+    },
+    "special_cases.dispute.ends_call": {
+      "expected": true,
+      "source": "call sheet CUSTOMER SAYS"
+    },
+    "special_cases.dispute.takes_promise": {
+      "expected": false,
+      "source": "call sheet CUSTOMER SAYS"
+    },
+    "special_cases.human.action": {
+      "expected": {
+        "type": "transfer",
+        "queue": "GVF-THREAD",
+        "outcome": "TR-H",
+        "reason": "HUM"
+      },
+      "source": "CUSTOMER SAYS: transfer GVF-THREAD, close TR-H / HUM"
+    },
+    "special_cases.human.ask_once_first": {
+      "expected": false,
+      "source": "call sheet says transfer at once; no ask-first wording exists"
+    },
+    "special_cases.human.ends_call": {
+      "expected": true,
+      "source": "call sheet CUSTOMER SAYS"
+    },
+    "special_cases.refuse_to_talk.action": {
+      "expected": {
+        "type": "close",
+        "outcome": "No-PTP",
+        "reason": "No-PTP"
+      },
+      "source": "CUSTOMER SAYS: will not talk -> close No-PTP / No-PTP at once"
+    },
+    "special_cases.refuse_to_talk.ask_once_first": {
+      "expected": false,
+      "source": "zero persuasion; no ask-to-continue wording exists"
+    },
+    "special_cases.refuse_to_talk.ends_call": {
+      "expected": true,
+      "source": "call sheet CUSTOMER SAYS"
+    },
+    "special_cases.scam.action": {
+      "expected": {
+        "type": "continue"
+      },
+      "source": "call sheet SCAM Q: carry on"
+    },
+    "special_cases.scam.ends_call": {
+      "expected": false,
+      "source": "call sheet SCAM Q"
+    },
+    "special_cases.scam.say": {
+      "expected": "Call the number printed on your statement to check us.",
+      "source": "call sheet SCAM Q"
+    },
+    "phrases.product_naming": {
+      "expected": {
+        "hp": "hire purchase",
+        "spark": "Sparq credit line",
+        "cc_rev": "GVF revolving card"
+      },
+      "source": "ACCOUNT: say the kind in words"
+    }
+  },
+  "comparison_notes": [
+    "ABSENT by design (the diff should treat these as missing, not as defaults): hardship, callback scheduling (third_party.callback.enabled=false), notes tool use (notes.enabled=false), already_paid, restructuring, persuasion attempt schedule (bands have empty attempts), floor counter-offers (amounts.floor_offered_once=false), date roll-forward and agent-proposed date/amount offers (dates.*offers/rolls=false). S8 and the add_note endpoint exist in the vocabulary but no call path uses them.",
+    "Vocabulary is deliberately mixed-case and numeric ('No-PTP', 'ID-F', 'G01', 'D60', 'R07'); field names are abbreviated (cust_ref, item_id, amt_due, dl_days, min_pmt).",
+    "The k-date is the 20th of the month after the call, with the seven-day business week, no holidays and adjustment none; a builder must not roll to the next business day nor offer substitute dates.",
+    "Forbidden-before-verification words: owe, overdue, arrears, deadline, amount, payment.",
+    "No public mock simulations: identities/products/schema differ; .example.invalid endpoints prevent accidental bank writes.",
+    "Authored offline: bands deadline and business-day relations can be probed with bankcal; no extraction, build, publication or simulation was run."
+  ]
+}
